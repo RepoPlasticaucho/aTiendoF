@@ -36,7 +36,8 @@ export class ModeloproductosEditComponent implements OnInit {
   modelProductForm = new FormGroup({
     categoria: new FormControl('', Validators.required),
     linea: new FormControl('',),
-    modelo: new FormControl('',),
+    marca: new FormControl('',Validators.required),
+    modelo: new FormControl('',Validators.required),
     color_id: new FormControl('0'),
     color: new FormControl('0', Validators.required),
     atributo_id: new FormControl('0'),
@@ -64,12 +65,11 @@ export class ModeloproductosEditComponent implements OnInit {
   lstAtributos: AtributosEntity[] = [];
   lstGeneros: GenerosEntity[] = [];
   //Variables para validar selección
-  selectMarcas: boolean = false;
+  selectMarca: boolean = false;
   selectColores: boolean = false;
   selectAtributos: boolean = false;
   selectGeneros: boolean = false;
   //Variables para Autocomplete
-  keywordMark = 'marca';
   keywordModel = 'modelo';
   keywordColor = 'color';
   keywordAttribute = 'atributo';
@@ -201,11 +201,11 @@ export class ModeloproductosEditComponent implements OnInit {
         //Asignamos los valores a los campos
         this.codigo = res.id!;
         this.modelProductForm.get('categoria')?.setValue(res.categoria!);
+        this.modelProductForm.get('marca')?.setValue(res.marca!);
         this.modelProductForm.get('linea')?.setValue(res.linea!);
         this.modelProductForm.get('modelo')?.setValue(res.modelo!);
         this.modelProductForm.get('modeloProducto')?.setValue(res.modelo_producto);
         this.modelProductForm.get('codigoSAP')?.setValue(res.cod_sap);
-        this.initialMark = res.marca!;
         this.initialColor = res.color!;
         this.initialAttribute = res.atributo!;
         this.initialGenre = res.genero!;
@@ -290,7 +290,7 @@ export class ModeloproductosEditComponent implements OnInit {
     if (!this.modelProductForm.valid) {
       this.modelProductForm.markAllAsTouched();
       if (this.modelProductForm.get('marca_id')?.value == '0') {
-        this.selectMarcas = true;
+        this.selectMarca = true;
       }
       if (this.modelProductForm.get('color_id')?.value == '0') {
         this.selectColores = true;
@@ -303,7 +303,7 @@ export class ModeloproductosEditComponent implements OnInit {
       }
     } else {
       if (this.modelProductForm.get('marca_id')?.value == '0') {
-        this.selectMarcas = true;
+        this.selectMarca = true;
       } else if (this.modelProductForm.get('color_id')?.value == '0') {
         this.selectColores = true;
       } else if (this.modelProductForm.get('atributo_id')?.value == '0') {
@@ -539,15 +539,16 @@ export class ModeloproductosEditComponent implements OnInit {
     }   
   }
   changeGroup2(e: any) {
-
     if (e.target.value == 0) {
       this.selectLinea = true;
       this.lstModelos = [];
+      this.modelProductForm.get("marca")?.setValue("0");
     } else {
       this.selectLinea = false;
     }
     if (e.target.value == null || undefined) {
       this.lstModelos = [];
+      this.modelProductForm.get("marca")?.setValue("0");
     } else {
       const linea: LineasEntity = {
         id: '',
@@ -556,22 +557,47 @@ export class ModeloproductosEditComponent implements OnInit {
         linea: e.target.value,
         etiquetas: '',
         cod_sap: '',
-        almacen_id: ''
-      }
-      this.httpServiceModelos.obtenerModelosLineasAdm(linea).subscribe(res => {
-        console.log(res);
-        if (res.codigoError != "OK") {
-          Swal.fire({
-            icon: 'error',
-            title: 'No se pudo obtener las líneas.',
-            text: res.descripcionError,
-            showConfirmButton: false,
-          });
-          this.lstModelos = [];
-        } else {
-          this.lstModelos = res.lstModelos;
-        }
-      })
+        almacen_id: '',
+      };
+      this.httpServiceModelos
+        .obtenerModelosLineasAdm(linea)
+        .subscribe((res) => {
+          if (res.codigoError != 'OK') {
+            Swal.fire({
+              icon: 'error',
+              title: 'No se pudo obtener las líneas.',
+              text: res.descripcionError,
+              showConfirmButton: false,
+            });
+            this.lstModelos = [];
+            this.modelProductForm.get("marca")?.setValue("0");
+          } else {
+            this.lstModelos = res.lstModelos;
+            this.modelProductForm.get("marca")?.setValue("0");
+          }
+        });
+    }
+  }
+
+  changeMark(marca: any): void {
+    if (marca.target.value == 0) {
+      this.selectMarca = true;
+    } else {
+      this.selectMarca = false;
+
+      this.httpServiceModelos.obtenerModelosLineasMarcas(this.modelProductForm.value!.linea ?? '', marca.target.value).subscribe((res) => {
+          if (res.codigoError != 'OK') {
+            Swal.fire({
+              icon: 'error',
+              title: 'No se pudo obtener las líneas.',
+              text: res.descripcionError,
+              showConfirmButton: false,
+            });
+            this.lstModelos = [];
+          } else {
+            this.lstModelos = res.lstModelos;
+          }
+        });
     }
   }
 

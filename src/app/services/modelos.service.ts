@@ -38,6 +38,9 @@ export class ModelosService {
   obtenerModelosLineasAdm(linea: LineasEntity): Observable<Modelos> {
     return this.http.post<Modelos>(`${environment.apiUrl}modelos/ObtenerModelosLineasAdm`, linea);
   }
+  obtenerModelosLineasMarcas(linea: string, marca: string): Observable<Modelos> {
+    return this.http.get<Modelos>(`${environment.apiUrl}modelos/ObtenerModelosLineasMarcas?linea=`+ linea + `&marca=`+ marca);
+  }
   obtenerModelosNombre(modelo: ModelosEntity): Observable<Modelos> {
     return this.http.post<Modelos>(`${environment.apiUrl}modelos/ObtenerModelosNombre`, modelo);
   }

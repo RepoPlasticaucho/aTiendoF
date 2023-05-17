@@ -36,7 +36,7 @@ export class ModeloproductosCreateComponent implements OnInit {
   modelProductForm = new FormGroup({
     categoria: new FormControl('0', Validators.required),
     linea: new FormControl('0', Validators.required),
-    marca: new FormControl('0', Validators.required),
+    marca: new FormControl('0'),
     modelo: new FormControl('0', Validators.required),
     color_id: new FormControl('0', Validators.required),
     atributo_id: new FormControl('0', Validators.required),
@@ -45,7 +45,7 @@ export class ModeloproductosCreateComponent implements OnInit {
     codigoSAP: new FormControl('', [Validators.required]),
     urlImagen: new FormControl(''),
   });
-  
+
   lstCategorias: CategoriasEntity[] = [];
   selectCategoria: boolean = false;
 
@@ -80,7 +80,7 @@ export class ModeloproductosCreateComponent implements OnInit {
   codigoError: string = '';
   descripcionError: string = '';
 
-  selectedModeloProducto: string | undefined = '' ;
+  selectedModeloProducto: string | undefined = '';
 
   constructor(
     private readonly httpServiceMarcas: MarcasService,
@@ -97,8 +97,8 @@ export class ModeloproductosCreateComponent implements OnInit {
 
   ngOnInit(): void {
     // Obtener Categorías
-    this.httpServiceCategorias.obtenerCategorias().subscribe(res => {
-      if (res.codigoError != "OK") {
+    this.httpServiceCategorias.obtenerCategorias().subscribe((res) => {
+      if (res.codigoError != 'OK') {
         Swal.fire({
           icon: 'error',
           title: 'No se pudo obtener la Sociedad.',
@@ -123,8 +123,7 @@ export class ModeloproductosCreateComponent implements OnInit {
         this.lstMarcas = res.lstMarcas;
       }
     });
-    
-    
+
     //Obtenemos Colores
     this.httpServiceColores.obtenerColores().subscribe((res) => {
       if (res.codigoError != 'OK') {
@@ -194,44 +193,50 @@ export class ModeloproductosCreateComponent implements OnInit {
             descripcionError: '',
             nombreArchivoEliminar: '',
           };
-          this.httpServiceImage.agregarImagenMP(imageEntity).subscribe((res) => {
+          this.httpServiceImage
+            .agregarImagenMP(imageEntity)
+            .subscribe((res) => {
               if (res.codigoError == 'OK') {
                 console.log(res);
                 const modelProductEntity: ModeloProductosEntity = {
-                  marca_id: "",
+                  marca_id: '',
                   modelo: this.modelProductForm.value!.modelo ?? '',
                   modelo_id: this.lstModelos2[0].id ?? '',
                   color_id: this.modelProductForm.value!.color_id ?? '',
                   atributo_id: this.modelProductForm.value!.atributo_id ?? '',
                   genero_id: this.modelProductForm.value!.genero_id ?? '',
-                  modelo_producto:this.modelProductForm.value!.modeloProducto ?? '',
+                  modelo_producto:
+                    this.modelProductForm.value!.modeloProducto ?? '',
                   cod_sap: this.modelProductForm.value!.codigoSAP ?? '',
-                  url_image:this.imageName == '' ? this.imageUrl : this.imageName,
+                  url_image:
+                    this.imageName == '' ? this.imageUrl : this.imageName,
                 };
                 console.log(modelProductEntity);
-                this.httpService.agregarModeloProducto(modelProductEntity).subscribe((res) => {
-                  if (res.codigoError == 'OK') {
-                    Swal.fire({
-                      icon: 'success',
-                      title: 'Guardado Exitosamente.',
-                      text: `Se ha creado el modelo ${this.modelProductForm.value.modeloProducto}`,
-                      showConfirmButton: true,
-                      confirmButtonText: 'Ok',
-                    }).finally(() => {
-                      this.router.navigate([
-                        '/navegation-adm',
-                        { outlets: { contentAdmin: ['modeloProductos'] } },
-                      ]);
-                    });
-                  } else {
-                    Swal.fire({
-                      icon: 'error',
-                      title: 'Ha ocurrido un error.',
-                      text: res.descripcionError,
-                      showConfirmButton: false,
-                    });
-                  }
-                });
+                this.httpService
+                  .agregarModeloProducto(modelProductEntity)
+                  .subscribe((res) => {
+                    if (res.codigoError == 'OK') {
+                      Swal.fire({
+                        icon: 'success',
+                        title: 'Guardado Exitosamente.',
+                        text: `Se ha creado el modelo ${this.modelProductForm.value.modeloProducto}`,
+                        showConfirmButton: true,
+                        confirmButtonText: 'Ok',
+                      }).finally(() => {
+                        this.router.navigate([
+                          '/navegation-adm',
+                          { outlets: { contentAdmin: ['modeloProductos'] } },
+                        ]);
+                      });
+                    } else {
+                      Swal.fire({
+                        icon: 'error',
+                        title: 'Ha ocurrido un error.',
+                        text: res.descripcionError,
+                        showConfirmButton: false,
+                      });
+                    }
+                  });
               } else {
                 Swal.fire({
                   icon: 'error',
@@ -243,7 +248,7 @@ export class ModeloproductosCreateComponent implements OnInit {
             });
         } else {
           const modelProductEntity: ModeloProductosEntity = {
-            marca_id: "",
+            marca_id: '',
             modelo: this.modelProductForm.value!.modelo ?? '',
             modelo_id: this.lstModelos2[0].id ?? '',
             color_id: this.modelProductForm.value!.color_id ?? '',
@@ -251,7 +256,7 @@ export class ModeloproductosCreateComponent implements OnInit {
             genero_id: this.modelProductForm.value!.genero_id ?? '',
             modelo_producto: this.modelProductForm.value!.modeloProducto ?? '',
             cod_sap: this.modelProductForm.value!.codigoSAP ?? '',
-            url_image: this.imageName == '' ? this.imageUrl : this.imageName
+            url_image: this.imageName == '' ? this.imageUrl : this.imageName,
           };
           console.log(modelProductEntity);
           this.httpService
@@ -293,28 +298,32 @@ export class ModeloproductosCreateComponent implements OnInit {
 
   //Disparador cuando selecciona algún item de los combos
 
-
   //Color
   selectEventColor(item: ColorsEntity) {
     this.selectColores = false;
-    this.selectedModeloProducto = this.selectedModeloProducto?.concat(' ' + item.color);
+    this.selectedModeloProducto = this.selectedModeloProducto?.concat(
+      ' ' + item.color
+    );
     this.modelProductForm.controls['color_id'].setValue(item.id);
   }
 
   //Atributo
   selectEventAttribute(item: AtributosEntity) {
     this.selectAtributos = false;
-    this.selectedModeloProducto = this.selectedModeloProducto?.concat(' ' + item.atributo);
+    this.selectedModeloProducto = this.selectedModeloProducto?.concat(
+      ' ' + item.atributo
+    );
     this.modelProductForm.controls['atributo_id'].setValue(item.id);
   }
 
   //Genero
   selectEventGenre(item: any) {
     this.selectGeneros = false;
-    this.selectedModeloProducto = this.selectedModeloProducto?.concat(' ' + item.genero);
+    this.selectedModeloProducto = this.selectedModeloProducto?.concat(
+      ' ' + item.genero
+    );
     this.modelProductForm.controls['genero_id'].setValue(item.id);
   }
-
 
   onChangeSearchColor(val: string) {
     if (val == '') {
@@ -337,7 +346,6 @@ export class ModeloproductosCreateComponent implements OnInit {
     }
   }
 
-
   onInputClearedColor() {
     this.selectColores = true;
     this.modelProductForm.controls['color_id'].setValue('0');
@@ -354,20 +362,19 @@ export class ModeloproductosCreateComponent implements OnInit {
   }
 
   onChangeFile(target: any): void {
-    if (target.value != "") {
+    if (target.value != '') {
       this.fileToUpload = target.files[0];
       let reader = new FileReader();
       reader.onload = (event: any) => {
         this.imageUrl = event.target.result;
         this.imageBase64 = this.imageUrl.split(',')[1];
         this.imageName = this.fileToUpload.name;
-      }
+      };
       reader.readAsDataURL(this.fileToUpload);
     }
   }
 
   changeGroup1(e: any) {
-
     if (e.target.value == 0) {
       this.selectCategoria = true;
       this.lstLineas = [];
@@ -384,35 +391,39 @@ export class ModeloproductosCreateComponent implements OnInit {
         categoria: e.target.value,
         cod_sap: '',
         etiquetas: '',
-        almacen_id : '',
-      }
-      this.httpServiceLineas.obtenerLineasCategoriaAdm(categoria).subscribe(res => {
-        console.log(res);
-        if (res.codigoError != "OK") {
-          Swal.fire({
-            icon: 'error',
-            title: 'No se pudo obtener las líneas.',
-            text: res.descripcionError,
-            showConfirmButton: false,
-          });
-          this.lstLineas = [];
-          this.lstModelos = [];
-        } else {
-          this.lstLineas = res.lstLineas;
-        }
-      })
-    }   
+        almacen_id: '',
+      };
+      this.httpServiceLineas
+        .obtenerLineasCategoriaAdm(categoria)
+        .subscribe((res) => {
+          console.log(res);
+          if (res.codigoError != 'OK') {
+            Swal.fire({
+              icon: 'error',
+              title: 'No se pudo obtener las líneas.',
+              text: res.descripcionError,
+              showConfirmButton: false,
+            });
+            this.lstLineas = [];
+            this.lstModelos = [];
+          } else {
+            this.lstLineas = res.lstLineas;
+          }
+        });
+    }
   }
-  changeGroup2(e: any) {
 
+  changeGroup2(e: any) {
     if (e.target.value == 0) {
       this.selectLinea = true;
       this.lstModelos = [];
+      this.modelProductForm.get("marca")?.setValue("0");
     } else {
       this.selectLinea = false;
     }
     if (e.target.value == null || undefined) {
       this.lstModelos = [];
+      this.modelProductForm.get("marca")?.setValue("0");
     } else {
       const linea: LineasEntity = {
         id: '',
@@ -421,21 +432,47 @@ export class ModeloproductosCreateComponent implements OnInit {
         linea: e.target.value,
         etiquetas: '',
         cod_sap: '',
-        almacen_id: ''
-      }
-      this.httpServiceModelos.obtenerModelosLineasAdm(linea).subscribe(res => {
-        if (res.codigoError != "OK") {
-          Swal.fire({
-            icon: 'error',
-            title: 'No se pudo obtener las líneas.',
-            text: res.descripcionError,
-            showConfirmButton: false,
-          });
-          this.lstModelos = [];
-        } else {
-          this.lstModelos = res.lstModelos;
-        }
-      })
+        almacen_id: '',
+      };
+      this.httpServiceModelos
+        .obtenerModelosLineasAdm(linea)
+        .subscribe((res) => {
+          if (res.codigoError != 'OK') {
+            Swal.fire({
+              icon: 'error',
+              title: 'No se pudo obtener las líneas.',
+              text: res.descripcionError,
+              showConfirmButton: false,
+            });
+            this.lstModelos = [];
+            this.modelProductForm.get("marca")?.setValue("0");
+          } else {
+            this.lstModelos = res.lstModelos;
+            this.modelProductForm.get("marca")?.setValue("0");
+          }
+        });
+    }
+  }
+
+  changeMark(marca: any): void {
+    if (marca.target.value == 0) {
+      this.selectMarca = true;
+    } else {
+      this.selectMarca = false;
+
+      this.httpServiceModelos.obtenerModelosLineasMarcas(this.modelProductForm.value!.linea ?? '', marca.target.value).subscribe((res) => {
+          if (res.codigoError != 'OK') {
+            Swal.fire({
+              icon: 'error',
+              title: 'No se pudo obtener las líneas.',
+              text: res.descripcionError,
+              showConfirmButton: false,
+            });
+            this.lstModelos = [];
+          } else {
+            this.lstModelos = res.lstModelos;
+          }
+        });
     }
   }
 
@@ -452,33 +489,27 @@ export class ModeloproductosCreateComponent implements OnInit {
         linea_id: '',
         almacen_id: '',
         linea_nombre: '',
-        marca_nombre:'',      
+        marca_nombre: '',
         modelo: modelo.target.value,
         etiquetas: '',
-        cod_sap: ''
-      }
-      this.httpServiceModelos.obtenerModelosNombre(modelonew).subscribe(res => {
-        if (res.codigoError != "OK") {
-          Swal.fire({
-            icon: 'error',
-            title: 'No se pudo obtener la Sociedad.',
-            text: res.descripcionError,
-            showConfirmButton: false,
-          });
-        } else {
-          this.lstModelos2 = res.lstModelos;
-        }
-      })
+        cod_sap: '',
+      };
+      this.httpServiceModelos
+        .obtenerModelosNombre(modelonew)
+        .subscribe((res) => {
+          if (res.codigoError != 'OK') {
+            Swal.fire({
+              icon: 'error',
+              title: 'No se pudo obtener la Sociedad.',
+              text: res.descripcionError,
+              showConfirmButton: false,
+            });
+          } else {
+            this.lstModelos2 = res.lstModelos;
+          }
+        });
 
       //this.warehousesForm.get("sociedad")?.setValue(sociedad.target.value);
-    }
-  }
-
-  changeMark(marca: any): void {
-    if (marca.target.value == 0) {
-      this.selectMarca = true;
-    } else {
-      this.selectMarca = false;
     }
   }
 }
