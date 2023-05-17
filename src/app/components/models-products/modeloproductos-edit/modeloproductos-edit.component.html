@@ -1,0 +1,206 @@
+<div style="width: 90%; margin: auto">
+    <div class="card">
+        <div class="card-header">
+            <div class="row mx-3">
+                <fa-icon [icon]="faList" [size]="'3x'" style="color: #636363"></fa-icon>
+                <h1 class="mx-5" style="color: #636363">Modificar Modelo Producto</h1>
+                <div style="position: absolute; right: 0" class="mx-3">
+                    <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip"
+                        data-placement="bottom" title="Regresar a modelos" (click)="visualizarModeloProductos()">
+                    </fa-icon>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <table style="width: 100%">
+                <tr>
+                    <td style="width: 60%">
+                        <form [formGroup]="modelProductForm" (ngSubmit)="onSubmit()">
+                            <div class="form-group">
+                                <label for="grupo">Categoria</label>
+                                <select class="form-control" (change)="changeGroup1($event)" formControlName="categoria">
+                                    <option [value]="0" selected>Seleccione una categoría</option>
+                                    <option *ngFor="let categoria of lstCategorias" [value]="categoria.categoria">
+                                        {{categoria.categoria}}
+                                    </option>
+                                </select>
+                                <small *ngIf="selectCategoria">
+                                    <small *ngIf="selectCategoria" style="color: red; ">
+                                        Debe seleccionar una categoría.
+                                    </small>
+                                </small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="grupo">Líneas</label>
+                                <select class="form-control" (change)="changeGroup2($event)" formControlName="linea">
+                                    <option [value]=" 0 " selected>Seleccione una línea</option>
+                                    <option *ngFor="let linea of lstLineas" [value]="linea.linea">
+                                        {{linea.linea}}
+                                    </option>
+                                </select>
+                                <small *ngIf="selectLinea">
+                                    <small *ngIf="selectLinea" style="color: red; ">
+                                        Debe seleccionar una línea.
+                                    </small>
+                                </small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="grupo">Modelos</label>
+                                <select class="form-control" (change)="changeGroup3($event)" formControlName="modelo">
+                                    <option [value]=" 0 " selected>Seleccione un modelo</option>
+                                    <option *ngFor="let modelo of lstModelos" [value]="modelo.modelo">
+                                        {{modelo.modelo}}
+                                    </option>
+                                </select>
+                                <small *ngIf="selectModelo">
+                                    <small *ngIf="selectModelo" style="color: red; ">
+                                        Debe seleccionar un modelo.
+                                    </small>
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="marca">Marca:</label>
+                                <ng-autocomplete [data]="lstMarcas" (selected)="selectEventMark($event)"
+                                    [searchKeyword]="keywordMark" placeholder="Seleccione la Marca"
+                                    [itemTemplate]="itemTemplateMark" [notFoundTemplate]="notFoundTemplateMark"
+                                    class="form-control" style="width: 100%; padding: 0%"
+                                    (inputChanged)="onChangeSearchMark($event)" [initialValue]="initialMark"
+                                    (inputCleared)="onInputClearedMark()" formControlName="marca" id="markInput">
+                                </ng-autocomplete>
+                                <ng-template #itemTemplateMark let-item>
+                                    <a [innerHTML]="item.marca"></a>
+                                </ng-template>
+                                <ng-template #notFoundTemplateMark let-notFound>
+                                    <p>No se encontro datos</p>
+                                </ng-template>
+                                <small *ngIf="selectMarcas">
+                                    <small *ngIf="selectMarcas" style="color: red">
+                                        Debe seleccionar una Marca.
+                                    </small>
+                                </small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="color_id">Color/Diseño/Sabor:</label>
+                                <ng-autocomplete [data]="lstColores" (selected)="selectEventColor($event)"
+                                    [searchKeyword]="keywordColor" placeholder="Seleccione el Color/Diseño/Sabor"
+                                    [itemTemplate]="itemTemplateColor" [notFoundTemplate]="notFoundTemplateColor"
+                                    class="form-control" style="width: 100%; padding: 0%"
+                                    (inputChanged)="onChangeSearchColor($event)" [initialValue]="initialColor"
+                                    (inputCleared)="onInputClearedColor()" formControlName="color" id="colorInput">
+                                </ng-autocomplete>
+                                <ng-template #itemTemplateColor let-item>
+                                    <a [innerHTML]="item.color"></a>
+                                </ng-template>
+                                <ng-template #notFoundTemplateColor let-notFound>
+                                    <p>No se encontro datos</p>
+                                </ng-template>
+                                <small *ngIf="selectColores">
+                                    <small *ngIf="selectColores" style="color: red">
+                                        Debe seleccionar un Color/Diseño/Sabor.
+                                    </small>
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="atributo_id">Caracteristica:</label>
+                                <ng-autocomplete [data]="lstAtributos" (selected)="selectEventAttribute($event)"
+                                    [searchKeyword]="keywordAttribute" placeholder="Seleccione la caracteristica"
+                                    [itemTemplate]="itemTemplateAttribute"
+                                    [notFoundTemplate]="notFoundTemplateAttribute" class="form-control"
+                                    style="width: 100%; padding: 0%" (inputChanged)="onChangeSearchAttribute($event)"
+                                    [initialValue]="initialAttribute" (inputCleared)="onInputClearedAttribute()"
+                                    formControlName="atributo" id="attributeInput">
+                                </ng-autocomplete>
+                                <ng-template #itemTemplateAttribute let-item>
+                                    <a [innerHTML]="item.atributo"></a>
+                                </ng-template>
+                                <ng-template #notFoundTemplateAttribute let-notFound>
+                                    <p>No se encontro datos</p>
+                                </ng-template>
+                                <small *ngIf="selectAtributos">
+                                    <small *ngIf="selectAtributos" style="color: red">
+                                        Debe seleccionar una caracteristicas.
+                                    </small>
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="genero_id">Género:</label>
+                                <ng-autocomplete [data]="lstGeneros" (selected)="selectEventGenre($event)"
+                                    [searchKeyword]="keywordGenre" placeholder="Seleccione el Género"
+                                    [itemTemplate]="itemTemplateGenre" [notFoundTemplate]="notFoundTemplateGenre"
+                                    class="form-control" style="width: 100%; padding: 0%"
+                                    (inputChanged)="onChangeSearchGenre($event)" [initialValue]="initialGenre"
+                                    (inputCleared)="onInputClearedGenre()" formControlName="genero" id="genreInput">
+                                </ng-autocomplete>
+                                <ng-template #itemTemplateGenre let-item>
+                                    <a [innerHTML]="item.genero"></a>
+                                </ng-template>
+                                <ng-template #notFoundTemplateGenre let-notFound>
+                                    <p>No se encontro datos</p>
+                                </ng-template>
+                                <small *ngIf="selectGeneros">
+                                    <small *ngIf="selectGeneros" style="color: red">
+                                        Debe seleccionar un Género.
+                                    </small>
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="modeloProducto " style="margin: 0">Descripción</label>
+                                <input type="text " class="form-control" id="modelo "
+                                    placeholder="Ingrese la descripción del Modelo Producto."
+                                    formControlName="modeloProducto" />
+                                <small *ngIf="
+                    modelProductForm.controls['modeloProducto'].invalid &&
+                    (modelProductForm.controls['modeloProducto'].dirty ||
+                      modelProductForm.controls['modeloProducto'].touched)
+                  ">
+                                    <small *ngIf="modelProductForm.controls['modeloProducto'].errors?.['required']"
+                                        style="color: red">
+                                        Debe ingresar la descripción del Modelo Producto
+                                    </small>
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="codigoSAP">Código SAP</label>
+                                <input type="text" class="form-control" id="codigoSAP"
+                                    placeholder="Ingrese el código SAP" formControlName="codigoSAP" />
+                            </div>
+                            <div class="form-group">
+                                <label for="etiquetas">Imagen Marca</label>
+                                <br />
+                                <!-- <input type="text" class="form-control" id="etiquetas" placeholder="Ingrese las etiquetas" formControlName="etiquetas"> -->
+                                <input type="file" accept="image/*" (change)="onChangeFile($event.target)"
+                                    class="form-control" style="padding: 0px" formControlName="urlImagen"
+                                    id="imageUpload" name="imageUpload" />
+                                <small *ngIf="
+                    modelProductForm.controls['urlImagen'].invalid &&
+                    (modelProductForm.controls['urlImagen'].dirty ||
+                      modelProductForm.controls['urlImagen'].touched)
+                  ">
+                                    <small *ngIf="modelProductForm.controls['urlImagen'].errors" style="color: red">
+                                        Debe seleccionar imágen
+                                    </small>
+                                </small>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
+                                Guardar
+                            </button>
+                        </form>
+                    </td>
+                    <td style="width: 5%"></td>
+                    <td style="width: 30%; text-align: center">
+                        <img src="{{ imageUrl }}" alt="Imágen Marca" class="img-thumbnail" />
+                        <br />
+                        <button class="btn btn-danger" style="margin-top: 5px" (click)="eliminarImagen()">
+                            Eliminar Imagen
+                        </button>
+                    </td>
+                    <td style="width: 5%"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

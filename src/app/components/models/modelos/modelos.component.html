@@ -1,0 +1,38 @@
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="row mx-3">
+                <fa-icon [icon]="faShoppingBag" [size]="'3x'" style="color: #636363;"></fa-icon>
+                <h1 class="mx-5 " style="color: #636363;">Modelos</h1>
+                <div style="position: absolute;right:0;" class="mx-3">
+                    <fa-icon [icon]="faPlus" class="btn btn-success" [size]="'lg'" data-toggle="tooltip" data-placement="bottom" title="Agregar un nuevo modelo" (click)="agregarModelos()"></fa-icon>
+                </div>
+            </div>
+        </div>
+        <div class="card-body ">
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                <thead style="color: #636363;">
+                    <tr>
+                        <th style="width: 20%; ">Linea</th>
+                        <th style="width: 20%; ">Modelo</th>
+                        <th style="width: 20%; ">Etiquetas</th>
+                        <th style="width: 25%; ">Código SAP</th>
+                        <th style="width: 15%; "></th>
+                    </tr>
+                </thead>
+                <tbody style="color: #767695;">
+                    <tr *ngFor="let modelo of lstModelos">
+                        <td>{{modelo.linea_nombre}}</td>
+                        <td>{{modelo.modelo}}</td>
+                        <td>{{modelo.etiquetas}}</td>
+                        <td>{{modelo.cod_sap}}</td>
+                        <td style="text-align: center;">
+                            <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'sm'" style="margin-right: 5px;" data-placement="bottom" title="Editar Modelo" (click)="editarModelos(modelo)"></fa-icon>
+                            <fa-icon [icon]="faTrashAlt" class="btn btn-danger" [size]="'lg'" data-placement="bottom" title="Eliminar Modelo" (click)="eliminarModelos(modelo)"></fa-icon>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

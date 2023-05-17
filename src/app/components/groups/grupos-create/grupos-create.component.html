@@ -1,0 +1,43 @@
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="row mx-3">
+                <fa-icon [icon]="faUserFriends" [size]="'3x'" style="color: #636363;"></fa-icon>
+                <h1 class="mx-5 " style="color: #636363;">Agregar Grupo</h1>
+                <div style="position: absolute;right:0;" class="mx-3">
+                    <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip" data-placement="bottom" title="Regresar a grupos" (click)="visualizarGrupos()"></fa-icon>
+                </div>
+            </div>
+        </div>
+        <div class="card-body ">
+            <form [formGroup]="groupForm" (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                    <label for="grupo">Grupo</label>
+                    <input type="text" class="form-control" id="grupo" placeholder="Ingrese el nombre del grupo" formControlName="grupo">
+                    <small *ngIf="groupForm.controls['grupo'].invalid && (groupForm.controls['grupo'].dirty || groupForm.controls['grupo'].touched)">
+                        <small  *ngIf="groupForm.controls['grupo'].errors" style="color: red;">
+                            Debe ingresar el nombre del grupo.
+                        </small >
+                    </small >
+                </div>
+                <div class="form-group">
+                    <label for="idFiscal" style="margin: 0;">Identificación Fiscal</label>
+                    <p style="font-size:0.75em; margin:0">Ingresar información sin guión</p>
+                    <input type="text" class="form-control" id="idFiscal" placeholder="Ingrese Cédula/RUC" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="13" formControlName="idFiscal" (keypress)="keyPressNumbers($event)">
+                    <small *ngIf="groupForm.controls['idFiscal'].invalid && (groupForm.controls['idFiscal'].dirty || groupForm.controls['idFiscal'].touched)">
+                        <small  *ngIf="groupForm.controls['idFiscal'].errors?.['required']" style="color: red;">
+                            Debe ingresar la identificación fiscal.
+                        </small >
+                        <small  *ngIf="groupForm.controls['idFiscal'].errors?.['minlength']" style="color: red;">
+                            Mínimo 10 caracteres.
+                        </small >
+                    </small >
+                </div>
+                <button type="submit" class="btn btn-primary"><!--[disabled]="!this.groupForm.valid"-->
+                    <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
+                    Guardar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,74 @@
+<div style="max-width: 90%;margin: auto;">
+    <div class="card">
+        <br>
+        <div class="card-header">
+            <div class="row mx-3">
+                <fa-icon [icon]="faUserFriends" [size]="'3x'" style="color: #636363;"></fa-icon>
+                <h1 class="mx-5 " style="color: #636363;">Usuarios(Terceros)</h1>
+                <div style="position: absolute;right:0;" class="mx-3">
+                    <fa-icon [icon]="faPlus" class="btn btn-success" [size]="'lg'" data-toggle="tooltip" data-placement="bottom" title="Agregar un nuevo usuario" (click)="agregarTerceros()"></fa-icon>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card-body ">
+            <div>
+                <mat-grid-list cols="6" rowHeight="50px">
+                    <mat-grid-tile>
+                        <a class="btn button" href="./navegation-cl/(contentClient:tercerosalmacen)"
+                            style="text-align:center;
+                                    font-size: 15px; width:140px; 
+                                       height:35px;
+                                       text-align:center; 
+                                       margin-top: 10px;
+                                       background: rgb(54,169,225,0.8);"
+                        ><span style="color: white;">
+                            Volver
+                        </span>
+                        </a>
+                        </mat-grid-tile>                        
+                </mat-grid-list>
+               
+            </div>
+            <br><br> 
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                <thead style="color: #636363;">
+                    <tr>
+                        <th style="width: 20%; ">Tipo de Usuario</th>
+                        <th style="width: 20%; ">Codigo</th>
+                        <th style="width: 20%; ">Tipo de I.D.</th>
+                        <th style="width: 20%; ">Identificacion</th>
+                        <th style="width: 20%; ">Nombres</th>
+                        <th style="width: 20%; ">Correo Electronico</th>
+                        <th style="width: 20%; ">Provincia</th>
+                        <th style="width: 20%; ">Ciudad</th>
+                        <th style="width: 20%; ">Direccion</th>
+                        <th style="width: 20%; ">Fecha de Nacimiento</th>
+                        <th style="width: 20%; "></th>
+                        <th style="width: 20%; "></th>
+
+                    </tr>
+                </thead>
+                <tbody style="color: #767695;">
+                    <tr *ngFor="let tercero of lstTerceros">
+                        <td>{{tercero.tipousuario}}</td>
+                        <td>100{{tercero.id}}</td>
+                        <td>{{tercero.nombretercero}}</td>
+                        <td>{{tercero.id_fiscal}}</td>
+                        <td>{{tercero.nombre}}</td>
+                        <td>{{tercero.correo}}</td>
+                        <td>{{tercero.provincia}}</td>
+                        <td>{{tercero.ciudad}}</td>
+                        <td>{{tercero.direccion}}</td>
+                        <td>{{tercero.fecha_nac| date: 'MM/dd/yyyy' }}</td>
+                        <td style="text-align: center;">
+                            <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'lg'" style="margin-right: 5px;" data-placement="bottom" title="Editar Usuario" (click)="editarTerceros(tercero)"></fa-icon>
+                            &nbsp; &nbsp;  
+                            <fa-icon [icon]="faTrashAlt" class="btn btn-danger" [size]="'lg'" data-placement="bottom" title="Eliminar Usuario" (click)="eliminarTercero(tercero)"></fa-icon>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

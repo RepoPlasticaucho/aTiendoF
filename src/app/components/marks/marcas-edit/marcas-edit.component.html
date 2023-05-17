@@ -1,0 +1,63 @@
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="row mx-3">
+                <fa-icon [icon]="faBookmark" [size]="'3x'" style="color: #636363;"></fa-icon>
+                <h1 class="mx-5 " style="color: #636363;">Modificar Marcas</h1>
+                <div style="position: absolute;right:0;" class="mx-3">
+                    <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip" data-placement="bottom" title="Regresar a marcas" (click)="visualizarMarcas()"></fa-icon>
+                </div>
+            </div>
+        </div>
+        <div class="card-body ">
+            <table style="width: 100%;">
+                <tr>
+                    <td style="width: 60%;">
+                        <form [formGroup]="markForm" (ngSubmit)="onSubmit()">
+                            <div class="form-group">
+                                <label for="atributo">Marca</label>
+                                <input type="text" class="form-control" id="atributo" placeholder="Ingrese el nombre de la marca" formControlName="marca">
+                                <small *ngIf="markForm.controls['marca'].invalid && (markForm.controls['marca'].dirty || markForm.controls['marca'].touched)">
+                                    <small  *ngIf="markForm.controls['marca'].errors" style="color: red;">
+                                        Debe ingresar el nombre de la marca
+                                    </small >
+                                </small >
+                            </div>
+                            <div class="form-group">
+                                <label for="etiquetas">Etiquetas</label>
+                                <input type="text" class="form-control" id="etiquetas" placeholder="Ingrese las etiquetas" formControlName="etiquetas">
+                                <small *ngIf="markForm.controls['etiquetas'].invalid && (markForm.controls['etiquetas'].dirty || markForm.controls['etiquetas'].touched)">
+                                    <small  *ngIf="markForm.controls['etiquetas'].errors" style="color: red;">
+                                        Debe ingresar etiquetas.
+                                    </small >
+                                </small >
+                            </div>
+                            <div class="form-group">
+                                <label for="etiquetas">Imagen Marca</label>
+                                <br>
+                                <!-- <input type="text" class="form-control" id="etiquetas" placeholder="Ingrese las etiquetas" formControlName="etiquetas"> -->
+                                <input type="file"  accept="image/*" (change)="onChangeFile($event.target)" class="form-control" style="padding: 0px;"  formControlName="urlImagen" id="imageUpload" name="imageUpload"> 
+                                <small *ngIf="markForm.controls['urlImagen'].invalid && (markForm.controls['urlImagen'].dirty || markForm.controls['urlImagen'].touched)">
+                                    <small  *ngIf="markForm.controls['urlImagen'].errors" style="color: red;">
+                                        Debe seleccionar imágen
+                                    </small >
+                                </small >
+                            </div>
+                            <button type="submit" class="btn btn-primary"><!--[disabled]="!this.groupForm.valid"-->
+                                <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
+                                Guardar
+                            </button>
+                        </form>
+                    </td>
+                    <td style="width: 5%;"></td>
+                    <td style="width: 30%;text-align: center;">
+                        <img src={{imageUrl}} alt="Imágen Marca" class="img-thumbnail"/>
+                        <br>
+                        <button class="btn btn-danger" style="margin-top: 5px;" (click)="eliminarImagen()">Eliminar Imagen</button>
+                    </td>
+                    <td style="width: 5%;"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

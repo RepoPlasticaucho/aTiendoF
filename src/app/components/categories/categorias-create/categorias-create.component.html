@@ -1,0 +1,48 @@
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="row mx-3">
+                <fa-icon [icon]="faCopy" [size]="'3x'" style="color: #636363;"></fa-icon>
+                <h1 class="mx-5 " style="color: #636363;">Agregar Categoria</h1>
+                <div style="position: absolute;right:0;" class="mx-3">
+                    <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip" data-placement="bottom" title="Regresar a grupos" (click)="visualizarCategorias()"></fa-icon>
+                </div>
+            </div>
+        </div>
+        <div class="card-body ">
+            <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                    <label for="grupo">Categoria</label>
+                    <input type="text" class="form-control" id="categoria" placeholder="Ingrese el nombre del grupo" formControlName="categoria">
+                    <small *ngIf="categoryForm.controls['categoria'].invalid && (categoryForm.controls['categoria'].dirty || categoryForm.controls['categoria'].touched)">
+                        <small  *ngIf="categoryForm.controls['categoria'].errors" style="color: red;">
+                            Debe ingresar el nombre de la categoria
+                        </small >
+                    </small >
+                </div>
+                <div class="form-group">
+                    <label for="grupo">Código SAP</label>
+                    <input type="text" class="form-control" id="codigoSAP" placeholder="Ingrese el código SAP" formControlName="codigoSAP">
+                    <small *ngIf="categoryForm.controls['codigoSAP'].invalid && (categoryForm.controls['codigoSAP'].dirty || categoryForm.controls['codigoSAP'].touched)">
+                        <small  *ngIf="categoryForm.controls['codigoSAP'].errors" style="color: red;">
+                            Debe ingresar el código.
+                        </small >
+                    </small >
+                </div>
+                <div class="form-group">
+                    <label for="grupo">Etiquetas</label>
+                    <input type="text" class="form-control" id="etiquetas" placeholder="Ingrese las etiquetas" formControlName="etiquetas">
+                    <small *ngIf="categoryForm.controls['etiquetas'].invalid && (categoryForm.controls['etiquetas'].dirty || categoryForm.controls['etiquetas'].touched)">
+                        <small  *ngIf="categoryForm.controls['etiquetas'].errors" style="color: red;">
+                            Debe ingresar etiquetas.
+                        </small >
+                    </small >
+                </div>
+                <button type="submit" class="btn btn-primary"><!--[disabled]="!this.groupForm.valid"-->
+                    <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
+                    Guardar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

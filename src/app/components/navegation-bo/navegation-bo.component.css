@@ -1,0 +1,33 @@
+.sidenav-container {
+  height: 100%;
+}
+
+.sidenav {
+  width: 240px;
+  background-color: #5e72e4;
+}
+
+.sidenav .mat-toolbar {
+  display: block;
+  text-align: right;
+}
+
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+img {
+  max-width: 50%;
+  border-radius: 0.2857rem;
+  vertical-align: middle;
+  border-style: none;
+  align-content: center;
+}
+
+#info {
+  width: 0%;
+  margin: 0 auto;
+  align-content: left;
+}

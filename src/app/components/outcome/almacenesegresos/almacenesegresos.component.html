@@ -1,0 +1,14 @@
+<table>
+    <thead>
+      <tr>
+        <th></th>
+        <th *ngFor="let columna of lstModeloProductos">{{ columna.color }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let fila of lstModeloProductos">
+        <th>{{ fila.id }}</th>
+        
+      </tr>
+    </tbody>
+  </table>

@@ -1,0 +1,79 @@
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="row mx-3">
+                <fa-icon [icon]="faUserFriends" [size]="'3x'" style="color: #636363;"></fa-icon>
+                <h1 class="mx-5 " style="color: #636363;">Agregar Almacen</h1>
+                <div style="position: absolute;right:0;" class="mx-3">
+                    <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip"
+                        data-placement="bottom" title="Regresar a almacenes" (click)="visualizarAlmacenes()">
+                    </fa-icon>
+                </div>
+            </div>
+        </div>
+        <div class="card-body ">
+            <form [formGroup]="warehousesForm" (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                    <label for="direccion">Direccion</label>
+                    <input type="text" class="form-control" id="Direccion"
+                        placeholder="Ingrese la direccion " formControlName="Direccion">
+                    <small
+                        *ngIf="warehousesForm.controls['Direccion'].invalid && (warehousesForm.controls['Direccion'].dirty || warehousesForm.controls['Direccion'].touched)">
+                        <small *ngIf="warehousesForm.controls['Direccion'].errors?.['required']"
+                            style="color: red;">
+                            Debe ingresar la direccion.
+                        </small>
+                    </small>
+                </div>
+                
+                <div class="form-group ">
+                    <label for="telefono ">Teléfono</label>
+                    <input type="text " class="form-control " id="telefono "
+                        placeholder="Ingrese el número de teléfono "
+                        oninput="javascript: if (this.value.length> this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        maxlength="10" formControlName="telefono" (keypress)="keyPressNumbers($event)">
+                    <small
+                        *ngIf="warehousesForm.controls['telefono'].invalid && (warehousesForm.controls['telefono'].dirty || warehousesForm.controls['telefono'].touched)">
+                        <small *ngIf="warehousesForm.controls['telefono'].errors?.['required']" style="color: red;">
+                            Debe ingresar el número de teléfono.
+                        </small>
+                        <small *ngIf="warehousesForm.controls['telefono'].errors?.['minlength']" style="color: red;">
+                            Mínimo 9 caracteres.
+                        </small>
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="codigo">Establecimiento</label>
+                    <input type="text" class="form-control" id="codigo"
+                        placeholder="Ingrese el establecimiento " formControlName="codigo">
+                    <small
+                        *ngIf="warehousesForm.controls['codigo'].invalid && (warehousesForm.controls['codigo'].dirty || warehousesForm.controls['codigo'].touched)">
+                        <small *ngIf="warehousesForm.controls['codigo'].errors?.['required']"
+                            style="color: red;">
+                            Debe ingresar el establecimiento.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="pto_emision">Punto de Emision</label>
+                    <input type="text" class="form-control" id="pto_emision"
+                        placeholder="Ingrese el Punto de Emision " formControlName="pto_emision">
+                    <small
+                        *ngIf="warehousesForm.controls['pto_emision'].invalid && (warehousesForm.controls['pto_emision'].dirty || warehousesForm.controls['pto_emision'].touched)">
+                        <small *ngIf="warehousesForm.controls['pto_emision'].errors?.['required']"
+                            style="color: red;">
+                            Debe ingresar el punto de Emision.
+                        </small>
+                    </small>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <!--[disabled]="!this.corporationForm.valid"-->
+                    <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
+                    Guardar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

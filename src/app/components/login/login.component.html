@@ -1,0 +1,84 @@
+<div class="grid-container" style="color: grey;">
+  <mat-grid-list cols="2" rowHeight="600px">
+      <mat-grid-tile >
+          <mat-card class="dashboard-card1" 
+                    style="
+                        padding: 15px;
+                        border-radius: 10px;">
+              <div align="center">
+                <br>
+                <a routerLink="/navegation-cl" rel="noopener noreferrer">
+                    <img src="https://atiendo.ec/black/img/logo.png">
+                </a>
+            </div>
+            <br><br><br><br><br><br><br><br><br>
+            <div align="left">
+              <p style="font-size: 2.5em;
+                        letter-spacing: 0.5pt;
+                        line-height: 0.75em;
+                        color: whitesmoke;" 
+              >
+              <a class="button" style="color: white;">
+                ¿No tienes una cuenta?
+              </a> 
+              </p><br><br>
+              
+              <p style="color: white;">
+                Regístrate para acceder a todos nuestros beneficios. <br>
+                Conoce los detalles y promociones de nuestros productos
+              </p>
+            </div>
+          </mat-card>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-card class="dashboard-card" style="
+                                      padding: 15px;
+                                      border-radius: 10px;">
+            <span>
+              <h1>
+              Accede
+              </h1>
+            </span><br><br><br>
+            <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+              <div class="form-group">
+                  <input type="text" class="form-control" id="email" placeholder="Correo Electronico" formControlName="categoria">
+                  <small *ngIf="categoryForm.controls['categoria'].invalid && (categoryForm.controls['categoria'].dirty || categoryForm.controls['categoria'].touched)">
+                      <small  *ngIf="categoryForm.controls['categoria'].errors" style="color: red;">
+                          Debe ingresar el correo electronico
+                      </small >
+                  </small >
+              </div>
+              <div class="form-group">
+                  <input type="password" class="form-control" id="passw" placeholder="Contraseña" formControlName="codigoSAP">
+                  <small *ngIf="categoryForm.controls['codigoSAP'].invalid && (categoryForm.controls['codigoSAP'].dirty || categoryForm.controls['codigoSAP'].touched)">
+                      <small  *ngIf="categoryForm.controls['codigoSAP'].errors" style="color: red;">
+                          Debe ingresar la contraseña.
+                      </small >
+                  </small >
+              </div>
+              <div align="center">
+
+                <label>
+                  <input type="checkbox"> Recordarme
+                </label>
+
+                <br>
+
+                <button type="submit" class="btn btn-primary"><!--[disabled]="!this.groupForm.valid"-->
+                  Entrar
+                </button>
+                <br><br>
+
+                <a href="#" class="btn btn-link">
+                  <span>Olvidaste tu contraseña?</span>
+                </a>
+
+              </div>
+              
+          </form>
+          <br><br><br><br><br>
+
+        </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

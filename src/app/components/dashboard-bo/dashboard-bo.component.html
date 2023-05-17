@@ -1,0 +1,38 @@
+<div class="grid-container" style="color: grey;">
+  <h1 class="mat-h1"></h1>
+    <div style="text-align: right;">
+        <button mat-button [matMenuTriggerFor]="menu" class="material-icons-outlined" style="font-size: 30px ;color: #3163ad">
+            <img  class="circular--square" src="https://atiendo.ec/black/img/anime3.png" 
+                width="35" height="35"><mat-icon class="mat-18">ligature</mat-icon>
+        </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <mat-menu #menu="matMenu">
+            <a [routerLink]="[{ outlets: { contentAdmin: ['categorias'] } }]" class="mat-menu-item">Perfil</a>
+            <a [routerLink]="[{ outlets: { contentAdmin: ['categorias'] } }]" class="mat-menu-item">Configuracion</a>
+            <a [routerLink]="[{ outlets: { contentAdmin: ['categorias'] } }]" class="mat-menu-item">Salir</a>
+        </mat-menu>           
+    </div>
+  <mat-grid-list cols="3" rowHeight="225px">
+      <mat-grid-tile *ngFor="let card of cards | async" [colspan]="card.cols" [rowspan]="card.rows">
+          <mat-card class="dashboard-card">
+              <mat-card-header>
+
+                  <mat-card-title>
+                      <span class="material-icons-outlined" style="font-size: 40px ; color: #3163ad">{{card.figure}}</span>
+                      <br><br>
+                      <a href={{card.dir}} style="text-decoration: none;">
+                          <p style="color: black; font-size:30px;font-weight: normal;">
+                              {{card.title}}
+                          </p>
+                      </a>
+                  </mat-card-title>
+              </mat-card-header>
+              <mat-card-content class="dashboard-card-content">
+                  <div>
+                      Informacion acerca <br> de {{card.name}} <br>
+                      <br>
+                  </div>
+              </mat-card-content>
+          </mat-card>
+      </mat-grid-tile>
+  </mat-grid-list>
+</div>

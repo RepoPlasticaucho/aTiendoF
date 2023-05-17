@@ -1,0 +1,48 @@
+<div style="width: 90%;margin: auto;">
+    <div class="card">
+        <div class="card-header">
+            <div class="row mx-3">
+                <fa-icon [icon]="faList" [size]="'3x'" style="color: #636363;"></fa-icon>
+                <h1 class="mx-5 " style="color: #636363;">Modelo Producto</h1>
+                <div style="position: absolute;right:0;" class="mx-3">
+                    <fa-icon [icon]="faPlus" class="btn btn-success" [size]="'lg'" data-toggle="tooltip" data-placement="bottom" title="Agregar una nuevo Modelo Producto" (click)="agregarModeloProducto()"></fa-icon>
+                </div>
+            </div>
+        </div>
+        <div class="card-body ">
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                <thead style="color: #636363;">
+                    <tr>
+                        <th style="width: 10%; "></th>
+                        <th style="width: 10%; ">Marca</th>
+                        <th style="width: 10%; ">Color</th>
+                        <th style="width: 10%; ">Atributo</th>
+                        <th style="width: 10%; ">Género</th>
+                        <th style="width: 15%; ">Modelo</th>
+                        <th style="width: 20%; ">Modelo Producto</th>
+                        <th style="width: 11%; ">Cód. SAP</th>
+                        <th style="width: 14%; "></th>
+                    </tr>
+                </thead>
+                <tbody style="color: #767695;">
+                    <tr *ngFor="let modeloProducto of lstModelosProductos">
+                        <td style="text-align: center;">
+                            <img src={{modeloProducto.url_image}} alt={{modeloProducto.marca}} class="img-thumbnail" height="100px" width="100px" data-toggle="modal" data-target="#exampleModal">
+                        </td>
+                        <td>{{modeloProducto.marca}}</td>
+                        <td>{{modeloProducto.color}}</td>
+                        <td>{{modeloProducto.atributo}}</td>
+                        <td>{{modeloProducto.genero}}</td>
+                        <td>{{modeloProducto.modelo}}</td>
+                        <td>{{modeloProducto.modelo_producto}}</td>
+                        <td>{{modeloProducto.cod_sap}}</td>
+                        <td style="text-align: center;">
+                            <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'lg'" style="margin-right: 5px;" data-placement="bottom" title="Editar Modelo Producto" (click)=" editarModeloProducto(modeloProducto) "></fa-icon>
+                            <fa-icon [icon]="faTrashAlt " class="btn btn-danger " [size]=" 'lg' " data-placement="bottom " title="Eliminar Modelo Producto" (click)="deshabilitarModeloProducto(modeloProducto)"></fa-icon>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

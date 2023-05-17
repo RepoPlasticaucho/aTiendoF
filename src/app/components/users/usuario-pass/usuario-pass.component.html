@@ -1,0 +1,131 @@
+
+<div class="grid-container" style="color: grey;">
+    <h1 class="mat-h1"></h1>
+    <div style="text-align: right;">
+        <button mat-button [matMenuTriggerFor]="menu" class="material-icons-outlined" style="font-size: 30px ;color: #3163ad">
+        <img  class="circular--square" src="https://atiendo.ec/black/img/anime3.png" 
+            width="35" height="35"><mat-icon class="mat-18">ligature</mat-icon>
+        </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <mat-menu #menu="matMenu">
+            <a class="mat-menu-item" href="./navegation-adm/(contentAdmin:usuario)">Perfil</a>
+            <a [routerLink]="[{ outlets: { contentAdmin: ['usuario'] } }]" class="mat-menu-item">Configuracion</a>
+            <a [routerLink]="[{ outlets: { contentAdmin: ['usuario'] } }]" class="mat-menu-item">Salir</a>
+        
+        </mat-menu>           
+    </div>
+    <br>
+    <mat-grid-list cols="1" rowHeight="660px">
+            <mat-grid-tile >
+                <div class="col-md-8">
+                    <mat-card class="dashboard-card" 
+                        style="
+                            padding: 15px;
+                            border-radius: 10px;">
+                           <br>
+                            <div align="left">
+                                <a  class="btn btn-info" (click)="onPass()">Volver</a>                          
+                            </div><br>
+                                                      
+                           <div align="center">
+                                   <h5 class="title">Cambio de contraseña</h5>
+                            </div><br>
+
+                            <form [formGroup]="corporationForm" (ngSubmit)="onSubmit()">
+                                <div class="form-group">
+                                    <label for="razonSocial">Contraseña Actual</label>
+                                    <input type="password" class="form-control" id="razonSocial"
+                                        placeholder="Ingrese la contraseña Actual " formControlName="razonSocial">
+                                    <small
+                                        *ngIf="corporationForm.controls['razonSocial'].invalid && (corporationForm.controls['razonSocial'].dirty || corporationForm.controls['razonSocial'].touched)">
+                                        <small *ngIf="corporationForm.controls['razonSocial'].errors?.['required']"
+                                            style="color: red;">
+                                            Debe ingresar la contraseña actual
+                                        </small>
+                                    </small>
+                                </div>
+                              
+                                <div class="form-group">
+                                    <label for="passwnew">Nueva Contraseña</label>
+                                    <input type="password" class="form-control" id="passwnew"
+                                        placeholder="Ingrese la nueva contraseña " formControlName="nombreComercial2">
+                                    <small
+                                        *ngIf="corporationForm.controls['nombreComercial2'].invalid && (corporationForm.controls['nombreComercial2'].dirty || corporationForm.controls['nombreComercial2'].touched)">
+                                        <small *ngIf="corporationForm.controls['nombreComercial2'].errors?.['required']"
+                                            style="color: red;">
+                                            Debe ingresar la nueva contraseña.
+                                        </small>
+                                    </small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="passconfirm">Confirmacion de la Nueva Contraseña</label>
+                                    <input type="password" class="form-control" id="passconfirm"
+                                        placeholder="Ingrese la nueva contraseña " formControlName="nombreComercial1">
+                                    <small
+                                        *ngIf="corporationForm.controls['nombreComercial1'].invalid && (corporationForm.controls['nombreComercial1'].dirty || corporationForm.controls['nombreComercial1'].touched)">
+                                        <small *ngIf="corporationForm.controls['nombreComercial1'].errors?.['required']"
+                                            style="color: red;">
+                                            Debe confirmar la nueva contraseña.
+                                        </small>
+                                    </small>
+                                </div>
+                              <div align="center">
+                                <button type="submit" class="btn btn-primary">
+                                    <!--[disabled]="!this.corporationForm.valid"-->
+                                    <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
+                                    Actualizar
+                                </button>
+                              </div>
+                               
+                            </form>   
+                            <br>
+                        </mat-card>
+                </div> 
+                <div class="col-md-4">
+                    <mat-card class="dashboard-card" 
+                            style="
+                                padding: 15px;
+                                border-radius: 10px;">
+                            <div class="card card-user">
+                                <div class="card-body">
+                                    <p class="card-text">
+                                        <div class="author"align="center">
+                                            <div class="block block-one"></div>
+                                            <div class="block block-two"></div>
+                                            <div class="block block-three"></div>
+                                            <div class="block block-four"></div>
+                                            <a href="#">
+                                                <img class="avatar" src="https://atiendo.ec/black/img/anime3.png" alt="">
+                                            </a>
+                                            <p class="description" style="text-align: center;">
+                                                Ceo/Co-Founder
+                                            </p>
+                                        </div>
+                                        
+                                    <div class="card-description">
+                                        <p>
+                                            'Do not be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
+                                        </p> 
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="button-container" align="center">
+                                        <button class="btn btn-icon btn-round btn-facebook">
+                                            <i class="fab fa-facebook"></i>
+                                        </button>
+                                        <button class="btn btn-icon btn-round btn-twitter">
+                                            <i class="fab fa-twitter"></i>
+                                        </button>
+                                        <button class="btn btn-icon btn-round btn-google">
+                                            <i class="fab fa-google-plus"></i>
+                                        </button>
+                                        </div>
+                                </div>
+                            </div>                   
+                    
+                    </mat-card>
+                </div>    
+                        
+            </mat-grid-tile>
+    </mat-grid-list>
+   
+</div>

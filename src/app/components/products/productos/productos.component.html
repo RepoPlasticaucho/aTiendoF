@@ -1,0 +1,50 @@
+<div style="width: 90%;margin: auto;">
+    <div class="card">
+        <div class="card-header">
+            <div class="row mx-3">
+                <fa-icon [icon]="faList" [size]="'3x'" style="color: #636363;"></fa-icon>
+                <h1 class="mx-5 " style="color: #636363;">Productos</h1>
+                <div style="position: absolute;right: 4.5em;" class="mx-3">
+                    <button class="btn btn-info" (click)="onMigrar()">MIGRAR</button>
+                </div>
+                <div style="position: absolute;right:0;" class="mx-3">
+                    <fa-icon [icon]="faPlus" class="btn btn-success" [size]="'lg'" data-toggle="tooltip" data-placement="bottom" title="Agregar una nuevo Modelo Producto" (click)="agregarProducto()"></fa-icon>
+                </div>
+            </div>
+ 
+        </div>
+        <div class="card-body ">
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                <thead style="color: #636363;">
+                    <tr>
+                        <th style="width: 10%; ">Marca</th>
+                        <th style="width: 10%; ">Color</th>
+                        <th style="width: 10%; ">Atributo</th>
+                        <th style="width: 10%; ">Género</th>
+                        <th style="width: 15%; ">Modelo</th>
+                        <th style="width: 19%; ">Producto</th>
+                        <th style="width: 6%; ">Tamaño</th>
+                        <th style="width: 6%; ">Impuesto</th>
+                        <th style="width: 14%; "></th>
+                    </tr>
+                </thead>
+                <tbody style="color: #767695;">
+                    <tr *ngFor="let producto of lstProductos">
+                        <td>{{producto.marca_nombre}}</td>
+                        <td>{{producto.color_nombre}}</td>
+                        <td>{{producto.atributo_nombre}}</td>
+                        <td>{{producto.genero_nombre}}</td>
+                        <td>{{producto.modelo_nombre}}</td>
+                        <td>{{producto.nombre}}</td>
+                        <td>{{producto.tamanio}}</td>
+                        <td>{{producto.impuesto_nombre}}</td>
+                        <td style="text-align: center;">
+                            <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'lg'" style="margin-right: 5px;" data-placement="bottom" title="Editar Modelo Producto" (click)=" editarProducto(producto) "></fa-icon>
+                            <fa-icon [icon]="faTrashAlt " class="btn btn-danger " [size]=" 'lg' " data-placement="bottom " title="Eliminar Modelo Producto" (click)="deshabilitarProducto(producto)"></fa-icon>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

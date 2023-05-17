@@ -1,0 +1,41 @@
+<div style="width: 90%;margin: auto;">
+    <div class="card">
+        <br>
+        <div class="card-header">
+            <div class="row mx-3">
+                <fa-icon [icon]="faUserFriends" [size]="'3x'" style="color: #636363;"></fa-icon>
+                <h1 class="mx-5 " style="color: #636363;">Almacenes</h1>
+                <div style="position: absolute;right:0;" class="mx-3">
+                    <fa-icon [icon]="faPlus" class="btn btn-success" [size]="'lg'" data-toggle="tooltip" data-placement="bottom" title="Agregar un nuevo Almacen" (click)="agregarAlmacenes()"></fa-icon>
+                </div>
+            </div>
+        </div>
+        <div class="card-body ">
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                <thead style="color: #636363;">
+                    <tr>
+                        <th style="width: 10%; ">Sociedad</th>
+                        <th style="width: 10%; ">Direccion</th>
+                        <th style="width: 15%; ">Telefono</th>
+                        <th style="width: 20%; ">Establecimiento</th>
+                        <th style="width: 20%; ">Punto de Emision</th>
+                        <th style="width: 20%; "></th>
+                    </tr>
+                </thead>
+                <tbody style="color: #767695;">
+                    <tr *ngFor="let almacen of lstAlmacenes">
+                        <td>{{almacen.nombresociedad}}</td>
+                        <td>{{almacen.direccion}}</td>
+                        <td>{{almacen.telefono}}</td>
+                        <td>{{almacen.codigo}}</td>
+                        <td>{{almacen.pto_emision}}</td>
+                        <td>
+                            <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'sm'" style="margin-right: 5px;" data-placement="bottom" title="Editar Almacen" (click)="editarAlmacenes(almacen)"></fa-icon>
+                            <fa-icon [icon]="faTrashAlt" class="btn btn-danger" [size]="'lg'" data-placement="bottom" title="Eliminar Almacen" (click)="eliminarAlmacenes(almacen)"></fa-icon>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

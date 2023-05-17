@@ -1,0 +1,38 @@
+
+<br>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="row mx-3">
+                <fa-icon [icon]="faCopy" [size]="'3x'" style="color: #636363;"></fa-icon>
+                <h1 class="mx-5 " style="color: #636363;">Categorias</h1>
+                <div style="position: absolute;right:0;" class="mx-3">
+                    <fa-icon [icon]="faPlus" class="btn btn-success" [size]="'lg'" data-toggle="tooltip" data-placement="bottom" title="Agregar una nueva categoria" (click)="agregarCategoria()"></fa-icon>
+                </div>
+            </div>
+        </div>
+        <div class="card-body ">
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                <thead style="color: #636363;">
+                    <tr>
+                        <th style="width: 25%; ">Categoria</th>
+                        <th style="width: 25%; ">Cod. SAP</th>
+                        <th style="width: 30%; ">Etiquetas</th>
+                        <th style="width: 20%; "></th>
+                    </tr>
+                </thead>
+                <tbody style="color: #767695;">
+                    <tr *ngFor="let categoria of lstCategorias">
+                        <td>{{categoria.categoria}}</td>
+                        <td>{{categoria.cod_sap}}</td>
+                        <td>{{categoria.etiquetas}}</td>
+                        <td style="text-align: center;">
+                            <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'lg'" style="margin-right: 5px;" data-placement="bottom" title="Editar categoria" (click)="editarCategorias(categoria)"></fa-icon>
+                            <fa-icon [icon]="faTrashAlt" class="btn btn-danger" [size]="'lg'" data-placement="bottom" title="Eliminar categoria" (click)="eliminarCategorias(categoria)"></fa-icon>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

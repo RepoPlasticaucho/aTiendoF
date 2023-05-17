@@ -1,0 +1,48 @@
+{
+    "$schema": "./node_modules/@angular/service-worker/config/schema.json",
+    "index": "/index.html",
+    "assetGroups": [{
+            "name": "app",
+            "installMode": "prefetch",
+            "resources": {
+                "files": [
+                    "/favicon.ico",
+                    "/index.html",
+                    "/manifest.webmanifest",
+                    "/*.css",
+                    "/*.js"
+                ]
+            }
+        },
+        {
+            "name": "assets",
+            "installMode": "lazy",
+            "updateMode": "prefetch",
+            "resources": {
+                "files": [
+                    "/assets/**",
+                    "/*.(svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)"
+                ]
+            }
+        }
+    ],
+    "dataGroups": [{
+        "name": "data-api",
+        "urls": [
+            "http://outgoapp.plasticaucho.com/WSAtiendo/api/categorias/ObtenerCategorias",
+            "http://outgoapp.plasticaucho.com/WSAtiendo/api/lineas/ObtenerLineas",
+            "http://outgoapp.plasticaucho.com/WSAtiendo/api/modelos/ObtenerModelos",
+            "http://outgoapp.plasticaucho.com/WSAtiendo/api/marcas/ObtenerMarcas",
+            "http://outgoapp.plasticaucho.com/WSAtiendo/api/colores/ObtenerColores",
+            "http://outgoapp.plasticaucho.com/WSAtiendo/api/generos/ObtenerGeneros",
+            "http://outgoapp.plasticaucho.com/WSAtiendo/api/atributos/ObtenerAtributos",
+            "http://outgoapp.plasticaucho.com/WSAtiendo/api/modeloProducto/ObtenerModeloProductos"
+        ],
+        "cacheConfig": {
+            "strategy": "freshness",
+            "maxSize": 100,
+            "maxAge": "50m",
+            "timeout": "5s"
+        }
+    }]
+}

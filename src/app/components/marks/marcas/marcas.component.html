@@ -1,0 +1,54 @@
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="row mx-3">
+                <fa-icon [icon]="faBookmark" [size]="'3x'" style="color: #636363;"></fa-icon>
+                <h1 class="mx-5 " style="color: #636363;">Marcas</h1>
+                <div style="position: absolute;right:0;" class="mx-3">
+                    <fa-icon [icon]="faPlus" class="btn btn-success" [size]="'lg'" data-toggle="tooltip" data-placement="bottom" title="Agregar una nueva marca" (click)="agregarMarca()"></fa-icon>
+                </div>
+            </div>
+        </div>
+        <div class="card-body ">
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                <thead style="color: #636363;">
+                    <tr>
+                        <th style="width: 20%; "></th>
+                        <th style="width: 30%; ">Marca</th>
+                        <th style="width: 30%; ">Etiquetas</th>
+                        <th style="width: 20%; "></th>
+                    </tr>
+                </thead>
+                <tbody style="color: #767695;">
+                    <tr *ngFor="let marca of lstMarcas">
+                        <td style="text-align: center;">
+                            <img src={{marca.url_image}} alt={{marca.marca}} class="img-thumbnail" height="100px" width="100px" data-toggle="modal" data-target="#exampleModal" (click)="abrirImagen(marca)">
+                        </td>
+                        <td>{{marca.marca}}</td>
+                        <td>{{marca.etiquetas}}</td>
+                        <td style="text-align: center;">
+                            <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'lg'" style="margin-right: 5px;" data-placement="bottom" title="Editar marca" (click)="editarMarcas(marca)"></fa-icon>
+                            <fa-icon [icon]="faTrashAlt" class="btn btn-danger" [size]="'lg'" data-placement="bottom" title="Eliminar marca" (click)="eliminarMarcas(marca)"></fa-icon>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: black;opacity: 0.95;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-title" style="text-align: end;">
+                <button class="btn btn-danger" style="margin-top: 10px; margin-right: 10px;" data-dismiss="modal">X</button>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <img src={{lvUrlImagen}} alt={{lvNombre} class="img-thumbnail" data-dismiss="modal" />
+            </div>
+            <div class="modal-footer" style="justify-content: center;">
+                <p style="font-size: 20px;">Marca: {{lvNombre}}</p>
+            </div>
+        </div>
+    </div>
+</div>

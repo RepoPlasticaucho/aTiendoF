@@ -1,0 +1,48 @@
+<div style="width: 90%;margin: auto;">
+    <div class="card">
+        <br>
+        <div class="card-header">
+            <div class="row mx-3">
+                <fa-icon [icon]="faUserFriends" [size]="'3x'" style="color: #636363;"></fa-icon>
+                <h1 class="mx-5 " style="color: #636363;">Productos de los Almacenes</h1>
+                <div style="position: absolute;right:0;" class="mx-3">
+                </div>
+            </div>
+        </div>
+        <div class="card-body ">
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                <thead style="color: #636363;">
+                    <tr>
+                        <th style="width: 20%; ">Direccion</th>
+                        <th style="width: 20%; ">Telefono</th>
+                        <th style="width: 20%; ">Codigo</th>
+                        <th style="width: 20%; ">Punto de Emision</th>
+                        <th style="width: 20%; "></th>
+                    </tr>
+                </thead>
+                <tbody style="color: #767695;">
+                    <tr *ngFor="let almacen of lstAlmacenes">
+                        <td>{{almacen.direccion}}</td>
+                        <td>{{almacen.telefono}}</td>
+                        <td>{{almacen.codigo}}</td>
+                        <td>{{almacen.pto_emision}}</td>
+                        <td>
+                            <a class="btn button" (click)="buscarInventario(almacen)"
+                                style="border-radius: 5px; 
+                                       background: rgb(49,99,173,0.8); 
+                                       font-size: 15px; width:140px; 
+                                       height:35px;
+                                       text-align:center; 
+                                       margin-top: 15px;
+                                       ">
+                                <span style="color:white;">
+                                        DETALLAR
+                                </span>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

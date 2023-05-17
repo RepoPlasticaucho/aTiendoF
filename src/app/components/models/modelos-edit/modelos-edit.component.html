@@ -1,0 +1,67 @@
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="row mx-3">
+                <fa-icon [icon]="faShoppingBag" [size]="'3x'" style="color: #636363;"></fa-icon>
+                <h1 class="mx-5 " style="color: #636363;">Modificar Modelo</h1>
+                <div style="position: absolute;right:0;" class="mx-3">
+                    <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip" data-placement="bottom" title="Regresar a modelos" (click)="visualizarLineas()">
+                    </fa-icon>
+                </div>
+            </div>
+        </div>
+        <div class="card-body ">
+            <form [formGroup]="modelForm" (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                    <label for="linea">Linea</label>
+                    <select class="form-control" (change)="changeLine($event)" formControlName="linea">
+                        <option [value]=" 0 " selected>Seleccione una línea</option>
+                        <option *ngFor="let linea of lstLineas " [value]="linea.id ">
+                            {{linea.linea}}
+                        </option>
+                    </select>
+                    <small *ngIf="selectLineas">
+                        <small *ngIf="selectLineas " style="color: red; ">
+                            Debe seleccionar una Línea.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group ">
+                    <label for="modelo " style="margin: 0;">Modelo</label>
+                    <input type="text " class="form-control " id="modelo " placeholder="Ingrese el nombre del modelo." formControlName="modelo">
+                    <small *ngIf="modelForm.controls['modelo'].invalid && (modelForm.controls['modelo'].dirty || modelForm.controls['modelo'].touched)">
+                        <small *ngIf="modelForm.controls['modelo'].errors?.['required']" style="color: red;">
+                            Debe ingresar el nombre del Modelo.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="etiquetas">Etiquetas</label>
+                    <p style="font-size:0.75em; margin:0">Separadas por comas(,)</p>
+                    <input type="text" class="form-control" id="etiquetas" placeholder="Ingrese las etiquetas " formControlName="etiquetas">
+                    <small *ngIf="modelForm.controls['etiquetas'].invalid && (modelForm.controls['etiquetas'].dirty || modelForm.controls['etiquetas'].touched)">
+                        <small *ngIf="modelForm.controls['etiquetas'].errors?.['required']"
+                            style="color: red;">
+                            Debe ingresar el nombre de las etiquetas.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="codigoSAP">Código SAP</label>
+                    <input type="text" class="form-control" id="codigoSAP" placeholder="Ingrese el código" formControlName="codigoSAP">
+                    <small *ngIf="modelForm.controls['codigoSAP'].invalid && (modelForm.controls['codigoSAP'].dirty || modelForm.controls['codigoSAP'].touched)">
+                        <small *ngIf="modelForm.controls['codigoSAP'].errors?.['required']"
+                            style="color: red;">
+                            Debe ingresar el código SAP.
+                        </small>
+                    </small>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <!--[disabled]="!this.modelForm.valid"-->
+                    <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
+                    Guardar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

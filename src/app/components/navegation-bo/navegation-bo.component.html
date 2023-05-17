@@ -1,0 +1,62 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
+
+      <div align="center">
+          <br>
+          <a routerLink="/navegation-bo" rel="noopener noreferrer">
+              <img src="https://atiendo.ec/black/img/logo.png">
+          </a>
+      </div>
+      <p align="center" style="color:aliceblue">__________________________</p>
+      <mat-nav-list>
+          <a mat-list-item routerLink="/navegation-bo" style="color: white">
+              <span class="material-icons-outlined" style="font-size: 24px">pie_chart</span>
+              <font style="font-size: 13px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dashboard</font>
+          </a>
+          <a mat-list-item [routerLink]="[{ outlets: { contentBo: ['categorias'] } }]" style="color: white">
+              <span class="material-icons-outlined" style="font-size: 24px">file_copy</span>
+              <font style="font-size: 13px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Categorias</font>
+          </a>
+          <a mat-list-item [routerLink]="[{ outlets: { contentBo: ['lineas'] } }]" style="color: white">
+              <span class="material-icons-outlined" style="font-size: 24px">assignment</span>
+              <font style="font-size: 13px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lineas</font>
+          </a>
+          <a mat-list-item [routerLink]="[{ outlets: { contentBo: ['marcas'] } }]" style="color: white">
+              <span class="material-icons-outlined" style="font-size: 24px">bookmarks</span>
+              <font style="font-size: 13px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Marcas</font>
+          </a>
+          <a mat-list-item [routerLink]="[{ outlets: { contentBo: ['colores'] } }]" style="color: white">
+              <span class="material-icons-outlined" style="font-size: 24px">shopping_cart</span>
+              <font style="font-size: 13px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Colores</font>
+          </a>
+          <a mat-list-item [routerLink]="[{ outlets: { contentBo: ['atributos'] } }]" style="color: white">
+              <span class="material-icons-outlined" style="font-size: 24px">pie_chart</span>
+              <font style="font-size: 13px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Caracteristicas</font>
+          </a>
+          <a mat-list-item [routerLink]="[{ outlets: { contentBo: ['productos'] } }]" style="color: white">
+              <span class="material-icons-outlined" style="font-size: 24px">widgets</span>
+              <font style="font-size: 13px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Productos</font>
+          </a>
+          <a mat-list-item [routerLink]="[{ outlets: { contentBo: ['grupos'] } }]" style="color: white">
+              <span class="material-icons-outlined" style="font-size: 24px">person</span>
+              <font style="font-size: 13px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grupos</font>
+          </a>
+          <a mat-list-item [routerLink]="[{ outlets: { contentBo: ['sociedades'] } }]" style="color: white">
+              <span class="material-icons-outlined" style="font-size: 24px">supervisor_account</span>
+              <font style="font-size: 13px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sociedades</font>
+          </a>
+          <a mat-list-item [routerLink]="[{ outlets: { contentBo: ['almacenes'] } }]" style="color: white">
+              <span class="material-icons-outlined" style="font-size: 24px">location_city</span>
+              <font style="font-size: 13px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Almacenes</font>
+          </a>
+          <a mat-list-item href="#" style="color: white">
+              <span class="material-icons-outlined" style="font-size: 24px">logout</span>
+              <font style="font-size: 13px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Salir</font>
+          </a>
+      </mat-nav-list>
+
+  </mat-sidenav>
+  <mat-sidenav-content>
+      <router-outlet name="contentBo"></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

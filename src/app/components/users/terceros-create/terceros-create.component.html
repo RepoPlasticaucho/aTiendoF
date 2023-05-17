@@ -1,0 +1,205 @@
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="row mx-3">
+                <fa-icon [icon]="faUserFriends" [size]="'3x'" style="color: #636363;"></fa-icon>
+                <h1 class="mx-5 " style="color: #636363;">Agregar Usuario</h1>
+                <div style="position: absolute;right:0;" class="mx-3">
+                    <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip"
+                        data-placement="bottom" title="Regresar a terceros" (click)="visualizarTerceros()">
+                    </fa-icon>
+                </div>
+            </div>
+        </div>
+        <div class="card-body ">
+            <form [formGroup]="TercerosForm" (ngSubmit)="onSubmit()" >
+                <div class="form-group">
+                    <label for="grupo">Sociedad</label>
+                    <select class="form-control" (change)="onSelect1($event)" formControlName="sociedad">
+                        <option [value]=" 0 " selected>Seleccione una sociedad</option>
+                        <option *ngFor="let sociedad of lstSociedades" [value]="sociedad.nombre_comercial">
+                            {{sociedad.nombre_comercial}}
+                        </option>
+                    </select>
+                    <small *ngIf="selectSociedades">
+                        <small *ngIf="selectSociedades " style="color: red; ">
+                            Debe seleccionar una sociedad.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="grupo">Almacén</label>
+                    <select class="form-control" (change)="changeGroup5($event)" formControlName="almacen">
+                        <option [value]=" 0 " selected>Seleccione un almacén</option>
+                        <option *ngFor="let almacen of lstAlmacenes" [value]="almacen.direccion">
+                            {{almacen.direccion}}
+                        </option>
+                    </select>
+                    <small *ngIf="selectAlmacenes">
+                        <small *ngIf="selectAlmacenes " style="color: red; ">
+                            Debe seleccionar un almacén.
+                        </small>
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="grupo">Tipo Usuario</label>
+                    <select class="form-control" (change)="changeGroup3($event)" formControlName="tipo_usuario">
+                        <option [value]=" 0 " selected>Seleccione un tipo usuario</option>
+                        <option *ngFor="let tipo_usuario of lstTipoUsuarios" [value]="tipo_usuario.usuario">
+                            {{tipo_usuario.usuario}}
+                        </option>
+                    </select>
+                    <small *ngIf="selectTipoUsuario">
+                        <small *ngIf="selectTipoUsuario " style="color: red; ">
+                            Debe seleccionar un tipo de Usuario.
+                        </small>
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="grupo">Tipo de Indentificacion</label>
+                    <select class="form-control" (change)="changeGroup2($event)" formControlName="tipo_tercero">
+                        <option [value]=" 0 " selected>Seleccione un tipo tercero</option>
+                        <option *ngFor="let tipo_tercero of lstTipoTerceros" [value]="tipo_tercero.descripcion">
+                            {{tipo_tercero.descripcion}}
+                        </option>
+                    </select>
+                    <small *ngIf="selectTipoTercero">
+                        <small *ngIf="selectTipoTercero " style="color: red; ">
+                            Debe seleccionar un tipo tercero.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group ">
+                    <label for=" ">Identificacion</label>
+                    <input type="text " class="form-control " id="id_fiscal"
+                        placeholder="Ingrese el numero Identificacion "
+                        [maxlength]="idFiscalMaxLength" formControlName="id_fiscal">
+                    <small
+                        *ngIf="TercerosForm.controls['id_fiscal'].invalid && (TercerosForm.controls['id_fiscal'].dirty || TercerosForm.controls['id_fiscal'].touched)">
+                        <small *ngIf="TercerosForm.controls['id_fiscal'].errors?.['required']" style="color: red;">
+                            Debe ingresar el número de Identificacion.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="nombre">Nombres</label>
+                    <input type="text" class="form-control" id="nombre"
+                        placeholder="Ingrese los nombres " formControlName="nombre"
+                        (keypress)="keyPressLetters($event)">
+                    <small
+                        *ngIf="TercerosForm.controls['nombre'].invalid && (TercerosForm.controls['nombre'].dirty || TercerosForm.controls['nombre'].touched)">
+                        <small *ngIf="TercerosForm.controls['nombre'].errors?.['required']"
+                            style="color: red;">
+                            Debe ingresar los nombres.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="apellido">Apellidos</label>
+                    <input type="text" class="form-control" id="apellido"
+                        placeholder="Ingrese los Apellidos" formControlName="apellido"
+                        (keypress)="keyPressLetters($event)">
+                    <small
+                        *ngIf="TercerosForm.controls['apellido'].invalid && (TercerosForm.controls['apellido'].dirty || TercerosForm.controls['apellido'].touched)">
+                        <small *ngIf="TercerosForm.controls['apellido'].errors?.['required']"
+                            style="color: red;">
+                            Debe ingresar los apellidos.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="correo">Correo Electronico</label>
+                    <input type="text" [(ngModel)]="email" class="form-control" id="correo"
+                        placeholder="Ingrese el correo Electronico" formControlName="correo" pattern=".*@.*" required>
+                        <small
+                        *ngIf="TercerosForm.controls['correo'].invalid && TercerosForm.get('correo')!.invalid && (TercerosForm.controls['correo'].dirty || TercerosForm.controls['correo'].touched)">
+                        <small style="color: red;">
+                            Debe ingresar un correo válido.
+                        </small>
+                    </small>
+                </div>
+
+                <div class="form-group ">   <label for="telefono ">Teléfono</label>
+                    <input type="text " class="form-control " id="telefono"
+                
+                         placeholder="Ingrese el número de teléfono "
+                        oninput="javascript: if (this.value.length> this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        maxlength="10" formControlName="telefono" (keypress)="keyPressNumbers($event)">
+                    <small
+                        *ngIf="TercerosForm.controls['telefono'].invalid && (TercerosForm.controls['telefono'].dirty || TercerosForm.controls['telefono'].touched)">
+                        <small *ngIf="TercerosForm.controls['telefono'].errors?.['required']" style="color: red;">
+                            Debe ingresar el número de teléfono.
+                        </small>
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="provincia">Provincia</label>
+                    <select class="form-control" (change)="onSelect($event)" formControlName="provincia">
+                        <option [value]=" 0 " selected>Seleccione una provincia</option>
+                        <option *ngFor="let provincia of lstProvincias" [value]= "provincia.provincia">
+                            {{provincia.provincia}}
+                        </option>
+                    </select>
+                    <small *ngIf="selectProvincias2">
+                        <small *ngIf="selectProvincias2" style="color: red; ">
+                            Debe seleccionar una provincia.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="grupo">Ciudad</label>
+                    <select class="form-control" (change)="changeGroup1($event)" formControlName="ciudad">
+                        <option [value]=" 0 " selected>Seleccione una ciudad</option>
+                        <option *ngFor="let ciudad of lstCiudades" [value]="ciudad.ciudad">
+                            {{ciudad.ciudad}}
+                        </option>
+                    </select>
+                    <small *ngIf="selectCiudades">
+                        <small *ngIf="selectCiudades " style="color: red; ">
+                            Debe seleccionar una ciudad.
+                        </small>
+                    </small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="direccion">Direccion</label>
+                    <input type="text" class="form-control" id="direccion"
+                        placeholder="Ingrese la direccion " formControlName="direccion">
+                    <small
+                        *ngIf="TercerosForm.controls['direccion'].invalid && (TercerosForm.controls['direccion'].dirty || TercerosForm.controls['direccion'].touched)">
+                        <small *ngIf="TercerosForm.controls['direccion'].errors?.['required']"
+                            style="color: red;">
+                            Debe ingresar la direccion.
+                        </small>
+                    </small>
+                </div>
+              
+                <div class="form-group">
+                    <label for="fecha_nac">Fecha de Nacimiento</label><br>
+                    
+                    <mat-form-field appearance="fill">
+                        <mat-label>INGRESE LA FECHA</mat-label>
+                        <input id="fecha_nac" 
+                            matInput [matDatepicker]="picker" 
+                            formControlName="fecha_nac" [(ngModel)]="fechaSeleccionada" [disabled]="true">
+
+                            <mat-datepicker-toggle matSuffix [for]="picker">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #picker disabled="false">
+                            </mat-datepicker>
+                    </mat-form-field>
+
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <!--[disabled]="!this.corporationForm.valid"-->
+                    <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
+                    Guardar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

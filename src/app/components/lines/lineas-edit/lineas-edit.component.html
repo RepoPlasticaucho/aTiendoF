@@ -1,0 +1,67 @@
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="row mx-3">
+                <fa-icon [icon]="faClipboardList" [size]="'3x'" style="color: #636363;"></fa-icon>
+                <h1 class="mx-5 " style="color: #636363;">Modificar Línea</h1>
+                <div style="position: absolute;right:0;" class="mx-3">
+                    <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip" data-placement="bottom" title="Regresar a sociedades" (click)="visualizarLineas()">
+                    </fa-icon>
+                </div>
+            </div>
+        </div>
+        <div class="card-body ">
+            <form [formGroup]="lineForm" (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                    <label for="categoria">Categoria</label>
+                    <select class="form-control" (change)="changeCategoria($event)" formControlName="categoria">
+                        <option [value]=" 0 " selected>Seleccione una categoria</option>
+                        <option *ngFor="let categoria of lstCategorias " [value]="categoria.id ">
+                            {{categoria.categoria}}
+                        </option>
+                    </select>
+                    <small *ngIf="selectCategorias">
+                        <small *ngIf="selectCategorias " style="color: red; ">
+                            Debe seleccionar una categoria.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group ">
+                    <label for="linea " style="margin: 0;">Línea</label>
+                    <input type="text " class="form-control " id="linea " placeholder="Ingrese el nombre de la Línea." formControlName="linea">
+                    <small *ngIf="lineForm.controls['linea'].invalid && (lineForm.controls['linea'].dirty || lineForm.controls['linea'].touched)">
+                        <small *ngIf="lineForm.controls['linea'].errors?.['required']" style="color: red;">
+                            Debe ingresar el nombre de la Línea.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="etiquetas">Etiquetas</label>
+                    <p style="font-size:0.75em; margin:0">Separadas por comas(,)</p>
+                    <input type="text" class="form-control" id="etiquetas" placeholder="Ingrese las etiquetas " formControlName="etiquetas">
+                    <small *ngIf="lineForm.controls['etiquetas'].invalid && (lineForm.controls['etiquetas'].dirty || lineForm.controls['etiquetas'].touched)">
+                        <small *ngIf="lineForm.controls['etiquetas'].errors?.['required']"
+                            style="color: red;">
+                            Debe ingresar el nombre de las etiquetas.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="codigoSAP">Código SAP</label>
+                    <input type="text" class="form-control" id="codigoSAP" placeholder="Ingrese el código" formControlName="codigoSAP">
+                    <small *ngIf="lineForm.controls['codigoSAP'].invalid && (lineForm.controls['codigoSAP'].dirty || lineForm.controls['codigoSAP'].touched)">
+                        <small *ngIf="lineForm.controls['codigoSAP'].errors?.['required']"
+                            style="color: red;">
+                            Debe ingresar el código SAP.
+                        </small>
+                    </small>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <!--[disabled]="!this.lineForm.valid"-->
+                    <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
+                    Guardar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

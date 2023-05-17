@@ -1,0 +1,39 @@
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="row mx-3">
+                <fa-icon [icon]="faList" [size]="'3x'" style="color: #636363;"></fa-icon>
+                <h1 class="mx-5 " style="color: #636363;">Agregar Género</h1>
+                <div style="position: absolute;right:0;" class="mx-3">
+                    <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip" data-placement="bottom" title="Regresar a género" (click)="visualizarGeneros()"></fa-icon>
+                </div>
+            </div>
+        </div>
+        <div class="card-body ">
+            <form [formGroup]="genreForm" (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                    <label for="genero">Género</label>
+                    <input type="text" class="form-control" id="genero" placeholder="Ingrese el nombre del género" formControlName="genero">
+                    <small *ngIf="genreForm.controls['genero'].invalid && (genreForm.controls['genero'].dirty || genreForm.controls['genero'].touched)">
+                        <small  *ngIf="genreForm.controls['genero'].errors" style="color: red;">
+                            Debe ingresar el nombre del género
+                        </small >
+                    </small >
+                </div>
+                <div class="form-group">
+                    <label for="etiquetas">Etiquetas</label>
+                    <input type="text" class="form-control" id="etiquetas" placeholder="Ingrese las etiquetas" formControlName="etiquetas">
+                    <small *ngIf="genreForm.controls['etiquetas'].invalid && (genreForm.controls['etiquetas'].dirty || genreForm.controls['etiquetas'].touched)">
+                        <small  *ngIf="genreForm.controls['etiquetas'].errors" style="color: red;">
+                            Debe ingresar etiquetas.
+                        </small >
+                    </small >
+                </div>
+                <button type="submit" class="btn btn-primary"><!--[disabled]="!this.groupForm.valid"-->
+                    <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
+                    Guardar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

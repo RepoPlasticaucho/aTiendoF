@@ -1,0 +1,119 @@
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="row mx-3">
+                <fa-icon [icon]="faUserFriends" [size]="'3x'" style="color: #636363;"></fa-icon>
+                <h1 class="mx-5 " style="color: #636363;">Editar Sociedad</h1>
+                <div style="position: absolute;right:0;" class="mx-3">
+                    <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip"
+                        data-placement="bottom" title="Regresar a sociedades" (click)="visualizarSociedades()">
+                    </fa-icon>
+                </div>
+            </div>
+        </div>
+        <div class="card-body ">
+            <form [formGroup]="corporationForm" (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                    <label for="grupo">Grupo</label>
+                    <select class="form-control" (change)="changeGroup($event)" formControlName="grupo">
+                        <option [value]=" 0 " selected>Seleccione un grupo</option>
+                        <option *ngFor="let grupo of lstGrupos " [value]="grupo.id ">
+                            {{grupo.grupo}}
+                        </option>
+                    </select>
+                    <small *ngIf="selectGrupo ">
+                        <small *ngIf="selectGrupo " style="color: red; ">
+                            Debe seleccionar un grupo.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group ">
+                    <label for="idFiscal " style="margin: 0;">Identificación Fiscal</label>
+                    <p style="font-size:0.75em; margin:0">Ingresar información sin guión</p>
+                    <input type="text " class="form-control " id="idFiscal "
+                        placeholder="Ingrese la identificación fiscal "
+                        oninput="javascript: if (this.value.length> this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        maxlength="13" formControlName="idFiscal" (keypress)="keyPressNumbers($event)">
+                    <small
+                        *ngIf="corporationForm.controls['idFiscal'].invalid && (corporationForm.controls['idFiscal'].dirty || corporationForm.controls['idFiscal'].touched)">
+                        <small *ngIf="corporationForm.controls['idFiscal'].errors?.['required']" style="color: red;">
+                            Debe ingresar la identificación fiscal.
+                        </small>
+                        <small *ngIf="corporationForm.controls['idFiscal'].errors?.['minlength']" style="color: red;">
+                            Mínimo 10 caracteres.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="nombreComercial">Nombre Comercial</label>
+                    <input type="text" class="form-control" id="nombreComercial"
+                        placeholder="Ingrese el Nombre Comercial " formControlName="nombreComercial">
+                    <small
+                        *ngIf="corporationForm.controls['nombreComercial'].invalid && (corporationForm.controls['nombreComercial'].dirty || corporationForm.controls['nombreComercial'].touched)">
+                        <small *ngIf="corporationForm.controls['nombreComercial'].errors?.['required']"
+                            style="color: red;">
+                            Debe ingresar el Nombre Comercial.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="correoElectronico">Correo Electrónico</label>
+                    <input type="text" class="form-control" id="email" placeholder="Ingrese su correo electrónico"
+                        formControlName="correoElectronico">
+                    <small
+                        *ngIf="corporationForm.controls['correoElectronico'].invalid && (corporationForm.controls['correoElectronico'].dirty || corporationForm.controls['correoElectronico'].touched)">
+                        <small *ngIf="corporationForm.controls['correoElectronico'].errors?.['required']"
+                            style="color: red;">
+                            Debe ingresar su correo electrónico.
+                        </small>
+                        <small *ngIf="corporationForm.controls['correoElectronico'].errors?.['email']"
+                            style="color: red;">
+                            Correo electrónico no valido.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group ">
+                    <label for="telefono ">Teléfono</label>
+                    <input type="text " class="form-control " id="telefono "
+                        placeholder="Ingrese el número de teléfono "
+                        oninput="javascript: if (this.value.length> this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        maxlength="10" formControlName="telefono" (keypress)="keyPressNumbers($event)">
+                    <small
+                        *ngIf="corporationForm.controls['telefono'].invalid && (corporationForm.controls['telefono'].dirty || corporationForm.controls['telefono'].touched)">
+                        <small *ngIf="corporationForm.controls['telefono'].errors?.['required']" style="color: red;">
+                            Debe ingresar el número de teléfono.
+                        </small>
+                        <small *ngIf="corporationForm.controls['telefono'].errors?.['minlength']" style="color: red;">
+                            Mínimo 9 caracteres.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="grupo">Rol</label>
+                    <select class="form-control" (change)="changeGroup2($event)" formControlName="rol">
+                        <option [value]=" 0 " selected>Seleccione un rol</option>
+                        <option [value]="admin">
+                            ADMINISTRADOR
+                        </option>
+                        <option [value]="client">
+                            CLIENTE
+                        </option>
+                        <option [value]="bo">
+                            BACK OFFICE
+                        </option>
+                    </select>
+                    <small *ngIf="selectRol">
+                        <small *ngIf="selectRol" style="color: red; ">
+                            Debe seleccionar un rol.
+                        </small>
+                    </small>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <!--[disabled]="!this.corporationForm.valid"-->
+                    <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
+                    Guardar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
