@@ -40,6 +40,7 @@ export class ModelosComponent implements OnInit {
     }
 
     this.httpService.obtenerModelos().subscribe(res => {
+      console.log(res)
       if (res.codigoError != "OK") {
         Swal.fire({
           icon: 'error',

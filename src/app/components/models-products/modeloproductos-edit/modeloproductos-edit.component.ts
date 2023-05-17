@@ -36,8 +36,6 @@ export class ModeloproductosEditComponent implements OnInit {
   modelProductForm = new FormGroup({
     categoria: new FormControl('', Validators.required),
     linea: new FormControl('',),
-    marca_id: new FormControl('0'),
-    marca: new FormControl('0', Validators.required),
     modelo: new FormControl('',),
     color_id: new FormControl('0'),
     color: new FormControl('0', Validators.required),
@@ -325,7 +323,7 @@ export class ModeloproductosEditComponent implements OnInit {
             if (res.codigoError == 'OK') {
               const modelProductEntity: ModeloProductosEntity = {
                 id: this.codigo,
-                marca_id: this.modelProductForm.value!.marca_id ?? this.lstMarcas.filter((x) => x.marca == this.modelProductForm.value.marca)[0].id,
+                marca_id: '',
                 modelo_id: this.lstModelos2[0].id ?? '',
                 color_id: this.modelProductForm.value!.color_id ?? this.lstColores.filter((x) => x.color == this.modelProductForm.value.color)[0].id,
                 atributo_id: this.modelProductForm.value!.atributo_id ?? this.lstAtributos.filter((x) => x.atributo == this.modelProductForm.value.atributo)[0].id,
@@ -370,7 +368,7 @@ export class ModeloproductosEditComponent implements OnInit {
         } else {
           const modelProductEntity: ModeloProductosEntity = {
             id: this.codigo,
-                  marca_id: this.modelProductForm.value!.marca_id ?? this.lstMarcas.filter((x) => x.marca == this.modelProductForm.value.marca)[0].id,
+                  marca_id: '',
                   modelo_id: this.lstModelos2[0].id ?? '',
                   color_id: this.modelProductForm.value!.color_id ?? this.lstColores.filter((x) => x.color == this.modelProductForm.value.color)[0].id,
                   atributo_id: this.modelProductForm.value!.atributo_id ?? this.lstAtributos.filter((x) => x.atributo == this.modelProductForm.value.atributo)[0].id,
@@ -418,13 +416,6 @@ export class ModeloproductosEditComponent implements OnInit {
   }
 
   //Disparador cuando selecciona algún item de los combos
-  //Marca
-  selectEventMark(item: MarcasEntity) {
-    this.selectMarcas = false;
-    this.modelProductForm.controls['marca'].setValue(item.marca);
-    this.modelProductForm.controls['marca_id'].setValue(item.id);
-  }
-
 
   //Color
   selectEventColor(item: ColorsEntity) {
@@ -448,13 +439,6 @@ export class ModeloproductosEditComponent implements OnInit {
   }
 
   //Disparador cuando se escribe algún item de los combos
-  onChangeSearchMark(val: string) {
-    if (val == '') {
-      this.selectMarcas = true;
-      this.modelProductForm.controls['marca_id'].setValue('0');
-      this.modelProductForm.controls['marca'].setValue('');
-    }
-  }
 
   onChangeSearchColor(val: string) {
     if (val == '') {
@@ -480,12 +464,6 @@ export class ModeloproductosEditComponent implements OnInit {
     }
   }
   //Evento para cuando se limpia los cuadros de texto
-  onInputClearedMark() {
-    this.selectMarcas = true;
-    this.modelProductForm.controls['marca_id'].setValue('0');
-    this.modelProductForm.controls['marca'].setValue('');
-  }
-
 
   onInputClearedColor() {
     this.selectColores = true;

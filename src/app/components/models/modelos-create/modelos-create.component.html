@@ -26,6 +26,20 @@
                         </small>
                     </small>
                 </div>
+                <div class="form-group">
+                    <label for="marca">Marca</label>
+                    <select class="form-control" (change)="changeMark($event)" formControlName="marca">
+                        <option [value]=" 0 " selected>Seleccione una marca</option>
+                        <option *ngFor="let marca of lstMarcas " [value]="marca.id ">
+                            {{marca.marca}}
+                        </option>
+                    </select>
+                    <small *ngIf="selectMarcas">
+                        <small *ngIf="selectMarcas " style="color: red; ">
+                            Debe seleccionar una Marca.
+                        </small>
+                    </small>
+                </div>
                 <div class="form-group ">
                     <label for="modelo " style="margin: 0;">Modelo</label>
                     <input type="text " class="form-control " id="modelo " placeholder="Ingrese el nombre del modelo." formControlName="modelo">

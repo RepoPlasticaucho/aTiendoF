@@ -46,6 +46,20 @@
                                     </small>
                                 </small>
                             </div>
+                            <div class="form-group">
+                                <label for="marca">Marcas</label>
+                                <select class="form-control" (change)="changeMark($event)" formControlName="marca">
+                                    <option [value]=" 0 " selected>Seleccione una marca</option>
+                                    <option *ngFor="let marca of lstMarcas" [value]="marca.marca">
+                                        {{marca.marca}}
+                                    </option>
+                                </select>
+                                <small *ngIf="selectMarca">
+                                    <small *ngIf="selectMarca" style="color: red; ">
+                                        Debe seleccionar una marca.
+                                    </small>
+                                </small>
+                            </div>
 
                             <div class="form-group">
                                 <label for="grupo">Modelos</label>
@@ -62,26 +76,6 @@
                                 </small>
                             </div>
 
-                            <div class="form-group">
-                                <label for="marca_id">Marca:</label>
-                                <ng-autocomplete [data]="lstMarcas" (selected)="selectEventMark($event)"
-                                    [searchKeyword]="keywordMark" placeholder="Seleccione la Marca"
-                                    [itemTemplate]="itemTemplateMark" [notFoundTemplate]="notFoundTemplateMark"
-                                    class="form-control" style="width: 100%; padding: 0%"
-                                    (inputChanged)="onChangeSearchMark($event)" (inputCleared)="onInputClearedMark()">
-                                </ng-autocomplete>
-                                <ng-template #itemTemplateMark let-item>
-                                    <a [innerHTML]="item.marca"></a>
-                                </ng-template>
-                                <ng-template #notFoundTemplateMark let-notFound>
-                                    <p>No se encontro datos</p>
-                                </ng-template>
-                                <small *ngIf="selectMarcas">
-                                    <small *ngIf="selectMarcas" style="color: red">
-                                        Debe seleccionar una Marca.
-                                    </small>
-                                </small>
-                            </div>
 
                             <div class="form-group">
                                 <label for="color_id">Color/Diseño/Sabor:</label>

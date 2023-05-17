@@ -36,7 +36,7 @@ export class ModeloproductosCreateComponent implements OnInit {
   modelProductForm = new FormGroup({
     categoria: new FormControl('0', Validators.required),
     linea: new FormControl('0', Validators.required),
-    marca_id: new FormControl('0', Validators.required),
+    marca: new FormControl('0', Validators.required),
     modelo: new FormControl('0', Validators.required),
     color_id: new FormControl('0', Validators.required),
     atributo_id: new FormControl('0', Validators.required),
@@ -51,22 +51,21 @@ export class ModeloproductosCreateComponent implements OnInit {
 
   lstLineas: LineasEntity[] = [];
   selectLinea: boolean = false;
+  lstMarcas: MarcasEntity[] = [];
+  selectMarca: boolean = false;
 
   lstModelos: ModelosEntity[] = [];
   lstModelos2: ModelosEntity[] = [];
   selectModelo: boolean = false;
   //Variables para listas desplegables
-  lstMarcas: MarcasEntity[] = [];
   lstColores: ColorsEntity[] = [];
   lstAtributos: AtributosEntity[] = [];
   lstGeneros: GenerosEntity[] = [];
   //Variables para validar selección
-  selectMarcas: boolean = false;
   selectColores: boolean = false;
   selectAtributos: boolean = false;
   selectGeneros: boolean = false;
   //Variables para Autocomplete
-  keywordMark = 'marca';
   keywordModel = 'modelo';
   keywordColor = 'color';
   keywordAttribute = 'atributo';
@@ -125,6 +124,7 @@ export class ModeloproductosCreateComponent implements OnInit {
       }
     });
     
+    
     //Obtenemos Colores
     this.httpServiceColores.obtenerColores().subscribe((res) => {
       if (res.codigoError != 'OK') {
@@ -169,9 +169,6 @@ export class ModeloproductosCreateComponent implements OnInit {
   onSubmit(): void {
     if (!this.modelProductForm.valid) {
       this.modelProductForm.markAllAsTouched();
-      if (this.modelProductForm.get('marca_id')?.value == '0') {
-        this.selectMarcas = true;
-      }
       if (this.modelProductForm.get('color_id')?.value == '0') {
         this.selectColores = true;
       }
@@ -182,9 +179,7 @@ export class ModeloproductosCreateComponent implements OnInit {
         this.selectGeneros = true;
       }
     } else {
-      if (this.modelProductForm.get('marca_id')?.value == '0') {
-        this.selectMarcas = true;
-      } else if (this.modelProductForm.get('color_id')?.value == '0') {
+      if (this.modelProductForm.get('color_id')?.value == '0') {
         this.selectColores = true;
       } else if (this.modelProductForm.get('atributo_id')?.value == '0') {
         this.selectAtributos = true;
@@ -203,7 +198,7 @@ export class ModeloproductosCreateComponent implements OnInit {
               if (res.codigoError == 'OK') {
                 console.log(res);
                 const modelProductEntity: ModeloProductosEntity = {
-                  marca_id: this.modelProductForm.value!.marca_id ?? '',
+                  marca_id: "",
                   modelo: this.modelProductForm.value!.modelo ?? '',
                   modelo_id: this.lstModelos2[0].id ?? '',
                   color_id: this.modelProductForm.value!.color_id ?? '',
@@ -248,7 +243,7 @@ export class ModeloproductosCreateComponent implements OnInit {
             });
         } else {
           const modelProductEntity: ModeloProductosEntity = {
-            marca_id: this.modelProductForm.value!.marca_id ?? '',
+            marca_id: "",
             modelo: this.modelProductForm.value!.modelo ?? '',
             modelo_id: this.lstModelos2[0].id ?? '',
             color_id: this.modelProductForm.value!.color_id ?? '',
@@ -297,11 +292,6 @@ export class ModeloproductosCreateComponent implements OnInit {
   }
 
   //Disparador cuando selecciona algún item de los combos
-  //Marca
-  selectEventMark(item: MarcasEntity) {
-    this.selectMarcas = false;
-    this.modelProductForm.controls['marca_id'].setValue(item.id);
-  }
 
 
   //Color
@@ -325,14 +315,6 @@ export class ModeloproductosCreateComponent implements OnInit {
     this.modelProductForm.controls['genero_id'].setValue(item.id);
   }
 
-  //Disparador cuando se escribe algún item de los combos
-  onChangeSearchMark(val: string) {
-    if (val == '') {
-      this.selectMarcas = true;
-      this.modelProductForm.controls['marca_id'].setValue('0');
-    }
-  }
-
 
   onChangeSearchColor(val: string) {
     if (val == '') {
@@ -353,11 +335,6 @@ export class ModeloproductosCreateComponent implements OnInit {
       this.selectGeneros = true;
       this.modelProductForm.controls['genero_id'].setValue('0');
     }
-  }
-  //Evento para cuando se limpia los cuadros de texto
-  onInputClearedMark() {
-    this.selectMarcas = true;
-    this.modelProductForm.controls['marca_id'].setValue('0');
   }
 
 
@@ -474,7 +451,8 @@ export class ModeloproductosCreateComponent implements OnInit {
         id: '',
         linea_id: '',
         almacen_id: '',
-        linea_nombre: '',      
+        linea_nombre: '',
+        marca_nombre:'',      
         modelo: modelo.target.value,
         etiquetas: '',
         cod_sap: ''
@@ -493,6 +471,14 @@ export class ModeloproductosCreateComponent implements OnInit {
       })
 
       //this.warehousesForm.get("sociedad")?.setValue(sociedad.target.value);
+    }
+  }
+
+  changeMark(marca: any): void {
+    if (marca.target.value == 0) {
+      this.selectMarca = true;
+    } else {
+      this.selectMarca = false;
     }
   }
 }

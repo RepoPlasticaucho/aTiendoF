@@ -9,6 +9,8 @@ const initModel: ModelosEntity = {
   id: "",
   linea_id: "",
   linea_nombre: "",
+  marca_id: "",
+  marca_nombre: "",
   modelo: "",
   cod_sap: "",
   etiquetas: "",
