@@ -14,10 +14,10 @@ import Swal from 'sweetalert2';
 export class InventariosPedidoColoresComponent implements OnInit {
 
   private codigocategoria: string = "";
-  private codigoalmacen :string ="";
-  private codigolinea :string ="";
-  private codigomodelo :string="";
-  private codigocolor: string="";
+  private codigoalmacen: string = "";
+  private codigolinea: string = "";
+  private codigomodelo: string = "";
+  private codigocolor: string = "";
 
   faUserFriends = faUserFriends;
   faEdit = faEdit;
@@ -28,9 +28,9 @@ export class InventariosPedidoColoresComponent implements OnInit {
   dtTrigger: Subject<any> = new Subject<any>();
   lstInventarios: InventariosEntity[] = [];
 
-  color_name : string | undefined;
-  categoria_name : string | undefined;
-  linea_name : string | undefined;
+  color_name: string | undefined;
+  categoria_name: string | undefined;
+  linea_name: string | undefined;
   modelo_name: string | undefined;
 
   codalmacen: string | undefined;
@@ -47,7 +47,7 @@ export class InventariosPedidoColoresComponent implements OnInit {
       searching: true,
       ordering: true,
       info: true,
-      responsive:true
+      responsive: true
     }
     this.httpService.obtenerInventario$.subscribe(res => {
 
@@ -55,11 +55,11 @@ export class InventariosPedidoColoresComponent implements OnInit {
       this.codigoalmacen = res.almacen_id ?? "";
       this.codigolinea = res.linea ?? "";
       this.codigomodelo = res.modelo ?? "";
-      this.codigocolor = res.color ??"";
+      this.codigocolor = res.color ?? "";
 
-      if (this.codigocategoria || this.codigoalmacen ||  this.codigolinea || this.codigomodelo || this.codigocolor == null) {
-        
-        const inventario : InventariosEntity = {
+      if (this.codigocategoria || this.codigoalmacen || this.codigolinea || this.codigomodelo || this.codigocolor == null) {
+
+        const inventario: InventariosEntity = {
           categoria_id: this.codigocategoria,
           categoria: '',
           linea_id: '',
@@ -82,36 +82,55 @@ export class InventariosPedidoColoresComponent implements OnInit {
           modelo: this.codigomodelo
         }
 
-        this.httpService.obtenerPortafoliosColores(inventario).subscribe(res => {
-          if (res.codigoError != "OK") {
-            /*Swal.fire({
-              icon: 'error',
-              title: 'Ha ocurrido un error.',
-              text: res.descripcionError,
-              showConfirmButton: false,
-              // timer: 3000
-            });*/
-          } else {
-            this.lstInventarios = res.lstInventarios;
-            this.dtTrigger.next('');
-            this.categoria_name = this.lstInventarios[0].categoria;
-            this.linea_name = this.lstInventarios[0].linea;
-            this.modelo_name = this.codigomodelo;
-            this.color_name = this.codigocolor;
+        Swal.fire({
+          title: 'CARGANDO...',
+          html: 'Se están cargando los productos.',
+          timer: 30000,
+          didOpen: () => {
+            Swal.showLoading();
+            const b = Swal.getHtmlContainer()!.querySelector('b');
+            const timerInterval = setInterval(() => {
+              if (b!.textContent !== null) {
+                b!.textContent = Swal.getTimerLeft()?.toString()!;
+              }
+            }, 100);
+            this.httpService.obtenerPortafoliosColores(inventario).subscribe(res => {
+              if (res.codigoError != "OK") {
+                /*Swal.fire({
+                  icon: 'error',
+                  title: 'Ha ocurrido un error.',
+                  text: res.descripcionError,
+                  showConfirmButton: false,
+                  // timer: 3000
+                });*/
+              } else {
+                this.lstInventarios = res.lstInventarios;
+                this.dtTrigger.next('');
+                this.categoria_name = this.lstInventarios[0].categoria;
+                this.linea_name = this.lstInventarios[0].linea;
+                this.modelo_name = this.codigomodelo;
+                this.color_name = this.codigocolor;
+                Swal.close();
+              }
+            });
+          },
+        }).then((result) => {
+          /* Read more about handling dismissals below */
+          if (result.dismiss === Swal.DismissReason.timer) {
+            console.log('I was closed by the timer');
           }
-          
-        })
+        });
 
-      }else{
+      } else {
         this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido'] } }]);
 
       }
     });
 
   }
-  returncategoria(){
-    
-    const inventario : InventariosEntity = {
+  returncategoria() {
+
+    const inventario: InventariosEntity = {
       categoria_id: this.codigocategoria,
       categoria: '',
       linea_id: '',
@@ -136,11 +155,11 @@ export class InventariosPedidoColoresComponent implements OnInit {
     console.log(inventario);
     this.httpService.asignarCategoria(inventario);
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido-categoria'] } }]);
-  }  
+  }
 
-  returnLinea(){
-    
-    const inventario : InventariosEntity = {
+  returnLinea() {
+
+    const inventario: InventariosEntity = {
       categoria_id: this.codigocategoria,
       categoria: '',
       linea_id: '',
@@ -165,11 +184,11 @@ export class InventariosPedidoColoresComponent implements OnInit {
     console.log(inventario);
     this.httpService.asignarCategoria(inventario);
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido-lineas'] } }]);
-  }  
+  }
 
-  returnModelo(){
-    
-    const inventario : InventariosEntity = {
+  returnModelo() {
+
+    const inventario: InventariosEntity = {
       categoria_id: this.codigocategoria,
       categoria: '',
       linea_id: '',
@@ -194,5 +213,5 @@ export class InventariosPedidoColoresComponent implements OnInit {
     console.log(inventario);
     this.httpService.asignarCategoria(inventario);
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido-modelos'] } }]);
-  }  
+  }
 }

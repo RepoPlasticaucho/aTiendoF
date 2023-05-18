@@ -26,13 +26,13 @@ export class InventariosPedidoCategoriaComponent implements OnInit {
   dtTrigger: Subject<any> = new Subject<any>();
   lstInventarios: InventariosEntity[] = [];
   lstLineas: LineasEntity[] = [];
-  
+
   private codigocategoria: string = "";
-  private codigoalmacen :string ="";
+  private codigoalmacen: string = "";
   categorianame: string | undefined;
   codigolinea: string | undefined;
   constructor(private readonly httpService: InventariosService, private router: Router) { }
-  
+
   ngOnInit(): void {
     this.dtOptions = {
       language: {
@@ -43,89 +43,106 @@ export class InventariosPedidoCategoriaComponent implements OnInit {
       searching: true,
       ordering: true,
       info: true,
-      responsive:true
+      responsive: true
     }
     this.httpService.obtenerInventario$.subscribe(res => {
-        
-        this.codigocategoria = res.categoria_id ?? "";
-        this.codigoalmacen = res.almacen_id ?? "";
-        if (this.codigocategoria || this.codigoalmacen == null) {
-          const categoria : CategoriasEntity ={
-            id: this.codigocategoria,
-            categoria: '',
-            cod_sap: '',
-            etiquetas: '',
-            almacen_id: this.codigoalmacen
-          }
-  
-          const inventario : InventariosEntity = {
-            categoria_id: this.codigocategoria,
-            categoria: '',
-            linea_id: '',
-            linea: '',
-            modelo_id: '',
-            marca_id: '',
-            marca: '',
-            modelo_producto_id: '',
-            idProducto: '',
-            Producto: '',
-            id: '',
-            dInventario: '',
-            producto_id: '',
-            almacen_id: this.codigoalmacen,
-            almacen: '',
-            stock: '',
-            stock_optimo: '',
-            fav: '',
-            color: '',
-            modelo: ''
-          }
-  
-          this.httpService.obtenerPortafoliosCategoria(inventario).subscribe(res => {
-            if (res.codigoError != "OK") {
-              /*Swal.fire({
-                icon: 'error',
-                title: 'Ha ocurrido un error.',
-                text: res.descripcionError,
-                showConfirmButton: false,
-                // timer: 3000
-              });*/
-            } else {
-              this.lstInventarios = res.lstInventarios;
-              this.dtTrigger.next('');
-              this.categorianame = this.lstInventarios[0].categoria;
 
-              this.httpService.obtenerLineasCategoria(categoria).subscribe(res => {
-                if (res.codigoError != "OK") {
-                  /*Swal.fire({
-                   // icon: 'error',
-                   // title: 'Ha ocurrido un error.',
-                   // text: res.descripcionError,
-                   // showConfirmButton: false,
-                    // timer: 3000
-                  });*/
-                } else {
-                  
-                  this.lstLineas = res.lstLineas;
-
-                }
-                
-              })
-            }
-            
-          });
-          
-        } else {
-          this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido'] } }]);
+      this.codigocategoria = res.categoria_id ?? "";
+      this.codigoalmacen = res.almacen_id ?? "";
+      if (this.codigocategoria || this.codigoalmacen == null) {
+        const categoria: CategoriasEntity = {
+          id: this.codigocategoria,
+          categoria: '',
+          cod_sap: '',
+          etiquetas: '',
+          almacen_id: this.codigoalmacen
         }
-        
-    })
-    
+
+        const inventario: InventariosEntity = {
+          categoria_id: this.codigocategoria,
+          categoria: '',
+          linea_id: '',
+          linea: '',
+          modelo_id: '',
+          marca_id: '',
+          marca: '',
+          modelo_producto_id: '',
+          idProducto: '',
+          Producto: '',
+          id: '',
+          dInventario: '',
+          producto_id: '',
+          almacen_id: this.codigoalmacen,
+          almacen: '',
+          stock: '',
+          stock_optimo: '',
+          fav: '',
+          color: '',
+          modelo: ''
+        }
+
+        Swal.fire({
+          title: 'CARGANDO...',
+          html: 'Se están cargando los productos.',
+          timer: 30000,
+          didOpen: () => {
+            Swal.showLoading();
+            const b = Swal.getHtmlContainer()!.querySelector('b');
+            const timerInterval = setInterval(() => {
+              if (b!.textContent !== null) {
+                b!.textContent = Swal.getTimerLeft()?.toString()!;
+              }
+            }, 100);
+            this.httpService.obtenerPortafoliosCategoria(inventario).subscribe(res => {
+              if (res.codigoError != "OK") {
+                /*Swal.fire({
+                  icon: 'error',
+                  title: 'Ha ocurrido un error.',
+                  text: res.descripcionError,
+                  showConfirmButton: false,
+                  // timer: 3000
+                });*/
+              } else {
+                this.lstInventarios = res.lstInventarios;
+                this.dtTrigger.next('');
+                Swal.close();
+                this.categorianame = this.lstInventarios[0].categoria;
+
+                this.httpService.obtenerLineasCategoria(categoria).subscribe(res => {
+                  if (res.codigoError != "OK") {
+                    /*Swal.fire({
+                     // icon: 'error',
+                     // title: 'Ha ocurrido un error.',
+                     // text: res.descripcionError,
+                     // showConfirmButton: false,
+                      // timer: 3000
+                    });*/
+                  } else {
+                    this.lstLineas = res.lstLineas;
+                  }
+                })
+              }
+            });
+          },
+        }).then((result) => {
+          /* Read more about handling dismissals below */
+          if (result.dismiss === Swal.DismissReason.timer) {
+            console.log('I was closed by the timer');
+          }
+        });
+
+      } else {
+        this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido'] } }]);
+      }
+
+    });
+
+
   }
-  buscarPortafolioLinea(card : LineasEntity){
+  buscarPortafolioLinea(card: LineasEntity) {
     this.codigolinea = card["linea"];
-    
-    const inventario : InventariosEntity = {
+
+    const inventario: InventariosEntity = {
       categoria_id: this.codigocategoria,
       categoria: '',
       linea_id: '',
@@ -152,10 +169,10 @@ export class InventariosPedidoCategoriaComponent implements OnInit {
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido-lineas'] } }]);
   }
 
-  buscarPortafolioLineaSugerida(card : LineasEntity){
+  buscarPortafolioLineaSugerida(card: LineasEntity) {
     this.codigolinea = card["linea"];
-    
-    const inventario : InventariosEntity = {
+
+    const inventario: InventariosEntity = {
       categoria_id: this.codigocategoria,
       categoria: '',
       linea_id: '',
@@ -181,5 +198,5 @@ export class InventariosPedidoCategoriaComponent implements OnInit {
     this.httpService.asignarLinea(inventario);
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido-lineas'] } }]);
   }
- 
+
 }

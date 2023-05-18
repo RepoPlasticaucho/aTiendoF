@@ -26,7 +26,7 @@ export class InventariosPedidoComponent implements OnInit {
   dtTrigger: Subject<any> = new Subject<any>();
   lstInventarios: InventariosEntity[] = [];
   lstCategorias: CategoriasEntity[] = [];
-  cat : string | undefined;
+  cat: string | undefined;
   constructor(private readonly httpService: InventariosService,
     private router: Router) { }
 
@@ -40,10 +40,10 @@ export class InventariosPedidoComponent implements OnInit {
       searching: true,
       ordering: true,
       info: true,
-      responsive:true
+      responsive: true
     }
     const almacen: AlmacenesEntity = {
-      idAlmacen: JSON.parse(localStorage.getItem('almacenid')||"[]"),
+      idAlmacen: JSON.parse(localStorage.getItem('almacenid') || "[]"),
       sociedad_id: '',
       nombresociedad: '',
       direccion: '',
@@ -55,43 +55,60 @@ export class InventariosPedidoComponent implements OnInit {
 
     this.httpService.obtenerCategoria().subscribe(res => {
       if (res.codigoError != "OK") {
-       /* Swal.fire({
-          //icon: 'error',
-          //title: 'Ha ocurrido un error.',
-          //text: res.descripcionError,
-          //showConfirmButton: false,
-          // timer: 3000
-        });*/
+        /* Swal.fire({
+           //icon: 'error',
+           //title: 'Ha ocurrido un error.',
+           //text: res.descripcionError,
+           //showConfirmButton: false,
+           // timer: 3000
+         });*/
       } else {
         this.lstCategorias = res.lstCategorias;
-        
-        this.httpService.obtenerPortafolios(almacen).subscribe(res => {
-          if (res.codigoError != "OK") {
-            
-            Swal.fire({
-              icon: 'error',
-              title: 'Ha ocurrido un error.',
-              text: res.descripcionError,
-             // showConfirmButton: false,
-              // timer: 3000
+        Swal.fire({
+          title: 'CARGANDO...',
+          html: 'Se están cargando los productos.',
+          timer: 30000,
+          didOpen: () => {
+            Swal.showLoading();
+            const b = Swal.getHtmlContainer()!.querySelector('b');
+            const timerInterval = setInterval(() => {
+              if (b!.textContent !== null) {
+                b!.textContent = Swal.getTimerLeft()?.toString()!;
+              }
+            }, 100);
+
+            this.httpService.obtenerPortafolios(almacen).subscribe(res => {
+              if (res.codigoError != "OK") {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Ha ocurrido un error.',
+                  text: res.descripcionError,
+                  // showConfirmButton: false,
+                  // timer: 3000
+                });
+              } else {
+                this.lstInventarios = res.lstInventarios;
+                this.dtTrigger.next('');
+                Swal.close();
+              }
             });
-          } else {
-            this.lstInventarios = res.lstInventarios;
-            this.dtTrigger.next('');
-            
+          },
+        }).then((result) => {
+          /* Read more about handling dismissals below */
+          if (result.dismiss === Swal.DismissReason.timer) {
+            console.log('I was closed by the timer');
           }
-          
-        })
+        });
       }
-      
+
     })
 
   }
 
-  buscarPortafolioLinea(card : CategoriasEntity){
+  buscarPortafolioLinea(card: CategoriasEntity) {
     console.log(card);
     this.cat = card["id"];
-    const inventario : InventariosEntity = {
+    const inventario: InventariosEntity = {
       categoria_id: this.cat!,
       categoria: '',
       linea_id: '',
@@ -105,7 +122,7 @@ export class InventariosPedidoComponent implements OnInit {
       id: '',
       dInventario: '',
       producto_id: '',
-      almacen_id: JSON.parse(localStorage.getItem('almacenid')||"[]"),
+      almacen_id: JSON.parse(localStorage.getItem('almacenid') || "[]"),
       almacen: '',
       stock: '',
       stock_optimo: '',
@@ -113,14 +130,14 @@ export class InventariosPedidoComponent implements OnInit {
       color: '',
       modelo: ''
     }
-   // console.log(inventario);
+    // console.log(inventario);
     this.httpService.asignarCategoria(inventario);
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido-categoria'] } }]);
   }
-  buscarPortafolioLineaSugerido(card : CategoriasEntity){
+  buscarPortafolioLineaSugerido(card: CategoriasEntity) {
     console.log(card);
     this.cat = card["id"];
-    const inventario : InventariosEntity = {
+    const inventario: InventariosEntity = {
       categoria_id: this.cat!,
       categoria: '',
       linea_id: '',
@@ -134,7 +151,7 @@ export class InventariosPedidoComponent implements OnInit {
       id: '',
       dInventario: '',
       producto_id: '',
-      almacen_id: JSON.parse(localStorage.getItem('almacenid')||"[]"),
+      almacen_id: JSON.parse(localStorage.getItem('almacenid') || "[]"),
       almacen: '',
       stock: '',
       stock_optimo: '',
@@ -142,13 +159,13 @@ export class InventariosPedidoComponent implements OnInit {
       color: '',
       modelo: ''
     }
-   // console.log(inventario);
+    // console.log(inventario);
     this.httpService.asignarCategoria(inventario);
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['pedido-sugeridos'] } }]);
   }
 
- 
-    
+
+
   /*eliminarAlmacenes(almacen: AlmacenesEntity): void {
     Swal.fire({
       icon: 'question',

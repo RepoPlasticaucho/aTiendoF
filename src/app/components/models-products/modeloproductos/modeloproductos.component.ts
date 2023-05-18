@@ -38,22 +38,41 @@ export class ModeloproductosComponent implements OnInit {
       info: true,
       responsive: true
     }
-
-    this.httpService.obtenerModelosProductos().subscribe(res => {
-      console.log(res);
-      if (res.codigoError != "OK") {
-        Swal.fire({
-          icon: 'error',
-          title: 'Ha ocurrido un error.',
-          text: res.descripcionError,
-          showConfirmButton: false,
-          // timer: 3000
+    Swal.fire({
+      title: 'CARGANDO...',
+      html: 'Se están cargando los modelos productos.',
+      timer: 30000,
+      didOpen: () => {
+        Swal.showLoading();
+        const b = Swal.getHtmlContainer()!.querySelector('b');
+        const timerInterval = setInterval(() => {
+          if (b!.textContent !== null) {
+            b!.textContent = Swal.getTimerLeft()?.toString()!;
+          }
+        }, 100);
+        this.httpService.obtenerModelosProductos().subscribe(res => {
+          console.log(res);
+          if (res.codigoError != "OK") {
+            Swal.fire({
+              icon: 'error',
+              title: 'Ha ocurrido un error.',
+              text: res.descripcionError,
+              showConfirmButton: false,
+              // timer: 3000
+            });
+          } else {
+            this.lstModelosProductos = res.lstModelo_Productos;
+            this.dtTrigger.next('');
+            Swal.close();
+          }
         });
-      } else {
-        this.lstModelosProductos = res.lstModelo_Productos;
-        this.dtTrigger.next('');
+      },
+    }).then((result) => {
+      /* Read more about handling dismissals below */
+      if (result.dismiss === Swal.DismissReason.timer) {
+        console.log('I was closed by the timer');
       }
-    })
+    });
   }
 
   editarModeloProducto(modeloProducto: ModeloProductosEntity): void {

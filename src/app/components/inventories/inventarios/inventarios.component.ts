@@ -33,15 +33,15 @@ export class InventariosComponent implements OnInit {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
       },
       paging: true,
-      pageLength:50,
+      pageLength: 50,
       search: false,
       searching: true,
       ordering: true,
       info: true,
-      responsive:true
+      responsive: true
     }
     const almacen: AlmacenesEntity = {
-      idAlmacen: JSON.parse(localStorage.getItem('almacenid')||"[]"),
+      idAlmacen: JSON.parse(localStorage.getItem('almacenid') || "[]"),
       sociedad_id: '',
       nombresociedad: '',
       direccion: '',
@@ -49,23 +49,40 @@ export class InventariosComponent implements OnInit {
       codigo: '',
       pto_emision: ''
     }
-    console.log(almacen);
-
-    this.httpService.obtenerPortafolios(almacen).subscribe(res => {
-      if (res.codigoError != "OK") {
-        Swal.fire({
-          icon: 'error',
-          title: 'Ha ocurrido un error.',
-          text: res.descripcionError,
-          showConfirmButton: false,
-          // timer: 3000
+    Swal.fire({
+      title: 'CARGANDO...',
+      html: 'Se están cargando los productos.',
+      timer: 30000,
+      didOpen: () => {
+        Swal.showLoading();
+        const b = Swal.getHtmlContainer()!.querySelector('b');
+        const timerInterval = setInterval(() => {
+          if (b!.textContent !== null) {
+            b!.textContent = Swal.getTimerLeft()?.toString()!;
+          }
+        }, 100);
+        this.httpService.obtenerPortafolios(almacen).subscribe(res => {
+          if (res.codigoError != "OK") {
+            Swal.fire({
+              icon: 'error',
+              title: 'Ha ocurrido un error.',
+              text: res.descripcionError,
+              showConfirmButton: false,
+              // timer: 3000
+            });
+          } else {
+            this.lstInventarios = res.lstInventarios;
+            this.dtTrigger.next('');
+            Swal.close();
+          }
         });
-      } else {
-        this.lstInventarios = res.lstInventarios;
-        this.dtTrigger.next('');
+      },
+    }).then((result) => {
+      /* Read more about handling dismissals below */
+      if (result.dismiss === Swal.DismissReason.timer) {
+        console.log('I was closed by the timer');
       }
-      
-    })
+    });
 
   }
 

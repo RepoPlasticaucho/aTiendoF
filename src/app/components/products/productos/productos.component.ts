@@ -31,67 +31,88 @@ export class ProductosComponent implements OnInit {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
       },
       paging: true,
-      pageLength:100,
+      pageLength: 100,
       search: false,
       searching: true,
       ordering: true,
       info: true,
       responsive: true
     }
-
-    this.httpService.obtenerProductos().subscribe(res => {
-      if (res.codigoError != "OK") {
-        Swal.fire({
-          icon: 'error',
-          title: 'Ha ocurrido un error.',
-          text: res.descripcionError,
-          showConfirmButton: false,
+    Swal.fire({
+      title: 'CARGANDO...',
+      html: 'Se están cargando los productos.',
+      timer: 30000,
+      didOpen: () => {
+        Swal.showLoading();
+        const b = Swal.getHtmlContainer()!.querySelector('b');
+        const timerInterval = setInterval(() => {
+          if (b!.textContent !== null) {
+            b!.textContent = Swal.getTimerLeft()?.toString()!;
+          }
+        }, 100);
+    
+        this.httpService.obtenerProductos().subscribe(res => {
+          clearInterval(timerInterval);
+    
+          if (res.codigoError != "OK") {
+            Swal.fire({
+              icon: 'error',
+              title: 'Ha ocurrido un error.',
+              text: res.descripcionError,
+              showConfirmButton: false,
+            });
+          } else {
+            this.lstProductos = res.lstProductos;
+            this.dtTrigger.next('');
+          }
         });
-      } else {
-        this.lstProductos = res.lstProductos;
-        this.dtTrigger.next('');
+      },
+    }).then((result) => {
+      /* Read more about handling dismissals below */
+      if (result.dismiss === Swal.DismissReason.timer) {
+        console.log('I was closed by the timer');
       }
-    })
+    });    
   }
 
   editarProducto(producto: ProducAdmEntity): void {
-     this.httpService.asignarProducto(producto);
+    this.httpService.asignarProducto(producto);
     // console.log(producto);
-      this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['editarProductos'] } }]);
+    this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['editarProductos'] } }]);
   }
 
   eliminarProducto(producto: ProducAdmEntity): void {
-     Swal.fire({
-       icon: 'question',
-       title: `¿Esta seguro de eliminar ${producto.nombre}?`,
-       showDenyButton: true,
-       confirmButtonText: 'Si',
-       denyButtonText: 'No',
-     }).then((result) => {
-       if (result.isConfirmed) {
-         this.httpService.eliminarProducto(producto).subscribe(res => {
-           if (res.codigoError == 'OK') {
-             Swal.fire({
-               icon: 'success',
-               title: 'Eliminado Exitosamente.',
-               text: `Se ha eliminado el Producto ${producto.nombre}`,
-               showConfirmButton: true,
-               confirmButtonText: "Ok"
-             }).then(() => {
-               // this.groupForm.reset();
-               window.location.reload();
-             });
-           } else {
-             Swal.fire({
-               icon: 'error',
-               title: 'Ha ocurrido un error.',
-               text: res.descripcionError,
-               showConfirmButton: false,
-             });
-           }
-          })
-       }
-     })
+    Swal.fire({
+      icon: 'question',
+      title: `¿Esta seguro de eliminar ${producto.nombre}?`,
+      showDenyButton: true,
+      confirmButtonText: 'Si',
+      denyButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.httpService.eliminarProducto(producto).subscribe(res => {
+          if (res.codigoError == 'OK') {
+            Swal.fire({
+              icon: 'success',
+              title: 'Eliminado Exitosamente.',
+              text: `Se ha eliminado el Producto ${producto.nombre}`,
+              showConfirmButton: true,
+              confirmButtonText: "Ok"
+            }).then(() => {
+              // this.groupForm.reset();
+              window.location.reload();
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Ha ocurrido un error.',
+              text: res.descripcionError,
+              showConfirmButton: false,
+            });
+          }
+        })
+      }
+    })
   }
 
   deshabilitarProducto(producto: ProducAdmEntity): void {
@@ -124,10 +145,10 @@ export class ProductosComponent implements OnInit {
               showConfirmButton: false,
             });
           }
-         })
+        })
       }
     })
- }
+  }
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
@@ -137,7 +158,7 @@ export class ProductosComponent implements OnInit {
     this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['crearProductos'] } }]);
   }
 
-  onMigrar(){
+  onMigrar() {
     this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['catalogos'] } }]);
   }
 }

@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
   templateUrl: './pedido-sugerido.component.html',
   styleUrls: ['./pedido-sugerido.component.css']
 })
-export class PedidoSugeridoComponent implements OnInit,OnDestroy {
+export class PedidoSugeridoComponent implements OnInit, OnDestroy {
   faUserFriends = faUserFriends;
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;
@@ -28,12 +28,12 @@ export class PedidoSugeridoComponent implements OnInit,OnDestroy {
   lstLineas: LineasEntity[] = [];
 
   private codigocategoria: string = "";
-  private codigoalmacen :string ="";
+  private codigoalmacen: string = "";
   categorianame: string | undefined;
   codigolinea: string | undefined;
-  
+
   constructor(private readonly httpService: InventariosService, private router: Router) { }
-  
+
 
   ngOnInit(): void {
     this.dtOptions = {
@@ -45,176 +45,193 @@ export class PedidoSugeridoComponent implements OnInit,OnDestroy {
       searching: true,
       ordering: true,
       info: true,
-      responsive:true
+      responsive: true
     }
     this.httpService.obtenerInventario$.subscribe(res => {
-        
-        this.codigocategoria = res.categoria_id ?? "";
-        this.codigoalmacen = res.almacen_id ?? "";
-        if (this.codigocategoria || this.codigoalmacen == null) {
-          const categoria : CategoriasEntity ={
-            id: this.codigocategoria,
-            categoria: '',
-            cod_sap: '',
-            etiquetas: '',
-            almacen_id: this.codigoalmacen
-          }
-  
-          const inventario : InventariosEntity = {
-            categoria_id: this.codigocategoria,
-            categoria: '',
-            linea_id: '',
-            linea: '',
-            modelo_id: '',
-            marca_id: '',
-            marca: '',
-            modelo_producto_id: '',
-            idProducto: '',
-            Producto: '',
-            id: '',
-            dInventario: '',
-            producto_id: '',
-            almacen_id: this.codigoalmacen,
-            almacen: '',
-            stock: '',
-            stock_optimo: '',
-            fav: '',
-            color: '',
-            modelo: ''
-          }
-  
-          console.log(categoria);
-          console.log(inventario);
 
-          this.httpService.obtenerPortafoliosCategoriaSugerido(inventario).subscribe(res => {
-            if (res.codigoError != "OK") {
-              /*Swal.fire({
-                icon: 'error',
-                title: 'Ha ocurrido un error.',
-                text: res.descripcionError,
-                showConfirmButton: false,
-                // timer: 3000
-              });*/
-            } else {
-              this.lstInventarios = res.lstInventarios;
-              this.dtTrigger.next('');
-              this.categorianame = this.lstInventarios[0].categoria;
-
-              this.httpService.obtenerLineasCategoria(categoria).subscribe(res => {
-                if (res.codigoError != "OK") {
-                  /*Swal.fire({
-                   // icon: 'error',
-                   // title: 'Ha ocurrido un error.',
-                   // text: res.descripcionError,
-                   // showConfirmButton: false,
-                    // timer: 3000
-                  });*/
-                } else {
-                  
-                  this.lstLineas = res.lstLineas;
-
-                }
-                
-              })
-            }
-            
-          });
-          
-        } else {
-
-          this.codigocategoria = "1";
-          this.codigoalmacen = "6";
-
-          const categoria : CategoriasEntity ={
-            id: this.codigocategoria,
-            categoria: '',
-            cod_sap: '',
-            etiquetas: '',
-            almacen_id: this.codigoalmacen
-          }
-  
-          const inventario : InventariosEntity = {
-            categoria_id: this.codigocategoria,
-            categoria: '',
-            linea_id: '',
-            linea: '',
-            modelo_id: '',
-            marca_id: '',
-            marca: '',
-            modelo_producto_id: '',
-            idProducto: '',
-            Producto: '',
-            id: '',
-            dInventario: '',
-            producto_id: '',
-            almacen_id: this.codigoalmacen,
-            almacen: '',
-            stock: '',
-            stock_optimo: '',
-            fav: '',
-            color: '',
-            modelo: ''
-          }
-          
-          console.log(categoria);
-          console.log(inventario);
-
-          this.httpService.obtenerPortafoliosCategoriaSugerido(inventario).subscribe(res => {
-            if (res.codigoError != "OK") {
-              /*Swal.fire({
-                icon: 'error',
-                title: 'Ha ocurrido un error.',
-                text: res.descripcionError,
-                showConfirmButton: false,
-                // timer: 3000
-              });*/
-            } else {
-              this.lstInventarios = res.lstInventarios;
-              
-              this.dtTrigger.next('');
-              this.categorianame = this.lstInventarios[0].categoria;
-
-              this.httpService.obtenerLineasCategoria(categoria).subscribe(res => {
-                if (res.codigoError != "OK") {
-                  /*Swal.fire({
-                   // icon: 'error',
-                   // title: 'Ha ocurrido un error.',
-                   // text: res.descripcionError,
-                   // showConfirmButton: false,
-                    // timer: 3000
-                  });*/
-                } else {
-                  
-                  this.lstLineas = res.lstLineas;
-
-                }
-                
-              })
-            }
-            
-          });
-          
-          
+      this.codigocategoria = res.categoria_id ?? "";
+      this.codigoalmacen = res.almacen_id ?? "";
+      if (this.codigocategoria || this.codigoalmacen == null) {
+        const categoria: CategoriasEntity = {
+          id: this.codigocategoria,
+          categoria: '',
+          cod_sap: '',
+          etiquetas: '',
+          almacen_id: this.codigoalmacen
         }
-        
+
+        const inventario: InventariosEntity = {
+          categoria_id: this.codigocategoria,
+          categoria: '',
+          linea_id: '',
+          linea: '',
+          modelo_id: '',
+          marca_id: '',
+          marca: '',
+          modelo_producto_id: '',
+          idProducto: '',
+          Producto: '',
+          id: '',
+          dInventario: '',
+          producto_id: '',
+          almacen_id: this.codigoalmacen,
+          almacen: '',
+          stock: '',
+          stock_optimo: '',
+          fav: '',
+          color: '',
+          modelo: ''
+        }
+        console.log(categoria);
+        console.log(inventario);
+
+
+        this.httpService.obtenerPortafoliosCategoriaSugerido(inventario).subscribe(res => {
+          if (res.codigoError != "OK") {
+            /*Swal.fire({
+              icon: 'error',
+              title: 'Ha ocurrido un error.',
+              text: res.descripcionError,
+              showConfirmButton: false,
+              // timer: 3000
+            });*/
+          } else {
+            this.lstInventarios = res.lstInventarios;
+            this.dtTrigger.next('');
+            this.categorianame = this.lstInventarios[0].categoria;
+
+            this.httpService.obtenerLineasCategoria(categoria).subscribe(res => {
+              if (res.codigoError != "OK") {
+                /*Swal.fire({
+                 // icon: 'error',
+                 // title: 'Ha ocurrido un error.',
+                 // text: res.descripcionError,
+                 // showConfirmButton: false,
+                  // timer: 3000
+                });*/
+              } else {
+                this.lstLineas = res.lstLineas;
+              }
+            })
+          }
+        });
+
+
+      } else {
+
+        this.codigocategoria = "1";
+        this.codigoalmacen = "6";
+
+        const categoria: CategoriasEntity = {
+          id: this.codigocategoria,
+          categoria: '',
+          cod_sap: '',
+          etiquetas: '',
+          almacen_id: this.codigoalmacen
+        }
+
+        const inventario: InventariosEntity = {
+          categoria_id: this.codigocategoria,
+          categoria: '',
+          linea_id: '',
+          linea: '',
+          modelo_id: '',
+          marca_id: '',
+          marca: '',
+          modelo_producto_id: '',
+          idProducto: '',
+          Producto: '',
+          id: '',
+          dInventario: '',
+          producto_id: '',
+          almacen_id: this.codigoalmacen,
+          almacen: '',
+          stock: '',
+          stock_optimo: '',
+          fav: '',
+          color: '',
+          modelo: ''
+        }
+
+        console.log(categoria);
+        console.log(inventario);
+
+        Swal.fire({
+          title: 'CARGANDO...',
+          html: 'Se están cargando los productos.',
+          timer: 30000,
+          didOpen: () => {
+            Swal.showLoading();
+            const b = Swal.getHtmlContainer()!.querySelector('b');
+            const timerInterval = setInterval(() => {
+              if (b!.textContent !== null) {
+                b!.textContent = Swal.getTimerLeft()?.toString()!;
+              }
+            }, 100);
+            this.httpService.obtenerPortafoliosCategoriaSugerido(inventario).subscribe(res => {
+              if (res.codigoError != "OK") {
+                /*Swal.fire({
+                  icon: 'error',
+                  title: 'Ha ocurrido un error.',
+                  text: res.descripcionError,
+                  showConfirmButton: false,
+                  // timer: 3000
+                });*/
+              } else {
+                this.lstInventarios = res.lstInventarios;
+
+                this.dtTrigger.next('');
+                this.categorianame = this.lstInventarios[0].categoria;
+                Swal.close();
+
+                this.httpService.obtenerLineasCategoria(categoria).subscribe(res => {
+                  if (res.codigoError != "OK") {
+                    /*Swal.fire({
+                     // icon: 'error',
+                     // title: 'Ha ocurrido un error.',
+                     // text: res.descripcionError,
+                     // showConfirmButton: false,
+                      // timer: 3000
+                    });*/
+                  } else {
+
+                    this.lstLineas = res.lstLineas;
+
+                  }
+
+                })
+              }
+
+            });
+          },
+        }).then((result) => {
+          /* Read more about handling dismissals below */
+          if (result.dismiss === Swal.DismissReason.timer) {
+            console.log('I was closed by the timer');
+          }
+        });
+
+
+      }
+
     })
-    
+
   }
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
   }
-  pedidosugerido(lstInventariosR: InventariosEntity[] ){
-   
+  pedidosugerido(lstInventariosR: InventariosEntity[]) {
+
     console.log(lstInventariosR);
-   // this.httpService.asignarLinea(inventario);
-   // this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido-lineas'] } }]);
+    // this.httpService.asignarLinea(inventario);
+    // this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido-lineas'] } }]);
   }
 
-  pedidosugeridoLinea(card : LineasEntity){
+  pedidosugeridoLinea(card: LineasEntity) {
     this.codigolinea = card["linea"];
-    
-    const inventario : InventariosEntity = {
+
+    const inventario: InventariosEntity = {
       categoria_id: this.codigocategoria,
       categoria: '',
       linea_id: '',
@@ -238,29 +255,49 @@ export class PedidoSugeridoComponent implements OnInit,OnDestroy {
     }
     console.log(inventario);
 
-    this.httpService.obtenerPortafoliosLineasSugerido(inventario).subscribe(res => {
-      if (res.codigoError != "OK") {
-        Swal.fire({
-          icon: 'error',
-          title: 'Ha ocurrido un error.',
-          text: res.descripcionError,
-          showConfirmButton: false,
-          // timer: 3000
-        });
-      } else {
+    Swal.fire({
+      title: 'CARGANDO...',
+      html: 'Se están cargando los productos.',
+      timer: 30000,
+      didOpen: () => {
+        Swal.showLoading();
+        const b = Swal.getHtmlContainer()!.querySelector('b');
+        const timerInterval = setInterval(() => {
+          if (b!.textContent !== null) {
+            b!.textContent = Swal.getTimerLeft()?.toString()!;
+          }
+        }, 100);
+        this.httpService.obtenerPortafoliosLineasSugerido(inventario).subscribe(res => {
+          if (res.codigoError != "OK") {
+            Swal.fire({
+              icon: 'error',
+              title: 'Ha ocurrido un error.',
+              text: res.descripcionError,
+              showConfirmButton: false,
+              // timer: 3000
+            });
+          } else {
 
-        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-          // Destroy the table first
-          dtInstance.destroy();
-          // Call the dtTrigger to rerender again
-          this.lstInventarios = res.lstInventarios;  
-          this.categorianame = this.lstInventarios[0].categoria;
-          console.log(this.lstInventarios);
-          this.dtTrigger.next('');
+            this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+              // Destroy the table first
+              dtInstance.destroy();
+              // Call the dtTrigger to rerender again
+              this.lstInventarios = res.lstInventarios;
+              this.categorianame = this.lstInventarios[0].categoria;
+              console.log(this.lstInventarios);
+              this.dtTrigger.next('');
+              Swal.close();
+            });
+
+          }
+
         });
-        
+      },
+    }).then((result) => {
+      /* Read more about handling dismissals below */
+      if (result.dismiss === Swal.DismissReason.timer) {
+        console.log('I was closed by the timer');
       }
-      
     });
 
   }

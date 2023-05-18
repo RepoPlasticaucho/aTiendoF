@@ -182,8 +182,7 @@ import { PedidoventComponent } from './components/outcome/pedidovent/pedidovent.
     AlmaceningresosComponent,
     AlmacenesegresosComponent,
     PedidoprovComponent,
-    PedidoventComponent,
-    
+    PedidoventComponent
   ],
   imports: [
     BrowserModule,

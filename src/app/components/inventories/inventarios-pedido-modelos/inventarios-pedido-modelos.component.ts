@@ -16,10 +16,10 @@ import Swal from 'sweetalert2';
 export class InventariosPedidoModelosComponent implements OnInit {
 
   private codigocategoria: string = "";
-  private codigoalmacen :string ="";
-  private codigolinea :string ="";
-  private codigomodelo :string="";
-  
+  private codigoalmacen: string = "";
+  private codigolinea: string = "";
+  private codigomodelo: string = "";
+
   faUserFriends = faUserFriends;
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;
@@ -30,18 +30,18 @@ export class InventariosPedidoModelosComponent implements OnInit {
   lstInventarios: InventariosEntity[] = [];
   lstModeloProducto: ModeloProductosEntity[] = [];
 
-  color_name : string | undefined;
-  categoria_name : string | undefined;
-  linea_name : string | undefined;
+  color_name: string | undefined;
+  categoria_name: string | undefined;
+  linea_name: string | undefined;
   modelo_name: string | undefined;
 
   codigocolor: string | undefined;
   codalmacen: string | undefined;
-  
+
   constructor(private readonly httpService: InventariosService, private router: Router) { }
 
   ngOnInit(): void {
-    
+
     this.dtOptions = {
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
@@ -51,29 +51,29 @@ export class InventariosPedidoModelosComponent implements OnInit {
       searching: true,
       ordering: true,
       info: true,
-      responsive:true
+      responsive: true
     }
 
     this.httpService.obtenerInventario$.subscribe(res => {
-        
+
       this.codigocategoria = res.categoria_id ?? "";
       this.codigoalmacen = res.almacen_id ?? "";
       this.codigolinea = res.linea ?? "";
       this.codigomodelo = res.modelo ?? "";
-      
-      if (this.codigocategoria || this.codigoalmacen ||  this.codigolinea || this.codigomodelo == null) {
-       
-        const modelo : ModelosEntity ={
+
+      if (this.codigocategoria || this.codigoalmacen || this.codigolinea || this.codigomodelo == null) {
+
+        const modelo: ModelosEntity = {
           id: '',
           linea_id: '',
           modelo: this.codigomodelo,
           etiquetas: '',
           cod_sap: '',
           almacen_id: this.codigoalmacen,
-          linea_nombre :this.codigolinea
+          linea_nombre: this.codigolinea
         }
 
-        const inventario : InventariosEntity = {
+        const inventario: InventariosEntity = {
           categoria_id: this.codigocategoria,
           categoria: '',
           linea_id: '',
@@ -95,46 +95,65 @@ export class InventariosPedidoModelosComponent implements OnInit {
           color: '',
           modelo: this.codigomodelo
         }
-       // console.log(modelo);
-       // console.log(inventario);
-       this.httpService.obtenerPortafoliosModelos(inventario).subscribe(res => {
-        if (res.codigoError != "OK") {
-          /*Swal.fire({
-            icon: 'error',
-            title: 'Ha ocurrido un error.',
-            text: res.descripcionError,
-            showConfirmButton: false,
-            // timer: 3000
-          }); */
-        } else {
-          this.lstInventarios = res.lstInventarios;
-          this.dtTrigger.next('');
-          this.color_name = this.lstInventarios[0].color;
-          this.categoria_name =  this.lstInventarios[0].categoria;
-          this.linea_name = this.codigolinea;
-          this.modelo_name = this.codigomodelo;
-         // console.log(this.lstInventarios);
+        // console.log(modelo);
+        // console.log(inventario);
+        Swal.fire({
+          title: 'CARGANDO...',
+          html: 'Se están cargando los productos.',
+          timer: 30000,
+          didOpen: () => {
+            Swal.showLoading();
+            const b = Swal.getHtmlContainer()!.querySelector('b');
+            const timerInterval = setInterval(() => {
+              if (b!.textContent !== null) {
+                b!.textContent = Swal.getTimerLeft()?.toString()!;
+              }
+            }, 100);
+            this.httpService.obtenerPortafoliosModelos(inventario).subscribe(res => {
+              if (res.codigoError != "OK") {
+                /*Swal.fire({
+                  icon: 'error',
+                  title: 'Ha ocurrido un error.',
+                  text: res.descripcionError,
+                  showConfirmButton: false,
+                  // timer: 3000
+                }); */
+              } else {
+                this.lstInventarios = res.lstInventarios;
+                this.dtTrigger.next('');
+                this.color_name = this.lstInventarios[0].color;
+                this.categoria_name = this.lstInventarios[0].categoria;
+                this.linea_name = this.codigolinea;
+                this.modelo_name = this.codigomodelo;
+                Swal.close();
+                // console.log(this.lstInventarios);
 
-          this.httpService.obtenerModelosMProducto(modelo).subscribe(res => {
-            if (res.codigoError != "OK") {
-             /* Swal.fire({
-             // icon: 'error',
-             // title: 'Ha ocurrido un error.',
-             // text: res.descripcionError,
-             // showConfirmButton: false,
-              // timer: 3000
-              });*/
-            } else {
+                this.httpService.obtenerModelosMProducto(modelo).subscribe(res => {
+                  if (res.codigoError != "OK") {
+                    /* Swal.fire({
+                    // icon: 'error',
+                    // title: 'Ha ocurrido un error.',
+                    // text: res.descripcionError,
+                    // showConfirmButton: false,
+                     // timer: 3000
+                     });*/
+                  } else {
 
-             this.lstModeloProducto = res.lstModelo_Productos;
-             //console.log(this.lstModeloProducto);
+                    this.lstModeloProducto = res.lstModelo_Productos;
+                    //console.log(this.lstModeloProducto);
 
-           
-            }
-          })
-        }
 
-      })
+                  }
+                })
+              }
+            });
+          },
+        }).then((result) => {
+          /* Read more about handling dismissals below */
+          if (result.dismiss === Swal.DismissReason.timer) {
+            console.log('I was closed by the timer');
+          }
+        });
 
       } else {
         this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido'] } }]);
@@ -143,10 +162,10 @@ export class InventariosPedidoModelosComponent implements OnInit {
     })
   }
 
-  buscarPortafolioModeloColor(card : ModeloProductosEntity){
+  buscarPortafolioModeloColor(card: ModeloProductosEntity) {
     this.codigocolor = card["color"];
-    
-    const inventario : InventariosEntity = {
+
+    const inventario: InventariosEntity = {
       categoria_id: this.codigocategoria,
       categoria: '',
       linea_id: '',
@@ -171,11 +190,11 @@ export class InventariosPedidoModelosComponent implements OnInit {
     //console.log(inventario);
     this.httpService.asignarColor(inventario);
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido-colores'] } }]);
-  }  
+  }
 
-  returncategoria(){
-    
-    const inventario : InventariosEntity = {
+  returncategoria() {
+
+    const inventario: InventariosEntity = {
       categoria_id: this.codigocategoria,
       categoria: '',
       linea_id: '',
@@ -200,11 +219,11 @@ export class InventariosPedidoModelosComponent implements OnInit {
     console.log(inventario);
     this.httpService.asignarCategoria(inventario);
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido-categoria'] } }]);
-  }  
+  }
 
-  returnLinea(){
-    
-    const inventario : InventariosEntity = {
+  returnLinea() {
+
+    const inventario: InventariosEntity = {
       categoria_id: this.codigocategoria,
       categoria: '',
       linea_id: '',
@@ -229,5 +248,5 @@ export class InventariosPedidoModelosComponent implements OnInit {
     console.log(inventario);
     this.httpService.asignarCategoria(inventario);
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido-lineas'] } }]);
-  }  
+  }
 }
