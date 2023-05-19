@@ -79,7 +79,7 @@
 
         </form>
 
-        <form [formGroup]="corporationForm" (ngSubmit)="onSubmit()" *ngIf="mostrarAct">
+        <form [formGroup]="corporationForm" (ngSubmit)="onSubmit2()" *ngIf="mostrarAct">
           <div class="form-group">
             <label for="passwnew">Nueva Contraseña</label>
             <input type="password" class="form-control" id="passwnew"
@@ -106,7 +106,7 @@
         </div>
           <div align="center">
             <br>
-            <button type="submit" class="btn btn-primary" (click)="onSubmit2()">
+            <button type="submit" class="btn btn-primary">
               <!--[disabled]="!this.corporationForm.valid"-->
               <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
               Actualizar

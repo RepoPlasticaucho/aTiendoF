@@ -92,7 +92,7 @@ export class LoginComponent {
             razon_social: ''
           }
           switch (this.passwre) {
-            case "venus22":
+            case "venus21":
               this.httpService.obtenerSociedadL(sociedadEntity).subscribe(res => {
                 if (res.codigoError == "OK") {
                   this.mostrarIni = false;
