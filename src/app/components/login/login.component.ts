@@ -21,16 +21,25 @@ export class LoginComponent {
   faTimes = faTimes;
   faCopy = faCopy;
   faSave = faSave;
+
+  mostrarIni: boolean = true;
+  mostrarAct: boolean = false;
   //Creación de la variable para formulario
   categoryForm = new FormGroup({
     categoria: new FormControl('', Validators.required),
     codigoSAP: new FormControl('', Validators.required),
     etiquetas: new FormControl('',),
   });
+  corporationForm = new FormGroup({
+    passwnew: new FormControl('', Validators.required),
+    passconfirm: new FormControl('', Validators.required),
+  });
+  encPass2: string | undefined;
+  fun: any;
   private db: any;
   encPass!: string;
   passwre!: string;
-  constructor(private breakpointObserver: BreakpointObserver, private readonly httpService: SociedadesService, private router: Router) {}
+  constructor(private breakpointObserver: BreakpointObserver, private readonly httpService: SociedadesService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -51,24 +60,25 @@ export class LoginComponent {
         razon_social: ''
       }
 
-      console.log(userEntity);
-      
-      this.httpService.obtenerUsuario(userEntity).subscribe(res => {
-        if (res.codigoError == "OK") {
+      // console.log(userEntity);
 
+      this.httpService.obtenerUsuario(userEntity).subscribe(res => {
+        const idsociedad = res.lstSociedades[0].idSociedad;
+        localStorage.setItem('sociedadid', idsociedad);
+        if (res.codigoError == "OK") {
           var salt = CryptoJS.enc.Base64.parse("SXZhbiBNZWR2ZWRldg==");
           var iv = CryptoJS.enc.Hex.parse("69135769514102d0eded589ff874cacd");
-          var key564Bits10000Iterations = CryptoJS.PBKDF2("Venus21!", salt, {keySize: 256/32 + 128/32, iterations: 10000, hasher: CryptoJS.algo.SHA512});
+          var key564Bits10000Iterations = CryptoJS.PBKDF2("Venus21!", salt, { keySize: 256 / 32 + 128 / 32, iterations: 10000, hasher: CryptoJS.algo.SHA512 });
           const pass = this.categoryForm.value!.codigoSAP ?? ""
           var encrypted = CryptoJS.AES.encrypt(pass, key564Bits10000Iterations, {
             iv: iv,
             mode: CryptoJS.mode.CBC,
             padding: CryptoJS.pad.Pkcs7
           });
-          
+
           this.passwre = pass;
-          this.encPass= encrypted.toString();
-         // console.log(this.encPass);
+          this.encPass = encrypted.toString();
+          // console.log(this.encPass);
 
           const sociedadEntity: SociedadesEntity = {
             idGrupo: '',
@@ -81,45 +91,81 @@ export class LoginComponent {
             idSociedad: '',
             razon_social: ''
           }
-          
-
-          this.httpService.obtenerSociedadL(sociedadEntity).subscribe(res => {
-            if (res.codigoError == "OK") {
-              const rol = res.lstSociedades[0].funcion;
-              const idsociedad = res.lstSociedades[0].idSociedad;
-              const passwa = this.passwre;
-              console.log(passwa);
-              localStorage.setItem('sociedadid',idsociedad);
-              localStorage.setItem('passwa',passwa);
-               switch (rol) {
-                case "admin":
+          switch (this.passwre) {
+            case "venus22":
+              this.httpService.obtenerSociedadL(sociedadEntity).subscribe(res => {
+                if (res.codigoError == "OK") {
+                  this.mostrarIni = false;
+                  this.mostrarAct = true;
+                  console.log(res)
+                } else{
                   Swal.fire({
-                    icon: 'success',
-                    title: 'Bienvenido Administrador!!!'
-                    }).finally(() => {
-                      this.router.navigate(['/navegation-adm']);
-                    })
-                  break;
-
-                case "client":
-                  Swal.fire({
-                    icon: 'success',
-                    title: 'Bienvenido!!!'
-                    }).finally(() => {
-                      this.router.navigate(['/navegation-cl']);
-                    })
-                  break;
-              }
-            }else{
-              Swal.fire({
-                icon: 'error',
-                title: 'Contraseña Inconrrecta.'
-              }).finally(() => {
-                this.router.navigate(['/login-nav']);
+                    icon: 'error',
+                    title: 'Contraseña Incorrecta.'
+                  }).finally(() => {
+                    this.router.navigate(['/login-nav']);
+                  });
+                 console.log(res)
+                }
               });
-            }
-          });
-        }else{
+              break;
+
+            case "inicio22":
+              this.httpService.obtenerSociedadL(sociedadEntity).subscribe(res => {
+                if (res.codigoError == "OK") {
+                  this.mostrarIni = false;
+                  this.mostrarAct = true;
+                } else {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Contraseña Incorrecta.'
+                  }).finally(() => {
+                    this.router.navigate(['/login-nav']);
+                  });
+                }
+              });
+              break;
+
+            default:
+              this.httpService.obtenerSociedadL(sociedadEntity).subscribe(res => {
+                if (res.codigoError == "OK") {
+                  const rol = res.lstSociedades[0].funcion;
+                  const passwa = this.passwre;
+                  // console.log(passwa);
+                  localStorage.setItem('passwa', passwa);
+                  switch (rol) {
+                    case "admin":
+                      Swal.fire({
+                        icon: 'success',
+                        title: 'Bienvenido Administrador!!!'
+                      }).finally(() => {
+                        this.router.navigate(['/navegation-adm']);
+                      })
+                      break;
+
+                    case "client":
+                      Swal.fire({
+                        icon: 'success',
+                        title: 'Bienvenido!!!'
+                      }).finally(() => {
+                        this.router.navigate(['/navegation-cl']);
+                      })
+                      break;
+
+                  }
+                } else {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Contraseña Incorrecta.'
+                  }).finally(() => {
+                    this.router.navigate(['/login-nav']);
+                  });
+                }
+
+              });
+              break;
+          }
+        } else {
           Swal.fire({
             icon: 'error',
             title: 'El usuario no existe.'
@@ -129,6 +175,84 @@ export class LoginComponent {
 
         }
       })
+    }
+  }
+
+  onSubmit2() {
+    const passnuevo = this.corporationForm.value!.passwnew ?? "";
+    const passconfirm = this.corporationForm.value!.passconfirm ?? "";
+
+    if (!this.corporationForm.valid) {
+      this.corporationForm.markAllAsTouched();
+    } else {
+
+      if ('venus21' == passconfirm || 'venus21' == passnuevo) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Contraseñas Identicas.',
+          text: 'Ingrese contraseñas validas',
+          showConfirmButton: false,
+        });
+      } else {
+
+        if (passnuevo == passconfirm) {
+
+          var salt = CryptoJS.enc.Base64.parse("SXZhbiBNZWR2ZWRldg==");
+          var iv = CryptoJS.enc.Hex.parse("69135769514102d0eded589ff874cacd");
+          var key564Bits10000Iterations = CryptoJS.PBKDF2("Venus21!", salt, { keySize: 256 / 32 + 128 / 32, iterations: 10000, hasher: CryptoJS.algo.SHA512 });
+
+          var encrypted = CryptoJS.AES.encrypt(passnuevo, key564Bits10000Iterations, {
+            iv: iv,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7
+          });
+
+          this.encPass2 = encrypted.toString();
+
+          const userEntity: SociedadesEntity = {
+            idGrupo: '',
+            nombre_comercial: '',
+            id_fiscal: '',
+            email: '',
+            telefono: '',
+            password: this.encPass2,
+            funcion: '',
+            idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
+            razon_social: ''
+          }
+          console.log(userEntity)
+          this.httpService.actualizarPass(userEntity).subscribe(res => {
+            if (res.codigoError == "OK") {
+              Swal.fire({
+                icon: 'success',
+                title: 'Actualizado Correctamente.',
+                text: `Se ha actualizado la información`,
+                showConfirmButton: true,
+                confirmButtonText: "Ok"
+              }).finally(() => {
+                window.location.reload();
+              });
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Ha ocurrido un error.',
+                text: res.descripcionError,
+                showConfirmButton: false,
+              });
+            }
+          });
+
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'No coinciden las contreseñas',
+            text: 'Contraseña nueva y confirmacion no coinciden',
+            showConfirmButton: false,
+          });
+        }
+
+      }
+
     }
   }
 }

@@ -133,6 +133,7 @@ export class UsuarioPassComponent implements OnInit {
                      this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['usuario'] } }]);
                   break;
               }
+              
               });
 
               
