@@ -13,6 +13,8 @@ import { LineasEntity } from 'src/app/models/lineas';
 import { LineasService } from 'src/app/services/lineas.service';
 import { CategoriasEntity } from 'src/app/models/categorias';
 import { CategoriasService } from 'src/app/services/categorias.service';
+import { MarcasService } from 'src/app/services/marcas.service';
+import { MarcasEntity } from 'src/app/models/marcas';
 
 @Component({
   selector: 'app-productos-create',
@@ -33,7 +35,7 @@ export class ProductosCreateComponent implements OnInit {
     // categoria: new FormControl('',),
     categoria: new FormControl('0',),
     linea: new FormControl('0',),
-    marca_id: new FormControl('0', Validators.required),
+    marca: new FormControl('0'),
     modelo: new FormControl('0',),
     producto: new FormControl('', [Validators.required]),
     etiquetas: new FormControl('', [Validators.required]),
@@ -44,6 +46,8 @@ export class ProductosCreateComponent implements OnInit {
   lstModeloProductos: ModeloProductosEntity[] = [];
   lstCategorias: CategoriasEntity[] = [];
   selectCategoria: boolean = false;
+  lstMarcas: MarcasEntity[] = [];
+  selectMarca: boolean = false;
 
   lstLineas: LineasEntity[] = [];
   selectLinea: boolean = false;
@@ -69,6 +73,7 @@ export class ProductosCreateComponent implements OnInit {
   constructor(
     
     private readonly httpServiceModelosProductos: ModeloproductosService,
+    private readonly httpServiceMarcas: MarcasService,
     //private readonly httpServiceModelos: ModelosService,
     //private readonly httpServiceLineas: LineasService,
     private readonly httpServiceModelos: ModelosService,
@@ -91,6 +96,20 @@ export class ProductosCreateComponent implements OnInit {
         });
       } else {
         this.lstCategorias = res.lstCategorias;
+      }
+    });
+
+    //Obtenemos Marcas
+    this.httpServiceMarcas.obtenerMarcas().subscribe((res) => {
+      if (res.codigoError != 'OK') {
+        Swal.fire({
+          icon: 'error',
+          title: 'No se pudo obtener Marcas.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      } else {
+        this.lstMarcas = res.lstMarcas;
       }
     });
 
@@ -267,11 +286,13 @@ export class ProductosCreateComponent implements OnInit {
     if (e.target.value == 0) {
       this.selectLinea = true;
       this.lstModelos = [];
+      this.modelProductForm.get("marca")?.setValue("0");
     } else {
       this.selectLinea = false;
     }
     if (e.target.value == null || undefined) {
       this.lstModelos = [];
+      this.modelProductForm.get("marca")?.setValue("0");
     } else {
       const linea: LineasEntity = {
         id: '',
@@ -291,8 +312,10 @@ export class ProductosCreateComponent implements OnInit {
             showConfirmButton: false,
           });
           this.lstModelos = [];
+          this.modelProductForm.get("marca")?.setValue("0");
         } else {
           this.lstModelos = res.lstModelos;
+          this.modelProductForm.get("marca")?.setValue("0");
         }
       })
     }
@@ -343,6 +366,28 @@ export class ProductosCreateComponent implements OnInit {
       });
 
       //this.warehousesForm.get("sociedad")?.setValue(sociedad.target.value);
+    }
+  }
+
+  changeMark(marca: any): void {
+    if (marca.target.value == 0) {
+      this.selectMarca = true;
+    } else {
+      this.selectMarca = false;
+
+      this.httpServiceModelos.obtenerModelosLineasMarcas(this.modelProductForm.value!.linea ?? '', marca.target.value).subscribe((res) => {
+          if (res.codigoError != 'OK') {
+            Swal.fire({
+              icon: 'error',
+              title: 'No se pudo obtener las líneas.',
+              text: res.descripcionError,
+              showConfirmButton: false,
+            });
+            this.lstModelos = [];
+          } else {
+            this.lstModelos = res.lstModelos;
+          }
+        });
     }
   }
 
