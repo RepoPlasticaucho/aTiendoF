@@ -126,7 +126,6 @@ export class ProductosCreateComponent implements OnInit {
       if (this.modelProductForm.get('modelo_producto_id')?.value == '0') {
         this.selectModeloProducto = true;
       }
-     
     } else {
       if (this.modelProductForm.get('modelo_producto_id')?.value == '0') {
         this.selectModeloProducto = true;
