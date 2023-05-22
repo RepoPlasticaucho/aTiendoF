@@ -9,6 +9,9 @@ import { TercerosEditComponent } from './components/users/terceros-edit/terceros
 import { AlmacenesegresosComponent } from './components/outcome/almacenesegresos/almacenesegresos.component';
 import { InventariosCreateComponent } from './components/inventories/inventarios-create/inventarios-create.component';
 import { InventariosEditComponent } from './components/inventories/inventarios-edit/inventarios-edit.component';
+import { AlmaceningresosComponent } from './components/income/almaceningresos/almaceningresos.component';
+import { VistapedidosComponent } from './components/income/vistapedidos/vistapedidos.component';
+import { PedidoprovComponent } from './components/income/pedidoprov/pedidoprov.component';
 
 const routes: Routes = [
   {
@@ -37,7 +40,10 @@ const routes: Routes = [
       { path: "tercerosusuarios-edit", component: TercerosusuariosEditComponent, outlet: "contentClient" },
       { path: "tercerosusuarios", component: TercerosusuariosComponent, outlet: "contentClient" },
       { path: "modeloproductos", component: ModeloproductosComponent, outlet: "contentClient" },
-      { path: "egresos", component: AlmacenesegresosComponent, outlet: "contentClient" }
+      { path: "egresos", component: AlmacenesegresosComponent, outlet: "contentClient" },
+      { path: "almaceningresos", component: AlmaceningresosComponent, outlet: "contentClient" },
+      { path: "vistapedidos", component: VistapedidosComponent, outlet: "contentClient" },
+      { path: "pedidoprov", component: PedidoprovComponent, outlet: "contentClient" }
     ]
   },
   {

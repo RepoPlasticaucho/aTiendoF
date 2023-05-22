@@ -102,6 +102,7 @@ import { AlmaceningresosComponent } from './components/income/almaceningresos/al
 import { AlmacenesegresosComponent } from './components/outcome/almacenesegresos/almacenesegresos.component';
 import { PedidoprovComponent } from './components/income/pedidoprov/pedidoprov.component';
 import { PedidoventComponent } from './components/outcome/pedidovent/pedidovent.component';
+import { VistapedidosComponent } from './components/income/vistapedidos/vistapedidos.component';
 
 @NgModule({
   declarations: [
@@ -182,7 +183,8 @@ import { PedidoventComponent } from './components/outcome/pedidovent/pedidovent.
     AlmaceningresosComponent,
     AlmacenesegresosComponent,
     PedidoprovComponent,
-    PedidoventComponent
+    PedidoventComponent,
+    VistapedidosComponent
   ],
   imports: [
     BrowserModule,
