@@ -186,7 +186,7 @@ export class LoginComponent {
       this.corporationForm.markAllAsTouched();
     } else {
 
-      if ('venus21' == passconfirm || 'venus21' == passnuevo) {
+      if ('venus22' == passconfirm || 'venus22' == passnuevo) {
         Swal.fire({
           icon: 'error',
           title: 'Contraseñas Identicas.',
