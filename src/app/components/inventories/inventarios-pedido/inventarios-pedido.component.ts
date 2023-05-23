@@ -70,13 +70,6 @@ export class InventariosPedidoComponent implements OnInit {
           timer: 30000,
           didOpen: () => {
             Swal.showLoading();
-            const b = Swal.getHtmlContainer()!.querySelector('b');
-            const timerInterval = setInterval(() => {
-              if (b!.textContent !== null) {
-                b!.textContent = Swal.getTimerLeft()?.toString()!;
-              }
-            }, 100);
-
             this.httpService.obtenerPortafolios(almacen).subscribe(res => {
               if (res.codigoError != "OK") {
                 Swal.fire({

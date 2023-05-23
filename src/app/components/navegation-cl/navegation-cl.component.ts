@@ -12,6 +12,8 @@ import { Location } from '@angular/common';
 })
 export class NavegationClComponent {
 
+  transaccionesExpandidas = false;
+  
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches),

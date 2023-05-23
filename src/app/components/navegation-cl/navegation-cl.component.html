@@ -13,10 +13,24 @@
                 <span class="material-icons-outlined" style="font-size: 24px">pie_chart</span>
                 <font style="font-size: 13px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dashboard</font>
             </a>
-            <a mat-list-item href="#" style="color: white">
+            <a mat-list-item style="color: white" (click)="transaccionesExpandidas = !transaccionesExpandidas">
                 <span class="material-icons-outlined" style="font-size: 24px">remove_done</span>
                 <font style="font-size: 13px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Transacciones</font>
             </a>
+            <div *ngIf="transaccionesExpandidas" class="subitem-menu">
+                <a mat-list-item [routerLink]="[{ outlets: { contentClient: ['almaceningresos'] } }]" style="color: white">
+                    <span class="material-icons-outlined" style="font-size: 20px">shopping_cart</span>
+                    <font style="font-size: 12px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ingresos</font>
+                </a>
+                <a mat-list-item style="color: white">
+                    <span class="material-icons-outlined" style="font-size: 20px">payment</span>
+                    <font style="font-size: 12px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Egresos</font>
+                </a>
+                <a mat-list-item style="color: white">
+                    <span class="material-icons-outlined" style="font-size: 20px">monetization_on</span>
+                    <font style="font-size: 12px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Saldos</font>
+                </a>
+              </div>
             <a mat-list-item [routerLink]="[{ outlets: { contentClient: ['inventarios-productos'] } }]" style="color: white">
                 <span class="material-icons-outlined" style="font-size: 24px">apps</span>
                 <font style="font-size: 13px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Productos</font>

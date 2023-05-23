@@ -162,12 +162,6 @@ export class PedidoSugeridoComponent implements OnInit, OnDestroy {
           timer: 30000,
           didOpen: () => {
             Swal.showLoading();
-            const b = Swal.getHtmlContainer()!.querySelector('b');
-            const timerInterval = setInterval(() => {
-              if (b!.textContent !== null) {
-                b!.textContent = Swal.getTimerLeft()?.toString()!;
-              }
-            }, 100);
             this.httpService.obtenerPortafoliosCategoriaSugerido(inventario).subscribe(res => {
               if (res.codigoError != "OK") {
                 /*Swal.fire({
@@ -261,12 +255,6 @@ export class PedidoSugeridoComponent implements OnInit, OnDestroy {
       timer: 30000,
       didOpen: () => {
         Swal.showLoading();
-        const b = Swal.getHtmlContainer()!.querySelector('b');
-        const timerInterval = setInterval(() => {
-          if (b!.textContent !== null) {
-            b!.textContent = Swal.getTimerLeft()?.toString()!;
-          }
-        }, 100);
         this.httpService.obtenerPortafoliosLineasSugerido(inventario).subscribe(res => {
           if (res.codigoError != "OK") {
             Swal.fire({

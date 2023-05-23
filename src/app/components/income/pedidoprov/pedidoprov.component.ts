@@ -4,14 +4,18 @@ import { faList, faEdit, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-
 import { Subject } from 'rxjs';
 import { ModeloProductosEntity } from 'src/app/models/modeloproductos';
 import { ModeloproductosService } from 'src/app/services/modeloproductos.service';
+import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
+import { PedidoCreateComponent } from '../pedido-create/pedido-create.component';
 
 @Component({
   selector: 'app-pedidoprov',
   templateUrl: './pedidoprov.component.html',
-  styleUrls: ['./pedidoprov.component.css']
+  styleUrls: ['./pedidoprov.component.css'],
+  providers: [MatDialog]
 })
 export class PedidoprovComponent implements OnInit {
+  
 //Iconos para la pagina de grupos
 faList = faList;
 faEdit = faEdit;
@@ -23,7 +27,19 @@ dtTrigger: Subject<any> = new Subject<any>();
 lstModelosProductos: ModeloProductosEntity[] = [];
 
 constructor(private readonly httpService: ModeloproductosService,
-  private router: Router) { }
+  private router: Router,
+  private dialog: MatDialog) { }
+
+  openModal(): void {
+    const dialogRef = this.dialog.open(PedidoCreateComponent, {
+      width: '500px',
+      // Agrega cualquier configuración adicional del modal aquí
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      // Lógica para manejar el resultado después de cerrar el modal
+    });
+  }
 
 ngOnInit(): void {
   this.dtOptions = {
@@ -43,12 +59,6 @@ ngOnInit(): void {
     timer: 30000,
     didOpen: () => {
       Swal.showLoading();
-      const b = Swal.getHtmlContainer()!.querySelector('b');
-      const timerInterval = setInterval(() => {
-        if (b!.textContent !== null) {
-          b!.textContent = Swal.getTimerLeft()?.toString()!;
-        }
-      }, 100);
       this.httpService.obtenerModelosProductos().subscribe(res => {
         console.log(res);
         if (res.codigoError != "OK") {
@@ -76,10 +86,6 @@ ngOnInit(): void {
 
 ngOnDestroy(): void {
   this.dtTrigger.unsubscribe();
-}
-
-agregarModeloProducto() {
-  this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['crearModeloProductos'] } }]);
 }
 
 }

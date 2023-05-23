@@ -103,6 +103,8 @@ import { AlmacenesegresosComponent } from './components/outcome/almacenesegresos
 import { PedidoprovComponent } from './components/income/pedidoprov/pedidoprov.component';
 import { PedidoventComponent } from './components/outcome/pedidovent/pedidovent.component';
 import { VistapedidosComponent } from './components/income/vistapedidos/vistapedidos.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { PedidoCreateComponent } from './components/income/pedido-create/pedido-create.component';
 
 @NgModule({
   declarations: [
@@ -184,7 +186,8 @@ import { VistapedidosComponent } from './components/income/vistapedidos/vistaped
     AlmacenesegresosComponent,
     PedidoprovComponent,
     PedidoventComponent,
-    VistapedidosComponent
+    VistapedidosComponent,
+    PedidoCreateComponent
   ],
   imports: [
     BrowserModule,
@@ -206,6 +209,7 @@ import { VistapedidosComponent } from './components/income/vistapedidos/vistaped
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
+    MatDialogModule,
     MatInputModule,
     MatDatepickerModule,        
     MatNativeDateModule,        

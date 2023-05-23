@@ -1,0 +1,65 @@
+<div class="dialog-content">
+    <div class="btn-cerrar">
+        <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip"
+            data-placement="bottom" title="Regresar a modelos" (click)="cerrarDialog()">
+        </fa-icon>
+    </div>
+</div>
+<br>
+<div>
+    <form [formGroup]="pedidoForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label for="grupo">Categoria</label>
+            <select class="form-control" (change)="changeGroup1($event)" formControlName="categoria">
+                <option [value]="0" selected>Seleccione una categoría</option>
+                <option *ngFor="let categoria of lstCategorias" [value]="categoria.categoria">
+                    {{categoria.categoria}}
+                </option>
+            </select>
+            <small *ngIf="selectCategoria">
+                <small *ngIf="selectCategoria" style="color: red; ">
+                    Debe seleccionar una categoría.
+                </small>
+            </small>
+        </div>
+    
+        <div class="form-group">
+            <label for="grupo">Tipo</label>
+            <select class="form-control" (change)="changeGroup2($event)" formControlName="tipo">
+                <option [value]=" 0 " selected>Seleccione un rol</option>
+                        <option [value]="ped">
+                            PEDIDO ESTANDAR
+                        </option>
+                        <option [value]="dev">
+                            DEVOLUCIÓN NORMAL
+                        </option>
+            </select>
+            <small *ngIf="selectTipo">
+                <small *ngIf="selectTipo" style="color: red; ">
+                    Debe seleccionar un tipo.
+                </small>
+            </small>
+        </div>
+        <div class="form-group">
+            <label for="grupo">Motivo</label>
+            <select class="form-control" (change)="changeGroup3($event)" formControlName="motivo">
+                <option [value]=" 0 " selected>Seleccione un motivo</option>
+                <!--
+                    <option *ngFor="let motivo of lstMotivos" [value]="motivo.motivo">
+                    {{motivo.motivo}}
+                </option>
+                -->
+            </select>
+            <small *ngIf="selectMotivo">
+                <small *ngIf="selectMotivo" style="color: red; ">
+                    Debe seleccionar un motivo.
+                </small>
+            </small>
+        </div>
+        <button type="submit" class="btn btn-primary">
+            <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
+            Guardar
+        </button>
+    </form>
+    
+</div>

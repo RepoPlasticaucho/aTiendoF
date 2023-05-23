@@ -50,7 +50,6 @@ export class ProductosComponent implements OnInit {
             b!.textContent = Swal.getTimerLeft()?.toString()!;
           }
         }, 100);
-    
         this.httpService.obtenerProductos().subscribe(res => {
           clearInterval(timerInterval);
     

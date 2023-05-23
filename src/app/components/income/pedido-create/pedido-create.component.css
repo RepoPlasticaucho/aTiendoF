@@ -1,0 +1,9 @@
+.dialog-content {
+    position: relative;
+  }
+
+.btn-cerrar {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }

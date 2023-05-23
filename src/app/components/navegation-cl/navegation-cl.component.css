@@ -49,3 +49,7 @@ img {
   background-color: #2196F3;
   border-radius: 4px;
 }
+
+.subitem-menu {
+  margin-left: 20px; /* Ajusta el valor según la separación deseada */
+}
