@@ -79,7 +79,7 @@ export class CatalogosComponent implements OnInit {
         this.catalogoMarca = [...new Set(res.lstCatalogos.map(item => item.marca))];
         this.catalogoColores = [...new Set(res.lstCatalogos.map(item => item.color))];
 
-        // CARGA DE TABLAS PADRES 
+        // CARGA DE CAMPOS
         this.Categorias();
         this.Atributos();
         this.Generos();

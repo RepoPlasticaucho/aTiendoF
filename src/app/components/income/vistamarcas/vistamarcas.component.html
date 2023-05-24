@@ -7,7 +7,7 @@
               <h1 class="mx-5 " style="color: #636363;">Marcas</h1>
           </div>
       </div>
-      <div class="card-body ">
+      <div class="card-body">
           <div>
               <mat-grid-list cols="6" rowHeight="50px">
                   <mat-grid-tile>
@@ -27,12 +27,12 @@
               </mat-grid-list>
           </div>
           <br><br>
-  <mat-grid-list cols="3" rowHeight="225px">
+  <mat-grid-list cols="2" rowHeight="225px">
     <mat-grid-tile *ngFor="let marca of lstMarcas">
       <mat-card class="dashboard-card">
         <mat-card-header>
             <mat-card-title>
-              <img src={{marca.url_image}} alt={{marca.marca}} class="img-thumbnail" height="100px" width="100px" data-toggle="modal" data-target="#exampleModal">
+              <img src={{marca.url_image}} alt={{marca.marca}} class="img-thumbnail" height="75px" width="75px" data-toggle="modal" data-target="#exampleModal">
               <br><br>
               <a href=# style="text-decoration: none;">
                 <p style="color: black; font-size: 30px; font-weight: normal;">{{ marca.marca }}</p>
