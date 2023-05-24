@@ -42,6 +42,7 @@ export class ModeloproductosCreateComponent implements OnInit {
     atributo_id: new FormControl('0', Validators.required),
     genero_id: new FormControl('0', Validators.required),
     modeloProducto: new FormControl('', [Validators.required]),
+    codigoFam: new FormControl('', [Validators.required]),
     codigoSAP: new FormControl('', [Validators.required]),
     urlImagen: new FormControl(''),
   });
@@ -207,6 +208,7 @@ export class ModeloproductosCreateComponent implements OnInit {
                   genero_id: this.modelProductForm.value!.genero_id ?? '',
                   modelo_producto:
                     this.modelProductForm.value!.modeloProducto ?? '',
+                  cod_familia: this.modelProductForm.value!.codigoFam ?? '',
                   cod_sap: this.modelProductForm.value!.codigoSAP ?? '',
                   url_image:
                     this.imageName == '' ? this.imageUrl : this.imageName,
@@ -255,6 +257,7 @@ export class ModeloproductosCreateComponent implements OnInit {
             atributo_id: this.modelProductForm.value!.atributo_id ?? '',
             genero_id: this.modelProductForm.value!.genero_id ?? '',
             modelo_producto: this.modelProductForm.value!.modeloProducto ?? '',
+            cod_familia: this.modelProductForm.value!.codigoFam ?? '',
             cod_sap: this.modelProductForm.value!.codigoSAP ?? '',
             url_image: this.imageName == '' ? this.imageUrl : this.imageName,
           };

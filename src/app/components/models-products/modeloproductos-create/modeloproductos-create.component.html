@@ -140,15 +140,21 @@
                             </div>
                             <div class="form-group">
                                 <label for="modeloProducto " style="margin: 0">Descripción</label>
-                                <input type="text " [(ngModel)]="selectedModeloProducto" class="form-control" id="modelo "
-                                    placeholder="Ingrese la descripción del Modelo Producto."
+                                <input type="text " [(ngModel)]="selectedModeloProducto" class="form-control"
+                                    id="modelo " placeholder="Ingrese la descripción del Modelo Producto."
                                     formControlName="modeloProducto" />
-                                <small *ngIf="modelProductForm.controls['modeloProducto'].invalid && (modelProductForm.controls['modeloProducto'].dirty || modelProductForm.controls['modeloProducto'].touched)">
+                                <small
+                                    *ngIf="modelProductForm.controls['modeloProducto'].invalid && (modelProductForm.controls['modeloProducto'].dirty || modelProductForm.controls['modeloProducto'].touched)">
                                     <small *ngIf="modelProductForm.controls['modeloProducto'].errors?.['required']"
                                         style="color: red">
                                         Debe ingresar la descripción del Modelo Producto
                                     </small>
                                 </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="codigoFam">Código de Familia</label>
+                                <input type="text" class="form-control" id="codigoFam"
+                                    placeholder="Ingrese el código de la Familia" formControlName="codigoFam" />
                             </div>
                             <div class="form-group">
                                 <label for="codigoSAP">Código SAP</label>

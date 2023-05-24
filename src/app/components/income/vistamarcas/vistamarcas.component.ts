@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MarcasEntity } from 'src/app/models/marcas';
 import { MarcasService } from 'src/app/services/marcas.service';
 import Swal from 'sweetalert2';
+import { faEdit, faPlus, faTrashAlt, faShoppingBag } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-vistamarcas',
@@ -10,7 +11,7 @@ import Swal from 'sweetalert2';
 })
 export class VistamarcasComponent implements OnInit {
   lstMarcas: MarcasEntity[] = [];
-
+  faShoppingBag = faShoppingBag;
 
   constructor(private readonly httpServiceMarcas: MarcasService) { }
 

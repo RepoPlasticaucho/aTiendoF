@@ -1,4 +1,4 @@
-<div style="width: 90%;margin: auto;">
+<div style="width: 100%;margin: auto;">
     <div class="card">
         <div class="card-header">
             <div class="row mx-3">
@@ -13,15 +13,16 @@
             <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                 <thead style="color: #636363;">
                     <tr>
-                        <th style="width: 10%; "></th>
+                        <th style="width: 20%; "></th>
                         <th style="width: 10%; ">Marca</th>
                         <th style="width: 10%; ">Color</th>
                         <th style="width: 10%; ">Atributo</th>
                         <th style="width: 10%; ">Género</th>
-                        <th style="width: 15%; ">Modelo</th>
-                        <th style="width: 20%; ">Modelo Producto</th>
-                        <th style="width: 11%; ">Cód. SAP</th>
-                        <th style="width: 14%; "></th>
+                        <th style="width: 10%; ">Modelo</th>
+                        <th style="width: 10%; ">Modelo Producto</th>
+                        <th style="width: 10%; ">Familia</th>
+                        <th style="width: 10%; ">Cód. SAP</th>
+                        <th style="width: 10%; "></th>
                     </tr>
                 </thead>
                 <tbody style="color: #767695;">
@@ -35,6 +36,7 @@
                         <td>{{modeloProducto.genero}}</td>
                         <td>{{modeloProducto.modelo}}</td>
                         <td>{{modeloProducto.modelo_producto}}</td>
+                        <td>{{modeloProducto.cod_familia}}</td>
                         <td>{{modeloProducto.cod_sap}}</td>
                         <td style="text-align: center;">
                             <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'lg'" style="margin-right: 5px;" data-placement="bottom" title="Editar Modelo Producto" (click)=" editarModeloProducto(modeloProducto) "></fa-icon>

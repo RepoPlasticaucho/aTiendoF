@@ -45,6 +45,7 @@ export class ModeloproductosEditComponent implements OnInit {
     genero_id: new FormControl('0'),
     genero: new FormControl('0', Validators.required),
     modeloProducto: new FormControl('', [Validators.required]),
+    codigoFam: new FormControl('', [Validators.required]),
     codigoSAP: new FormControl('', [Validators.required]),
     urlImagen: new FormControl(''),
   });
@@ -205,6 +206,7 @@ export class ModeloproductosEditComponent implements OnInit {
         this.modelProductForm.get('linea')?.setValue(res.linea!);
         this.modelProductForm.get('modelo')?.setValue(res.modelo!);
         this.modelProductForm.get('modeloProducto')?.setValue(res.modelo_producto);
+        this.modelProductForm.get('codigoFam')?.setValue(res.cod_familia!);
         this.modelProductForm.get('codigoSAP')?.setValue(res.cod_sap);
         this.initialColor = res.color!;
         this.initialAttribute = res.atributo!;
@@ -329,6 +331,7 @@ export class ModeloproductosEditComponent implements OnInit {
                 atributo_id: this.modelProductForm.value!.atributo_id ?? this.lstAtributos.filter((x) => x.atributo == this.modelProductForm.value.atributo)[0].id,
                 genero_id: this.modelProductForm.value!.genero_id ?? this.lstGeneros.filter((x) => x.genero == this.modelProductForm.value.genero)[0].id,
                 modelo_producto: this.modelProductForm.value!.modeloProducto ?? '',
+                cod_familia: this.modelProductForm.value!.codigoFam ?? '',
                 cod_sap: this.modelProductForm.value!.codigoSAP ?? '',
                 url_image: this.imageName == '' ? this.imageUrl : this.imageName
               };
@@ -374,6 +377,7 @@ export class ModeloproductosEditComponent implements OnInit {
                   atributo_id: this.modelProductForm.value!.atributo_id ?? this.lstAtributos.filter((x) => x.atributo == this.modelProductForm.value.atributo)[0].id,
                   genero_id: this.modelProductForm.value!.genero_id ?? this.lstGeneros.filter((x) => x.genero == this.modelProductForm.value.genero)[0].id,
                   modelo_producto: this.modelProductForm.value!.modeloProducto ?? '',
+                  cod_familia: this.modelProductForm.value!.codigoFam ?? '',
                   cod_sap: this.modelProductForm.value!.codigoSAP ?? '',
                   url_image: this.imageName == '' ? this.imageUrl : this.imageName
           };

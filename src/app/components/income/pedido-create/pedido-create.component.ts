@@ -131,8 +131,9 @@ export class PedidoCreateComponent implements OnInit {
     }
     */
 
-   //  this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['vistamarcas'] } }]);
-   // this.dialogRef.close();
+   this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['vistamarcas'] } }]);
+   this.dialogRef.close();
+   
 
   }
 

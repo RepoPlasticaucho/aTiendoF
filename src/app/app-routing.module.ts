@@ -12,6 +12,7 @@ import { InventariosEditComponent } from './components/inventories/inventarios-e
 import { AlmaceningresosComponent } from './components/income/almaceningresos/almaceningresos.component';
 import { VistapedidosComponent } from './components/income/vistapedidos/vistapedidos.component';
 import { PedidoprovComponent } from './components/income/pedidoprov/pedidoprov.component';
+import { VistamarcasComponent } from './components/income/vistamarcas/vistamarcas.component';
 
 const routes: Routes = [
   {
@@ -44,7 +45,7 @@ const routes: Routes = [
       { path: "almaceningresos", component: AlmaceningresosComponent, outlet: "contentClient" },
       { path: "vistapedidos", component: VistapedidosComponent, outlet: "contentClient" },
       { path: "pedidoprov", component: PedidoprovComponent, outlet: "contentClient" },
-      { path: "vistamarcas", component: PedidoprovComponent, outlet: "contentClient" }
+      { path: "vistamarcas", component: VistamarcasComponent, outlet: "contentClient" }
     ]
   },
   {
