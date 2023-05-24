@@ -120,20 +120,14 @@ export class CatalogosService {
   obtenerCatalogoModelos(): Observable<Catalogos> {
     return this.http.get<Catalogos>(`${environment.apiUrl}catalogos/ObtenerCatalogosModelos`);
   }
-
   obtenerCatalogoModelo(modelo: ModelosEntity): Observable<Modelos> {
     return this.http.post<Modelos>(`${environment.apiUrl}modelos/ObtenerCatalogoModelo`, modelo);
   }
-
-  obtenerLineaNombre(linea: LineasEntity): Observable<Lineas> {
-    return this.http.post<Lineas>(`${environment.apiUrl}lineas/ObtenerLineasNombre`, linea );
-  }
-
   agregarModelo(modelo: ModelosEntity): Observable<Modelos> {
     return this.http.post<Modelos>(`${environment.apiUrl}modelos/InsertarModelos`, modelo);
   }
   actualizarModelo(modelo: ModelosEntity): Observable<Modelos> {
-    return this.http.post<Modelos>(`${environment.apiUrl}modelos/ModificarModelos`, modelo);
+    return this.http.post<Modelos>(`${environment.apiUrl}modelos/ActualizarModelos`, modelo);
   }
 
   /// INSERTAR ACTUALIZAR Y OBTENER MODELOS PRODUCTOS
@@ -141,18 +135,15 @@ export class CatalogosService {
   obtenerCatalogoModeloProductos(): Observable<Catalogos> {
     return this.http.get<Catalogos>(`${environment.apiUrl}catalogos/ObtenerCatalogosModelosProductos`);
   }
-
-  ///CARGAR MODELOS PRODUCTOS
   obtenerCatalogoModeloProducto(modeloProducto: ModeloProductosEntity): Observable<ModeloProductos> {
     return this.http.post<ModeloProductos>(`${environment.apiUrl}modeloProducto/ObtenerCatalogoModeloProductos`, modeloProducto);
-  }
-  obtenerModeloNombre(modelo: ModelosEntity): Observable<Modelos> {
-    return this.http.post<Modelos>(`${environment.apiUrl}modelos/ObtenerModelosNombre`, modelo);
   }
   agregarModeloProducto(modeloProducto: ModeloProductosEntity): Observable<ModeloProductos> {
     return this.http.post<ModeloProductos>(`${environment.apiUrl}modeloProducto/InsertarModeloProductos`, modeloProducto);
   }
-
+  actualizarModeloProducto(modeloproducto: ModeloProductosEntity): Observable<ModeloProductos> {
+    return this.http.post<ModeloProductos>(`${environment.apiUrl}modeloProducto/ActualizarModeloProductos`, modeloproducto);
+  }
   //CARGAR SKUS
   obtenerCatalogoProductos(): Observable<Catalogos> {
     return this.http.get<Catalogos>(`${environment.apiUrl}catalogos/ObtenerCatalogosProductos`);
