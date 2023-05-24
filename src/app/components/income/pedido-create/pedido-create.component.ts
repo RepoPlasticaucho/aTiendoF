@@ -76,6 +76,7 @@ export class PedidoCreateComponent implements OnInit {
   }
 
   onSubmit(): void {
+    /*
     console.log(this.pedidoForm.value);
     console.log(this.pedidoForm.valid);
     if (!this.pedidoForm.valid) {
@@ -128,6 +129,10 @@ export class PedidoCreateComponent implements OnInit {
         }
       })
     }
+    */
+
+   //  this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['vistamarcas'] } }]);
+   // this.dialogRef.close();
 
   }
 

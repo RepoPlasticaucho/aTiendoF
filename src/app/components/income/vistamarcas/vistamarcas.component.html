@@ -1,0 +1,14 @@
+<!-- Ejemplo de uso del código -->
+<div *ngFor="let marca of lstMarcas">
+    <mat-card>
+      <mat-card-content>
+        <mat-card-title>
+          <span class="material-icons-outlined" style="font-size: 40px; color: #3163ad">{{ marca.url_image }}</span>
+          <br><br>
+          <a href=# style="text-decoration: none;">
+            <p style="color: black; font-size: 30px; font-weight: normal;">{{ marca.marca }}</p>
+          </a>
+        </mat-card-title>
+      </mat-card-content>
+    </mat-card>
+  </div>

@@ -43,7 +43,8 @@ const routes: Routes = [
       { path: "egresos", component: AlmacenesegresosComponent, outlet: "contentClient" },
       { path: "almaceningresos", component: AlmaceningresosComponent, outlet: "contentClient" },
       { path: "vistapedidos", component: VistapedidosComponent, outlet: "contentClient" },
-      { path: "pedidoprov", component: PedidoprovComponent, outlet: "contentClient" }
+      { path: "pedidoprov", component: PedidoprovComponent, outlet: "contentClient" },
+      { path: "vistamarcas", component: PedidoprovComponent, outlet: "contentClient" }
     ]
   },
   {
