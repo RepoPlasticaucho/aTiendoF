@@ -47,3 +47,7 @@ input[type=number] {
     border-bottom-right-radius: 50% 50%;
     border-bottom-left-radius: 50% 50%;
 }
+
+.card-body {
+    overflow-x: auto
+}
