@@ -1,0 +1,59 @@
+.dashboard-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  padding: 10px;
+  text-align: center;
+  background-color: #ffffff;
+  border-radius: 4px;
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+  color: rgb(48, 166, 170);
+  font-size: 16px;
+  text-align: center;
+  font-weight: normal;
+}
+
+.card-image {
+  height: 100px;
+  width: 100px;
+  margin-bottom: 10px;
+}
+
+.card-content {
+  color: black;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+/* Estilos CSS para el contenedor de búsqueda */
+.search-container {
+  position: relative;
+  flex: 1; /* Ajusta el ancho del contenedor para ocupar el espacio disponible */
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/* Estilos CSS para el input de búsqueda */
+.search-input {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 20px;
+  background-color: #f2f2f2;
+  font-size: 14px;
+  color: #333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+  width: 100%; /* Ajusta el ancho al 100% para ocupar el espacio disponible */
+  max-width: 200px; /* Establece un ancho máximo para el input */
+}
+
+.search-input:focus {
+  outline: none;
+  background-color: #eaeaea;
+}

@@ -13,6 +13,7 @@ import { AlmaceningresosComponent } from './components/income/almaceningresos/al
 import { VistapedidosComponent } from './components/income/vistapedidos/vistapedidos.component';
 import { PedidoprovComponent } from './components/income/pedidoprov/pedidoprov.component';
 import { VistamarcasComponent } from './components/income/vistamarcas/vistamarcas.component';
+import { PortafoliosComponent } from './components/income/portafolios/portafolios.component';
 
 const routes: Routes = [
   {
@@ -45,7 +46,8 @@ const routes: Routes = [
       { path: "almaceningresos", component: AlmaceningresosComponent, outlet: "contentClient" },
       { path: "vistapedidos", component: VistapedidosComponent, outlet: "contentClient" },
       { path: "pedidoprov", component: PedidoprovComponent, outlet: "contentClient" },
-      { path: "vistamarcas", component: VistamarcasComponent, outlet: "contentClient" }
+      { path: "vistamarcas", component: VistamarcasComponent, outlet: "contentClient" },
+      { path: "portafolios", component: PortafoliosComponent, outlet: "contentClient" }
     ]
   },
   {

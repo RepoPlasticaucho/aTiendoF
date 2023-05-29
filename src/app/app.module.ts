@@ -106,6 +106,7 @@ import { VistapedidosComponent } from './components/income/vistapedidos/vistaped
 import { MatDialogModule } from '@angular/material/dialog';
 import { PedidoCreateComponent } from './components/income/pedido-create/pedido-create.component';
 import { VistamarcasComponent } from './components/income/vistamarcas/vistamarcas.component';
+import { PortafoliosComponent } from './components/income/portafolios/portafolios.component';
 
 @NgModule({
   declarations: [
@@ -189,7 +190,8 @@ import { VistamarcasComponent } from './components/income/vistamarcas/vistamarca
     PedidoventComponent,
     VistapedidosComponent,
     PedidoCreateComponent,
-    VistamarcasComponent
+    VistamarcasComponent,
+    PortafoliosComponent
   ],
   imports: [
     BrowserModule,
