@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { ModeloProductos, ModeloProductosEntity } from '../models/modeloproductos';
+import { MarcasEntity } from '../models/marcas';
+import { ColorsEntity } from '../models/colors';
 
 const initModelProduct: ModeloProductosEntity = {
   id: "",
@@ -46,6 +48,12 @@ export class ModeloproductosService {
   }
   obtenerModeloProductosModelosAdm(modeloProducto: ModeloProductosEntity): Observable<ModeloProductos> {
     return this.http.post<ModeloProductos>(`${environment.apiUrl}modeloProducto/ObtenerModeloProductosModelosAdm`, modeloProducto);
+  }
+  obtenerModeloProductosMarca(marca: MarcasEntity): Observable<ModeloProductos> {
+    return this.http.post<ModeloProductos>(`${environment.apiUrl}modeloProducto/ObtenerModeloProductosMarca`, marca);
+  }
+  obtenerModeloProductosColor(color: ColorsEntity): Observable<ModeloProductos> {
+    return this.http.post<ModeloProductos>(`${environment.apiUrl}modeloProducto/ObtenerModeloProductosColor`, color);
   }
   agregarModeloProducto(modeloProducto: ModeloProductosEntity): Observable<ModeloProductos> {
     return this.http.post<ModeloProductos>(`${environment.apiUrl}modeloProducto/InsertarModeloProductos`, modeloProducto);

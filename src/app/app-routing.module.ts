@@ -14,6 +14,7 @@ import { VistapedidosComponent } from './components/income/vistapedidos/vistaped
 import { PedidoprovComponent } from './components/income/pedidoprov/pedidoprov.component';
 import { VistamarcasComponent } from './components/income/vistamarcas/vistamarcas.component';
 import { PortafoliosComponent } from './components/income/portafolios/portafolios.component';
+import { PortafoliosComprarComponent } from './components/income/portafolios-comprar/portafolios-comprar.component';
 
 const routes: Routes = [
   {
@@ -47,7 +48,8 @@ const routes: Routes = [
       { path: "vistapedidos", component: VistapedidosComponent, outlet: "contentClient" },
       { path: "pedidoprov", component: PedidoprovComponent, outlet: "contentClient" },
       { path: "vistamarcas", component: VistamarcasComponent, outlet: "contentClient" },
-      { path: "portafolios", component: PortafoliosComponent, outlet: "contentClient" }
+      { path: "portafolios", component: PortafoliosComponent, outlet: "contentClient" },
+      { path: "portafolios-comprar", component: PortafoliosComprarComponent, outlet: "contentClient" }
     ]
   },
   {

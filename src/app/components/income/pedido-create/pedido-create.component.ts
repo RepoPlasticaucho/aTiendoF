@@ -130,80 +130,18 @@ export class PedidoCreateComponent implements OnInit {
       })
     }
     */
-
-   this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['vistamarcas'] } }]);
-   this.dialogRef.close();
-   
-
-  }
-
-  changeGroup1(e: any) {
-
-    if (e.target.value == 0) {
-      this.selectCategoria = true;
+    if (!this.pedidoForm.valid) {
+      this.pedidoForm.markAllAsTouched();
+      console.log("Error");
     } else {
-      this.selectCategoria = false;
-    }
-    if (e.target.value == null || undefined) {
-      
-    } else {
-      const categoria: CategoriasEntity = {
-        id: '',
-        categoria: e.target.value,
-        cod_sap: '',
-        etiquetas: '',
-        almacen_id: '',
-      }
-      this.httpServiceLineas.obtenerLineasCategoriaAdm(categoria).subscribe(res => {
-        console.log(res);
-        if (res.codigoError != "OK") {
-          Swal.fire({
-            icon: 'error',
-            title: 'No se pudo obtener las líneas.',
-            text: res.descripcionError,
-            showConfirmButton: false,
-          });
-
-        } else {
-
-        }
-      })
+      localStorage.setItem('categoria', this.pedidoForm.value.categoria!)
+      localStorage.setItem('tipo', this.pedidoForm.value.tipo!)
+      localStorage.setItem('motivo', this.pedidoForm.value.motivo!)
+      this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['vistamarcas'] } }]);
+      this.dialogRef.close();
     }
   }
-  changeGroup2(e: any) {
 
-    if (e.target.value == 0) {
-      this.selectTipo = true;
-    } else {
-      this.selectTipo = false;
-    }
-    if (e.target.value == null || undefined) {
-
-    } else {
-      const linea: LineasEntity = {
-        id: '',
-        categoria_id: '',
-        categoria_nombre: '',
-        linea: e.target.value,
-        etiquetas: '',
-        cod_sap: '',
-        almacen_id: ''
-      }
-      this.httpServiceModelos.obtenerModelosLineasAdm(linea).subscribe(res => {
-        if (res.codigoError != "OK") {
-          Swal.fire({
-            icon: 'error',
-            title: 'No se pudo obtener las líneas.',
-            text: res.descripcionError,
-            showConfirmButton: false,
-          });
-
-        } else {
-
-        }
-      })
-    }
-  }
 
   changeGroup3(modelo: any): void {
     if (modelo.target.value == 0) {

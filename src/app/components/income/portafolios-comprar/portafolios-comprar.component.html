@@ -1,0 +1,45 @@
+<div style="width: 95%; margin: auto">
+    <div class="card">
+        <br />
+        <div class="card-header">
+            <div class="row mx-3">
+                <fa-icon [icon]="faShoppingBag" [size]="'3x'" style="color: #636363"></fa-icon>
+                <h1 class="mx-5" style="color: #636363">CURVA DEL PRODUCTO</h1>
+            </div>
+        </div>
+        <div class="card-body">
+            <div>
+                <mat-grid-list cols="6" rowHeight="50px">
+                    <mat-grid-tile>
+                        <a class="btn button" href="#" (click)="verPortafolios($event)" style="
+                text-align: center;
+                font-size: 15px;
+                width: 140px;
+                height: 35px;
+                text-align: center;
+                margin-top: 10px;
+                background: rgb(54, 169, 225, 0.8);
+              "><span style="color: white"> Volver </span>
+                        </a>
+                    </mat-grid-tile>
+                </mat-grid-list>
+            </div>
+            <br /><br />
+            <table>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th *ngFor="let columna of lstModeloProductos">{{ columna.color }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let fila of lstModeloProductos">
+                    <th>{{ fila.id }}</th>
+                    
+                  </tr>
+                </tbody>
+              </table>
+        </div>
+    </div>
+</div>
+

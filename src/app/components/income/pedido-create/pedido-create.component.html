@@ -10,7 +10,7 @@
     <form [formGroup]="pedidoForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
             <label for="grupo">Categoria</label>
-            <select class="form-control" (change)="changeGroup1($event)" formControlName="categoria">
+            <select class="form-control" formControlName="categoria">
                 <option [value]="0" selected>Seleccione una categoría</option>
                 <option *ngFor="let categoria of lstCategorias" [value]="categoria.categoria">
                     {{categoria.categoria}}
@@ -25,7 +25,7 @@
     
         <div class="form-group">
             <label for="grupo">Tipo</label>
-            <select class="form-control" (change)="changeGroup2($event)" formControlName="tipo">
+            <select class="form-control" formControlName="tipo">
                 <option [value]=" 0 " selected>Seleccione un rol</option>
                         <option [value]="ped">
                             PEDIDO ESTANDAR
