@@ -52,8 +52,8 @@ export class ModeloproductosService {
   obtenerModeloProductosMarca(marca: MarcasEntity): Observable<ModeloProductos> {
     return this.http.post<ModeloProductos>(`${environment.apiUrl}modeloProducto/ObtenerModeloProductosMarca`, marca);
   }
-  obtenerModeloProductosColor(color: ColorsEntity): Observable<ModeloProductos> {
-    return this.http.post<ModeloProductos>(`${environment.apiUrl}modeloProducto/ObtenerModeloProductosColor`, color);
+  obtenerModeloProductosColor(cod_familia: ModeloProductosEntity): Observable<ModeloProductos> {
+    return this.http.post<ModeloProductos>(`${environment.apiUrl}modeloProducto/ObtenerModeloProductosColor`, cod_familia);
   }
   agregarModeloProducto(modeloProducto: ModeloProductosEntity): Observable<ModeloProductos> {
     return this.http.post<ModeloProductos>(`${environment.apiUrl}modeloProducto/InsertarModeloProductos`, modeloProducto);
