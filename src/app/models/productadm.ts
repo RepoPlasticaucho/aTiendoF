@@ -9,6 +9,7 @@ export interface ProducAdmEntity {
     tamanio: string;
     nombre: string;
     cod_sap: string;
+    pvp?: string;
     etiquetas: string;
     es_plasticaucho: string;
     es_sincronizado: string;

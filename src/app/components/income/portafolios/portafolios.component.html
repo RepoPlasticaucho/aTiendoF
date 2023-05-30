@@ -1,5 +1,5 @@
 <div style="width: 95%; margin: auto">
-    <div class="card">
+    <div class="card" id="tarjetas">
         <br />
         <div class="card-header">
             <div class="row mx-3">
@@ -27,11 +27,11 @@
             <br /><br />
             <div class="search-container">
                 <!-- Campo de búsqueda -->
-                <input type="text" [(ngModel)]="searchText" placeholder="Buscar" style="margin-bottom: 10px;" class="search-input">
+                <input type="text" [(ngModel)]="searchText" placeholder="Buscar" style="margin-bottom: 10px;" class="search-input" (ngModelChange)="onSearchChange()">
               </div>
 
-            <mat-grid-list cols="4" rowHeight="375px">
-                <mat-grid-tile *ngFor="let modeloproducto of filteredModeloProductos">
+            <mat-grid-list cols="4" rowHeight="400px">
+                <mat-grid-tile *ngFor="let modeloproducto of pagedModeloProductos">
                     <mat-card class="dashboard-card">
                         <mat-card-header>
                             <mat-card-title>
@@ -42,16 +42,19 @@
                   ">
                                     {{ modeloproducto.modelo }}
                                 </p>
-                                <img src="{{ modeloproducto.url_image }}" alt="{{ modeloproducto.marca }}"
-                                    class="img-thumbnail" height="100px" width="100px" data-toggle="modal"
-                                    data-target="#exampleModal" />
-                                <br /><br />
+                                <div class="content-container">
+                                    <div class="image-container">
+                                        <img src="{{ modeloproducto.url_image }}" alt="{{ modeloproducto.marca }}"
+                                        class="card-image" height="100px" width="100px" data-toggle="modal"
+                                        data-target="#exampleModal" />
+                                    </div> 
+                                    <p style="color: black; font-size: 12px; font-weight: normal">
+                                        {{ modeloproducto.modelo_producto }}
+                                    </p>     
+                                </div>                                
                             </mat-card-title>
                         </mat-card-header>
                         <mat-card-content>
-                            <p style="color: black; font-size: 12px; font-weight: normal">
-                                {{ modeloproducto.modelo_producto }}
-                            </p>
                             <button type="button" (click)="comprar(modeloproducto)" style="height: 30px; width: 100px; font-size: 10px"
                                 class="btn btn-primary">
                                 COMPRAR
@@ -60,6 +63,7 @@
                     </mat-card>
                 </mat-grid-tile>
             </mat-grid-list>
+            <mat-paginator [length]="filteredModeloProductos.length" [pageSize]="itemsPerPage" (page)="onPageChange($event)"></mat-paginator>
         </div>
     </div>
 </div>

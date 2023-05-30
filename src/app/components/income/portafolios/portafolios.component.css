@@ -1,7 +1,8 @@
 .dashboard-card {
+  height: 375px; /* Establece una altura fija para las tarjetas */
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   margin: 10px;
   padding: 10px;
@@ -11,19 +12,21 @@
   box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
 }
 
-.card-title {
-  color: rgb(48, 166, 170);
-  font-size: 16px;
-  text-align: center;
-  font-weight: normal;
-}
-
 .card-image {
   height: 100px;
   width: 100px;
   margin-bottom: 10px;
-  object-fit: contain; /* Ajusta la imagen dentro del espacio disponible sin distorsionarla */
+  object-fit: contain;
 }
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
 
 .card-content {
   color: black;

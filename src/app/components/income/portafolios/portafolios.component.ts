@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 
 import { ModeloproductosService } from 'src/app/services/modeloproductos.service';
 import { ModeloProductosEntity } from 'src/app/models/modeloproductos';
@@ -16,11 +16,20 @@ import { MarcasEntity } from 'src/app/models/marcas';
 export class PortafoliosComponent implements OnInit {
   searchText: string = '';
   lstModeloProductos: ModeloProductosEntity[] = [];
+  filteredModeloProductos: ModeloProductosEntity[] = [];
   faShoppingBag = faShoppingBag;
+  // Nueva propiedad para las tarjetas de la página actual
+  pagedModeloProductos: ModeloProductosEntity[] = [];
+  // Propiedades para el paginador
+  totalItems = 0;
+  itemsPerPage = 16;
+  currentPage = 0;
+
 
   constructor(private readonly httpServiceModeloproductos: ModeloproductosService,
     private readonly httpServiceMarcas: MarcasService,
-    private router: Router) { }
+    private router: Router,
+    private elementRef: ElementRef) { }
 
   ngOnInit(): void {
     this.httpServiceMarcas.obtenermarca$.subscribe((res) => {
@@ -42,8 +51,8 @@ export class PortafoliosComponent implements OnInit {
             const marcasNew: MarcasEntity = {
               id: '',
               marca: res.marca,
-              url_image:'',
-              etiquetas:''
+              url_image: '',
+              etiquetas: ''
             }
             this.httpServiceModeloproductos.obtenerModeloProductosMarca(marcasNew).subscribe((res1) => {
               if (res1.codigoError != 'OK') {
@@ -55,6 +64,8 @@ export class PortafoliosComponent implements OnInit {
                 });
               } else {
                 this.lstModeloProductos = res1.lstModelo_Productos;
+                this.filteredModeloProductos = this.lstModeloProductos;
+                this.onPageChange({ pageIndex: 0, pageSize: this.itemsPerPage }); // Llama a onPageChange para cargar los datos de la primera página
                 Swal.close();
               }
             });
@@ -69,16 +80,46 @@ export class PortafoliosComponent implements OnInit {
     });
   }
 
-  comprar(modeloproducto: ModeloProductosEntity){
+  comprar(modeloproducto: ModeloProductosEntity) {
     this.httpServiceModeloproductos.asignarModeloProducto(modeloproducto);
     console.log(modeloproducto);
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['portafolios-comprar'] } }]);
   }
 
-  get filteredModeloProductos(): ModeloProductosEntity[] {
-    return this.lstModeloProductos.filter((modeloproducto) =>
+
+  onPageChange(event: any): void {
+    this.currentPage = event.pageIndex + 1;
+    this.itemsPerPage = event.pageSize;
+
+    // Actualiza las tarjetas de la página actual
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.pagedModeloProductos = this.filteredModeloProductos.slice(startIndex, endIndex);
+
+    // Desplaza la vista hacia la parte superior de las tarjetas
+    const tarjetasElement = this.elementRef.nativeElement.querySelector('#tarjetas');
+    if (tarjetasElement) {
+      tarjetasElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+  onSearchChange(): void {
+    // Aplica el filtro de búsqueda y actualiza los elementos paginados
+    this.currentPage = 1; // Reinicia la página actual al realizar una nueva búsqueda
+    this.filterModeloProductos();
+    this.updatePagedModeloProductos();
+  }
+
+  filterModeloProductos(): void {
+    this.filteredModeloProductos = this.lstModeloProductos.filter((modeloproducto) =>
       modeloproducto.modelo_producto!.toLowerCase().includes(this.searchText.toLowerCase()) ||
       modeloproducto.modelo!.toLowerCase().includes(this.searchText.toLowerCase())
     );
   }
+
+  updatePagedModeloProductos(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.pagedModeloProductos = this.filteredModeloProductos.slice(startIndex, endIndex);
+  }
+
 }

@@ -108,6 +108,7 @@ import { PedidoCreateComponent } from './components/income/pedido-create/pedido-
 import { VistamarcasComponent } from './components/income/vistamarcas/vistamarcas.component';
 import { PortafoliosComponent } from './components/income/portafolios/portafolios.component';
 import { PortafoliosComprarComponent } from './components/income/portafolios-comprar/portafolios-comprar.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -223,7 +224,8 @@ import { PortafoliosComprarComponent } from './components/income/portafolios-com
       enabled: environment.production
     }),
     AutocompleteLibModule,
-    FormsModule
+    FormsModule,
+    MatPaginatorModule
   ],
   providers: [
     {provide: LocationStrategy, useClass: PathLocationStrategy}

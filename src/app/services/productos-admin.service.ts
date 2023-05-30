@@ -11,6 +11,7 @@ const initProduct : ProducAdmEntity ={
   tamanio: "",
   nombre: "",
   cod_sap: "",
+  pvp: "",
   etiquetas: "",
   es_plasticaucho: "",
   es_sincronizado: "",
