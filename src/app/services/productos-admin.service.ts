@@ -53,6 +53,9 @@ export class ProductosAdminService {
   obtenerProductosN(producto: ProducAdmEntity): Observable<ProductAdm> {
     return this.http.post<ProductAdm>(`${environment.apiUrl}productos/ObtenerProductosN`, producto);
   }
+  obtenerProductosTamanio(modelo_producto: ModeloProductosEntity): Observable<ProductAdm> {
+    return this.http.post<ProductAdm>(`${environment.apiUrl}productos/ObtenerProductosTamanio`, modelo_producto);
+  }
   agregarProducto(producto: ProducAdmEntity): Observable<ProductAdm> {
     return this.http.post<ProductAdm>(`${environment.apiUrl}productos/InsertarProductos`, producto);
   }
