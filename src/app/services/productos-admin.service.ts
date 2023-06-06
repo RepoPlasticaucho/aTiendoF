@@ -53,6 +53,12 @@ export class ProductosAdminService {
   obtenerProductosN(producto: ProducAdmEntity): Observable<ProductAdm> {
     return this.http.post<ProductAdm>(`${environment.apiUrl}productos/ObtenerProductosN`, producto);
   }
+  verificarProductosMP(color_id: string, tamanio: string, cod_fam: string): Observable<ProductAdm> {
+    return this.http.get<ProductAdm>(`${environment.apiUrl}productos/VerificarProductosMP?color_id=`+ color_id + `&tamanio=` + tamanio + `&cod_fam=` + cod_fam);
+  }
+  obtenerProductosID(tamanio: string, color: string, cod_fam: string): Observable<ProductAdm> {
+    return this.http.get<ProductAdm>(`${environment.apiUrl}productos/ObtenerProductosID?tamanio=`+ tamanio + `&color=` + color + `&cod_fam=` + cod_fam);
+  }
   obtenerProductosTamanio(modelo_producto: ModeloProductosEntity): Observable<ProductAdm> {
     return this.http.post<ProductAdm>(`${environment.apiUrl}productos/ObtenerProductosTamanio`, modelo_producto);
   }

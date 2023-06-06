@@ -6,6 +6,9 @@ import { ProducAdmEntity } from 'src/app/models/productadm';
 import { ModeloproductosService } from 'src/app/services/modeloproductos.service';
 import { ProductosAdminService } from 'src/app/services/productos-admin.service';
 import Swal from 'sweetalert2';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 
 
 @Component({
@@ -17,6 +20,12 @@ export class PortafoliosComprarComponent implements OnInit {
   faShoppingBag = faShoppingBag;
   lstModeloProductos: ModeloProductosEntity[] = [];
   lstProductos: ProducAdmEntity[] = [];
+  imagen: string = '';
+  producto : string = '';
+  desc : string = '';
+  id: string = '';
+  matrizIds: string[][] = [];
+
 
   constructor(private readonly httpService: ModeloproductosService,
     private readonly httpServiceProductos: ProductosAdminService,
@@ -47,6 +56,9 @@ export class PortafoliosComprarComponent implements OnInit {
           cod_sap: '',
           cod_familia: res.cod_familia
         }
+        this.imagen = res.url_image;
+        this.producto = res.modelo_producto;
+        this.desc = res.atributo!;
         this.httpService.obtenerModeloProductosColor(modeloProducto).subscribe(res1 => {
           if (res1.codigoError != "OK") {
             Swal.fire({
@@ -58,7 +70,6 @@ export class PortafoliosComprarComponent implements OnInit {
             });
           } else {
             this.lstModeloProductos = res1.lstModelo_Productos;
-
             this.httpServiceProductos.obtenerProductosTamanio(modeloProducto).subscribe(res2 => {
               if (res2.codigoError != "OK") {
                 Swal.fire({
@@ -71,9 +82,19 @@ export class PortafoliosComprarComponent implements OnInit {
               } else {
                 this.lstProductos = res2.lstProductos;
                 this.lstProductos.forEach((fila) => {
+                const columnIds: string[] = [];
                 this.lstModeloProductos.forEach((columna) => {
-                  this.isCeldaEditable(columna.color_id, fila.tamanio);
+                  this.isCeldaEditable(columna.color_id, fila.tamanio, columna.cod_familia); // se verifica si es editable
+                  this.httpServiceProductos.obtenerProductosID(fila.tamanio, columna.color!, res.cod_familia!).subscribe(res4 => {
+                    console.log(fila.tamanio)
+                    console.log(res4.lstProductos[0].id)
+                    if (res4.codigoError != "OK") {
+                    } else {
+                      columnIds.push(res4.lstProductos[0].id);
+                    }
+                  });
                 });
+                this.matrizIds.push(columnIds);
               });
               }
             });
@@ -81,7 +102,6 @@ export class PortafoliosComprarComponent implements OnInit {
         });
       }
     });
-
   }
 
   verPortafolios(event: Event) {
@@ -89,12 +109,21 @@ export class PortafoliosComprarComponent implements OnInit {
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['portafolios'] } }]);
   }
 
-  isCeldaEditable(columna: any, fila: any): boolean {
+  isCeldaEditable(columna: any, fila: any, cod_fam: any): Observable<boolean> {
     // Retorna true si la celda es editable, false en caso contrario
-    if(fila == '34' && columna == '7'){
-      return true;
-    } else {
-      return false;
-    }
+    // Verificar si el id del producto tiene ese id del color
+    return this.httpServiceProductos.verificarProductosMP(columna,fila,cod_fam).pipe(map(res3 => {
+      if (res3.codigoError != "OK") {
+        return false;
+      } else {
+        return true;
+      }
+    })
+    )
+  }
+
+  onInput(event: any) {
+    const inputValue = event.target.value;
+    event.target.value = inputValue.replace(/[^0-9]/g, ''); // Filtra solo números
   }
 }

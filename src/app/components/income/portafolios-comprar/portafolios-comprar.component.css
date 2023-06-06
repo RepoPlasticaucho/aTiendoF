@@ -1,0 +1,22 @@
+.cool-table {
+    border-collapse: collapse;
+    margin: auto;
+  }
+  
+  .cool-table th,
+  .cool-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+  }
+  
+  .cool-input {
+    width: 50px; /* Ajusta el tamaño de los inputs según tus necesidades */
+  }
+
+  .uneditable-cell {
+    background-color: #b9b7b7; /* Cambia el color de fondo según tus preferencias */
+  }
+
+  .card-body {
+    overflow-x: auto
+}
