@@ -114,6 +114,11 @@
                     <input type="text" (keypress)="keyPressNumbers($event)" class="form-control" id="codigoSAP" placeholder="Ingrese el stock"
                         formControlName="stock" />
                 </div>
+                <div class="form-group">
+                    <label for="precio">Precio</label>
+                    <input type="text" (keypress)="keyPressNumbers($event)" class="form-control" id="codigoSAP" placeholder="Ingrese el precio"
+                        formControlName="precio" />
+                </div>
                 <button type="submit" class="btn btn-primary">
                     <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
                     Guardar

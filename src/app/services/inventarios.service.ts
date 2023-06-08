@@ -31,7 +31,13 @@ const initGruop: InventariosEntity = {
   etiquetas: "",
   fav: "",
   color: '',
-  modelo: ''
+  modelo: '',
+  costo: '',
+  pvp1 : '',
+  pvp2 : '',
+  pvp_sugerido : '',
+  cod_principal : '',
+  cod_secundario : ''
 }
 
 @Injectable({
@@ -125,5 +131,6 @@ export class InventariosService {
   deshabilitarInventarios(inventario: InventariosEntity): Observable<Inventarios> {
     return this.http.post<Inventarios>(`${environment.apiUrl}inventarios/DeshabilitarInventarios`, inventario);
   }
+ 
   
 }

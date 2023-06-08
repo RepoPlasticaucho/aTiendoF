@@ -62,3 +62,14 @@ export { TercerosalmacenComponent} from "./users/tercerosalmacen/tercerosalmacen
 export { TercerosusuariosComponent} from "./users/tercerosusuarios/tercerosusuarios.component";
 export { TercerosusuariosCreateComponent} from "./users/tercerosusuarios-create/tercerosusuarios-create.component";
 export { TercerosusuariosEditComponent} from "./users/tercerosusuarios-edit/tercerosusuarios-edit.component";
+export { TercerosEditComponent } from "./users/terceros-edit/terceros-edit.component";
+export { AlmacenesegresosComponent } from "./outcome/almacenesegresos/almacenesegresos.component";
+export { InventariosCreateComponent } from "./inventories/inventarios-create/inventarios-create.component";
+export { InventariosEditComponent } from "./inventories/inventarios-edit/inventarios-edit.component";
+export { AlmaceningresosComponent } from "./income/almaceningresos/almaceningresos.component";
+export { VistapedidosComponent } from "./income/vistapedidos/vistapedidos.component";
+export { PedidoprovComponent } from "./income/pedidoprov/pedidoprov.component";
+export { VistamarcasComponent } from "./income/vistamarcas/vistamarcas.component";
+export { PortafoliosComponent } from "./income/portafolios/portafolios.component";
+export { PortafoliosComponentM } from "./inventories/portafolios/portafoliosm.component";
+export { PortafoliosComprarComponent } from "./income/portafolios-comprar/portafolios-comprar.component";

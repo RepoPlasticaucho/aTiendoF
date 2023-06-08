@@ -1,20 +1,10 @@
 import { LocationStrategy } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AlmacenesComponent, AlmacenesCreateComponent, AlmacenesEditComponent, AlmacenessociedadComponent, AlmacenessociedadCreateComponent, AlmacenessociedadEditComponent, AtributosComponent, AtributosCreateComponent, AtributosEditComponent, CatalogosComponent, CategoriasComponent, CategoriasCreateComponent, CategoriasEditComponent, ColorsComponent, ColorsCreateComponent, ColorsEditComponent, DashboardAdmComponent, DashboardBoComponent, DashboardClComponent, GenerosComponent, GenerosCreateComponent, GenerosEditComponent, GruposComponent, GruposCreateComponent, GruposEditComponent, InventariosAlmacenComponent, InventariosComponent, InventariosPedidoCategoriaComponent, InventariosPedidoColoresComponent, InventariosPedidoComponent, InventariosPedidoLineasComponent, InventariosPedidoModelosComponent, InventariosProductosComponent, LineasComponent, LineasCreateComponent, LineasEditComponent, MarcasComponent, MarcasCreateComponent, MarcasEditComponent, ModeloproductosComponent, ModeloproductosCreateComponent, ModeloproductosEditComponent, ModelosComponent, ModelosCreateComponent, ModelosEditComponent, NavegationAdmComponent, NavegationBoComponent, NavegationClComponent, PedidoSugeridoComponent, ProductosComponent, ProductosCreateComponent, ProductosEditComponent, SociedadesComponent, SociedadesCreateComponent, SociedadesEditComponent, TercerosalmacenComponent, TercerosComponent, TercerosCreateComponent, TercerosusuariosComponent, TercerosusuariosCreateComponent, TercerosusuariosEditComponent, UsuarioComponent, UsuarioPassComponent } from './components/all_components';
+import { AlmacenesComponent, AlmacenesCreateComponent, AlmacenesEditComponent, AlmacenesegresosComponent, AlmacenessociedadComponent, AlmacenessociedadCreateComponent, AlmacenessociedadEditComponent, AlmaceningresosComponent, AtributosComponent, AtributosCreateComponent, AtributosEditComponent, CatalogosComponent, CategoriasComponent, CategoriasCreateComponent, CategoriasEditComponent, ColorsComponent, ColorsCreateComponent, ColorsEditComponent, DashboardAdmComponent, DashboardBoComponent, DashboardClComponent, GenerosComponent, GenerosCreateComponent, GenerosEditComponent, GruposComponent, GruposCreateComponent, GruposEditComponent, InventariosAlmacenComponent, InventariosComponent, InventariosCreateComponent, InventariosEditComponent, InventariosPedidoCategoriaComponent, InventariosPedidoColoresComponent, InventariosPedidoComponent, InventariosPedidoLineasComponent, InventariosPedidoModelosComponent, InventariosProductosComponent, LineasComponent, LineasCreateComponent, LineasEditComponent, MarcasComponent, MarcasCreateComponent, MarcasEditComponent, ModeloproductosComponent, ModeloproductosCreateComponent, ModeloproductosEditComponent, ModelosComponent, ModelosCreateComponent, ModelosEditComponent, NavegationAdmComponent, NavegationBoComponent, NavegationClComponent, PedidoprovComponent, PedidoSugeridoComponent, PortafoliosComponent, PortafoliosComponentM, PortafoliosComprarComponent, ProductosComponent, ProductosCreateComponent, ProductosEditComponent, SociedadesComponent, SociedadesCreateComponent, SociedadesEditComponent, TercerosalmacenComponent, TercerosComponent, TercerosCreateComponent, TercerosEditComponent, TercerosusuariosComponent, TercerosusuariosCreateComponent, TercerosusuariosEditComponent, UsuarioComponent, UsuarioPassComponent, VistamarcasComponent, VistapedidosComponent } from './components/all_components';
 import { LoginNavComponent } from './components/login-nav/login-nav.component';
 import { LoginComponent } from './components/login/login.component';
 
-import { TercerosEditComponent } from './components/users/terceros-edit/terceros-edit.component';
-import { AlmacenesegresosComponent } from './components/outcome/almacenesegresos/almacenesegresos.component';
-import { InventariosCreateComponent } from './components/inventories/inventarios-create/inventarios-create.component';
-import { InventariosEditComponent } from './components/inventories/inventarios-edit/inventarios-edit.component';
-import { AlmaceningresosComponent } from './components/income/almaceningresos/almaceningresos.component';
-import { VistapedidosComponent } from './components/income/vistapedidos/vistapedidos.component';
-import { PedidoprovComponent } from './components/income/pedidoprov/pedidoprov.component';
-import { VistamarcasComponent } from './components/income/vistamarcas/vistamarcas.component';
-import { PortafoliosComponent } from './components/income/portafolios/portafolios.component';
-import { PortafoliosComprarComponent } from './components/income/portafolios-comprar/portafolios-comprar.component';
 
 const routes: Routes = [
   {
@@ -98,6 +88,8 @@ const routes: Routes = [
       { path: "terceros", component: TercerosComponent, outlet: "contentAdmin" },
       { path: "terceros-create", component: TercerosCreateComponent, outlet: "contentAdmin" },
       { path: "terceros-edit", component: TercerosEditComponent, outlet: "contentAdmin" },
+      { path: "portafoliosmigracion", component: PortafoliosComponentM, outlet: "contentAdmin" },
+
     ]
   },
   {

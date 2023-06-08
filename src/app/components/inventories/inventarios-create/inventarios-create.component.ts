@@ -36,6 +36,8 @@ export class InventariosCreateComponent implements OnInit {
     producto: new FormControl('0', Validators.required),
     etiquetas: new FormControl('', Validators.required),
     stock: new FormControl('', [Validators.required]),
+    precio: new FormControl('', [Validators.required]),
+
   });
 
   lstCategorias: CategoriasEntity[] = [];
@@ -112,6 +114,10 @@ export class InventariosCreateComponent implements OnInit {
         stock_optimo : '',
         fav : '',
         color : '',
+        pvp1 : this.lstProductos2[0].pvp,
+        pvp_sugerido : this.lstProductos2[0].pvp,
+        pvp2 : this.inventarioForm.value!.precio ?? "",
+
       }
       console.log(inventario);
 
