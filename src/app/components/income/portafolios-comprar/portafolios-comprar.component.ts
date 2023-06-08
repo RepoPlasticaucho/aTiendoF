@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faShoppingBag } from '@fortawesome/free-solid-svg-icons';
+import { faShoppingBag, faMoneyBillAlt } from '@fortawesome/free-solid-svg-icons';
 import { ModeloProductosEntity } from 'src/app/models/modeloproductos';
 import { ProducAdmEntity } from 'src/app/models/productadm';
 import { ModeloproductosService } from 'src/app/services/modeloproductos.service';
@@ -8,7 +8,7 @@ import { ProductosAdminService } from 'src/app/services/productos-admin.service'
 import Swal from 'sweetalert2';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
+import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -18,12 +18,14 @@ import { map } from 'rxjs/operators';
 })
 export class PortafoliosComprarComponent implements OnInit {
   faShoppingBag = faShoppingBag;
+  faMoneyBillAlt = faMoneyBillAlt;
   lstModeloProductos: ModeloProductosEntity[] = [];
   lstProductos: ProducAdmEntity[] = [];
   imagen: string = '';
-  producto : string = '';
-  desc : string = '';
+  producto: string = '';
+  desc: string = '';
   id: string = '';
+  resultado: number = 0;
   matrizIds: string[][] = [];
 
 
@@ -81,21 +83,47 @@ export class PortafoliosComprarComponent implements OnInit {
                 });
               } else {
                 this.lstProductos = res2.lstProductos;
-                this.lstProductos.forEach((fila) => {
-                const columnIds: string[] = [];
-                this.lstModeloProductos.forEach((columna) => {
-                  this.isCeldaEditable(columna.color_id, fila.tamanio, columna.cod_familia); // se verifica si es editable
-                  this.httpServiceProductos.obtenerProductosID(fila.tamanio, columna.color!, res.cod_familia!).subscribe(res4 => {
-                    console.log(fila.tamanio)
-                    console.log(res4.lstProductos[0].id)
-                    if (res4.codigoError != "OK") {
-                    } else {
-                      columnIds.push(res4.lstProductos[0].id);
-                    }
+                this.lstProductos.forEach((fila, filaIndex) => {
+                  const columnIds: string[] = [];
+                  const observables = this.lstModeloProductos.map((columna, columnIndex) => {
+                    return this.httpServiceProductos.obtenerProductosID(fila.tamanio, columna.color!, res.cod_familia!)
+                      .pipe(
+                        map((res4) => ({
+                          res4,
+                          columnIndex
+                        }))
+                      );
+                  });
+
+                  forkJoin(observables).subscribe((results: { res4: any, columnIndex: number }[]) => {
+                    results.sort((a, b) => a.columnIndex - b.columnIndex);
+
+                    const missingIds: boolean[] = Array(this.lstModeloProductos.length).fill(true);
+
+                    results.forEach((result) => {
+                      const res4 = result.res4;
+                      if (res4.codigoError != "OK") {
+                        console.log("Algunas tamaños no existen en algunos colores");
+                      } else {
+                        if (res4.lstProductos.length > 0) {
+                          columnIds.push(res4.lstProductos[0].id);
+                          missingIds[result.columnIndex] = false;
+                        } else {
+                          columnIds.push("");
+                        }
+                      }
+                    });
+
+                    missingIds.forEach((missing, index) => {
+                      if (missing) {
+                        columnIds.splice(index, 0, "");
+                      }
+                    });
+
+                    this.matrizIds[filaIndex] = columnIds;
                   });
                 });
-                this.matrizIds.push(columnIds);
-              });
+
               }
             });
           }
@@ -109,21 +137,32 @@ export class PortafoliosComprarComponent implements OnInit {
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['portafolios'] } }]);
   }
 
-  isCeldaEditable(columna: any, fila: any, cod_fam: any): Observable<boolean> {
-    // Retorna true si la celda es editable, false en caso contrario
-    // Verificar si el id del producto tiene ese id del color
-    return this.httpServiceProductos.verificarProductosMP(columna,fila,cod_fam).pipe(map(res3 => {
-      if (res3.codigoError != "OK") {
-        return false;
-      } else {
-        return true;
-      }
-    })
-    )
+  isCellEmpty(i: number, j: number): boolean {
+    return !this.matrizIds[i] || !this.matrizIds[i][j];
   }
 
   onInput(event: any) {
     const inputValue = event.target.value;
     event.target.value = inputValue.replace(/[^0-9]/g, ''); // Filtra solo números
+    this.realizarCalculo();
+  }
+
+  realizarCalculo() {
+    this.resultado = 0;
+  
+    this.lstProductos.forEach((fila, filaIndex) => {
+      this.lstModeloProductos.forEach((columna, columnIndex) => {
+        const inputElement = document.getElementById(`input-${filaIndex}-${columnIndex}`) as HTMLInputElement;
+  
+        if (inputElement && inputElement.value) {
+          const inputValue = Number(inputElement.value);
+          const id = this.matrizIds[filaIndex]?.[columnIndex];
+  
+          if (id && inputValue) {
+            this.resultado += inputValue * Number(id);
+          }
+        }
+      });
+    });
   }
 }

@@ -23,16 +23,19 @@
             </a>
           </mat-grid-tile>
         </mat-grid-list>
-      </div>
+        <div class="icon-container">
+          <fa-icon [icon]="faMoneyBillAlt" [size]="'3x'" style="color: #6aaf42" class="icono-input"></fa-icon>
+          <label for="total" class="label-input">TOTAL:</label>
+          <input type="text" readonly [(ngModel)]="resultado" class="cool-input resultado-input" id="resultado-input">
+        </div></div>
       <table style="width: 90%">
         <tr>
           <td style="width: 5%"></td>
           <td style="width: 30%; text-align: center">
             <div class="image-container">
-              <img src="{{ imagen }}" alt="{{ imagen}}"
-              class="card-image" height="150px" width="150px" data-toggle="modal"
-              data-target="#exampleModal" />
-          </div> 
+              <img src="{{ imagen }}" alt="{{ imagen}}" class="cool-image" height="150px" width="150px"
+                data-toggle="modal" data-target="#exampleModal" />
+            </div>
           </td>
         </tr>
         <br>
@@ -40,8 +43,8 @@
           <td style="width: 5%"></td>
           <td style="width: 30%; text-align: center">
             <label for="producto">Producto</label>
-            <input type="text" [ngModel]="producto" style="text-align: center" class="form-control " id="producto" readonly placeholder="Línea"
-              >
+            <input type="text" [ngModel]="producto" style="text-align: center" class="form-control " id="producto"
+              readonly placeholder="Línea">
           </td>
         </tr>
         <br>
@@ -49,8 +52,8 @@
           <td style="width: 5%"></td>
           <td style="width: 30%; text-align: center">
             <label for="producto">Descripción</label>
-            <input type="text" [ngModel]="desc" style="text-align: center" class="form-control " id="desc" readonly placeholder="Línea"
-              >
+            <input type="text" [ngModel]="desc" style="text-align: center" class="form-control " id="desc" readonly
+              placeholder="Línea">
           </td>
         </tr>
       </table>
@@ -67,8 +70,13 @@
           <tr *ngFor="let fila of lstProductos; let i = index">
             <th>{{ fila.tamanio }}</th>
             <td *ngFor="let columna of lstModeloProductos; let j = index">
-              <input type="text" [readonly]="!isCeldaEditable(columna.color_id,fila.tamanio, columna.cod_familia)" (input)="onInput($event)" class="cool-input" [ngClass]="{'uneditable-cell': !isCeldaEditable(columna.color_id,fila.tamanio,columna.cod_familia)}">
-              {{ matrizIds[i][j] }}
+              <input type="text" [readonly]="isCellEmpty(i, j)" (input)="onInput($event)" class="cool-input"
+                [class.celda-plomo]="isCellEmpty(i, j)" [id]="'input-' + i + '-' + j">
+              <!--
+              <ng-container *ngIf="matrizIds[i]">
+                {{ matrizIds[i][j] }}
+              </ng-container>
+              -->
             </td>
           </tr>
         </tbody>

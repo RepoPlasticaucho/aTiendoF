@@ -34,7 +34,7 @@ img {
 
 .sidenav ::ng-deep .mat-drawer-content {
   scrollbar-width: thin;
-  scrollbar-color: #2196F3 #FFFFFF;
+  scrollbar-color: #ffffff #FFFFFF;
 }
 
 .sidenav ::ng-deep ::-webkit-scrollbar {
@@ -46,7 +46,7 @@ img {
 }
 
 .sidenav ::ng-deep ::-webkit-scrollbar-thumb {
-  background-color: #2196F3;
+  background-color: #ffffff;
   border-radius: 4px;
 }
 
