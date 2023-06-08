@@ -26,7 +26,8 @@ export class PortafoliosComprarComponent implements OnInit {
   desc: string = '';
   id: string = '';
   resultado: number = 0;
-  matrizIds: string[][] = [];
+  matrizIds: any[][] = [];
+  imagenSeleccionada: string = '';
 
 
   constructor(private readonly httpService: ModeloproductosService,
@@ -84,7 +85,7 @@ export class PortafoliosComprarComponent implements OnInit {
               } else {
                 this.lstProductos = res2.lstProductos;
                 this.lstProductos.forEach((fila, filaIndex) => {
-                  const columnIds: string[] = [];
+                  const columnIds: { id: string, url: string }[] = [];
                   const observables = this.lstModeloProductos.map((columna, columnIndex) => {
                     return this.httpServiceProductos.obtenerProductosID(fila.tamanio, columna.color!, res.cod_familia!)
                       .pipe(
@@ -106,17 +107,19 @@ export class PortafoliosComprarComponent implements OnInit {
                         console.log("Algunas tamaños no existen en algunos colores");
                       } else {
                         if (res4.lstProductos.length > 0) {
-                          columnIds.push(res4.lstProductos[0].id);
+                          const id = res4.lstProductos[0].id;
+                          const url = res4.lstProductos[0].url_image; // Reemplaza "otraVariable" con el nombre real de la propiedad que deseas guardar
+                          columnIds.push({ id, url });
                           missingIds[result.columnIndex] = false;
                         } else {
-                          columnIds.push("");
+                          columnIds.push({ id: "", url: "" });
                         }
                       }
                     });
 
                     missingIds.forEach((missing, index) => {
                       if (missing) {
-                        columnIds.splice(index, 0, "");
+                        columnIds.splice(index, 0, { id: "", url: "" });
                       }
                     });
 
@@ -138,7 +141,7 @@ export class PortafoliosComprarComponent implements OnInit {
   }
 
   isCellEmpty(i: number, j: number): boolean {
-    return !this.matrizIds[i] || !this.matrizIds[i][j];
+    return !this.matrizIds[i] || !this.matrizIds[i][j] || !this.matrizIds[i][j].id;
   }
 
   onInput(event: any) {
@@ -149,20 +152,24 @@ export class PortafoliosComprarComponent implements OnInit {
 
   realizarCalculo() {
     this.resultado = 0;
-  
+
     this.lstProductos.forEach((fila, filaIndex) => {
       this.lstModeloProductos.forEach((columna, columnIndex) => {
         const inputElement = document.getElementById(`input-${filaIndex}-${columnIndex}`) as HTMLInputElement;
-  
+
         if (inputElement && inputElement.value) {
           const inputValue = Number(inputElement.value);
           const id = this.matrizIds[filaIndex]?.[columnIndex];
-  
+
           if (id && inputValue) {
-            this.resultado += inputValue * Number(id);
+            this.resultado += inputValue * Number(id.id);
           }
         }
       });
     });
+  }
+
+  cambiarImagen(url: string) {
+    this.imagenSeleccionada = url;
   }
 }

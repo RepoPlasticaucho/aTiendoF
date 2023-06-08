@@ -24,4 +24,5 @@ export interface ProducAdmEntity {
     modelo_nombre: string;
     categoria?: string;
     linea?: string;
+    url_image? :string;
 }

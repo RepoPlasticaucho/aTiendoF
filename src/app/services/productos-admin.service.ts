@@ -25,7 +25,8 @@ const initProduct : ProducAdmEntity ={
   genero_nombre: "",
   modelo_nombre: "",
   categoria: "",
-  linea: ""
+  linea: "",
+  url_image: ""
 }
 
 @Injectable({

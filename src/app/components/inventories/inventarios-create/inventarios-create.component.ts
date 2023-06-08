@@ -380,9 +380,11 @@ export class InventariosCreateComponent implements OnInit {
   }
 
   keyPressNumbers(event: any) {
-    var charCode = (event.which) ? event.which : event.keyCode;
-    // Only Numbers 0-9
-    if ((charCode < 48 || charCode > 57)) {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    const inputChar = String.fromCharCode(charCode);
+    
+    // Solo números del 0 al 9 y punto decimal
+    if (!/^\d*\.?\d*$/.test(inputChar)) {
       event.preventDefault();
       return false;
     } else {
