@@ -6,7 +6,6 @@ import { ProducAdmEntity } from 'src/app/models/productadm';
 import { ModeloproductosService } from 'src/app/services/modeloproductos.service';
 import { ProductosAdminService } from 'src/app/services/productos-admin.service';
 import Swal from 'sweetalert2';
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 
@@ -28,6 +27,8 @@ export class PortafoliosComprarComponent implements OnInit {
   resultado: number = 0;
   matrizIds: any[][] = [];
   imagenSeleccionada: string = '';
+  lastEditedCell: { row: number, column: number } | null = null;
+  detalleProductos: { idProducto: any, cantidad: number }[] = [];
 
 
   constructor(private readonly httpService: ModeloproductosService,
@@ -122,7 +123,6 @@ export class PortafoliosComprarComponent implements OnInit {
                         columnIds.splice(index, 0, { id: "", url: "" });
                       }
                     });
-
                     this.matrizIds[filaIndex] = columnIds;
                   });
                 });
@@ -144,32 +144,46 @@ export class PortafoliosComprarComponent implements OnInit {
     return !this.matrizIds[i] || !this.matrizIds[i][j] || !this.matrizIds[i][j].id;
   }
 
-  onInput(event: any) {
+  onInput(event: any, i: number, j: number) {
     const inputValue = event.target.value;
     event.target.value = inputValue.replace(/[^0-9]/g, ''); // Filtra solo números
+    this.lastEditedCell = { row: i, column: j };
     this.realizarCalculo();
   }
 
   realizarCalculo() {
     this.resultado = 0;
 
-    this.lstProductos.forEach((fila, filaIndex) => {
-      this.lstModeloProductos.forEach((columna, columnIndex) => {
-        const inputElement = document.getElementById(`input-${filaIndex}-${columnIndex}`) as HTMLInputElement;
+    if (this.lastEditedCell) {
+      const { row, column } = this.lastEditedCell;
+      const id = this.matrizIds[row]?.[column];
+      const inputElement = document.getElementById(`input-${row}-${column}`) as HTMLInputElement;
 
-        if (inputElement && inputElement.value) {
-          const inputValue = Number(inputElement.value);
-          const id = this.matrizIds[filaIndex]?.[columnIndex];
-
-          if (id && inputValue) {
-            this.resultado += inputValue * Number(id.id);
-          }
-        }
-      });
-    });
+      if (id && inputElement && inputElement.value) {
+        const inputValue = Number(inputElement.value);
+        this.resultado = inputValue * Number(id.id);
+      }
+    }
   }
 
   cambiarImagen(url: string) {
     this.imagenSeleccionada = url;
+    this.resultado = 0;
+  }
+
+  obtenerDetalleProductos() {
+    this.detalleProductos = [];
+    this.matrizIds.forEach((fila, i) => {
+      fila.forEach((columna, j) => {
+        const inputElement = document.getElementById(`input-${i}-${j}`) as HTMLInputElement;
+        if (columna && columna.id && inputElement && inputElement.value) {
+          const idProducto: string = columna.id;
+          const cantidad = Number(inputElement.value);
+          this.detalleProductos.push({ idProducto, cantidad });
+        }
+      });
+    });
+    console.log(this.detalleProductos);
+    // Aquí puedes realizar las operaciones o enviar los datos al servidor
   }
 }

@@ -70,7 +70,7 @@
           <tr *ngFor="let fila of lstProductos; let i = index">
             <th>{{ fila.tamanio }}</th>
             <td *ngFor="let columna of lstModeloProductos; let j = index" (click)="cambiarImagen(matrizIds[i][j].url)">
-              <input type="text" [readonly]="isCellEmpty(i, j)" (input)="onInput($event)" class="cool-input"
+              <input type="text" [readonly]="isCellEmpty(i, j)" (input)="onInput($event, i, j)" class="cool-input"
                 [class.celda-plomo]="isCellEmpty(i, j)" [id]="'input-' + i + '-' + j">
               <!--
               <ng-container *ngIf="matrizIds[i]">
@@ -86,6 +86,9 @@
       <br>
       <br>
       <br>
+      <button class="btn button" (click)="obtenerDetalleProductos()" style="text-align: center; font-size: 15px; width: 140px; height: 35px; text-align: center; margin-top: 10px; background: rgb(54, 169, 225, 0.8);">
+        <span style="color: white"> Obtener detalle </span>
+      </button>
     </div>
   </div>
 </div>
