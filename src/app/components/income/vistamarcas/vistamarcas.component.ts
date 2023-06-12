@@ -36,7 +36,6 @@ export class VistamarcasComponent implements OnInit {
   verPortafolio(event: Event, marca: MarcasEntity){
     event.preventDefault();
     this.httpServiceMarcas.asignarMarca(marca);
-    console.log(marca);
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['portafolios'] } }]);
   }
 

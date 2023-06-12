@@ -82,7 +82,6 @@ export class PortafoliosComponent implements OnInit {
 
   comprar(modeloproducto: ModeloProductosEntity) {
     this.httpServiceModeloproductos.asignarModeloProducto(modeloproducto);
-    console.log(modeloproducto);
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['portafolios-comprar'] } }]);
   }
 

@@ -28,7 +28,7 @@ export class PortafoliosComprarComponent implements OnInit {
   matrizIds: any[][] = [];
   imagenSeleccionada: string = '';
   lastEditedCell: { row: number, column: number } | null = null;
-  detalleProductos: { idProducto: any, cantidad: number }[] = [];
+  detalleProductos: { idProducto: any, cantidad: number, pvp: any, precio: number }[] = [];
 
 
   constructor(private readonly httpService: ModeloproductosService,
@@ -86,7 +86,7 @@ export class PortafoliosComprarComponent implements OnInit {
               } else {
                 this.lstProductos = res2.lstProductos;
                 this.lstProductos.forEach((fila, filaIndex) => {
-                  const columnIds: { id: string, url: string }[] = [];
+                  const columnIds: { id: string, url: string, pvp: string }[] = [];
                   const observables = this.lstModeloProductos.map((columna, columnIndex) => {
                     return this.httpServiceProductos.obtenerProductosID(fila.tamanio, columna.color!, res.cod_familia!)
                       .pipe(
@@ -105,22 +105,23 @@ export class PortafoliosComprarComponent implements OnInit {
                     results.forEach((result) => {
                       const res4 = result.res4;
                       if (res4.codigoError != "OK") {
-                        console.log("Algunas tamaños no existen en algunos colores");
+                        console.log("Algunos tamaños no existen en algunos colores");
                       } else {
                         if (res4.lstProductos.length > 0) {
                           const id = res4.lstProductos[0].id;
-                          const url = res4.lstProductos[0].url_image; // Reemplaza "otraVariable" con el nombre real de la propiedad que deseas guardar
-                          columnIds.push({ id, url });
+                          const url = res4.lstProductos[0].url_image;
+                          const pvp = res4.lstProductos[0].pvp;
+                          columnIds.push({ id, url, pvp });
                           missingIds[result.columnIndex] = false;
                         } else {
-                          columnIds.push({ id: "", url: "" });
+                          columnIds.push({ id: "", url: "", pvp: "" });
                         }
                       }
                     });
 
                     missingIds.forEach((missing, index) => {
                       if (missing) {
-                        columnIds.splice(index, 0, { id: "", url: "" });
+                        columnIds.splice(index, 0, { id: "", url: "", pvp: "" });
                       }
                     });
                     this.matrizIds[filaIndex] = columnIds;
@@ -161,7 +162,8 @@ export class PortafoliosComprarComponent implements OnInit {
 
       if (id && inputElement && inputElement.value) {
         const inputValue = Number(inputElement.value);
-        this.resultado = inputValue * Number(id.id);
+        const subtotal = inputValue * Number(id.pvp);
+        this.resultado = Number(subtotal.toFixed(2));
       }
     }
   }
@@ -179,7 +181,42 @@ export class PortafoliosComprarComponent implements OnInit {
         if (columna && columna.id && inputElement && inputElement.value) {
           const idProducto: string = columna.id;
           const cantidad = Number(inputElement.value);
-          this.detalleProductos.push({ idProducto, cantidad });
+          const pvp: any = columna.pvp;
+          const precio: any = Number((cantidad * pvp).toFixed(2));
+          /*
+          const newDetalle: DetalleMovimiento {
+            id: '',
+            producto_id: idProducto,
+            movimiento_id: '',
+            cantidad: cantidad,
+            costo: pvp,
+            precio: precio
+          }
+          this.httpService.agregarDetalleMovimiento(newDetalle).subscribe(res => {
+            if (res.id == '') {
+              Swal.fire({
+              icon: 'error',
+              title: 'Ha ocurrido un error.',
+              text: 'No se ha obtenido información.',
+              showConfirmButton: false
+              });
+            } else {
+              Swal.fire({
+                  icon: 'success',
+                  title: 'Guardado Exitosamente.',
+                  text: `Se ha guardado con éxito`,
+                  showConfirmButton: true,
+                  confirmButtonText: 'Ok',
+                }).finally(() => {
+                  this.router.navigate([
+                    '/navegation-cl',
+                    { outlets: { contentClient: ['portafolios'] } },
+                  ]);
+                });
+            }
+          });
+          */
+          this.detalleProductos.push({ idProducto, cantidad, pvp, precio });
         }
       });
     });

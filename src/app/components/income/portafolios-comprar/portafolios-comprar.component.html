@@ -59,36 +59,38 @@
       </table>
       <br>
       <br /><br />
-      <table class="cool-table">
-        <thead>
-          <tr>
-            <th></th>
-            <th *ngFor="let columna of lstModeloProductos">{{ columna.color }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let fila of lstProductos; let i = index">
-            <th>{{ fila.tamanio }}</th>
-            <td *ngFor="let columna of lstModeloProductos; let j = index" (click)="cambiarImagen(matrizIds[i][j].url)">
-              <input type="text" [readonly]="isCellEmpty(i, j)" (input)="onInput($event, i, j)" class="cool-input"
-                [class.celda-plomo]="isCellEmpty(i, j)" [id]="'input-' + i + '-' + j">
-              <!--
-              <ng-container *ngIf="matrizIds[i]">
-                {{ matrizIds[i][j] }}
-              </ng-container>
-              -->
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="card-body2">
+        <table class="cool-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th *ngFor="let columna of lstModeloProductos">{{ columna.color }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let fila of lstProductos; let i = index">
+              <th>{{ fila.tamanio }}</th>
+              <td *ngFor="let columna of lstModeloProductos; let j = index" (click)="cambiarImagen(matrizIds[i][j].url)">
+                <input type="text" [readonly]="isCellEmpty(i, j)" (input)="onInput($event, i, j)" class="cool-input"
+                  [class.celda-plomo]="isCellEmpty(i, j)" [id]="'input-' + i + '-' + j">
+                <!--
+                <ng-container *ngIf="matrizIds[i]">
+                  {{ matrizIds[i][j] }}
+                </ng-container>
+                -->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <br>
       <br>
       <br>
-      <br>
-      <br>
-      <button class="btn button" (click)="obtenerDetalleProductos()" style="text-align: center; font-size: 15px; width: 140px; height: 35px; text-align: center; margin-top: 10px; background: rgb(54, 169, 225, 0.8);">
-        <span style="color: white"> Obtener detalle </span>
-      </button>
+      <div class="button-container">
+        <button class="btn button" (click)="obtenerDetalleProductos()">
+          <span style="color: white"> Obtener detalle </span>
+        </button>
+      </div>
     </div>
   </div>
 </div>

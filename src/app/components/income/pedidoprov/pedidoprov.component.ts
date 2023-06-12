@@ -60,7 +60,6 @@ ngOnInit(): void {
     didOpen: () => {
       Swal.showLoading();
       this.httpService.obtenerModelosProductos().subscribe(res => {
-        console.log(res);
         if (res.codigoError != "OK") {
           Swal.fire({
             icon: 'error',

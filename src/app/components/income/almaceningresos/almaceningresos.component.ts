@@ -53,7 +53,6 @@ export class AlmaceningresosComponent implements OnInit {
       funcion: '',
       razon_social: ''
     }
-    console.log(almacen);
 
     this.httpService.obtenerAlmacenesSociedad(almacen).subscribe(res => {
       if (res.codigoError != "OK") {
