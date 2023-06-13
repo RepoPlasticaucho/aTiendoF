@@ -5,6 +5,8 @@ import { ModeloProductosEntity } from 'src/app/models/modeloproductos';
 import { ProducAdmEntity } from 'src/app/models/productadm';
 import { ModeloproductosService } from 'src/app/services/modeloproductos.service';
 import { ProductosAdminService } from 'src/app/services/productos-admin.service';
+import { DetallesMovimiento, DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
+import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service.ts.service';
 import Swal from 'sweetalert2';
 import { map } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
@@ -33,6 +35,7 @@ export class PortafoliosComprarComponent implements OnInit {
 
   constructor(private readonly httpService: ModeloproductosService,
     private readonly httpServiceProductos: ProductosAdminService,
+    private readonly httpServiceDetalle: DetallesmovimientoService,
     private router: Router) { }
 
   ngOnInit(): void {
@@ -175,51 +178,61 @@ export class PortafoliosComprarComponent implements OnInit {
 
   obtenerDetalleProductos() {
     this.detalleProductos = [];
-    this.matrizIds.forEach((fila, i) => {
-      fila.forEach((columna, j) => {
-        const inputElement = document.getElementById(`input-${i}-${j}`) as HTMLInputElement;
-        if (columna && columna.id && inputElement && inputElement.value) {
-          const idProducto: string = columna.id;
-          const cantidad = Number(inputElement.value);
-          const pvp: any = columna.pvp;
-          const precio: any = Number((cantidad * pvp).toFixed(2));
-          /*
-          const newDetalle: DetalleMovimiento {
-            id: '',
-            producto_id: idProducto,
-            movimiento_id: '',
-            cantidad: cantidad,
-            costo: pvp,
-            precio: precio
-          }
-          this.httpService.agregarDetalleMovimiento(newDetalle).subscribe(res => {
-            if (res.id == '') {
-              Swal.fire({
-              icon: 'error',
-              title: 'Ha ocurrido un error.',
-              text: 'No se ha obtenido información.',
-              showConfirmButton: false
-              });
-            } else {
-              Swal.fire({
-                  icon: 'success',
-                  title: 'Guardado Exitosamente.',
-                  text: `Se ha guardado con éxito`,
-                  showConfirmButton: true,
-                  confirmButtonText: 'Ok',
-                }).finally(() => {
-                  this.router.navigate([
-                    '/navegation-cl',
-                    { outlets: { contentClient: ['portafolios'] } },
-                  ]);
-                });
+    Swal.fire({
+      title: '¿Quieres guardar el pedido?',
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Guardar',
+      denyButtonText: `No guardar`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        this.matrizIds.forEach((fila, i) => {
+          fila.forEach((columna, j) => {
+            const inputElement = document.getElementById(`input-${i}-${j}`) as HTMLInputElement;
+            if (columna && columna.id && inputElement && inputElement.value) {
+              const idProducto: string = columna.id;
+              const cantidad = Number(inputElement.value);
+              const pvp: any = columna.pvp;
+              const precio: any = Number((cantidad * pvp).toFixed(2));
+              const cant: string = cantidad.toString();
+
+              const newDetalle: DetallesMovimientoEntity = {
+                id: '',
+                producto_nombre: '',
+                inventario_id: '',
+                producto_id: idProducto,
+                movimiento_id: '1',
+                cantidad: cant,
+                costo: pvp,
+                precio: precio
+              }
+              this.httpServiceDetalle.agregarDetallePedido(newDetalle).subscribe(res => {
+                if (res.codigoError != 'OK') {
+                  Swal.fire({
+                  icon: 'error',
+                  title: 'Ha ocurrido un error.',
+                  text: 'No se ha obtenido información.',
+                  showConfirmButton: false
+                  });
+                } else {
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Guardado Exitosamente.',
+                    text: `Se ha guardado con éxito`,
+                    showConfirmButton: true,
+                    confirmButtonText: 'Ok',
+                  });
+                }
+              });        
+              this.detalleProductos.push({ idProducto, cantidad, pvp, precio });
             }
           });
-          */
-          this.detalleProductos.push({ idProducto, cantidad, pvp, precio });
-        }
-      });
-    });
+        });       
+      } else if (result.isDenied) {
+        Swal.fire('No se guardó el pedido', '', 'info')
+      }
+    }); 
     console.log(this.detalleProductos);
     // Aquí puedes realizar las operaciones o enviar los datos al servidor
   }
