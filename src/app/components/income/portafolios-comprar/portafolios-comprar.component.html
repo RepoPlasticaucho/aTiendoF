@@ -23,11 +23,6 @@
             </a>
           </mat-grid-tile>
         </mat-grid-list>
-        <div class="icon-container">
-          <fa-icon [icon]="faMoneyBillAlt" [size]="'3x'" style="color: #6aaf42" class="icono-input"></fa-icon>
-          <label for="total" class="label-input">VALOR:</label>
-          <input type="text" readonly [(ngModel)]="resultado" class="cool-input resultado-input" id="resultado-input">
-        </div></div>
       <table style="width: 90%">
         <tr>
           <td style="width: 5%"></td>
@@ -59,6 +54,14 @@
       </table>
       <br>
       <br /><br />
+      <div class="icon-container">
+        <fa-icon [icon]="faMoneyBillAlt" [size]="'3x'" style="color: #6aaf42" class="icono-input"></fa-icon>
+        <label for="total" class="label-input">VALOR:</label>
+        <input type="text" readonly [(ngModel)]="resultado" class="cool-input resultado-input" id="resultado-input">
+      </div>
+      <br>
+      <br>
+      <br>
       <div class="card-body2">
         <table class="cool-table">
           <thead>
@@ -72,7 +75,8 @@
               <th>{{ fila.tamanio }}</th>
               <td *ngFor="let columna of lstModeloProductos; let j = index" (click)="cambiarImagen(matrizIds[i][j].url)">
                 <input type="text" [readonly]="isCellEmpty(i, j)" (input)="onInput($event, i, j)" class="cool-input"
-                  [class.celda-plomo]="isCellEmpty(i, j)" [id]="'input-' + i + '-' + j">
+                  [class.celda-plomo]="isCellEmpty(i, j)" [class.celda-ingresada]="isCellEntered(i, j)"
+                  [id]="'input-' + i + '-' + j">
                 <!--
                 <ng-container *ngIf="matrizIds[i]">
                   {{ matrizIds[i][j] }}

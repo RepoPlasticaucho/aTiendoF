@@ -236,4 +236,9 @@ export class PortafoliosComprarComponent implements OnInit {
     console.log(this.detalleProductos);
     // Aquí puedes realizar las operaciones o enviar los datos al servidor
   }
+
+  isCellEntered(i: number, j: number): boolean {
+    const id = this.matrizIds[i]?.[j]?.id;
+    return this.detalleProductos.some((detalle) => detalle.idProducto === id);
+  }
 }
