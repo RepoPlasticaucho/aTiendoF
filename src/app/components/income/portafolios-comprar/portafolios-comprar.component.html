@@ -27,16 +27,6 @@
         <tr>
           <td style="width: 5%"></td>
           <td style="width: 30%; text-align: center">
-            <div class="image-container">
-              <img [src]="imagenSeleccionada || imagen" alt="{{ imagen}}" class="cool-image" height="150px" width="150px"
-                data-toggle="modal" data-target="#exampleModal" />
-            </div>
-          </td>
-        </tr>
-        <br>
-        <tr>
-          <td style="width: 5%"></td>
-          <td style="width: 30%; text-align: center">
             <label for="producto">Producto</label>
             <input type="text" [ngModel]="producto" style="text-align: center" class="form-control " id="producto"
               readonly placeholder="Línea">
@@ -51,9 +41,17 @@
               placeholder="Línea">
           </td>
         </tr>
+        <tr>
+          <td style="width: 5%"></td>
+          <td style="width: 30%; text-align: center">
+            <div class="image-container">
+              <img [src]="imagenSeleccionada || imagen" alt="{{ imagen}}" class="cool-image" height="150px" width="150px"
+                data-toggle="modal" data-target="#exampleModal" />
+            </div>
+          </td>
+        </tr>
       </table>
       <br>
-      <br /><br />
       <div class="icon-container">
         <fa-icon [icon]="faMoneyBillAlt" [size]="'3x'" style="color: #6aaf42" class="icono-input"></fa-icon>
         <label for="total" class="label-input">VALOR:</label>
@@ -91,10 +89,15 @@
       <br>
       <br>
       <div class="button-container">
-        <button class="btn button" (click)="obtenerDetalleProductos()">
-          <span style="color: white"> Guardar pedido </span>
+        <button class="btn btn-primary" (click)="obtenerDetalleProductos()">
+          <span style="color: white"> Añadir producto </span>
         </button>
       </div>
+      <div class="button-container">
+        <button class="btn btn-secondary" *ngIf="detalleGuardado" (click)="limpiarMatriz()">
+          <span style="color: white"> Limpiar matriz </span>
+        </button>
+      </div>     
     </div>
   </div>
 </div>

@@ -31,6 +31,7 @@ export class PortafoliosComprarComponent implements OnInit {
   imagenSeleccionada: string = '';
   lastEditedCell: { row: number, column: number } | null = null;
   detalleProductos: { idProducto: any, cantidad: number, pvp: any, precio: number }[] = [];
+  detalleGuardado: boolean = false;
 
 
   constructor(private readonly httpService: ModeloproductosService,
@@ -179,11 +180,11 @@ export class PortafoliosComprarComponent implements OnInit {
   obtenerDetalleProductos() {
     this.detalleProductos = [];
     Swal.fire({
-      title: '¿Quieres guardar el pedido?',
+      title: '¿Quieres guardar los productos?',
       showDenyButton: true,
       showCancelButton: true,
-      confirmButtonText: 'Guardar',
-      denyButtonText: `No guardar`,
+      confirmButtonText: 'Añadir',
+      denyButtonText: `No añadir`,
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
@@ -215,22 +216,22 @@ export class PortafoliosComprarComponent implements OnInit {
                   text: 'No se ha obtenido información.',
                   showConfirmButton: false
                   });
-                } else {
-                  Swal.fire({
-                    icon: 'success',
-                    title: 'Guardado Exitosamente.',
-                    text: `Se ha guardado con éxito`,
-                    showConfirmButton: true,
-                    confirmButtonText: 'Ok',
-                  });
                 }
               });        
               this.detalleProductos.push({ idProducto, cantidad, pvp, precio });
             }
           });
-        });       
+        });
+        Swal.fire({
+          icon: 'success',
+          title: 'Guardado Exitosamente.',
+          text: `Se ha guardado con éxito`,
+          showConfirmButton: true,
+          confirmButtonText: 'Ok',
+        });
+        this.detalleGuardado = true;       
       } else if (result.isDenied) {
-        Swal.fire('No se guardó el pedido', '', 'info')
+        Swal.fire('No se guardaron los productos', '', 'info')
       }
     }); 
     console.log(this.detalleProductos);
@@ -240,5 +241,17 @@ export class PortafoliosComprarComponent implements OnInit {
   isCellEntered(i: number, j: number): boolean {
     const id = this.matrizIds[i]?.[j]?.id;
     return this.detalleProductos.some((detalle) => detalle.idProducto === id);
+  }
+
+  limpiarMatriz() {
+    this.matrizIds.forEach((fila, i) => {
+      fila.forEach((columna, j) => {
+        const inputElement = document.getElementById(`input-${i}-${j}`) as HTMLInputElement;
+        if (inputElement) {
+          inputElement.value = ''; // Establecer el valor en blanco
+          this.resultado = 0;
+        }
+      });
+    });
   }
 }

@@ -23,7 +23,7 @@
 
 .cool-image {
   max-width: 100%;
-  max-height: 150px;
+  max-height: 400px;
   border-radius: 50%;
   border: 0.1px solid #ccc; /* Color y grosor del borde */
   transition: transform 0.3s ease-in-out;
@@ -68,6 +68,9 @@
   /* Estilos adicionales para el input del resultado */
 }
 
+.button-container button {
+  margin-bottom: 10px; /* Margen inferior entre los botones */
+}
 
 .button-container {
   margin-top: 20px;

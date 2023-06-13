@@ -4,6 +4,7 @@ import { MarcasService } from 'src/app/services/marcas.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { faEdit, faPlus, faTrashAlt, faShoppingBag } from '@fortawesome/free-solid-svg-icons';
+import { CategoriasEntity } from 'src/app/models/categorias';
 
 @Component({
   selector: 'app-vistamarcas',
@@ -16,10 +17,19 @@ export class VistamarcasComponent implements OnInit {
 
   constructor(private readonly httpServiceMarcas: MarcasService,
     private router: Router) { }
+    
 
   ngOnInit(): void {
+    const newCategoria: CategoriasEntity = {
+      categoria: localStorage.getItem('categoria')!,
+      cod_sap: '',
+      etiquetas: '',
+      almacen_id: ''
+    }
+    console.log(newCategoria)
     //Obtenemos Marcas
-    this.httpServiceMarcas.obtenerMarcas().subscribe((res) => {
+    this.httpServiceMarcas.obtenerMarcaCategoria(newCategoria).subscribe((res) => {
+      console.log(res)
       if (res.codigoError != 'OK') {
         Swal.fire({
           icon: 'error',

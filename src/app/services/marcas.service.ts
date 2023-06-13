@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { Marcas, MarcasEntity } from '../models/marcas';
+import { CategoriasEntity } from '../models/categorias';
 
 const initMark: MarcasEntity = {
   id: "",
@@ -30,6 +31,9 @@ export class MarcasService {
   }
   obtenerMarcas(): Observable<Marcas> {
     return this.http.get<Marcas>(`${environment.apiUrl}marcas/ObtenerMarcas`);
+  }
+  obtenerMarcaCategoria(categoria: CategoriasEntity): Observable<Marcas> {
+    return this.http.post<Marcas>(`${environment.apiUrl}marcas/ObtenerMarcaCategoria`, categoria);
   }
   agregarMarca(marca: MarcasEntity): Observable<Marcas> {
     return this.http.post<Marcas>(`${environment.apiUrl}marcas/InsertarMarcas`, marca);
