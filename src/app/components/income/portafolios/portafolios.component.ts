@@ -5,7 +5,7 @@ import { ModeloProductosEntity } from 'src/app/models/modeloproductos';
 import { MarcasService } from 'src/app/services/marcas.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { faShoppingBag } from '@fortawesome/free-solid-svg-icons';
+import { faShoppingBag, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { MarcasEntity } from 'src/app/models/marcas';
 
 @Component({
@@ -18,6 +18,7 @@ export class PortafoliosComponent implements OnInit {
   lstModeloProductos: ModeloProductosEntity[] = [];
   filteredModeloProductos: ModeloProductosEntity[] = [];
   faShoppingBag = faShoppingBag;
+  faShoppingCart = faShoppingCart;
   // Nueva propiedad para las tarjetas de la página actual
   pagedModeloProductos: ModeloProductosEntity[] = [];
   // Propiedades para el paginador
@@ -82,6 +83,10 @@ export class PortafoliosComponent implements OnInit {
 
   comprar(modeloproducto: ModeloProductosEntity) {
     this.httpServiceModeloproductos.asignarModeloProducto(modeloproducto);
+    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['portafolios-comprar'] } }]);
+  }
+
+  verCarrito() {
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['portafolios-comprar'] } }]);
   }
 

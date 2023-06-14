@@ -109,6 +109,7 @@ import { VistamarcasComponent } from './components/income/vistamarcas/vistamarca
 import { PortafoliosComponent } from './components/income/portafolios/portafolios.component';
 import { PortafoliosComprarComponent } from './components/income/portafolios-comprar/portafolios-comprar.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { CarritoComponent } from './components/income/carrito/carrito.component';
 
 @NgModule({
   declarations: [
@@ -194,7 +195,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     PedidoCreateComponent,
     VistamarcasComponent,
     PortafoliosComponent,
-    PortafoliosComprarComponent
+    PortafoliosComprarComponent,
+    CarritoComponent
   ],
   imports: [
     BrowserModule,

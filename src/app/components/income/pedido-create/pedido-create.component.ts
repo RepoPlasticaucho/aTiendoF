@@ -2,19 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { faSave, faList, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
-import { ModeloProductosEntity } from 'src/app/models/modeloproductos';
-import { ModelosEntity } from 'src/app/models/modelos';
-import { ModeloproductosService } from 'src/app/services/modeloproductos.service';
-import { ModelosService } from 'src/app/services/modelos.service';
 import Swal from 'sweetalert2';
 import { CategoriasEntity } from 'src/app/models/categorias';
 import { CategoriasService } from 'src/app/services/categorias.service';
-import { LineasEntity } from 'src/app/models/lineas';
-import { LineasService } from 'src/app/services/lineas.service';
-import { InventariosEntity } from 'src/app/models/inventarios';
-import { InventariosService } from 'src/app/services/inventarios.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { PedidoprovComponent } from '../pedidoprov/pedidoprov.component';
+import { MovimientosEntity } from 'src/app/models/movimientos';
+import { MovimientosService } from 'src/app/services/movimientos.service.ts.service';
 
 @Component({
   selector: 'app-pedido-create',
@@ -48,11 +42,8 @@ export class PedidoCreateComponent implements OnInit {
   */
   selectMotivo: boolean = false;
 
-  constructor(private readonly httpServiceModelos: ModelosService,
-    private readonly httpService: ModeloproductosService,
+  constructor(private readonly httpService: MovimientosService,
     private readonly httpServiceCategorias: CategoriasService,
-    private readonly httpServiceInventarios: InventariosService,
-    private readonly httpServiceLineas: LineasService,
     private router: Router,
     private dialogRef: MatDialogRef<PedidoprovComponent>) { }
 
@@ -76,49 +67,34 @@ export class PedidoCreateComponent implements OnInit {
   }
 
   onSubmit(): void {
-    /*
-    console.log(this.pedidoForm.value);
     console.log(this.pedidoForm.valid);
     if (!this.pedidoForm.valid) {
       this.pedidoForm.markAllAsTouched();
       console.log("Error");
     } else {
-      const inventario: InventariosEntity = {
-        categoria_id : '',
-        categoria : '',
-        linea_id : '',
-        linea : '',
-        modelo_id : '',
-        modelo : '',
-        marca_id : '',
-        marca : '',
-        modelo_producto_id : '',
-        idProducto : '',
-        Producto : '',
-        id : '',
-        dInventario : '',
-        producto_id : '',
-        almacen_id : JSON.parse(localStorage.getItem('almacenid') || "[]"),
-        almacen : '',
-        stock : '',
-        etiquetas: '',
-        stock_optimo : '',
-        fav : '',
-        color : '',
+      const newMovimiento: MovimientosEntity = {
+        almacen_id: JSON.parse(localStorage.getItem('almacenid') || "[]"),
+        id: '',
+        tipo_id: '1',
+        tipo_emision_cod: '',
+        estado_fact_id: '1',
+        tipo_comprb_id: '7',
+        cod_doc: '',
+        secuencial: ''
       }
-      console.log(inventario);
+      console.log(newMovimiento);
 
-      this.httpServiceInventarios.agregarInventario(inventario).subscribe(res => {
+      this.httpService.agregarMovimiento(newMovimiento).subscribe(res => {
+        console.log(res)
         if (res.codigoError == "OK") {
-          Swal.fire({
-            icon: 'success',
-            title: 'Guardado Exitosamente.',
-            text: `Se ha creado el inventario`,
-            showConfirmButton: true,
-            confirmButtonText: "Ok"
-          }).finally(() => {
-            this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios'] } }]);
-          });
+          this.httpService.obtenerMovimientoUno(newMovimiento).subscribe(res1 => {
+            localStorage.setItem('movimiento_id', res1.lstMovimientos[0].id);
+          })
+          localStorage.setItem('categoria', this.pedidoForm.value.categoria!)
+          localStorage.setItem('tipo', this.pedidoForm.value.tipo!)
+          localStorage.setItem('motivo', this.pedidoForm.value.motivo!)
+          this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['vistamarcas'] } }]);
+          this.dialogRef.close();
         } else {
           Swal.fire({
             icon: 'error',
@@ -129,64 +105,8 @@ export class PedidoCreateComponent implements OnInit {
         }
       })
     }
-    */
-    if (!this.pedidoForm.valid) {
-      this.pedidoForm.markAllAsTouched();
-      console.log("Error");
-    } else {
-      localStorage.setItem('categoria', this.pedidoForm.value.categoria!)
-      localStorage.setItem('tipo', this.pedidoForm.value.tipo!)
-      localStorage.setItem('motivo', this.pedidoForm.value.motivo!)
-      this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['vistamarcas'] } }]);
-      this.dialogRef.close();
-    }
+
   }
 
 
-  changeGroup3(modelo: any): void {
-    if (modelo.target.value == 0) {
-      this.selectMotivo = true;
-    } else {
-      this.selectMotivo = false;
-
-      // Obtener ID del modelo
-      //this.selectedModeloProducto = modelo.target.value;
-      const modelonew: ModeloProductosEntity = {
-        id: '',
-        marca_id: '',
-        marca: '',
-        modelo_id: '',
-        modelo: modelo.target.value,
-        categoria: '',
-        linea: '',
-        color_id: '',
-        color: '',
-        atributo_id: '',
-        atributo: '',
-        genero_id: '',
-        genero: '',
-        modelo_producto: '',
-        cod_sap: '',
-        cod_familia: '',
-        etiquetas: '',
-        url_image: ''
-      }
-      console.log(modelonew);
-      this.httpService.obtenerModeloProductosModelosAdm(modelonew).subscribe((res) => {
-        console.log(res);
-        if (res.codigoError != 'OK') {
-          Swal.fire({
-            icon: 'error',
-            title: 'No se pudo obtener Modelos.',
-            text: res.descripcionError,
-            showConfirmButton: false,
-          });
-
-        } else {
-
-        }
-      });
-
-    }
-  }
 }

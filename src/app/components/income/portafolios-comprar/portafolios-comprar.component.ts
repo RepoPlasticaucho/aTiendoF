@@ -203,7 +203,7 @@ export class PortafoliosComprarComponent implements OnInit {
                 producto_nombre: '',
                 inventario_id: '',
                 producto_id: idProducto,
-                movimiento_id: '1',
+                movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
                 cantidad: cant,
                 costo: pvp,
                 precio: precio

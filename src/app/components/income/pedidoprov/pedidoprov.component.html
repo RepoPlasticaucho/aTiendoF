@@ -5,33 +5,31 @@
                 <fa-icon [icon]="faList" [size]="'3x'" style="color: #636363;"></fa-icon>
                 <h1 class="mx-5 " style="color: #636363;">PEDIDOS</h1>
                 <div style="position: absolute;right:0;" class="mx-3">
-                    <a class="btn btn-success" (click)="openModal()"
-                        style=" border-radius: 5px; 
+                    <a class="btn btn-success" (click)="openModal()" style=" border-radius: 5px; 
                             font-size: 12px; width:150px; 
                             height:35px;
                             margin-top: 25px;
                             text-align:center; 
-                            ;"
-                    >NUEVO PEDIDO
+                            ;">NUEVO PEDIDO
                     </a>
                 </div>
             </div>
-            <div class="row mx-3">
-                            <a class="btn button" href="./navegation-cl/(contentClient:vistapedidos)"
-                                style="text-align:center;
-                                        font-size: 15px; width:140px; 
-                                           height:35px;
-                                           text-align:center; 
-                                           margin-top: 10px;
-                                           background: rgb(54,169,225,0.8);"
-                            ><span style="color: white;">
-                                Volver
-                            </span>
-                            
-                            </a>
-            </div>
+            <br>
         </div>
         <div class="card-body ">
+            <div class="row mx-3">
+                <a class="btn button" href="./navegation-cl/(contentClient:vistapedidos)" style="text-align:center;
+                            font-size: 15px; width:140px; 
+                               height:35px;
+                               text-align:center; 
+                               margin-top: 10px;
+                               background: rgb(54,169,225,0.8);"><span style="color: white;">
+                        Volver
+                    </span>
+
+                </a>
+            </div>
+            <br><br><br>
             <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                 <thead style="color: #636363;">
                     <tr>
@@ -44,7 +42,8 @@
                 <tbody style="color: #767695;">
                     <tr *ngFor="let modeloProducto of lstModelosProductos">
                         <td style="text-align: center;">
-                            <img src={{modeloProducto.url_image}} alt={{modeloProducto.marca}} class="img-thumbnail" height="100px" width="100px" data-toggle="modal" data-target="#exampleModal">
+                            <img src={{modeloProducto.url_image}} alt={{modeloProducto.marca}} class="img-thumbnail"
+                                height="100px" width="100px" data-toggle="modal" data-target="#exampleModal">
                         </td>
                         <td>{{modeloProducto.marca}}</td>
                         <td>{{modeloProducto.color}}</td>

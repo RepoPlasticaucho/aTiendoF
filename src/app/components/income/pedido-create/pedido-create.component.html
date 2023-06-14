@@ -42,7 +42,7 @@
         </div>
         <div class="form-group">
             <label for="grupo">Motivo</label>
-            <select class="form-control" (change)="changeGroup3($event)" formControlName="motivo">
+            <select class="form-control" formControlName="motivo">
                 <option [value]=" 0 " selected>Seleccione un motivo</option>
                 <!--
                     <option *ngFor="let motivo of lstMotivos" [value]="motivo.motivo">
