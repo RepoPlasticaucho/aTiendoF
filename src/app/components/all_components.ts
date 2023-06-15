@@ -73,3 +73,4 @@ export { VistamarcasComponent } from "./income/vistamarcas/vistamarcas.component
 export { PortafoliosComponent } from "./income/portafolios/portafolios.component";
 export { PortafoliosComponentM } from "./inventories/portafolios/portafoliosm.component";
 export { PortafoliosComprarComponent } from "./income/portafolios-comprar/portafolios-comprar.component";
+export { CarritoComponent } from './income/carrito/carrito.component'

@@ -87,7 +87,7 @@ export class PortafoliosComponent implements OnInit {
   }
 
   verCarrito() {
-    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['portafolios-comprar'] } }]);
+    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['carrito'] } }]);
   }
 
 

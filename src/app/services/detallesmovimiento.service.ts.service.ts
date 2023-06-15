@@ -12,7 +12,11 @@ const initDetail: DetallesMovimientoEntity = {
   movimiento_id: '',
   cantidad: '',
   costo: '',
-  precio: ''
+  precio: '',
+  color: '',
+  modelo_producto_nombre: '',
+  tamanio: '',
+  url_image: ''
 }
 
 @Injectable({
@@ -29,6 +33,10 @@ export class DetallesmovimientoService {
 
   asignarDetalle(detallePedido: DetallesMovimientoEntity) {
     this.detail$.next(detallePedido);
+  }
+  
+  obtenerDetalleMovimiento(detalle: DetallesMovimientoEntity): Observable<DetallesMovimiento> {
+    return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ObtenerDetalleMovimiento`, detalle );
   }
 
   agregarDetallePedido(detalle: DetallesMovimientoEntity): Observable<DetallesMovimiento> {

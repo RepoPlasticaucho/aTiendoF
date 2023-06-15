@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faShoppingBag, faMoneyBillAlt } from '@fortawesome/free-solid-svg-icons';
+import { faShoppingBag, faMoneyBillAlt, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { ModeloProductosEntity } from 'src/app/models/modeloproductos';
 import { ProducAdmEntity } from 'src/app/models/productadm';
 import { ModeloproductosService } from 'src/app/services/modeloproductos.service';
@@ -20,6 +20,7 @@ import { forkJoin } from 'rxjs';
 export class PortafoliosComprarComponent implements OnInit {
   faShoppingBag = faShoppingBag;
   faMoneyBillAlt = faMoneyBillAlt;
+  faShoppingCart = faShoppingCart;
   lstModeloProductos: ModeloProductosEntity[] = [];
   lstProductos: ProducAdmEntity[] = [];
   imagen: string = '';
@@ -253,5 +254,8 @@ export class PortafoliosComprarComponent implements OnInit {
         }
       });
     });
+  }
+  verCarrito() {
+    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['carrito'] } }]);
   }
 }
