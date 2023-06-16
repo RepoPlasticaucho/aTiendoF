@@ -10,6 +10,8 @@ export interface ProducAdmEntity {
     nombre: string;
     cod_sap: string;
     pvp?: string;
+    costo?: string;
+    precio_prom? : string;
     etiquetas: string;
     es_plasticaucho: string;
     es_sincronizado: string;

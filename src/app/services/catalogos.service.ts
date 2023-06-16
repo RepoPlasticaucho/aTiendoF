@@ -31,7 +31,9 @@ const initGruop: CatalogosEntity = {
     categoria : '',
     moelo_producto : '',
     modelo_producto_id : '',
-    linea_producto_id : ''
+    linea_producto_id : '',
+    costo :'',
+    pvp :''
 }
 
 @Injectable({
@@ -158,6 +160,11 @@ export class CatalogosService {
   }
 
   agregarProducto(producto: ProducAdmEntity): Observable<ProductAdm> {
-    return this.http.post<ProductAdm>(`${environment.apiUrl}productos/InsertarProductos`, producto);
+    return this.http.post<ProductAdm>(`${environment.apiUrl}productos/AgregarProductos`, producto);
   }
+
+  actualizarProducto(producto: ProducAdmEntity): Observable<ProductAdm> {
+    return this.http.post<ProductAdm>(`${environment.apiUrl}productos/ActualizarProductos`, producto);
+  }
+
 }

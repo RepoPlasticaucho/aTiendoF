@@ -26,7 +26,9 @@ const initProduct : ProducAdmEntity ={
   modelo_nombre: "",
   categoria: "",
   linea: "",
-  url_image: ""
+  url_image: "",
+  precio_prom :"",
+  costo :"",
 }
 
 @Injectable({

@@ -21,6 +21,7 @@ import { ColoresService } from 'src/app/services/colores.service';
 import Swal from 'sweetalert2';
 import { ModeloproductosComponent } from '../../all_components';
 import { Validators } from '@angular/forms';
+import { ContentObserver } from '@angular/cdk/observers';
 
 @Component({
   selector: 'app-catalogos',
@@ -79,7 +80,7 @@ export class CatalogosComponent implements OnInit {
         this.catalogoMarca = [...new Set(res.lstCatalogos.map(item => item.marca))];
         this.catalogoColores = [...new Set(res.lstCatalogos.map(item => item.color))];
 
-        // CARGA DE CAMPOS
+        //CARGA DE CAMPOS
         this.Categorias();
         this.Atributos();
         this.Generos();
@@ -87,10 +88,10 @@ export class CatalogosComponent implements OnInit {
         this.Colores();
         this.Lineas();
         this.Modelos();
-        this.ModelosProductos();
+        this.ModelosProductos()
         this.Productos()
-      }    
-      Swal.fire({
+
+        Swal.fire({
           icon: 'info',
           title: 'Carga Masiva realizada con EXITO.',
           text: `Se ha creado los Productos`,
@@ -98,7 +99,10 @@ export class CatalogosComponent implements OnInit {
           confirmButtonText: "Ok"
         }).finally(() => {
           this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['productos'] } }]);
-        })   
+        })
+ 
+      } 
+
     })
     
   }
@@ -521,6 +525,7 @@ export class CatalogosComponent implements OnInit {
       }
     })
   }
+
   Productos(){
     this.httpService.obtenerCatalogoProductos().subscribe(res =>{
       if (res.codigoError != "OK") {
@@ -550,8 +555,11 @@ export class CatalogosComponent implements OnInit {
             color_nombre: '',
             atributo_nombre: '',
             genero_nombre: '',
-            modelo_nombre: ''
+            modelo_nombre: '',
+            precio_prom : '',
+            costo :''
           }
+          
           this.httpService.obtenerCatalogoProducto(productonew).subscribe(res =>{
             if (res.codigoError != "OK") {
               const productonew : ProducAdmEntity={
@@ -570,9 +578,12 @@ export class CatalogosComponent implements OnInit {
                 color_nombre: '',
                 atributo_nombre: '',
                 genero_nombre: '',
-                modelo_nombre: ''
+                modelo_nombre: '',
+                costo : valor.costo,
+                precio_prom : valor.pvp,
+                pvp : valor.pvp
               }
-              //console.log(productonew);
+             // console.log(productonew);
               this.httpService.agregarProducto(productonew).subscribe(res =>{
                 if (res.codigoError != "OK") {
                   Swal.fire({
@@ -593,9 +604,81 @@ export class CatalogosComponent implements OnInit {
                 }
               })
             }else{
-              console.log("PRODUCTOS YA EXISTENTES")
+              //Actualizacion de precios
+              const productos = res.lstProductos
+              productos.forEach((value) => {
+                if (value.pvp == "" || value.pvp == null || value.pvp == "0") {
+                  const productonew : ProducAdmEntity={
+                    id: value.id,
+                    tamanio: value.tamanio,
+                    nombre: value.nombre,
+                    cod_sap: value.cod_sap,
+                    etiquetas: value.nombre,
+                    es_plasticaucho: '1',
+                    es_sincronizado: '1',
+                    modelo_producto_id: value.modelo_producto_id,
+                    modelo_producto: '',
+                    impuesto_id: '',
+                    impuesto_nombre: '',
+                    marca_nombre: '',
+                    color_nombre: '',
+                    atributo_nombre: '',
+                    genero_nombre: '',
+                    modelo_nombre: '',
+                    costo : valor.costo,
+                    precio_prom : valor.pvp,
+                    pvp : valor.pvp
+                  }
+                  this.httpService.actualizarProducto(productonew).subscribe(res => {
+                    if (res.codigoError != "OK") {
+                      Swal.fire({
+                        icon: 'error',
+                        title: 'Ha ocurrido un error.',
+                        text: res.descripcionError,
+                        showConfirmButton: false,
+                      }); 
+                    } else {
+                      console.log("Productos actualizados")
+                    }
+                  })
+                } else {
+                  const productonew : ProducAdmEntity={
+                    id: value.id,
+                    tamanio: value.tamanio,
+                    nombre: value.nombre,
+                    cod_sap: value.cod_sap,
+                    etiquetas: value.nombre,
+                    es_plasticaucho: '1',
+                    es_sincronizado: '1',
+                    modelo_producto_id: value.modelo_producto_id,
+                    modelo_producto: '',
+                    impuesto_id: '',
+                    impuesto_nombre: '',
+                    marca_nombre: '',
+                    color_nombre: '',
+                    atributo_nombre: '',
+                    genero_nombre: '',
+                    modelo_nombre: '',
+                    costo : valor.costo,
+                    precio_prom : ((parseInt (value.pvp!) + parseInt (valor.pvp!))/2).toString(),
+                    pvp : valor.pvp
+                  }
+                  this.httpService.actualizarProducto(productonew).subscribe(res => {
+                    if (res.codigoError != "OK") {
+                      Swal.fire({
+                        icon: 'error',
+                        title: 'Ha ocurrido un error.',
+                        text: res.descripcionError,
+                        showConfirmButton: false,
+                      }); 
+                    } else {
+                      console.log("Productos actualizados")
+                    }
+                  })
+                }
+              });
             }
-          })  
+          })
         });  
       }
     })

@@ -32,4 +32,6 @@ export interface CatalogosEntity {
     moelo_producto : string;
     modelo_producto_id : string;
     linea_producto_id : string;
+    costo? : string;
+    pvp? : string
 }
