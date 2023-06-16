@@ -1,3 +1,9 @@
 .card-body {
     overflow-x: auto
 }
+
+.table-row:hover {
+    background-color: #bff1f5; /* Color de fondo cuando se pasa el mouse por encima */
+    cursor: pointer;
+}
+

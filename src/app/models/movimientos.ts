@@ -20,6 +20,7 @@ export interface MovimientosEntity {
     total_desc?: string;
     total_imp?: string;
     propina?: string;
+    fecha_emision?: string;
     importe_total?: string;
     valor_rete_iva?: string;
     valor_rete_renta?: string;

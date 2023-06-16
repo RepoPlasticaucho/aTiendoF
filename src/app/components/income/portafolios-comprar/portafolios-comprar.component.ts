@@ -6,7 +6,7 @@ import { ProducAdmEntity } from 'src/app/models/productadm';
 import { ModeloproductosService } from 'src/app/services/modeloproductos.service';
 import { ProductosAdminService } from 'src/app/services/productos-admin.service';
 import { DetallesMovimiento, DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
-import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service.ts.service';
+import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service';
 import Swal from 'sweetalert2';
 import { map } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
@@ -33,7 +33,6 @@ export class PortafoliosComprarComponent implements OnInit {
   lastEditedCell: { row: number, column: number } | null = null;
   detalleProductos: { idProducto: any, cantidad: number, pvp: any, precio: number }[] = [];
   detalleGuardado: boolean = false;
-
 
   constructor(private readonly httpService: ModeloproductosService,
     private readonly httpServiceProductos: ProductosAdminService,

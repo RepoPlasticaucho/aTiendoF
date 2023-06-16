@@ -1,0 +1,42 @@
+<div class="dialog-content">
+    <div class="btn-cerrar">
+        <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip"
+            data-placement="bottom" title="Regresar a pedidos" (click)="cerrarDialog()">
+        </fa-icon>
+    </div>
+</div>
+<br>
+<div class="icon-container">
+    <fa-icon [icon]="faMoneyBillAlt" [size]="'3x'" style="color: #6aaf42" class="icono-input"></fa-icon>
+    <label for="total" class="label-input">TOTAL:</label>
+    <input type="text" [(ngModel)]="sumaTotal" class="cool-input resultado-input" readonly>
+</div>
+  <br><br><br>
+<div class="table-container">
+<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+    <thead style="color: #636363;">
+        <tr>
+            <th style="width: 10%; "></th>
+            <th style="width: 10%; ">Producto</th>
+            <th style="width: 10%; ">Cantidad</th>
+            <th style="width: 10%; ">Precio Uni.</th>
+            <th style="width: 10%; ">Precio</th>
+            <th style="width: 10%; ">Tamaño</th>
+            <th style="width: 10%; ">Color</th>
+        </tr>
+    </thead>
+    <tbody style="color: #767695;">
+        <tr *ngFor="let detalleMovimientos of lstDetalleMovimientos">
+            <td style="text-align: center;">
+                <img src={{detalleMovimientos.url_image}} alt={{detalleMovimientos.precio}} class="img-thumbnail" height="100px" width="100px" data-toggle="modal" data-target="#exampleModal">
+            </td>
+            <td>{{detalleMovimientos.producto_nombre}}</td>
+            <td>{{detalleMovimientos.cantidad}}</td>
+            <td>{{detalleMovimientos.costo}}</td>
+            <td>{{detalleMovimientos.precio}}</td>
+            <td>{{detalleMovimientos.tamanio}}</td>
+            <td>{{detalleMovimientos.color}}</td>
+        </tr>
+    </tbody>
+</table>
+</div>

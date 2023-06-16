@@ -8,7 +8,7 @@ import { CategoriasService } from 'src/app/services/categorias.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { PedidoprovComponent } from '../pedidoprov/pedidoprov.component';
 import { MovimientosEntity } from 'src/app/models/movimientos';
-import { MovimientosService } from 'src/app/services/movimientos.service.ts.service';
+import { MovimientosService } from 'src/app/services/movimientos.service';
 
 @Component({
   selector: 'app-pedido-create',

@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { faList, faEdit, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
-import { ModeloProductosEntity } from 'src/app/models/modeloproductos';
-import { ModeloproductosService } from 'src/app/services/modeloproductos.service';
+import { MovimientosEntity } from 'src/app/models/movimientos';
+import { MovimientosService } from 'src/app/services/movimientos.service';
 import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { PedidoCreateComponent } from '../pedido-create/pedido-create.component';
+import { TablaDetalleComponent } from '../tabla-detalle/tabla-detalle.component';
 
 @Component({
   selector: 'app-pedidoprov',
@@ -24,15 +25,27 @@ faPlus = faPlus;
 //Declaración de variables
 dtOptions: DataTables.Settings = {};
 dtTrigger: Subject<any> = new Subject<any>();
-lstModelosProductos: ModeloProductosEntity[] = [];
+lstMovimientos: MovimientosEntity[] = [];
 
-constructor(private readonly httpService: ModeloproductosService,
+constructor(private readonly httpService: MovimientosService,
   private router: Router,
   private dialog: MatDialog) { }
 
   openModal(): void {
     const dialogRef = this.dialog.open(PedidoCreateComponent, {
       width: '500px',
+      // Agrega cualquier configuración adicional del modal aquí
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      // Lógica para manejar el resultado después de cerrar el modal
+    });
+  }
+
+  openModalDetalle(movimiento: MovimientosEntity): void {
+    this.httpService.asignarMovimiento(movimiento);
+    const dialogRef = this.dialog.open(TablaDetalleComponent, {
+      width: '750px',
       // Agrega cualquier configuración adicional del modal aquí
     });
   
@@ -49,9 +62,19 @@ ngOnInit(): void {
     paging: true,
     search: false,
     searching: true,
-    ordering: true,
+    ordering: false,
     info: true,
     responsive: true
+  }
+  const newMovimiento: MovimientosEntity = {
+    id: '',
+    tipo_id: '',
+    tipo_emision_cod: '',
+    estado_fact_id: '',
+    tipo_comprb_id: '',
+    almacen_id: localStorage.getItem('almacenid')!,
+    cod_doc: '',
+    secuencial: ''
   }
   Swal.fire({
     title: 'CARGANDO...',
@@ -59,7 +82,7 @@ ngOnInit(): void {
     timer: 30000,
     didOpen: () => {
       Swal.showLoading();
-      this.httpService.obtenerModelosProductos().subscribe(res => {
+      this.httpService.obtenerMovimientosAlmacen(newMovimiento).subscribe(res => {
         if (res.codigoError != "OK") {
           Swal.fire({
             icon: 'error',
@@ -69,7 +92,7 @@ ngOnInit(): void {
             // timer: 3000
           });
         } else {
-          this.lstModelosProductos = res.lstModelo_Productos;
+          this.lstMovimientos = res.lstMovimientos;
           this.dtTrigger.next('');
           Swal.close();
         }

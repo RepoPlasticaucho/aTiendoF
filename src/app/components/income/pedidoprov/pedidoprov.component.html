@@ -26,28 +26,22 @@
                                background: rgb(54,169,225,0.8);"><span style="color: white;">
                         Volver
                     </span>
-
                 </a>
             </div>
             <br><br><br>
             <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                 <thead style="color: #636363;">
                     <tr>
-                        <th style="width: 20%; ">ESTADO</th>
+                        <th style="width: 10%; ">ESTADO</th>
                         <th style="width: 20%; ">CÓDIGO</th>
-                        <th style="width: 20%; ">NOMBRE</th>
-                        <th style="width: 20%; ">DIRECCIÓN</th>
+                        <th style="width: 20%; ">FECHA</th>
                     </tr>
                 </thead>
                 <tbody style="color: #767695;">
-                    <tr *ngFor="let modeloProducto of lstModelosProductos">
-                        <td style="text-align: center;">
-                            <img src={{modeloProducto.url_image}} alt={{modeloProducto.marca}} class="img-thumbnail"
-                                height="100px" width="100px" data-toggle="modal" data-target="#exampleModal">
-                        </td>
-                        <td>{{modeloProducto.marca}}</td>
-                        <td>{{modeloProducto.color}}</td>
-                        <td>{{modeloProducto.atributo}}</td>
+                    <tr *ngFor="let movimiento of lstMovimientos" (click)="openModalDetalle(movimiento)" class="table-row">
+                        <td>{{movimiento.estado_fact_id}}</td>
+                        <td>{{movimiento.id}}</td>
+                        <td>{{movimiento.fecha_emision | slice:0:10}}</td>
                     </tr>
                 </tbody>
             </table>

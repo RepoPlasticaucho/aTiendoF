@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DetallesMovimiento, DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
-import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service.ts.service';
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
+import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service';
+import { MovimientosService } from 'src/app/services/movimientos.service';
+import { MovimientosEntity } from 'src/app/models/movimientos';
+import { faShoppingCart, faEdit, faTrashAlt, faMoneyBillAlt } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
 import Swal from 'sweetalert2';
 
@@ -14,13 +16,18 @@ import Swal from 'sweetalert2';
 export class CarritoComponent implements OnInit {
 
   faShoppingCart = faShoppingCart;
+  faEdit = faEdit;
+  faTrashAlt = faTrashAlt;
+  faMoneyBillAlt = faMoneyBillAlt;
 
   //Declaración de variables
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
   lstDetalleMovimientos: DetallesMovimientoEntity[] = [];
+  sumaTotal: any;
 
   constructor(private readonly httpService: DetallesmovimientoService,
+    private readonly httpServiceMovimiento: MovimientosService,
     private router: Router) { }
 
   ngOnInit(): void {
@@ -55,7 +62,7 @@ export class CarritoComponent implements OnInit {
           if (res.codigoError != "OK") {
             Swal.fire({
               icon: 'error',
-              title: 'Ha ocurrido un error.',
+              title: 'No existe nada en el carrito.',
               text: res.descripcionError,
               showConfirmButton: false,
               // timer: 3000
@@ -64,6 +71,7 @@ export class CarritoComponent implements OnInit {
             console.log(res);
             this.lstDetalleMovimientos = res.lstDetalleMovimientos;
             this.dtTrigger.next('');
+            this.calcularSumaTotal();
             Swal.close();
           }
         });
@@ -79,6 +87,86 @@ export class CarritoComponent implements OnInit {
   verPortafolios(event: Event) {
     event.preventDefault();
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['portafolios'] } }]);
+  }
+
+  editarDetalle(detalle: DetallesMovimientoEntity): void {
+    this.httpService.asignarDetalle(detalle);
+    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['portafolios-editar'] } }]);
+  }
+
+  eliminarDetalle(detalle: DetallesMovimientoEntity): void {
+    Swal.fire({
+      icon: 'question',
+      title: `¿Esta seguro de eliminar ${detalle.producto_nombre}?`,
+      showDenyButton: true,
+      confirmButtonText: 'Si',
+      denyButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.httpService.eliminarDetallePedido(detalle).subscribe(res => {
+          if (res.codigoError == 'OK') {
+            Swal.fire({
+              icon: 'success',
+              title: 'Eliminado Exitosamente.',
+              text: `Se ha eliminado el producto ${detalle.producto_nombre}`,
+              showConfirmButton: true,
+              confirmButtonText: "Ok"
+            }).then(() => {
+              // this.groupForm.reset();
+              window.location.reload();
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Ha ocurrido un error.',
+              text: res.descripcionError,
+              showConfirmButton: false,
+            });
+          }
+        })
+      }
+    })
+  }
+
+  calcularSumaTotal() {
+    this.sumaTotal = this.lstDetalleMovimientos.reduce((total, detalleMovimientos) => {
+      return total + Number(detalleMovimientos.precio);
+    }, 0).toFixed(2);
+  }
+
+  finalizarPedido(){
+    const newPedido: MovimientosEntity = {
+      id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
+      tipo_id: '',
+      tipo_emision_cod: '',
+      estado_fact_id: '',
+      tipo_comprb_id: '',
+      almacen_id: '',
+      cod_doc: '',
+      secuencial: ''
+    }
+
+    this.httpServiceMovimiento.finalizarPedido(newPedido).subscribe(res => {
+      if (res.codigoError == 'OK') {
+        Swal.fire({
+          icon: 'success',
+          title: 'Finalizado Correctamente.',
+          text: `Se ha finalizado el pedido`,
+          showConfirmButton: true,
+          confirmButtonText: "Ok"
+        }).finally(() => {
+          // this.groupForm.reset();
+          this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['almaceningresos'] } }]);
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Ha ocurrido un error.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      }
+    })
   }
 
 }

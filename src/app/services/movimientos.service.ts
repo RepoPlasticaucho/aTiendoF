@@ -14,6 +14,7 @@ const initMovement: MovimientosEntity = {
   almacen_id: '',
   estab: '',
   cod_doc: '',
+  fecha_emision: '',
   secuencial: '',
   clave_acceso: '',
   total_si: '',
@@ -49,5 +50,13 @@ export class MovimientosService {
 
   obtenerMovimientoUno(movimiento: MovimientosEntity): Observable<Movimientos> {
     return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientoUno`, movimiento );
+  }
+
+  obtenerMovimientosAlmacen(movimiento: MovimientosEntity): Observable<Movimientos> {
+    return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientosAlmacen`, movimiento );
+  }
+
+  finalizarPedido(movimiento: MovimientosEntity): Observable<Movimientos> {
+    return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/FinalizarPedido`, movimiento);
   }
 }
