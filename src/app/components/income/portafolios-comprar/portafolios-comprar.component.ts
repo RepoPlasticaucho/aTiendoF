@@ -27,7 +27,7 @@ export class PortafoliosComprarComponent implements OnInit {
   producto: string = '';
   desc: string = '';
   id: string = '';
-  resultado: number = 0;
+  resultado: any;
   matrizIds: any[][] = [];
   imagenSeleccionada: string = '';
   lastEditedCell: { row: number, column: number } | null = null;
@@ -166,8 +166,9 @@ export class PortafoliosComprarComponent implements OnInit {
 
       if (id && inputElement && inputElement.value) {
         const inputValue = Number(inputElement.value);
-        const subtotal = inputValue * Number(id.pvp);
-        this.resultado = Number(subtotal.toFixed(2));
+        const pvpValue = parseFloat(id.pvp.replace(',', '.'));
+        const subtotal = inputValue * pvpValue;
+        this.resultado = subtotal.toLocaleString(undefined, { minimumFractionDigits: 2 });;
       }
     }
   }
@@ -194,8 +195,9 @@ export class PortafoliosComprarComponent implements OnInit {
             if (columna && columna.id && inputElement && inputElement.value) {
               const idProducto: string = columna.id;
               const cantidad = Number(inputElement.value);
-              const pvp: any = columna.pvp;
-              const precio: any = Number((cantidad * pvp).toFixed(2));
+              const pvp: any = parseFloat(columna.pvp.replace(',', '.'));
+              const pre: any = cantidad * pvp;
+              const precio: any = pre;
               const cant: string = cantidad.toString();
 
               const newDetalle: DetallesMovimientoEntity = {

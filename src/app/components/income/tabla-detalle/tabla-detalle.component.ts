@@ -99,9 +99,11 @@ export class TablaDetalleComponent implements OnInit {
   }
 
   calcularSumaTotal() {
-    this.sumaTotal = this.lstDetalleMovimientos.reduce((total, detalleMovimientos) => {
-      return total + Number(detalleMovimientos.precio);
-    }, 0).toFixed(2);
+    const suma = this.lstDetalleMovimientos.reduce((total, detalleMovimientos) => {
+      return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
+    }, 0);
+  
+    this.sumaTotal = suma.toLocaleString(undefined, { minimumFractionDigits: 2 }).replace('.', ',');
   }
 
 }

@@ -112,6 +112,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { CarritoComponent } from './components/income/carrito/carrito.component';
 import { PortafoliosEditarComponent } from './components/income/portafolios-editar/portafolios-editar.component';
 import { TablaDetalleComponent } from './components/income/tabla-detalle/tabla-detalle.component';
+import { VistafacturaComponent } from './components/income/vistafactura/vistafactura.component';
 
 @NgModule({
   declarations: [
@@ -200,7 +201,8 @@ import { TablaDetalleComponent } from './components/income/tabla-detalle/tabla-d
     PortafoliosComprarComponent,
     CarritoComponent,
     PortafoliosEditarComponent,
-    TablaDetalleComponent
+    TablaDetalleComponent,
+    VistafacturaComponent
   ],
   imports: [
     BrowserModule,

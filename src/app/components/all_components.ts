@@ -75,3 +75,4 @@ export { PortafoliosComponentM } from "./inventories/portafolios/portafoliosm.co
 export { PortafoliosComprarComponent } from "./income/portafolios-comprar/portafolios-comprar.component";
 export { CarritoComponent } from './income/carrito/carrito.component';
 export { PortafoliosEditarComponent } from "./income/portafolios-editar/portafolios-editar.component";
+export { VistafacturaComponent } from "./income/vistafactura/vistafactura.component";

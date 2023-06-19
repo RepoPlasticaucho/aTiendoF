@@ -129,9 +129,11 @@ export class CarritoComponent implements OnInit {
   }
 
   calcularSumaTotal() {
-    this.sumaTotal = this.lstDetalleMovimientos.reduce((total, detalleMovimientos) => {
-      return total + Number(detalleMovimientos.precio);
-    }, 0).toFixed(2);
+    const suma = this.lstDetalleMovimientos.reduce((total, detalleMovimientos) => {
+      return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
+    }, 0);
+  
+    this.sumaTotal = suma.toLocaleString(undefined, { minimumFractionDigits: 2 }).replace('.', ',');
   }
 
   finalizarPedido(){
@@ -156,7 +158,7 @@ export class CarritoComponent implements OnInit {
           confirmButtonText: "Ok"
         }).finally(() => {
           // this.groupForm.reset();
-          this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['almaceningresos'] } }]);
+          this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['vistafactura'] } }]);
         });
       } else {
         Swal.fire({
