@@ -11,6 +11,7 @@ export interface SociedadesEntity {
     razon_social: string;
     nombre_comercial: string;
     id_fiscal: string;
+    id_fiscal_grupo?: string;
     email: string;
     telefono: string;
     password: string;

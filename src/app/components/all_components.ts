@@ -76,3 +76,8 @@ export { PortafoliosComprarComponent } from "./income/portafolios-comprar/portaf
 export { CarritoComponent } from './income/carrito/carrito.component';
 export { PortafoliosEditarComponent } from "./income/portafolios-editar/portafolios-editar.component";
 export { VistafacturaComponent } from "./income/vistafactura/vistafactura.component";
+export { VistamarcasDevComponent } from './income/devoluciones/vistamarcas-dev/vistamarcas-dev.component';
+export { PortafoliosDevComponent } from './income/devoluciones/portafolios-dev/portafolios-dev.component';
+export { PortafoliosComprarDevComponent } from './income/devoluciones/portafolios-comprar-dev/portafolios-comprar-dev.component';
+export { CarritoDevComponent } from './income/devoluciones/carrito-dev/carrito-dev.component';
+export { EstadopedidoComponent } from './income/estadopedido/estadopedido.component';

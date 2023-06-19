@@ -113,6 +113,11 @@ import { CarritoComponent } from './components/income/carrito/carrito.component'
 import { PortafoliosEditarComponent } from './components/income/portafolios-editar/portafolios-editar.component';
 import { TablaDetalleComponent } from './components/income/tabla-detalle/tabla-detalle.component';
 import { VistafacturaComponent } from './components/income/vistafactura/vistafactura.component';
+import { VistamarcasDevComponent } from './components/income/devoluciones/vistamarcas-dev/vistamarcas-dev.component';
+import { PortafoliosDevComponent } from './components/income/devoluciones/portafolios-dev/portafolios-dev.component';
+import { PortafoliosComprarDevComponent } from './components/income/devoluciones/portafolios-comprar-dev/portafolios-comprar-dev.component';
+import { CarritoDevComponent } from './components/income/devoluciones/carrito-dev/carrito-dev.component';
+import { EstadopedidoComponent } from './components/income/estadopedido/estadopedido.component';
 
 @NgModule({
   declarations: [
@@ -202,7 +207,12 @@ import { VistafacturaComponent } from './components/income/vistafactura/vistafac
     CarritoComponent,
     PortafoliosEditarComponent,
     TablaDetalleComponent,
-    VistafacturaComponent
+    VistafacturaComponent,
+    VistamarcasDevComponent,
+    PortafoliosDevComponent,
+    PortafoliosComprarDevComponent,
+    CarritoDevComponent,
+    EstadopedidoComponent
   ],
   imports: [
     BrowserModule,

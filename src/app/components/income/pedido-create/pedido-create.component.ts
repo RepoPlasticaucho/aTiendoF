@@ -24,6 +24,7 @@ export class PedidoCreateComponent implements OnInit {
 
   ped = 'ped';
   dev = 'dev';
+  tipoSeleccionado: string = '';
   //Creación de la variable para formulario
   pedidoForm = new FormGroup({
     categoria: new FormControl('0', Validators.required),
@@ -66,6 +67,11 @@ export class PedidoCreateComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  onTipoChange(event: Event) {
+    const tipoElement = event.target as HTMLSelectElement;
+    this.tipoSeleccionado = tipoElement.value;
+  }
+
   onSubmit(): void {
     console.log(this.pedidoForm.valid);
     if (!this.pedidoForm.valid) {
@@ -89,12 +95,18 @@ export class PedidoCreateComponent implements OnInit {
         if (res.codigoError == "OK") {
           this.httpService.obtenerMovimientoUno(newMovimiento).subscribe(res1 => {
             localStorage.setItem('movimiento_id', res1.lstMovimientos[0].id);
+            localStorage.setItem('estab', res1.lstMovimientos[0].estab!);
           })
           localStorage.setItem('categoria', this.pedidoForm.value.categoria!)
           localStorage.setItem('tipo', this.pedidoForm.value.tipo!)
           localStorage.setItem('motivo', this.pedidoForm.value.motivo!)
-          this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['vistamarcas'] } }]);
-          this.dialogRef.close();
+          if (this.pedidoForm.value.tipo === 'ped') {
+            this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['vistamarcas'] } }]);
+            this.dialogRef.close();
+          } else {
+            this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['vistamarcas-dev'] } }]);
+            this.dialogRef.close();
+          }
         } else {
           Swal.fire({
             icon: 'error',

@@ -1,0 +1,107 @@
+<div style="max-width: 95%; margin: auto">
+    <div class="card">
+      <br />
+      <div class="card-header d-flex justify-content-between">
+        <div class="row mx-3">
+          <fa-icon [icon]="faShoppingBag" [size]="'3x'" style="color: #636363"></fa-icon>
+          <h1 class="mx-5" style="color: #636363">CURVA DEL PRODUCTO</h1>
+        </div>
+        <button class="btn button carrito-button" (click)="verCarrito()">
+          <fa-icon [icon]="faShoppingCart" [size]="'lg'" style="color: #ffffff"></fa-icon>
+        - Carrito
+        </button>
+      </div>
+      <div class="card-body">
+        <div>
+          <mat-grid-list cols="6" rowHeight="50px">
+            <mat-grid-tile>
+              <a class="btn button" href="#" (click)="verPortafolios($event)" style="
+                  text-align: center;
+                  font-size: 15px;
+                  width: 140px;
+                  height: 35px;
+                  text-align: center;
+                  margin-top: 10px;
+                  background: rgb(54, 169, 225, 0.8);
+                "><span style="color: white"> Volver </span>
+              </a>
+            </mat-grid-tile>
+          </mat-grid-list>
+        <table style="width: 90%">
+          <tr>
+            <td style="width: 5%"></td>
+            <td style="width: 30%; text-align: center">
+              <label for="producto">Producto</label>
+              <input type="text" [ngModel]="producto" style="text-align: center" class="form-control " id="producto"
+                readonly placeholder="Línea">
+            </td>
+          </tr>
+          <br>
+          <tr>
+            <td style="width: 5%"></td>
+            <td style="width: 30%; text-align: center">
+              <label for="producto">Descripción</label>
+              <input type="text" [ngModel]="desc" style="text-align: center" class="form-control " id="desc" readonly
+                placeholder="Línea">
+            </td>
+          </tr>
+          <tr>
+            <td style="width: 5%"></td>
+            <td style="width: 30%; text-align: center">
+              <div class="image-container">
+                <img [src]="imagenSeleccionada || imagen" alt="{{ imagen}}" class="cool-image" height="150px" width="150px"
+                  data-toggle="modal" data-target="#exampleModal" />
+              </div>
+            </td>
+          </tr>
+        </table>
+        <br>
+        <div class="icon-container">
+          <fa-icon [icon]="faMoneyBillAlt" [size]="'3x'" style="color: #6aaf42" class="icono-input"></fa-icon>
+          <label for="total" class="label-input">VALOR:</label>
+          <input type="text" readonly [(ngModel)]="resultado" class="cool-input resultado-input" id="resultado-input">
+        </div>
+        <br>
+        <br>
+        <br>
+        <div class="card-body2">
+          <table class="cool-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th *ngFor="let columna of lstModeloProductos">{{ columna.color }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let fila of lstProductos; let i = index">
+                <th>{{ fila.tamanio }}</th>
+                <td *ngFor="let columna of lstModeloProductos; let j = index" (click)="cambiarImagen(matrizIds[i][j].url)">
+                  <input type="text" [readonly]="isCellEmpty(i, j)" (input)="onInput($event, i, j)" class="cool-input"
+                    [class.celda-plomo]="isCellEmpty(i, j)" [class.celda-ingresada]="isCellEntered(i, j)"
+                    [id]="'input-' + i + '-' + j">
+                  <!--
+                  <ng-container *ngIf="matrizIds[i]">
+                    {{ matrizIds[i][j] }}
+                  </ng-container>
+                  -->
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <br>
+        <br>
+        <br>
+        <div class="button-container">
+          <button class="btn btn-primary" (click)="obtenerDetalleProductos()">
+            <span style="color: white"> Añadir productos </span>
+          </button>
+        </div>
+        <div class="button-container">
+          <button class="btn btn-secondary" *ngIf="detalleGuardado" (click)="limpiarMatriz()">
+            <span style="color: white"> Limpiar matriz </span>
+          </button>
+        </div>     
+      </div>
+    </div>
+  </div>

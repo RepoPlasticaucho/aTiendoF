@@ -26,13 +26,13 @@ cards = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
     if (matches) {
       return [
         { title: 'Gestión de Ventas', cols: 1, rows: 1, name: "la creación de pedidos", figure: "sell" , dir: "navegation-cl/(contentClient:pedidoprov)"},
-        { title: 'Estado del Pedido', cols: 1, rows: 1, name: "estado de los pedidos", figure: "local_shipping" ,  dir: "navegation-cl/(contentClient:almaceningresos)"},
+        { title: 'Estado del Pedido', cols: 1, rows: 1, name: "estado de los pedidos", figure: "local_shipping" ,  dir: "navegation-cl/(contentClient:estadopedido)"},
       ];
     }
 
     return [
       { title: 'Gestión de Ventas', cols: 1, rows: 1, name: "la creación de pedidos", figure: "sell" , dir: "navegation-cl/(contentClient:pedidoprov)"},
-      { title: 'Estado del Pedido', cols: 1, rows: 1, name: "estado de los pedidos", figure: "local_shipping" ,  dir: "navegation-cl/(contentClient:almaceningresos)"},
+      { title: 'Estado del Pedido', cols: 1, rows: 1, name: "estado de los pedidos", figure: "local_shipping" ,  dir: "navegation-cl/(contentClient:estadopedido)"},
     ]
   })
 );

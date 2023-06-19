@@ -1,0 +1,48 @@
+<div style="width: 90%;margin: auto;">
+    <div class="card">
+      <br>
+      <div class="card-header">
+        <div class="row mx-3">
+          <fa-icon [icon]="faShoppingBag" [size]="'3x'" style="color: #636363;"></fa-icon>
+          <h1 class="mx-5 " style="color: #636363;">Seleccione una marca</h1>
+        </div>
+      </div>
+      <div class="card-body">
+        <div>
+          <mat-grid-list cols="6" rowHeight="50px">
+            <mat-grid-tile>
+              <a class="btn button" href="./navegation-cl/(contentClient:pedidoprov)" style="text-align:center;
+                                    font-size: 15px; width:140px; 
+                                       height:35px;
+                                       text-align:center; 
+                                       margin-top: 10px;
+                                       background: rgb(54,169,225,0.8);"><span style="color: white;">
+                  Volver
+                </span>
+  
+              </a>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </div>
+        <br><br>
+        <mat-grid-list cols="4" rowHeight="300px">
+          <mat-grid-tile *ngFor="let marca of lstMarcas">
+            <mat-card class="dashboard-card">
+              <mat-card-header>
+                <mat-card-title>
+                  <div class="content-container">
+                    <div class="image-container">
+                      <img src={{marca.url_image}} alt={{marca.marca}} class="card-image" height="120px" width="125px"
+                        data-toggle="modal" data-target="#exampleModal">
+                      <br><br>
+                      <a href='#' (click)="verPortafolio($event, marca)">
+                        <p style="color: black; font-size: 30px; font-weight: normal;">{{ marca.marca }}</p>
+                      </a>
+                    </div>
+                  </div>
+                </mat-card-title>
+              </mat-card-header>
+            </mat-card>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>

@@ -137,38 +137,29 @@ export class CarritoComponent implements OnInit {
   }
 
   finalizarPedido(){
-    const newPedido: MovimientosEntity = {
-      id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
-      tipo_id: '',
-      tipo_emision_cod: '',
-      estado_fact_id: '',
-      tipo_comprb_id: '',
-      almacen_id: '',
-      cod_doc: '',
-      secuencial: ''
-    }
-
-    this.httpServiceMovimiento.finalizarPedido(newPedido).subscribe(res => {
-      if (res.codigoError == 'OK') {
-        Swal.fire({
-          icon: 'success',
-          title: 'Finalizado Correctamente.',
-          text: `Se ha finalizado el pedido`,
-          showConfirmButton: true,
-          confirmButtonText: "Ok"
-        }).finally(() => {
-          // this.groupForm.reset();
-          this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['vistafactura'] } }]);
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Ha ocurrido un error.',
-          text: res.descripcionError,
-          showConfirmButton: false,
-        });
+    Swal.fire({
+      title: '¿Estás seguro de terminar la compra?',
+      showDenyButton: true,
+      confirmButtonText: 'SÍ',
+      denyButtonText: `NO`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Finalizado Correctamente.',
+              text: `Se ha finalizado la compra`,
+              showConfirmButton: true,
+              confirmButtonText: "Ok"
+            }).finally(() => {
+              // this.groupForm.reset();
+              this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['vistafactura'] } }]);
+            });
+          
+      } else if (result.isDenied) {
+        Swal.fire('No se finalizó la compra', '', 'info')
       }
-    })
+    });
   }
 
 }

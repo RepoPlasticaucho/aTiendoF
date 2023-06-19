@@ -9,11 +9,13 @@ const initCorporation: SociedadesEntity = {
   email: "",
   nombre_comercial: "",
   id_fiscal: "",
+  id_fiscal_grupo: "",
   telefono: "",
   password: "",
   funcion: '',
   idSociedad: '',
-  razon_social: ''
+  razon_social: '',
+  nombreGrupo: ''
 }
 
 @Injectable({

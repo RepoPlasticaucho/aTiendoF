@@ -1,7 +1,7 @@
 <div class="dialog-content">
     <div class="btn-cerrar">
-        <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip"
-            data-placement="bottom" title="Regresar a pedidos" (click)="cerrarDialog()">
+        <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip" data-placement="bottom"
+            title="Regresar a pedidos" (click)="cerrarDialog()">
         </fa-icon>
     </div>
 </div>
@@ -22,17 +22,17 @@
                 </small>
             </small>
         </div>
-    
+
         <div class="form-group">
             <label for="grupo">Tipo</label>
-            <select class="form-control" formControlName="tipo">
+            <select class="form-control" formControlName="tipo" (change)="onTipoChange($event)">
                 <option [value]=" 0 " selected>Seleccione un rol</option>
-                        <option [value]="ped">
-                            PEDIDO ESTANDAR
-                        </option>
-                        <option [value]="dev">
-                            DEVOLUCIÓN NORMAL
-                        </option>
+                <option [value]="ped">
+                    PEDIDO ESTANDAR
+                </option>
+                <option [value]="dev">
+                    DEVOLUCIÓN NORMAL
+                </option>
             </select>
             <small *ngIf="selectTipo">
                 <small *ngIf="selectTipo" style="color: red; ">
@@ -49,6 +49,8 @@
                     {{motivo.motivo}}
                 </option>
                 -->
+                <option *ngIf="tipoSeleccionado === 'dev'" [value]="'buen_estado'">BUEN ESTADO</option>
+            <option *ngIf="tipoSeleccionado === 'dev'" [value]="'mal_estado'">MAL ESTADO</option>
             </select>
             <small *ngIf="selectMotivo">
                 <small *ngIf="selectMotivo" style="color: red; ">
@@ -61,5 +63,5 @@
             Guardar
         </button>
     </form>
-    
+
 </div>

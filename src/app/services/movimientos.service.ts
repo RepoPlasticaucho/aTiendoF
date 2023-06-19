@@ -47,9 +47,17 @@ export class MovimientosService {
   agregarMovimiento(movimiento: MovimientosEntity): Observable<Movimientos> {
     return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/InsertarMovimiento`, movimiento);
   }
+  
+  obtenerUltimoSecuencial(): Observable<Movimientos> {
+    return this.http.get<Movimientos>(`${environment.apiUrl}movimientos/ObtenerUltimoSecuencial`);
+  }
 
   obtenerMovimientoUno(movimiento: MovimientosEntity): Observable<Movimientos> {
     return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientoUno`, movimiento );
+  }
+
+  obtenerMovimientoID(movimiento: MovimientosEntity): Observable<Movimientos> {
+    return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientoID`, movimiento );
   }
 
   obtenerMovimientosAlmacen(movimiento: MovimientosEntity): Observable<Movimientos> {
