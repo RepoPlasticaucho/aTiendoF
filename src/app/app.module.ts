@@ -118,6 +118,8 @@ import { PortafoliosDevComponent } from './components/income/devoluciones/portaf
 import { PortafoliosComprarDevComponent } from './components/income/devoluciones/portafolios-comprar-dev/portafolios-comprar-dev.component';
 import { CarritoDevComponent } from './components/income/devoluciones/carrito-dev/carrito-dev.component';
 import { EstadopedidoComponent } from './components/income/estadopedido/estadopedido.component';
+import { VistaventasComponent } from './components/outcome/vistaventas/vistaventas.component';
+import { VentaprovComponent } from './components/outcome/ventaprov/ventaprov.component';
 
 @NgModule({
   declarations: [
@@ -212,7 +214,9 @@ import { EstadopedidoComponent } from './components/income/estadopedido/estadope
     PortafoliosDevComponent,
     PortafoliosComprarDevComponent,
     CarritoDevComponent,
-    EstadopedidoComponent
+    EstadopedidoComponent,
+    VistaventasComponent,
+    VentaprovComponent
   ],
   imports: [
     BrowserModule,

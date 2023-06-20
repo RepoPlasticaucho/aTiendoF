@@ -1,0 +1,57 @@
+<div style="width: 90%;margin: auto;">
+    <div class="card">
+        <br>
+        <div class="card-header">
+            <div class="row mx-3">
+                <fa-icon [icon]="faShoppingBag" [size]="'3x'" style="color: #636363;"></fa-icon>
+                <h1 class="mx-5 " style="color: #636363;">Ventas</h1>
+            </div>
+        </div>
+        <div class="card-body ">
+            <div>
+                <mat-grid-list cols="6" rowHeight="50px">
+                    <mat-grid-tile>
+                        <a class="btn button" href="./navegation-cl/(contentClient:almacenegresos)"
+                            style="text-align:center;
+                                    font-size: 15px; width:140px; 
+                                       height:35px;
+                                       text-align:center; 
+                                       margin-top: 10px;
+                                       background: rgb(54,169,225,0.8);"
+                        ><span style="color: white;">
+                            Volver
+                        </span>
+                        
+                        </a>
+                        </mat-grid-tile>
+                </mat-grid-list>
+            </div>
+            <br><br>
+            <mat-grid-list cols="2" rowHeight="225px">
+                <mat-grid-tile *ngFor="let card of cards | async" [colspan]="card.cols" [rowspan]="card.rows">
+                    <mat-card class="dashboard-card">
+                        <mat-card-header>
+            
+                            <mat-card-title>
+                                <span class="material-icons-outlined" style="font-size: 40px ; color: #3163ad">{{card.figure}}</span>
+                                <br><br>
+                                <a href={{card.dir}} style="text-decoration: none;">
+                                    <p style="color: black; font-size:30px;font-weight: normal;">
+                                        {{card.title}}
+                                    </p>
+                                </a>
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content class="dashboard-card-content">
+                            <div>
+                                Informacion acerca <br> de {{card.name}} <br>
+                                <br>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </mat-grid-tile>
+            </mat-grid-list>
+        </div>
+    </div>
+</div>
+

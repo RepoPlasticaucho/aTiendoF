@@ -20,18 +20,18 @@ export class VistapedidosComponent{
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;
   faPlus = faPlus;
-/** Based on the screen size, switch from standard to one column per row */
-cards = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
+  /** Based on the screen size, switch from standard to one column per row */
+  cards = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
   map(({ matches }) => {
     if (matches) {
       return [
-        { title: 'Gestión de Ventas', cols: 1, rows: 1, name: "la creación de pedidos", figure: "sell" , dir: "navegation-cl/(contentClient:pedidoprov)"},
+        { title: 'Gestión de Pedidos', cols: 1, rows: 1, name: "la creación de pedidos", figure: "sell" , dir: "navegation-cl/(contentClient:pedidoprov)"},
         { title: 'Estado del Pedido', cols: 1, rows: 1, name: "estado de los pedidos", figure: "local_shipping" ,  dir: "navegation-cl/(contentClient:estadopedido)"},
       ];
     }
 
     return [
-      { title: 'Gestión de Ventas', cols: 1, rows: 1, name: "la creación de pedidos", figure: "sell" , dir: "navegation-cl/(contentClient:pedidoprov)"},
+      { title: 'Gestión de Pedidos', cols: 1, rows: 1, name: "la creación de pedidos", figure: "sell" , dir: "navegation-cl/(contentClient:pedidoprov)"},
       { title: 'Estado del Pedido', cols: 1, rows: 1, name: "estado de los pedidos", figure: "local_shipping" ,  dir: "navegation-cl/(contentClient:estadopedido)"},
     ]
   })

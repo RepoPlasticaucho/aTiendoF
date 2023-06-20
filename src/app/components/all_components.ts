@@ -81,3 +81,5 @@ export { PortafoliosDevComponent } from './income/devoluciones/portafolios-dev/p
 export { PortafoliosComprarDevComponent } from './income/devoluciones/portafolios-comprar-dev/portafolios-comprar-dev.component';
 export { CarritoDevComponent } from './income/devoluciones/carrito-dev/carrito-dev.component';
 export { EstadopedidoComponent } from './income/estadopedido/estadopedido.component';
+export { VistaventasComponent } from './outcome/vistaventas/vistaventas.component';
+export { VentaprovComponent } from './outcome/ventaprov/ventaprov.component';

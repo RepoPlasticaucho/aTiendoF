@@ -19,9 +19,9 @@ export class DashboardClComponent {
     map(({ matches }) => {
       if (matches) {
         return [
-          { title: 'Ingresos', cols: 1, rows: 1, name: "las grupos", figure: "book" , dir: "navegation-cl/(contentClient:almaceningresos)"},
-          { title: 'Egresos', cols: 1, rows: 1, name: "los grupos", figure: "payment" ,  dir: "navegation-cl/(contentClient:egresos)"},
-          { title: 'Saldos', cols: 1, rows: 1, name: "los grupos", figure: "monetization_on" },
+          { title: 'Compras', cols: 1, rows: 1, name: "las grupos", figure: "book" , dir: "navegation-cl/(contentClient:almaceningresos)"},
+          { title: 'Ventas', cols: 1, rows: 1, name: "los grupos", figure: "payment" ,  dir: "navegation-cl/(contentClient:almacenegresos)"},
+          { title: 'Cuentas', cols: 1, rows: 1, name: "los grupos", figure: "monetization_on" },
           { title: 'Productos', cols: 1, rows: 1, name: "los productos", figure: "apps" , dir: "navegation-cl/(contentClient:inventarios-productos)"},
           { title: 'Inventarios', cols: 1, rows: 1, name: "los productos", figure: "apps" , dir: "navegation-cl/(contentClient:inventarios-almacen)"},
           { title: 'Pedido Sugerido', cols: 1, rows: 1, name: "las productos", figure: "widgets", dir: "navegation-cl/(contentClient:pedido-sugeridos)"},
@@ -32,9 +32,9 @@ export class DashboardClComponent {
       }
 
       return [
-        { title: 'Ingresos', cols: 1, rows: 1, name: "los grupos", figure: "book" , dir: "navegation-cl/(contentClient:almaceningresos)"},
-        { title: 'Egresos', cols: 1, rows: 1, name: "los grupos", figure: "payment" ,  dir: "navegation-cl/(contentClient:egresos)"},
-        { title: 'Saldos', cols: 1, rows: 1, name: "los grupos", figure: "monetization_on" },
+        { title: 'Compras', cols: 1, rows: 1, name: "los grupos", figure: "book" , dir: "navegation-cl/(contentClient:almaceningresos)"},
+        { title: 'Ventas', cols: 1, rows: 1, name: "los grupos", figure: "payment" ,  dir: "navegation-cl/(contentClient:almacenegresos)"},
+        { title: 'Cuentas', cols: 1, rows: 1, name: "los grupos", figure: "monetization_on" },
         { title: 'Productos', cols: 1, rows: 1, name: "los productos", figure: "apps" , dir: "navegation-cl/(contentClient:inventarios-productos)"},
         { title: 'Inventarios', cols: 1, rows: 1, name: "los productos", figure: "apps" , dir: "navegation-cl/(contentClient:inventarios-almacen)"},
         { title: 'Pedido Sugerido', cols: 1, rows: 1, name: "las productos", figure: "widgets", dir: "navegation-cl/(contentClient:pedido-sugeridos)"},
