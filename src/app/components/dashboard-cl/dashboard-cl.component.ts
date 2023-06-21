@@ -28,6 +28,8 @@ export class DashboardClComponent {
           { title: 'Movimientos', cols: 1, rows: 1, name: "los productos", figure: "monitor" },
           { title: 'Almacenes', cols: 1, rows: 1, name: "los almacenes", figure: "location_city", dir: "navegation-cl/(contentClient:almacenes)" },
           { title: 'Usuarios', cols: 1, rows: 1, name: "los usuarios", figure: "person", dir: "navegation-cl/(contentClient:tercerosalmacen)" },
+          { title: 'Pedidos Plasticaucho', cols: 1, rows: 1, name: "las grupos", figure: "book" , dir: "navegation-cl/(contentClient:almaceningresos)"},
+
         ];
       }
 
@@ -41,6 +43,8 @@ export class DashboardClComponent {
         { title: 'Movimientos', cols: 1, rows: 1, name: "los productos", figure: "monitor" },
         { title: 'Almacenes', cols: 1, rows: 1, name: "los almacenes", figure: "location_city", dir: "navegation-cl/(contentClient:almacenes)" },
         { title: 'Usuarios', cols: 1, rows: 1, name: "los usuarios", figure: "person", dir: "navegation-cl/(contentClient:tercerosalmacen)" },
+        { title: 'Plasticaucho', cols: 1, rows: 1, name: "las grupos", figure: "book" , dir: "navegation-cl/(contentClient:almaceningresos)"},
+
       ];
     })
   );

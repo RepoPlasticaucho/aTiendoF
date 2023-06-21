@@ -121,6 +121,8 @@ import { EstadopedidoComponent } from './components/income/estadopedido/estadope
 import { VistaventasComponent } from './components/outcome/vistaventas/vistaventas.component';
 import { VentaprovComponent } from './components/outcome/ventaprov/ventaprov.component';
 import { VentaCreateComponent } from './components/outcome/venta-create/venta-create.component';
+import { MenucomprComponent } from './components/shooping/menucompr/menucompr.component';
+import { MenuventComponent } from './components/sales/menuvent/menuvent.component';
 
 @NgModule({
   declarations: [
@@ -218,7 +220,9 @@ import { VentaCreateComponent } from './components/outcome/venta-create/venta-cr
     EstadopedidoComponent,
     VistaventasComponent,
     VentaprovComponent,
-    VentaCreateComponent
+    VentaCreateComponent,
+    MenucomprComponent,
+    MenuventComponent
   ],
   imports: [
     BrowserModule,
