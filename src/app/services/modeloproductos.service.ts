@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment.prod';
 import { ModeloProductos, ModeloProductosEntity } from '../models/modeloproductos';
 import { MarcasEntity } from '../models/marcas';
 import { ColorsEntity } from '../models/colors';
+import { AlmacenesEntity } from '../models/almacenes';
 
 const initModelProduct: ModeloProductosEntity = {
   id: "",
@@ -51,6 +52,9 @@ export class ModeloproductosService {
   }
   obtenerModeloProductosMarca(marca: MarcasEntity): Observable<ModeloProductos> {
     return this.http.post<ModeloProductos>(`${environment.apiUrl}modeloProducto/ObtenerModeloProductosMarca`, marca);
+  }
+  obtenerModeloProductosAlmacen(almacen: AlmacenesEntity): Observable<ModeloProductos> {
+    return this.http.post<ModeloProductos>(`${environment.apiUrl}modeloProducto/ObtenerModeloProductosAlmacen`, almacen);
   }
   obtenerModeloProductosColor(cod_familia: ModeloProductosEntity): Observable<ModeloProductos> {
     return this.http.post<ModeloProductos>(`${environment.apiUrl}modeloProducto/ObtenerModeloProductosColor`, cod_familia);

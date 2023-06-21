@@ -1,0 +1,31 @@
+<div class="dialog-content">
+    <div class="btn-cerrar">
+        <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip" data-placement="bottom"
+            title="Regresar a facturas" (click)="cerrarDialog()">
+        </fa-icon>
+    </div>
+</div>
+<br>
+<div>
+    <form [formGroup]="pedidoForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label for="tipo">Tipo de Comprobante</label>
+            <select class="form-control" (change)="changeGroup($event)" formControlName="tipo">
+                <option [value]="0" selected>Seleccione un tipo</option>
+                <option *ngFor="let tipo of lstTipos" [value]="tipo.nombre">
+                    {{tipo.nombre}}
+                </option>
+            </select>
+            <small *ngIf="selectTipo">
+                <small *ngIf="selectTipo" style="color: red; ">
+                    Debe seleccionar una categoría.
+                </small>
+            </small>
+        </div>
+        <button type="submit" class="btn btn-primary">
+            <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
+            Guardar
+        </button>
+    </form>
+
+</div>

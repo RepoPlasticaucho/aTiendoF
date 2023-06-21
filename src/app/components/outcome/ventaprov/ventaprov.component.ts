@@ -5,7 +5,7 @@ import { faEdit, faList, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-
 import { Subject } from 'rxjs';
 import { MovimientosEntity } from 'src/app/models/movimientos';
 import { MovimientosService } from 'src/app/services/movimientos.service';
-import { PedidoCreateComponent } from '../../income/pedido-create/pedido-create.component';
+import { VentaCreateComponent } from '../../outcome/venta-create/venta-create.component';
 import { TablaDetalleComponent } from '../../income/tabla-detalle/tabla-detalle.component';
 import Swal from 'sweetalert2';
 
@@ -31,7 +31,7 @@ constructor(private readonly httpService: MovimientosService,
   private dialog: MatDialog) { }
 
   openModal(): void {
-    const dialogRef = this.dialog.open(PedidoCreateComponent, {
+    const dialogRef = this.dialog.open(VentaCreateComponent, {
       width: '500px',
       // Agrega cualquier configuración adicional del modal aquí
     });

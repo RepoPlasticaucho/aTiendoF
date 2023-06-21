@@ -120,6 +120,7 @@ import { CarritoDevComponent } from './components/income/devoluciones/carrito-de
 import { EstadopedidoComponent } from './components/income/estadopedido/estadopedido.component';
 import { VistaventasComponent } from './components/outcome/vistaventas/vistaventas.component';
 import { VentaprovComponent } from './components/outcome/ventaprov/ventaprov.component';
+import { VentaCreateComponent } from './components/outcome/venta-create/venta-create.component';
 
 @NgModule({
   declarations: [
@@ -216,7 +217,8 @@ import { VentaprovComponent } from './components/outcome/ventaprov/ventaprov.com
     CarritoDevComponent,
     EstadopedidoComponent,
     VistaventasComponent,
-    VentaprovComponent
+    VentaprovComponent,
+    VentaCreateComponent
   ],
   imports: [
     BrowserModule,
