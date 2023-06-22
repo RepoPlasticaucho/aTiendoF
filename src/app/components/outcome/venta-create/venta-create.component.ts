@@ -126,7 +126,7 @@ export class VentaCreateComponent implements OnInit {
             localStorage.setItem('estab', res1.lstMovimientos[0].estab!);
           })
           // localStorage.setItem('tipo', this.pedidoForm.value.tipo!)
-            this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['pedidovent'] } }]);
+            this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['menuvent'] } }]);
             this.dialogRef.close();
           
         } else {

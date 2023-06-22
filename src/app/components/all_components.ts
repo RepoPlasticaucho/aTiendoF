@@ -84,3 +84,4 @@ export { EstadopedidoComponent } from './income/estadopedido/estadopedido.compon
 export { VistaventasComponent } from './outcome/vistaventas/vistaventas.component';
 export { VentaprovComponent } from './outcome/ventaprov/ventaprov.component';
 export { PedidoventComponent } from './outcome/pedidovent/pedidovent.component';
+export { MenuventComponent} from './sales/menuvent/menuvent.component'

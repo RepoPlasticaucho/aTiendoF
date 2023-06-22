@@ -1,1 +1,45 @@
-<p>menuvent works!</p>
+<div style="width: 95%; margin: auto">
+    <div class="card">
+        <br />
+        <div class="card-header d-flex justify-content-between">
+            <div class="row mx-3">
+              <fa-icon [icon]="faShoppingBag" [size]="'3x'" style="color: #636363"></fa-icon>
+              <h1 class="mx-5" style="color: #636363">Portafolios de los Productos</h1>
+            </div>
+            <button class="btn button carrito-button" (click)="verCarrito()">
+              <fa-icon [icon]="faShoppingCart" [size]="'lg'" style="color: #ffffff"></fa-icon>
+            - Carrito
+            </button>
+        </div>          
+        <div class="card-body">
+            <div class="row mx-3">
+                <a class="btn button" href="./navegation-cl/(contentClient:ventaprov)" style="text-align:center;
+                            font-size: 15px; width:140px; 
+                               height:35px;
+                               text-align:center; 
+                               margin-top: 10px;
+                               background: rgb(54,169,225,0.8);"><span style="color: white;">
+                        Volver
+                    </span>
+                </a>
+            </div>
+            <br/><br/>
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                <thead style="color: #636363;">
+                    <tr>
+                        <th style="width: 20%; ">PRODUCTO</th>
+                        <th style="width: 20%; ">NOMBRE</th>
+                        <th style="width: 20%; ">PVP</th>
+                    </tr>
+                </thead>
+                <tbody style="color: #767695;">
+                    <tr *ngFor="let inventario of lstInventarios" class="table-row">
+                        <td>{{inventario.Producto}}</td>
+                        <td>{{inventario.producto_nombre}}</td>
+                        <td>{{inventario.pvp2}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

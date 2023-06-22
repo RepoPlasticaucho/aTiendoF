@@ -76,7 +76,7 @@ export class AlmacenesegresosComponent implements OnInit {
   abrirVista(almacen: AlmacenesEntity) {
 
     localStorage.setItem('almacenid', almacen.idAlmacen)
-    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['vistaventas'] } }]);
+    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ventaprov'] } }]);
 
   }
 }
