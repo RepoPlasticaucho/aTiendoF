@@ -34,6 +34,7 @@ export interface InventariosEntity {
     fav : string;
     color :string;
     costo?: string;
+    cantidad?: string;
     pvp1? : string;
     pvp2? : string;
     pvp_sugerido? : string;

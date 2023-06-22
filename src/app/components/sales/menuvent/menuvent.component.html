@@ -1,4 +1,4 @@
-<div style="width: 95%; margin: auto">
+<div style="max-width: 95%; margin: auto">
     <div class="card">
         <br />
         <div class="card-header d-flex justify-content-between">
@@ -29,14 +29,33 @@
                     <tr>
                         <th style="width: 20%; ">PRODUCTO</th>
                         <th style="width: 20%; ">NOMBRE</th>
+                        <th style="width: 20%; ">CANTIDAD</th>
                         <th style="width: 20%; ">PVP</th>
+                        <th style="width: 20%; "></th>
                     </tr>
                 </thead>
                 <tbody style="color: #767695;">
                     <tr *ngFor="let inventario of lstInventarios" class="table-row">
                         <td>{{inventario.Producto}}</td>
                         <td>{{inventario.producto_nombre}}</td>
+                        <td>
+                            <input class="cool-input" (input)="onInput($event)" *ngIf="true" type="text" [(ngModel)]="inventario.cantidad" />
+                        </td>
                         <td>{{inventario.pvp2}}</td>
+                        <td style="text-align: center;">
+                            <a class="btn button" (click)=" crearDetalle(inventario)"
+                                style="border-radius: 5px; 
+                                       background: rgb(49,99,173,0.8); 
+                                       font-size: 15px; width:120px; 
+                                       height:35px;
+                                       text-align:center; 
+                                       margin-top: 10px;
+                                       ">
+                                <span style="color:white;">
+                                        AÑADIR
+                                </span>
+                            </a>
+                        </td>
                     </tr>
                 </tbody>
             </table>

@@ -123,6 +123,7 @@ import { VentaprovComponent } from './components/outcome/ventaprov/ventaprov.com
 import { VentaCreateComponent } from './components/outcome/venta-create/venta-create.component';
 import { MenucomprComponent } from './components/shooping/menucompr/menucompr.component';
 import { MenuventComponent } from './components/sales/menuvent/menuvent.component';
+import { VerCarritoComponent } from './components/sales/ver-carrito/ver-carrito.component';
 
 @NgModule({
   declarations: [
@@ -222,7 +223,8 @@ import { MenuventComponent } from './components/sales/menuvent/menuvent.componen
     VentaprovComponent,
     VentaCreateComponent,
     MenucomprComponent,
-    MenuventComponent
+    MenuventComponent,
+    VerCarritoComponent
   ],
   imports: [
     BrowserModule,

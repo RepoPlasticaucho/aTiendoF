@@ -8,3 +8,14 @@
     text-align: center;
   }
   
+  .card-body {
+    overflow-x: auto
+}
+
+.cool-input {
+  border: 1px solid #35b0e9;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 14px;
+  /* Otros estilos personalizados */
+}

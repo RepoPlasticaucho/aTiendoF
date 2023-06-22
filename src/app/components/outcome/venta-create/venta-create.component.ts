@@ -46,6 +46,7 @@ export class VentaCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.httpServiceTipos.obtenerTipos().subscribe(res => {
+      console.log(res)
       if (res.codigoError != "OK") {
         Swal.fire({
           icon: 'error',

@@ -32,6 +32,7 @@ const initGruop: InventariosEntity = {
   fav: "",
   color: '',
   modelo: '',
+  cantidad: '',
   costo: '',
   pvp1 : '',
   pvp2 : '',
