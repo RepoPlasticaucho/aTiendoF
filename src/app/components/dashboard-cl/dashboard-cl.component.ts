@@ -19,7 +19,7 @@ export class DashboardClComponent {
     map(({ matches }) => {
       if (matches) {
         return [
-          { title: 'Compras', cols: 1, rows: 1, name: "las grupos", figure: "book" , dir: "navegation-cl/(contentClient:almaceningresos)"},
+          { title: 'Compras', cols: 1, rows: 1, name: "las grupos", figure: "book" , dir: "navegation-cl/(contentClient:menucompr)"},
           { title: 'Ventas', cols: 1, rows: 1, name: "los grupos", figure: "payment" ,  dir: "navegation-cl/(contentClient:almacenegresos)"},
           { title: 'Cuentas', cols: 1, rows: 1, name: "los grupos", figure: "monetization_on" },
           { title: 'Productos', cols: 1, rows: 1, name: "los productos", figure: "apps" , dir: "navegation-cl/(contentClient:inventarios-productos)"},
@@ -34,7 +34,7 @@ export class DashboardClComponent {
       }
 
       return [
-        { title: 'Compras', cols: 1, rows: 1, name: "los grupos", figure: "book" , dir: "navegation-cl/(contentClient:almaceningresos)"},
+        { title: 'Compras', cols: 1, rows: 1, name: "los grupos", figure: "book" , dir: "navegation-cl/(contentClient:menucompr)"},
         { title: 'Ventas', cols: 1, rows: 1, name: "los grupos", figure: "payment" ,  dir: "navegation-cl/(contentClient:almacenegresos)"},
         { title: 'Cuentas', cols: 1, rows: 1, name: "los grupos", figure: "monetization_on" },
         { title: 'Productos', cols: 1, rows: 1, name: "los productos", figure: "apps" , dir: "navegation-cl/(contentClient:inventarios-productos)"},
