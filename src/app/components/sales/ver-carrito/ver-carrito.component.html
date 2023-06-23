@@ -32,13 +32,13 @@
                 <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
                     {{detalleMovimientos.cantidad}}
                 </ng-container>
-                <input class="small-input" *ngIf="editarDetalle && i === detalleEditIndex" type="text" [(ngModel)]="detalleMovimientos.cantidad">
+                <input class="small-input" (input)="onInput($event)" *ngIf="editarDetalle && i === detalleEditIndex" type="text" [(ngModel)]="detalleMovimientos.cantidad" (ngModelChange)="calcularPrecio(i)">
             </td>
             <td>
                 <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
                     {{detalleMovimientos.costo}}
                 </ng-container>
-                <input class="small-input" *ngIf="editarDetalle && i === detalleEditIndex" type="text" [(ngModel)]="detalleMovimientos.costo">
+                <input class="small-input" (input)="onInput2($event)" *ngIf="editarDetalle && i === detalleEditIndex" type="text" [(ngModel)]="detalleMovimientos.costo" (ngModelChange)="calcularPrecio(i)">
             </td>
             <td>{{detalleMovimientos.precio}}</td>
             <td>{{detalleMovimientos.tamanio}}</td>
@@ -48,11 +48,17 @@
                     <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'lg'" style="margin-right: 5px;" data-placement="bottom" (click)="editarDetalleMovimiento(i)" title="Editar Detalle"></fa-icon>
                 </ng-container>
                 <ng-container *ngIf="editarDetalle && i === detalleEditIndex">
-                    <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'lg'" style="margin-right: 5px;" data-placement="bottom" (click)="aplicarCambiosDetalle(i)" title="Aplicar"></fa-icon>
+                    <fa-icon [icon]="faCheck" class="btn btn-success" [size]="'lg'" style="margin-right: 5px;" data-placement="bottom" (click)="aplicarCambiosDetalle(i)" title="Aplicar"></fa-icon>
                 </ng-container>
                 <fa-icon [icon]="faTrashAlt" class="btn btn-danger" [size]=" 'lg' " data-placement="bottom" (click)=" eliminarDetalle(detalleMovimientos)" title="Eliminar Modelo Producto" ></fa-icon>
             </td>
         </tr>
     </tbody>
 </table>
+<br>
+<div class="button-container">
+    <button class="btn btn-primary" (click)="finalizarPedido()">
+      <span style="color: white"> Finalizar Compra </span>
+    </button>
+  </div>
 </div>

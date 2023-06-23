@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { faSave, faList, faTimes, faShoppingCart, faEdit, faTrashAlt, faMoneyBillAlt } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faList, faTimes, faShoppingCart, faEdit, faTrashAlt, faMoneyBillAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MenuventComponent } from '../menuvent/menuvent.component';
 import { DetallesMovimiento, DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
@@ -21,6 +21,7 @@ export class VerCarritoComponent implements OnInit {
   //Iconos para la pagina de grupos
   faList = faList;
   faTimes = faTimes;
+  faCheck = faCheck;
   faSave = faSave;
   faShoppingCart = faShoppingCart;
   faEdit = faEdit;
@@ -166,36 +167,57 @@ export class VerCarritoComponent implements OnInit {
     }
   }
 
-  /*
-  guardarDetalleMovimiento(): void {
-    if (this.detalleEditIndex >= 0 && this.detalleEditBackup) {
-      // Realizar lógica de guardado o actualización del detalle en tu servicio
-      // Por ejemplo:
-      this.httpService.actualizarDetallePedido(this.lstDetalleMovimientos[this.detalleEditIndex]).subscribe(res => {
-        if (res.codigoError == 'OK') {
-          Swal.fire({
-            icon: 'success',
-            title: 'Guardado Exitosamente.',
-            text: `Se han guardado los cambios del detalle`,
-            showConfirmButton: true,
-            confirmButtonText: "Ok"
-          }).then(() => {
-            this.editarDetalle = false;
-            this.detalleEditIndex = -1;
-            this.detalleEditBackup = null;
-          });
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Ha ocurrido un error.',
-            text: res.descripcionError,
-            showConfirmButton: false,
-          });
-        }
-      });
+  calcularPrecio(index: number): void {
+    const detalleMovimientos = this.lstDetalleMovimientos[index];
+    const cantidad = parseFloat(detalleMovimientos.cantidad);
+    const costo = parseFloat(detalleMovimientos.costo);
+  
+    if (!isNaN(cantidad) && !isNaN(costo)) {
+      detalleMovimientos.precio = (cantidad * costo).toFixed(2);
+    } else {
+      detalleMovimientos.precio = '';
     }
+  
+    this.calcularSumaTotal();
   }
-  */
+
+  onInput(event: any) {
+    const inputValue = event.target.value;
+    event.target.value = inputValue.replace(/[^0-9]/g, ''); // Filtra solo números
+  }
+
+  onInput2(event: any) {
+    const inputValue = event.target.value;
+    event.target.value = inputValue.replace(/[^0-9.]/g, ''); // Filtra solo números
+  }
+
+  finalizarPedido(){
+    Swal.fire({
+      title: '¿Estás seguro de terminar la compra?',
+      showDenyButton: true,
+      confirmButtonText: 'SÍ',
+      denyButtonText: `NO`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Finalizado Correctamente.',
+              text: `Se ha finalizado la compra`,
+              showConfirmButton: true,
+              confirmButtonText: "Ok"
+            }).finally(() => {
+              // this.groupForm.reset();
+              this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ver-factura'] } }]);
+              this.cerrarDialog();
+            });
+          
+      } else if (result.isDenied) {
+        Swal.fire('No se finalizó la compra', '', 'info')
+      }
+    });
+  }
+
 
 }
 

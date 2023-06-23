@@ -86,3 +86,4 @@ export { VentaprovComponent } from './outcome/ventaprov/ventaprov.component';
 export { PedidoventComponent } from './outcome/pedidovent/pedidovent.component';
 export { MenuventComponent} from './sales/menuvent/menuvent.component'
 export { MenucomprComponent } from './shooping/menucompr/menucompr.component';
+export { VerFacturaComponent } from "./sales/ver-factura/ver-factura.component";

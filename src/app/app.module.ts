@@ -124,6 +124,7 @@ import { VentaCreateComponent } from './components/outcome/venta-create/venta-cr
 import { MenucomprComponent } from './components/shooping/menucompr/menucompr.component';
 import { MenuventComponent } from './components/sales/menuvent/menuvent.component';
 import { VerCarritoComponent } from './components/sales/ver-carrito/ver-carrito.component';
+import { VerFacturaComponent } from './components/sales/ver-factura/ver-factura.component';
 
 @NgModule({
   declarations: [
@@ -224,7 +225,8 @@ import { VerCarritoComponent } from './components/sales/ver-carrito/ver-carrito.
     VentaCreateComponent,
     MenucomprComponent,
     MenuventComponent,
-    VerCarritoComponent
+    VerCarritoComponent,
+    VerFacturaComponent
   ],
   imports: [
     BrowserModule,
