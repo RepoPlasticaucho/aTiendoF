@@ -16,6 +16,7 @@ import { MovimientosService } from 'src/app/services/movimientos.service';
 })
 export class VerCarritoComponent implements OnInit {
 
+  editarDetalle: boolean = false;
 
   //Iconos para la pagina de grupos
   faList = faList;
@@ -31,6 +32,8 @@ export class VerCarritoComponent implements OnInit {
   dtTrigger: Subject<any> = new Subject<any>();
   lstDetalleMovimientos: DetallesMovimientoEntity[] = [];
   sumaTotal: any;
+  detalleEditIndex: number = -1;
+  detalleEditBackup: DetallesMovimientoEntity | null = null;
 
   constructor(private dialogRef: MatDialogRef<MenuventComponent>,
     private readonly httpServiceMov: MovimientosService,
@@ -50,35 +53,35 @@ export class VerCarritoComponent implements OnInit {
       responsive: true
     }
     //Cargar los datos Modificar
-        const newDetalle: DetallesMovimientoEntity = {
-          id: '',
-          producto_nombre: '',
-          inventario_id: '',
-          producto_id: '',
-          movimiento_id: localStorage.getItem('movimiento_id')!,
-          cantidad: '',
-          costo: '',
-          precio: ''
-        }
-      
-            this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe(res => {
-              if (res.codigoError != "OK") {
-                Swal.fire({
-                  icon: 'error',
-                  title: 'No existe nada en el pedido.',
-                  text: res.descripcionError,
-                  showConfirmButton: false,
-                  // timer: 3000
-                });
-                this.dialogRef.close();
-              } else {
-                this.lstDetalleMovimientos = res.lstDetalleMovimientos;
-                this.dtTrigger.next('');
-                this.calcularSumaTotal();
-                Swal.close();
-              }
-            });
-    
+    const newDetalle: DetallesMovimientoEntity = {
+      id: '',
+      producto_nombre: '',
+      inventario_id: '',
+      producto_id: '',
+      movimiento_id: localStorage.getItem('movimiento_id')!,
+      cantidad: '',
+      costo: '',
+      precio: ''
+    }
+
+    this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe(res => {
+      if (res.codigoError != "OK") {
+        Swal.fire({
+          icon: 'error',
+          title: 'No existe nada en el pedido.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+          // timer: 3000
+        });
+        this.dialogRef.close();
+      } else {
+        this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+        this.dtTrigger.next('');
+        this.calcularSumaTotal();
+        Swal.close();
+      }
+    });
+
   }
 
   cerrarDialog(): void {
@@ -89,9 +92,110 @@ export class VerCarritoComponent implements OnInit {
     const suma = this.lstDetalleMovimientos.reduce((total, detalleMovimientos) => {
       return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
     }, 0);
-  
+
     this.sumaTotal = suma.toLocaleString(undefined, { minimumFractionDigits: 2 }).replace('.', ',');
   }
+
+  eliminarDetalle(detalle: DetallesMovimientoEntity): void {
+    Swal.fire({
+      icon: 'question',
+      title: `¿Esta seguro de eliminar ${detalle.producto_nombre}?`,
+      showDenyButton: true,
+      confirmButtonText: 'Si',
+      denyButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.httpService.eliminarDetallePedido(detalle).subscribe(res => {
+          if (res.codigoError == 'OK') {
+            Swal.fire({
+              icon: 'success',
+              title: 'Eliminado Exitosamente.',
+              text: `Se ha eliminado el producto ${detalle.producto_nombre}`,
+              showConfirmButton: true,
+              confirmButtonText: "Ok"
+            }).then(() => {
+              // this.groupForm.reset();
+              window.location.reload();
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Ha ocurrido un error.',
+              text: res.descripcionError,
+              showConfirmButton: false,
+            });
+          }
+        })
+      }
+    })
+  }
+
+  editarDetalleMovimiento(index: number): void {
+    this.detalleEditIndex = index;
+    this.detalleEditBackup = { ...this.lstDetalleMovimientos[index] };
+    this.editarDetalle = true;
+  }
+
+  aplicarCambiosDetalle(index: number): void {
+    //this.guardarDetalleMovimiento();
+    if (this.detalleEditIndex >= 0 && this.detalleEditBackup) {
+      // Realizar lógica de guardado o actualización del detalle en tu servicio
+      // Por ejemplo:
+      this.httpService.modificarDetallePedido(this.lstDetalleMovimientos[this.detalleEditIndex]).subscribe(res => {
+        if (res.codigoError == 'OK') {
+          Swal.fire({
+            icon: 'success',
+            title: 'Guardado Exitosamente.',
+            text: `Se han guardado los cambios del detalle`,
+            showConfirmButton: true,
+            confirmButtonText: "Ok"
+          }).then(() => {
+            this.editarDetalle = false;
+            this.detalleEditIndex = -1;
+            this.detalleEditBackup = null;
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Ha ocurrido un error.',
+            text: res.descripcionError,
+            showConfirmButton: false,
+          });
+        }
+      });
+    }
+  }
+
+  /*
+  guardarDetalleMovimiento(): void {
+    if (this.detalleEditIndex >= 0 && this.detalleEditBackup) {
+      // Realizar lógica de guardado o actualización del detalle en tu servicio
+      // Por ejemplo:
+      this.httpService.actualizarDetallePedido(this.lstDetalleMovimientos[this.detalleEditIndex]).subscribe(res => {
+        if (res.codigoError == 'OK') {
+          Swal.fire({
+            icon: 'success',
+            title: 'Guardado Exitosamente.',
+            text: `Se han guardado los cambios del detalle`,
+            showConfirmButton: true,
+            confirmButtonText: "Ok"
+          }).then(() => {
+            this.editarDetalle = false;
+            this.detalleEditIndex = -1;
+            this.detalleEditBackup = null;
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Ha ocurrido un error.',
+            text: res.descripcionError,
+            showConfirmButton: false,
+          });
+        }
+      });
+    }
+  }
+  */
 
 }
 

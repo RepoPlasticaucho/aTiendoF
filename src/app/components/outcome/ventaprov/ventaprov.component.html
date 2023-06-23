@@ -5,7 +5,7 @@
                 <fa-icon [icon]="faList" [size]="'3x'" style="color: #636363;"></fa-icon>
                 <h1 class="mx-5 " style="color: #636363;">VENTAS</h1>
                 <div style="position: absolute;right:0;" class="mx-3">
-                    <a class="btn btn-success" (click)="openModal()" style=" border-radius: 5px; 
+                    <a class="btn btn-success" (click)="crearCompra()" style=" border-radius: 5px; 
                             font-size: 12px; width:150px; 
                             height:35px;
                             margin-top: 25px;
@@ -34,12 +34,19 @@
                     <tr>
                         <th style="width: 20%; ">CÓDIGO</th>
                         <th style="width: 20%; ">FECHA</th>
+                        <th style="width: 20%; "></th>
                     </tr>
                 </thead>
                 <tbody style="color: #767695;">
-                    <tr *ngFor="let movimiento of lstMovimientos" (click)="openModalDetalle(movimiento)" class="table-row">
+                    <tr *ngFor="let movimiento of lstMovimientos"
+                        class="table-row">
                         <td>{{movimiento.id}}</td>
                         <td>{{movimiento.fecha_emision | slice:0:10}}</td>
+                        <td>
+                            <a class="btn btn-success" (click)="openModal()" 
+                            >GENERAR NOTA DE PAGO
+                            </a>
+                        </td>
                     </tr>
                 </tbody>
             </table>

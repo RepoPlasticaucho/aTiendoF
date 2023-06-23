@@ -66,3 +66,9 @@
 .table-container::-webkit-scrollbar-thumb:hover {
   background-color: #555; /* Color del thumb del scrollbar al pasar el cursor por encima */
 }
+
+.small-input {
+  width: 80px; /* Ajusta el ancho según tus necesidades */
+  height: 24px; /* Ajusta la altura según tus necesidades */
+  font-size: 12px; /* Ajusta el tamaño de fuente según tus necesidades */
+}

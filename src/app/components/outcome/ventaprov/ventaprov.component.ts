@@ -109,4 +109,37 @@ ngOnDestroy(): void {
   this.dtTrigger.unsubscribe();
 }
 
+crearCompra(){
+  const newMovimiento: MovimientosEntity = {
+    almacen_id: JSON.parse(localStorage.getItem('almacenid') || "[]"),
+    id: '',
+    tipo_id: '2',
+    tipo_emision_cod: '',
+    estado_fact_id: '1',
+    tipo_comprb_id: '1',
+    cod_doc: '',
+    secuencial: ''
+  }
+  console.log(newMovimiento);
+
+  this.httpService.agregarMovimiento(newMovimiento).subscribe(res => {
+    console.log(res)
+    if (res.codigoError == "OK") {
+      this.httpService.obtenerMovimientoUno(newMovimiento).subscribe(res1 => {
+        localStorage.setItem('movimiento_id', res1.lstMovimientos[0].id);
+        localStorage.setItem('estab', res1.lstMovimientos[0].estab!);
+      })
+      // localStorage.setItem('tipo', this.pedidoForm.value.tipo!)
+        this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['menuvent'] } }]);
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Ha ocurrido un error.',
+        text: res.descripcionError,
+        showConfirmButton: false,
+      });
+    }
+  })
+}
+
 }

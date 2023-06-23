@@ -22,16 +22,36 @@
             <th style="width: 10%; ">Precio</th>
             <th style="width: 10%; ">Tamaño</th>
             <th style="width: 10%; ">Color</th>
+            <th style="width: 20%; "></th>
         </tr>
     </thead>
     <tbody style="color: #767695;">
-        <tr *ngFor="let detalleMovimientos of lstDetalleMovimientos">
+        <tr *ngFor="let detalleMovimientos of lstDetalleMovimientos; let i = index">
             <td>{{detalleMovimientos.producto_nombre}}</td>
-            <td>{{detalleMovimientos.cantidad}}</td>
-            <td>{{detalleMovimientos.costo}}</td>
+            <td>
+                <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
+                    {{detalleMovimientos.cantidad}}
+                </ng-container>
+                <input class="small-input" *ngIf="editarDetalle && i === detalleEditIndex" type="text" [(ngModel)]="detalleMovimientos.cantidad">
+            </td>
+            <td>
+                <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
+                    {{detalleMovimientos.costo}}
+                </ng-container>
+                <input class="small-input" *ngIf="editarDetalle && i === detalleEditIndex" type="text" [(ngModel)]="detalleMovimientos.costo">
+            </td>
             <td>{{detalleMovimientos.precio}}</td>
             <td>{{detalleMovimientos.tamanio}}</td>
             <td>{{detalleMovimientos.color}}</td>
+            <td style="text-align: center;">
+                <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
+                    <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'lg'" style="margin-right: 5px;" data-placement="bottom" (click)="editarDetalleMovimiento(i)" title="Editar Detalle"></fa-icon>
+                </ng-container>
+                <ng-container *ngIf="editarDetalle && i === detalleEditIndex">
+                    <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'lg'" style="margin-right: 5px;" data-placement="bottom" (click)="aplicarCambiosDetalle(i)" title="Aplicar"></fa-icon>
+                </ng-container>
+                <fa-icon [icon]="faTrashAlt" class="btn btn-danger" [size]=" 'lg' " data-placement="bottom" (click)=" eliminarDetalle(detalleMovimientos)" title="Eliminar Modelo Producto" ></fa-icon>
+            </td>
         </tr>
     </tbody>
 </table>
