@@ -156,7 +156,7 @@ export class VistafacturaComponent implements OnInit {
         id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
         tipo_id: '',
         tipo_emision_cod: '',
-        estado_fact_id: '',
+        estado_fact_id: '2',
         tipo_comprb_id: '',
         almacen_id: '',
         cod_doc: '',

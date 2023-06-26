@@ -1,13 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { faSave, faList, faTimes, faShoppingCart, faEdit, faTrashAlt, faMoneyBillAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { Component, OnInit, EventEmitter } from '@angular/core';
+import { faShoppingBag, faTimes, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MenuventComponent } from '../menuvent/menuvent.component';
-import { DetallesMovimiento, DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
+import { DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
 import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service';
-import { Subject } from 'rxjs';
+import { Subject, take } from 'rxjs';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { MovimientosService } from 'src/app/services/movimientos.service';
+import { AlmacenesEntity } from 'src/app/models/almacenes';
+import { InventariosEntity } from 'src/app/models/inventarios';
+import { InventariosService } from 'src/app/services/inventarios.service';
 
 @Component({
   selector: 'app-ver-carrito',
@@ -16,30 +18,27 @@ import { MovimientosService } from 'src/app/services/movimientos.service';
 })
 export class VerCarritoComponent implements OnInit {
 
-  editarDetalle: boolean = false;
-
-  //Iconos para la pagina de grupos
-  faList = faList;
-  faTimes = faTimes;
-  faCheck = faCheck;
-  faSave = faSave;
+searchText: string = '';
+  faShoppingBag = faShoppingBag;
   faShoppingCart = faShoppingCart;
-  faEdit = faEdit;
-  faTrashAlt = faTrashAlt;
-  faMoneyBillAlt = faMoneyBillAlt;
-
-  //Declaración de variables
+  faTimes = faTimes;
+  // Nueva propiedad para las tarjetas de la página actual
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
-  lstDetalleMovimientos: DetallesMovimientoEntity[] = [];
-  sumaTotal: any;
-  detalleEditIndex: number = -1;
-  detalleEditBackup: DetallesMovimientoEntity | null = null;
+  lstInventarios: InventariosEntity[] = [];
 
-  constructor(private dialogRef: MatDialogRef<MenuventComponent>,
-    private readonly httpServiceMov: MovimientosService,
-    private readonly httpService: DetallesmovimientoService,
-    private router: Router) { }
+  costo: any;
+  precio: any;
+  //Variable contenedor id Modelo Producto
+  codigo: string = '';
+  productoAgregado: EventEmitter<any> = new EventEmitter<any>();
+
+  constructor(
+    private readonly httpServiceInventarios: InventariosService,
+    private readonly httpServiceDetalle: DetallesmovimientoService,
+    private router: Router,
+    private dialogRef: MatDialogRef<MenuventComponent>,
+  ) { }
 
   ngOnInit(): void {
     this.dtOptions = {
@@ -49,175 +48,110 @@ export class VerCarritoComponent implements OnInit {
       paging: true,
       search: false,
       searching: true,
-      ordering: true,
+      ordering: false,
       info: true,
       responsive: true
     }
-    //Cargar los datos Modificar
-    const newDetalle: DetallesMovimientoEntity = {
-      id: '',
-      producto_nombre: '',
-      inventario_id: '',
-      producto_id: '',
-      movimiento_id: localStorage.getItem('movimiento_id')!,
-      cantidad: '',
-      costo: '',
-      precio: ''
-    }
-
-    this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe(res => {
-      if (res.codigoError != "OK") {
-        Swal.fire({
-          icon: 'error',
-          title: 'No existe nada en el pedido.',
-          text: res.descripcionError,
-          showConfirmButton: false,
-          // timer: 3000
+    Swal.fire({
+      title: 'CARGANDO...',
+      html: 'Se están cargando los productos.',
+      timer: 30000,
+      didOpen: () => {
+        Swal.showLoading();
+        const almacenNew: AlmacenesEntity = {
+          idAlmacen: localStorage.getItem('almacenid')!,
+          sociedad_id: '',
+          nombresociedad: '',
+          direccion: '',
+          telefono: '',
+          codigo: '',
+          pto_emision: '',
+        };
+        this.httpServiceInventarios.obtenerPortafolios(almacenNew).subscribe((res1) => {
+          if (res1.codigoError != 'OK') {
+            Swal.fire({
+              icon: 'error',
+              title: 'No se pudo obtener los productos.',
+              text: res1.descripcionError,
+              showConfirmButton: false,
+            });
+          } else {
+            this.lstInventarios = res1.lstInventarios;
+            this.dtTrigger.next('');
+            Swal.close();
+          }
         });
-        this.dialogRef.close();
-      } else {
-        this.lstDetalleMovimientos = res.lstDetalleMovimientos;
-        this.dtTrigger.next('');
-        this.calcularSumaTotal();
-        Swal.close();
+      },
+    }).then((result) => {
+      if (result.dismiss === Swal.DismissReason.timer) {
+        console.log('I was closed by the timer');
       }
     });
-
   }
 
   cerrarDialog(): void {
     this.dialogRef.close();
   }
 
-  calcularSumaTotal() {
-    const suma = this.lstDetalleMovimientos.reduce((total, detalleMovimientos) => {
-      return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
-    }, 0);
 
-    this.sumaTotal = suma.toLocaleString(undefined, { minimumFractionDigits: 2 }).replace('.', ',');
-  }
-
-  eliminarDetalle(detalle: DetallesMovimientoEntity): void {
-    Swal.fire({
-      icon: 'question',
-      title: `¿Esta seguro de eliminar ${detalle.producto_nombre}?`,
-      showDenyButton: true,
-      confirmButtonText: 'Si',
-      denyButtonText: 'No',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.httpService.eliminarDetallePedido(detalle).subscribe(res => {
-          if (res.codigoError == 'OK') {
-            Swal.fire({
-              icon: 'success',
-              title: 'Eliminado Exitosamente.',
-              text: `Se ha eliminado el producto ${detalle.producto_nombre}`,
-              showConfirmButton: true,
-              confirmButtonText: "Ok"
-            }).then(() => {
-              // this.groupForm.reset();
-              window.location.reload();
-            });
-          } else {
+  crearDetalle(inventario: InventariosEntity): void {
+    this.httpServiceInventarios.asignarInventario(inventario);
+    this.httpServiceInventarios.obtenerInventario$.pipe(take(1)).subscribe((res) => {
+      if (res.id == '') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Ha ocurrido un error.',
+          text: 'No se ha obtenido información.',
+          showConfirmButton: false,
+        }).finally(() => {
+          this.router.navigate([
+            '/navegation-cl',
+            { outlets: { contentClient: ['menuvent'] } },
+          ]);
+        });
+      } else {
+        //Asignamos los valores a los campos
+        this.costo = res.pvp2;
+        this.precio = parseFloat(res.pvp2!) * parseFloat(inventario.cantidad!);
+        this.codigo = res.id!;
+        const newDetalle: DetallesMovimientoEntity = {
+          id: '',
+          producto_nombre: '',
+          inventario_id: this.codigo,
+          producto_id: res.producto_id,
+          movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
+          cantidad: inventario.cantidad!,
+          costo: this.costo,
+          precio: this.precio
+        }
+        this.httpServiceDetalle.agregarDetallePedido(newDetalle).subscribe(res => {
+          if (res.codigoError != 'OK') {
             Swal.fire({
               icon: 'error',
               title: 'Ha ocurrido un error.',
-              text: res.descripcionError,
-              showConfirmButton: false,
+              text: 'No existe suficiente stock.',
+              showConfirmButton: false
             });
+          } else {
+            Swal.fire({
+              icon: 'success',
+              title: 'Se ha agregado al carrito',
+              text: `Se ha guardado con éxito el producto`,
+              showConfirmButton: true,
+              confirmButtonText: 'Ok',
+            });
+            this.productoAgregado.emit(inventario);
           }
-        })
+        });
       }
     })
-  }
-
-  editarDetalleMovimiento(index: number): void {
-    this.detalleEditIndex = index;
-    this.detalleEditBackup = { ...this.lstDetalleMovimientos[index] };
-    this.editarDetalle = true;
-  }
-
-  aplicarCambiosDetalle(index: number): void {
-    //this.guardarDetalleMovimiento();
-    if (this.detalleEditIndex >= 0 && this.detalleEditBackup) {
-      // Realizar lógica de guardado o actualización del detalle en tu servicio
-      // Por ejemplo:
-      this.httpService.modificarDetallePedido(this.lstDetalleMovimientos[this.detalleEditIndex]).subscribe(res => {
-        if (res.codigoError == 'OK') {
-          Swal.fire({
-            icon: 'success',
-            title: 'Guardado Exitosamente.',
-            text: `Se han guardado los cambios del detalle`,
-            showConfirmButton: true,
-            confirmButtonText: "Ok"
-          }).then(() => {
-            this.editarDetalle = false;
-            this.detalleEditIndex = -1;
-            this.detalleEditBackup = null;
-          });
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Ha ocurrido un error.',
-            text: res.descripcionError,
-            showConfirmButton: false,
-          });
-        }
-      });
-    }
-  }
-
-  calcularPrecio(index: number): void {
-    const detalleMovimientos = this.lstDetalleMovimientos[index];
-    const cantidad = parseFloat(detalleMovimientos.cantidad);
-    const costo = parseFloat(detalleMovimientos.costo);
-  
-    if (!isNaN(cantidad) && !isNaN(costo)) {
-      detalleMovimientos.precio = (cantidad * costo).toFixed(2);
-    } else {
-      detalleMovimientos.precio = '';
-    }
-  
-    this.calcularSumaTotal();
   }
 
   onInput(event: any) {
     const inputValue = event.target.value;
     event.target.value = inputValue.replace(/[^0-9]/g, ''); // Filtra solo números
   }
-
-  onInput2(event: any) {
-    const inputValue = event.target.value;
-    event.target.value = inputValue.replace(/[^0-9.]/g, ''); // Filtra solo números
-  }
-
-  finalizarPedido(){
-    Swal.fire({
-      title: '¿Estás seguro de terminar la compra?',
-      showDenyButton: true,
-      confirmButtonText: 'SÍ',
-      denyButtonText: `NO`,
-    }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
-      if (result.isConfirmed) {
-            Swal.fire({
-              icon: 'success',
-              title: 'Finalizado Correctamente.',
-              text: `Se ha finalizado la compra`,
-              showConfirmButton: true,
-              confirmButtonText: "Ok"
-            }).finally(() => {
-              // this.groupForm.reset();
-              this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ver-factura'] } }]);
-              this.cerrarDialog();
-            });
-          
-      } else if (result.isDenied) {
-        Swal.fire('No se finalizó la compra', '', 'info')
-      }
-    });
-  }
-
+  
 
 }
 

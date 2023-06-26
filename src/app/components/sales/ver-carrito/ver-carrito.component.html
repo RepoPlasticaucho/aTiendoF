@@ -1,64 +1,48 @@
-<div class="dialog-content">
-    <div class="btn-cerrar">
-        <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip"
-            data-placement="bottom" title="Regresar a pedidos" (click)="cerrarDialog()">
-        </fa-icon>
+<div style="max-width: 95%; margin: auto">
+    <div class="dialog-content">
+        <div class="btn-cerrar">
+            <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip"
+                data-placement="bottom" title="Regresar a pedidos" (click)="cerrarDialog()">
+            </fa-icon>
+        </div>
     </div>
-</div>
-<br>
-<div class="icon-container">
-    <fa-icon [icon]="faMoneyBillAlt" [size]="'3x'" style="color: #6aaf42" class="icono-input"></fa-icon>
-    <label for="total" class="label-input">TOTAL:</label>
-    <input type="text" [(ngModel)]="sumaTotal" class="cool-input resultado-input" readonly>
-</div>
-  <br><br><br>
-<div class="table-container">
-<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
-    <thead style="color: #636363;">
-        <tr>
-            <th style="width: 10%; ">Producto</th>
-            <th style="width: 10%; ">Cantidad</th>
-            <th style="width: 10%; ">Precio Uni.</th>
-            <th style="width: 10%; ">Precio</th>
-            <th style="width: 10%; ">Tamaño</th>
-            <th style="width: 10%; ">Color</th>
-            <th style="width: 20%; "></th>
-        </tr>
-    </thead>
-    <tbody style="color: #767695;">
-        <tr *ngFor="let detalleMovimientos of lstDetalleMovimientos; let i = index">
-            <td>{{detalleMovimientos.producto_nombre}}</td>
-            <td>
-                <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
-                    {{detalleMovimientos.cantidad}}
-                </ng-container>
-                <input class="small-input" (input)="onInput($event)" *ngIf="editarDetalle && i === detalleEditIndex" type="text" [(ngModel)]="detalleMovimientos.cantidad" (ngModelChange)="calcularPrecio(i)">
-            </td>
-            <td>
-                <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
-                    {{detalleMovimientos.costo}}
-                </ng-container>
-                <input class="small-input" (input)="onInput2($event)" *ngIf="editarDetalle && i === detalleEditIndex" type="text" [(ngModel)]="detalleMovimientos.costo" (ngModelChange)="calcularPrecio(i)">
-            </td>
-            <td>{{detalleMovimientos.precio}}</td>
-            <td>{{detalleMovimientos.tamanio}}</td>
-            <td>{{detalleMovimientos.color}}</td>
-            <td style="text-align: center;">
-                <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
-                    <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'lg'" style="margin-right: 5px;" data-placement="bottom" (click)="editarDetalleMovimiento(i)" title="Editar Detalle"></fa-icon>
-                </ng-container>
-                <ng-container *ngIf="editarDetalle && i === detalleEditIndex">
-                    <fa-icon [icon]="faCheck" class="btn btn-success" [size]="'lg'" style="margin-right: 5px;" data-placement="bottom" (click)="aplicarCambiosDetalle(i)" title="Aplicar"></fa-icon>
-                </ng-container>
-                <fa-icon [icon]="faTrashAlt" class="btn btn-danger" [size]=" 'lg' " data-placement="bottom" (click)=" eliminarDetalle(detalleMovimientos)" title="Eliminar Modelo Producto" ></fa-icon>
-            </td>
-        </tr>
-    </tbody>
-</table>
-<br>
-<div class="button-container">
-    <button class="btn btn-primary" (click)="finalizarPedido()">
-      <span style="color: white"> Finalizar Compra </span>
-    </button>
-  </div>
+    <br>
+            <br/><br/>
+            <div class="table-container">
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                <thead style="color: #636363;">
+                    <tr>
+                        <th style="width: 20%; ">PRODUCTO</th>
+                        <th style="width: 20%; ">NOMBRE</th>
+                        <th style="width: 20%; ">CANTIDAD</th>
+                        <th style="width: 20%; ">PVP</th>
+                        <th style="width: 20%; "></th>
+                    </tr>
+                </thead>
+                <tbody style="color: #767695;">
+                    <tr *ngFor="let inventario of lstInventarios" class="table-row">
+                        <td>{{inventario.Producto}}</td>
+                        <td>{{inventario.producto_nombre}}</td>
+                        <td>
+                            <input class="cool-input" (input)="onInput($event)" *ngIf="true" type="text" [(ngModel)]="inventario.cantidad" />
+                        </td>
+                        <td>{{inventario.pvp2}}</td>
+                        <td style="text-align: center;">
+                            <a class="btn button" (click)=" crearDetalle(inventario)"
+                                style="border-radius: 5px; 
+                                       background: rgb(49,99,173,0.8); 
+                                       font-size: 15px; width:120px; 
+                                       height:35px;
+                                       text-align:center; 
+                                       margin-top: 10px;
+                                       ">
+                                <span style="color:white;">
+                                        AÑADIR
+                                </span>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 </div>

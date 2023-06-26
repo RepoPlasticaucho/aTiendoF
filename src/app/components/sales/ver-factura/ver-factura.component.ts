@@ -155,7 +155,7 @@ export class VerFacturaComponent implements OnInit {
         id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
         tipo_id: '',
         tipo_emision_cod: '',
-        estado_fact_id: '',
+        estado_fact_id: '1',
         tipo_comprb_id: '',
         almacen_id: '',
         cod_doc: '',
@@ -163,6 +163,7 @@ export class VerFacturaComponent implements OnInit {
         estab: localStorage.getItem('estab')!,
         importe_total: this.sumaTotal
       }
+      console.log(newPedido)
       Swal.fire({
         title: '¿Estás seguro de finalizar el pedido?',
         showDenyButton: true,
@@ -182,7 +183,7 @@ export class VerFacturaComponent implements OnInit {
                 confirmButtonText: "Ok"
               }).finally(() => {
                 // this.groupForm.reset();
-                this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['almaceningresos'] } }]);
+                this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['almacenegresos'] } }]);
               });
             } else {
               Swal.fire({

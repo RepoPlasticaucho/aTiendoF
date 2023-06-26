@@ -38,7 +38,7 @@
                     </tr>
                 </thead>
                 <tbody style="color: #767695;">
-                    <tr *ngFor="let movimiento of lstMovimientos"
+                    <tr *ngFor="let movimiento of lstMovimientos" (click)="openModalDetalle(movimiento)" class="table-row"
                         class="table-row">
                         <td>{{movimiento.id}}</td>
                         <td>{{movimiento.fecha_emision | slice:0:10}}</td>

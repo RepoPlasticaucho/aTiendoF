@@ -10,7 +10,7 @@
               <fa-icon [icon]="faShoppingCart" [size]="'lg'" style="color: #ffffff"></fa-icon>
             - Carrito
             </button>
-          </div>          
+        </div>          
         <div class="card-body">
             <div>
                 <mat-grid-list cols="6" rowHeight="50px">
@@ -34,7 +34,6 @@
                 <input type="text" [(ngModel)]="searchText" placeholder="Buscar" style="margin-bottom: 10px;"
                     class="search-input" (ngModelChange)="onSearchChange()">
             </div>
-
             <mat-grid-list cols="4" rowHeight="400px">
                 <mat-grid-tile *ngFor="let modeloproducto of pagedModeloProductos">
                     <mat-card class="dashboard-card">

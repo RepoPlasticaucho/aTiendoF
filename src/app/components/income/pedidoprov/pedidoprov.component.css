@@ -3,7 +3,7 @@
 }
 
 .table-row:hover {
-    background-color: #bff1f5; /* Color de fondo cuando se pasa el mouse por encima */
+    background-color: #def8fa; /* Color de fondo cuando se pasa el mouse por encima */
     cursor: pointer;
 }
 
