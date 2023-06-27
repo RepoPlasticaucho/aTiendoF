@@ -4,7 +4,7 @@ import { faSave, faList, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { MatDialogRef } from '@angular/material/dialog';
-import { VentaprovComponent } from '../ventaprov/ventaprov.component';
+import { VentaprovComponent } from '../../sales/ventaprov/ventaprov.component';
 import { MovimientosEntity } from 'src/app/models/movimientos';
 import { MovimientosService } from 'src/app/services/movimientos.service';
 import { TipocomprobanteEntity } from 'src/app/models/tipo_comprobante';

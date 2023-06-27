@@ -99,7 +99,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule} from '@angular/material/datepicker';
 import { AlmaceningresosComponent } from './components/income/almaceningresos/almaceningresos.component';
-import { AlmacenesegresosComponent } from './components/outcome/almacenesegresos/almacenesegresos.component';
+import { AlmacenesegresosComponent } from './components/sales/almacenesegresos/almacenesegresos.component';
 import { PedidoprovComponent } from './components/income/pedidoprov/pedidoprov.component';
 import { PedidoventComponent } from './components/outcome/pedidovent/pedidovent.component';
 import { VistapedidosComponent } from './components/income/vistapedidos/vistapedidos.component';
@@ -119,7 +119,7 @@ import { PortafoliosComprarDevComponent } from './components/income/devoluciones
 import { CarritoDevComponent } from './components/income/devoluciones/carrito-dev/carrito-dev.component';
 import { EstadopedidoComponent } from './components/income/estadopedido/estadopedido.component';
 import { VistaventasComponent } from './components/outcome/vistaventas/vistaventas.component';
-import { VentaprovComponent } from './components/outcome/ventaprov/ventaprov.component';
+import { VentaprovComponent } from './components/sales/ventaprov/ventaprov.component';
 import { VentaCreateComponent } from './components/outcome/venta-create/venta-create.component';
 import { MenucomprComponent } from './components/shooping/menucompr/menucompr.component';
 import { MenuventComponent } from './components/sales/menuvent/menuvent.component';

@@ -18,6 +18,7 @@ import '../../../../../src/disable-alerts';
 export class MenuventComponent implements OnInit {
 
   editarDetalle: boolean = false;
+  selectTipo: boolean = false;
 
   //Iconos para la pagina de grupos
   faList = faList;
@@ -60,6 +61,13 @@ export class MenuventComponent implements OnInit {
 
   }
 
+  changeGroup(tipoC: any): void {
+    if (tipoC.target.value == 0) {
+      this.selectTipo = true;
+    } else {
+      this.selectTipo = false;
+    }
+  }
 
   verCarrito() {
     const dialogRef = this.dialog.open(VerCarritoComponent, {

@@ -63,7 +63,7 @@ export { TercerosusuariosComponent} from "./users/tercerosusuarios/tercerosusuar
 export { TercerosusuariosCreateComponent} from "./users/tercerosusuarios-create/tercerosusuarios-create.component";
 export { TercerosusuariosEditComponent} from "./users/tercerosusuarios-edit/tercerosusuarios-edit.component";
 export { TercerosEditComponent } from "./users/terceros-edit/terceros-edit.component";
-export { AlmacenesegresosComponent } from "./outcome/almacenesegresos/almacenesegresos.component";
+export { AlmacenesegresosComponent } from "./sales/almacenesegresos/almacenesegresos.component";
 export { InventariosCreateComponent } from "./inventories/inventarios-create/inventarios-create.component";
 export { InventariosEditComponent } from "./inventories/inventarios-edit/inventarios-edit.component";
 export { AlmaceningresosComponent } from "./income/almaceningresos/almaceningresos.component";
@@ -82,7 +82,7 @@ export { PortafoliosComprarDevComponent } from './income/devoluciones/portafolio
 export { CarritoDevComponent } from './income/devoluciones/carrito-dev/carrito-dev.component';
 export { EstadopedidoComponent } from './income/estadopedido/estadopedido.component';
 export { VistaventasComponent } from './outcome/vistaventas/vistaventas.component';
-export { VentaprovComponent } from './outcome/ventaprov/ventaprov.component';
+export { VentaprovComponent } from './sales/ventaprov/ventaprov.component';
 export { PedidoventComponent } from './outcome/pedidovent/pedidovent.component';
 export { MenuventComponent} from './sales/menuvent/menuvent.component'
 export { MenucomprComponent } from './shooping/menucompr/menucompr.component';

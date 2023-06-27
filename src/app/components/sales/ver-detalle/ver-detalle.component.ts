@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { faSave, faList, faTimes, faShoppingCart, faEdit, faTrashAlt, faMoneyBillAlt } from '@fortawesome/free-solid-svg-icons';
 import { MatDialogRef } from '@angular/material/dialog';
-import { VentaprovComponent } from '../../outcome/ventaprov/ventaprov.component'
+import { VentaprovComponent } from '../ventaprov/ventaprov.component'
 import { DetallesMovimiento, DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
 import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service';
 import { Subject } from 'rxjs';

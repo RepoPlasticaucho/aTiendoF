@@ -19,7 +19,30 @@
                     </span>
                 </a>
             </div>
-            <br /><br/>
+                <div class="d-flex justify-content-end">
+                    <button class="btn button carrito-button" (click)="verCarrito()">
+                        <fa-icon [icon]="faShoppingCart" [size]="'lg'" style="color: #ffffff"></fa-icon>
+                        - AÑADIR
+                    </button>
+                </div>
+            <div>
+                <label for="tipo">Tipo de Cliente</label>
+                <select class="form-control" (change)="changeGroup($event)" formControlName="tipo">
+                    <option selected>Seleccione un tipo de cliente</option>
+                    <option>
+                        CONSUMIDOR FINAL
+                    </option>
+                    <option>
+                        CLIENTE
+                    </option>
+                </select>
+                <small *ngIf="selectTipo">
+                    <small *ngIf="selectTipo" style="color: red; ">
+                        Debe seleccionar una categoría.
+                    </small>
+                </small>
+            </div>
+            <br><br>
             <table  datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                 <thead style="color: #636363;">
                     <tr>
@@ -73,12 +96,6 @@
                 </tbody>
             </table>
             <br>
-            <div class="row mx-3">
-                <button class="btn button carrito-button" (click)="verCarrito()">
-                    <fa-icon [icon]="faShoppingCart" [size]="'lg'" style="color: #ffffff"></fa-icon>
-                    - AÑADIR
-                </button>
-            </div>
             <div class="icon-container">
                 <fa-icon [icon]="faMoneyBillAlt" [size]="'3x'" style="color: #6aaf42" class="icono-input"></fa-icon>
                 <label for="total" class="label-input">TOTAL:</label>

@@ -6,7 +6,7 @@ import { Subject } from 'rxjs';
 import { MovimientosEntity } from 'src/app/models/movimientos';
 import { MovimientosService } from 'src/app/services/movimientos.service';
 import { VentaCreateComponent } from '../../outcome/venta-create/venta-create.component';
-import { VerDetalleComponent } from '../../sales/ver-detalle/ver-detalle.component';
+import { VerDetalleComponent } from '../ver-detalle/ver-detalle.component';
 import Swal from 'sweetalert2';
 
 @Component({
