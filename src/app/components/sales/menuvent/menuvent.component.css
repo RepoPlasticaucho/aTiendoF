@@ -17,10 +17,12 @@
   border-radius: 5px;
   padding: 5px;
   font-size: 14px;
-  /* Otros estilos personalizados */
 }
 
-
+.small-select {
+  width: 250px;
+  height: 40px;
+}
 
 .icon-container {
   position: relative;
@@ -103,4 +105,8 @@ margin-bottom: 10px; /* Margen inferior entre los botones */
 .button-container {
 margin-top: 20px;
 text-align: center;
+}
+
+.d-flex {
+  display: flex;
 }

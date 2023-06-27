@@ -19,31 +19,36 @@
                     </span>
                 </a>
             </div>
-                <div class="d-flex justify-content-end">
-                    <button class="btn button carrito-button" (click)="verCarrito()">
-                        <fa-icon [icon]="faShoppingCart" [size]="'lg'" style="color: #ffffff"></fa-icon>
-                        - AÑADIR
-                    </button>
-                </div>
-            <div>
+            <div class="d-flex justify-content-end">
+                <button class="btn button carrito-button" (click)="verCarrito()">
+                    <fa-icon [icon]="faShoppingCart" [size]="'lg'" style="color: #ffffff"></fa-icon>
+                    - AÑADIR
+                </button>
+            </div>
+            <form [formGroup]="clienteForm">
+            <div class="form-group">
                 <label for="tipo">Tipo de Cliente</label>
-                <select class="form-control" (change)="changeGroup($event)" formControlName="tipo">
-                    <option selected>Seleccione un tipo de cliente</option>
-                    <option>
-                        CONSUMIDOR FINAL
-                    </option>
-                    <option>
-                        CLIENTE
-                    </option>
-                </select>
+                <div class="d-flex">
+                    <select class="form-control small-select" (change)="changeGroup($event)" formControlName="tipo">
+                        <option value="0" selected>Seleccione un tipo de cliente</option>
+                        <option>
+                            CONSUMIDOR FINAL
+                        </option>
+                        <option>
+                            CLIENTE
+                        </option>
+                    </select>
+                    <button class="btn btn-primary ml-2" (click)="realizarAccion()">ELEGIR</button>
+                </div>
                 <small *ngIf="selectTipo">
                     <small *ngIf="selectTipo" style="color: red; ">
                         Debe seleccionar una categoría.
                     </small>
                 </small>
             </div>
+        </form>
             <br><br>
-            <table  datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                 <thead style="color: #636363;">
                     <tr>
                         <th style="width: 10%; ">Producto</th>

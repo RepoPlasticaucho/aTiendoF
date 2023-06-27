@@ -23,6 +23,7 @@ export interface ProducAdmEntity {
     color_nombre: string;
     atributo_nombre: string;
     genero_nombre: string;
+    cantidad?: string;
     modelo_nombre: string;
     categoria?: string;
     linea?: string;

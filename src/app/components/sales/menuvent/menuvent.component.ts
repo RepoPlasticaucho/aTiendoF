@@ -8,6 +8,9 @@ import { DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
 import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service';
 import { VerCarritoComponent } from '../ver-carrito/ver-carrito.component';
 import '../../../../../src/disable-alerts';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MovimientosService } from 'src/app/services/movimientos.service';
+import { MovimientosEntity } from 'src/app/models/movimientos';
 
 
 @Component({
@@ -19,6 +22,10 @@ export class MenuventComponent implements OnInit {
 
   editarDetalle: boolean = false;
   selectTipo: boolean = false;
+
+  clienteForm = new FormGroup({
+    tipo: new FormControl('0', Validators.required)
+  });
 
   //Iconos para la pagina de grupos
   faList = faList;
@@ -38,13 +45,14 @@ export class MenuventComponent implements OnInit {
   sumaTotal: any;
   detalleEditIndex: number = -1;
   detalleEditBackup: DetallesMovimientoEntity | null = null;
+  formGroup: any;
 
   constructor(private dialog: MatDialog,
     private readonly httpService: DetallesmovimientoService,
+    private readonly httpServiceMov: MovimientosService,
     private router: Router) { }
 
   ngOnInit(): void {
-    console.log(localStorage.getItem('movimiento_id'))
     this.dtOptions = {
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
@@ -66,6 +74,48 @@ export class MenuventComponent implements OnInit {
       this.selectTipo = true;
     } else {
       this.selectTipo = false;
+    }
+  }
+
+  realizarAccion() {
+    console.log(localStorage.getItem('movimiento_id'))
+    const selectedOption = this.clienteForm.get('tipo')!.value;
+    if (selectedOption === 'CONSUMIDOR FINAL') {
+      const newMovimiento: MovimientosEntity = {
+        id: localStorage.getItem('movimiento_id')!,
+        tipo_id: '',
+        tipo_emision_cod: '',
+        estado_fact_id: '',
+        tipo_comprb_id: '',
+        almacen_id: localStorage.getItem('almacenid')!,
+        cod_doc: '',
+        secuencial: ''
+      }
+      this.httpServiceMov.actualizarTerceroPedido(newMovimiento).subscribe(res => {
+        if (res.codigoError != "OK") {
+          Swal.fire({
+            icon: 'info',
+            title: 'Información',
+            text: 'Ha ocurrido un error',
+            showConfirmButton: true,
+            // timer: 3000
+          });
+        } else {
+          Swal.fire({
+            icon: 'info',
+            title: 'Información',
+            text: 'Se ha elegido al Consumidor Final',
+            showConfirmButton: true,
+            // timer: 3000
+          });
+        }
+      });
+    } else if (selectedOption === 'CLIENTE') {
+      // Realizar acción para el cliente
+      // Por ejemplo:
+      console.log('Seleccionó Cliente');
+    } else {
+      // Acción por defecto o error
     }
   }
 

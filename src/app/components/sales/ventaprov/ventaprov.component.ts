@@ -111,7 +111,7 @@ export class VentaprovComponent implements OnInit {
 
   crearCompra() {
     const newMovimiento: MovimientosEntity = {
-      almacen_id: JSON.parse(localStorage.getItem('almacenid') || "[]"),
+      almacen_id: localStorage.getItem('almacenid')!,
       id: '',
       tipo_id: '2',
       tipo_emision_cod: '',
@@ -120,18 +120,11 @@ export class VentaprovComponent implements OnInit {
       cod_doc: '',
       secuencial: ''
     }
-    console.log(newMovimiento);
-    this.httpService.obtenerMovimientoUno(newMovimiento).subscribe(res1 => {
-      if (res1.codigoError == "OK") {
-        localStorage.setItem('movimiento_id', res1.lstMovimientos[0].id);
-        localStorage.setItem('estab', res1.lstMovimientos[0].estab!);
-      }
-    })
     this.httpService.agregarMovimiento(newMovimiento).subscribe(res => {
       if (res.codigoError == "OK") {
-        console.log(localStorage.getItem('movimiento_id'))
+        
         // localStorage.setItem('tipo', this.pedidoForm.value.tipo!)
-        this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['menuvent'] } }]);
+        // this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['menuvent'] } }]);
       } else {
         Swal.fire({
           icon: 'error',
@@ -140,6 +133,14 @@ export class VentaprovComponent implements OnInit {
           showConfirmButton: false,
         });
       }
+      this.httpService.obtenerMovimientoUno(newMovimiento).subscribe(res1 => {
+        console.log(res1)
+        if (res1.codigoError == "OK") {
+          localStorage.setItem('movimiento_id', res1.lstMovimientos[0].id);
+          localStorage.setItem('estab', res1.lstMovimientos[0].estab!);
+          this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['menuvent'] } }]);
+        }
+      })
     })
   }
 

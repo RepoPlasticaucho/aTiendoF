@@ -24,6 +24,7 @@ const initProduct : ProducAdmEntity ={
   atributo_nombre: "",
   genero_nombre: "",
   modelo_nombre: "",
+  cantidad: "",
   categoria: "",
   linea: "",
   url_image: "",

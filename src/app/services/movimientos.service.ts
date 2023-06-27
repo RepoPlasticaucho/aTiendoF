@@ -71,4 +71,8 @@ export class MovimientosService {
   finalizarPedido(movimiento: MovimientosEntity): Observable<Movimientos> {
     return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/FinalizarPedido`, movimiento);
   }
+
+  actualizarTerceroPedido(movimiento: MovimientosEntity): Observable<Movimientos> {
+    return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/ActualizarTerceroPedido`, movimiento);
+  }
 }
