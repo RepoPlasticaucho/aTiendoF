@@ -126,6 +126,10 @@ import { MenuventComponent } from './components/sales/menuvent/menuvent.componen
 import { VerCarritoComponent } from './components/sales/ver-carrito/ver-carrito.component';
 import { VerFacturaComponent } from './components/sales/ver-factura/ver-factura.component';
 import { VerDetalleComponent } from './components/sales/ver-detalle/ver-detalle.component';
+import { VerCompraComponent } from './components/shooping/ver-compra/ver-compra.component';
+import { VerCompraDetalleComponent } from './components/shooping/ver-compra-detalle/ver-compra-detalle.component';
+import { CompraNuevoComponent } from './components/shooping/compra-nuevo/compra-nuevo.component';
+import { CompraEditarComponent } from './components/shooping/compra-editar/compra-editar.component';
 
 @NgModule({
   declarations: [
@@ -228,7 +232,11 @@ import { VerDetalleComponent } from './components/sales/ver-detalle/ver-detalle.
     MenuventComponent,
     VerCarritoComponent,
     VerFacturaComponent,
-    VerDetalleComponent
+    VerDetalleComponent,
+    VerCompraComponent,
+    VerCompraDetalleComponent,
+    CompraNuevoComponent,
+    CompraEditarComponent
   ],
   imports: [
     BrowserModule,
