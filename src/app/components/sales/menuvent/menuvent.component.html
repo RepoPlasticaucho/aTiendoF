@@ -6,10 +6,6 @@
                 <fa-icon [icon]="faShoppingBag" [size]="'3x'" style="color: #636363"></fa-icon>
                 <h1 class="mx-5" style="color: #636363">FACTURACIÓN</h1>
             </div>
-            <button class="btn button carrito-button" (click)="verCarrito()">
-                <fa-icon [icon]="faShoppingCart" [size]="'lg'" style="color: #ffffff"></fa-icon>
-                - AÑADIR
-            </button>
         </div>
         <div class="card-body">
             <div class="row mx-3">
@@ -23,13 +19,8 @@
                     </span>
                 </a>
             </div>
-            <div class="icon-container">
-                <fa-icon [icon]="faMoneyBillAlt" [size]="'3x'" style="color: #6aaf42" class="icono-input"></fa-icon>
-                <label for="total" class="label-input">TOTAL:</label>
-                <input type="text" [(ngModel)]="sumaTotal" class="cool-input resultado-input" readonly>
-            </div>
-            <br /><br/><br><br>
-            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+            <br /><br/>
+            <table  datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                 <thead style="color: #636363;">
                     <tr>
                         <th style="width: 10%; ">Producto</th>
@@ -82,7 +73,19 @@
                 </tbody>
             </table>
             <br>
-            <div class="button-container">
+            <div class="row mx-3">
+                <button class="btn button carrito-button" (click)="verCarrito()">
+                    <fa-icon [icon]="faShoppingCart" [size]="'lg'" style="color: #ffffff"></fa-icon>
+                    - AÑADIR
+                </button>
+            </div>
+            <div class="icon-container">
+                <fa-icon [icon]="faMoneyBillAlt" [size]="'3x'" style="color: #6aaf42" class="icono-input"></fa-icon>
+                <label for="total" class="label-input">TOTAL:</label>
+                <input type="text" [(ngModel)]="sumaTotal" class="cool-input resultado-input" readonly>
+            </div>
+            <br><br><br>
+            <div class="button-container" *ngIf="lstDetalleMovimientos.length > 0">
                 <button class="btn btn-primary" (click)="finalizarPedido()">
                     <span style="color: white"> Finalizar Compra </span>
                 </button>

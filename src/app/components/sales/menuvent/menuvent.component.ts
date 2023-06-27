@@ -7,6 +7,8 @@ import { faShoppingBag, faSave, faList, faTimes, faShoppingCart, faEdit, faTrash
 import { DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
 import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service';
 import { VerCarritoComponent } from '../ver-carrito/ver-carrito.component';
+import '../../../../../src/disable-alerts';
+
 
 @Component({
   selector: 'app-menuvent',
@@ -50,13 +52,14 @@ export class MenuventComponent implements OnInit {
       search: false,
       searching: true,
       ordering: true,
-      info: true,
-      responsive: true
+      info: false,
+      responsive: true,
     }
     
     this.cargarTablaMenuvent();
 
   }
+
 
   verCarrito() {
     const dialogRef = this.dialog.open(VerCarritoComponent, {
@@ -90,10 +93,10 @@ export class MenuventComponent implements OnInit {
     this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe(res => {
       if (res.codigoError != "OK") {
         Swal.fire({
-          icon: 'error',
-          title: 'No existe nada en el pedido.',
-          text: res.descripcionError,
-          showConfirmButton: false,
+          icon: 'info',
+          title: 'Información',
+          text: 'Empieza tu pedido en "AÑADIR".',
+          showConfirmButton: true,
           // timer: 3000
         });
       } else {

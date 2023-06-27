@@ -1,6 +1,6 @@
   
   .carrito-button {
-    background: rgb(54, 169, 225, 0.8);
+    background: #35b0e9;
     color: white;
     font-size: 15px;
     width: 120px;
@@ -42,7 +42,7 @@
 .resultado-input {
   position: absolute;
   top: 0;
-  right: 0;
+  right: 35px;
   width: 150px;
   height: 35px;
   text-align: center;
