@@ -11,6 +11,8 @@ import '../../../../../src/disable-alerts';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MovimientosService } from 'src/app/services/movimientos.service';
 import { MovimientosEntity } from 'src/app/models/movimientos';
+import { ProveedoresEntity } from 'src/app/models/proveedores';
+import { ProveedoresService } from 'src/app/services/proveedores.service';
 
 @Component({
   selector: 'app-menucompr',
@@ -44,9 +46,12 @@ export class MenucomprComponent implements OnInit {
   detalleEditIndex: number = -1;
   detalleEditBackup: DetallesMovimientoEntity | null = null;
   formGroup: any;
+  lstProveedores: ProveedoresEntity[] = [];
+  lstProveedores2: ProveedoresEntity[] = [];
 
   constructor(private dialog: MatDialog,
     private readonly httpService: DetallesmovimientoService,
+    private readonly httpServiceProv: ProveedoresService,
     private readonly httpServiceMov: MovimientosService,
     private router: Router) { }
 
@@ -62,7 +67,20 @@ export class MenucomprComponent implements OnInit {
       info: false,
       responsive: true,
     }
-    
+
+    this.httpServiceProv.obtenerProveedores().subscribe(res => {
+      if (res.codigoError != "OK") {
+        Swal.fire({
+          icon: 'error',
+          title: 'No se pudo obtener proveedores.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      } else {
+        this.lstProveedores = res.lstProveedores;
+      }
+    });
+
     this.cargarTablaMenucompr();
 
   }
@@ -73,6 +91,28 @@ export class MenucomprComponent implements OnInit {
     } else {
       this.selectTipo = false;
     }
+    const proveedores: ProveedoresEntity = {
+      id: '',
+      id_fiscal: '',
+      ciudadid: '',
+      correo: '',
+      direccionprov: '',
+      nombre: tipoC.target.value,
+      telefono: ''
+    }
+
+    this.httpServiceProv.obtenerProveedoresN(proveedores).subscribe(res => {
+      if (res.codigoError != "OK") {
+        Swal.fire({
+          icon: 'error',
+          title: 'No se pudo obtener la Sociedad.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      } else {
+        localStorage.setItem('proveedorid', res.lstProveedores[0].id);
+      }
+    })
   }
 
   /*
@@ -123,10 +163,10 @@ export class MenucomprComponent implements OnInit {
   verCarrito() {
     const dialogRef = this.dialog.open(CompraNuevoComponent, {
       width: '900px',
-      
+      height: '725px'
       // Agrega cualquier configuración adicional del modal aquí
     });
-  
+
     dialogRef.componentInstance.productoAgregado.subscribe((producto: any) => {
       // Actualizar la tabla
       this.cargarTablaMenucompr();
@@ -136,8 +176,8 @@ export class MenucomprComponent implements OnInit {
       // Lógica para manejar el resultado después de cerrar el modal
     });
   }
-  
-  cargarTablaMenucompr(){
+
+  cargarTablaMenucompr() {
     const newDetalle: DetallesMovimientoEntity = {
       id: '',
       producto_nombre: '',
@@ -250,13 +290,13 @@ export class MenucomprComponent implements OnInit {
     const detalleMovimientos = this.lstDetalleMovimientos[index];
     const cantidad = parseFloat(detalleMovimientos.cantidad);
     const costo = parseFloat(detalleMovimientos.costo);
-  
+
     if (!isNaN(cantidad) && !isNaN(costo)) {
       detalleMovimientos.precio = (cantidad * costo).toFixed(2);
     } else {
       detalleMovimientos.precio = '';
     }
-  
+
     this.calcularSumaTotal();
   }
 
@@ -270,7 +310,7 @@ export class MenucomprComponent implements OnInit {
     event.target.value = inputValue.replace(/[^0-9.]/g, ''); // Filtra solo números y punto
   }
 
-  finalizarPedido(){
+  finalizarPedido() {
     Swal.fire({
       title: '¿Estás seguro de terminar la compra?',
       showDenyButton: true,
@@ -279,17 +319,17 @@ export class MenucomprComponent implements OnInit {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-            Swal.fire({
-              icon: 'success',
-              title: 'Finalizado Correctamente.',
-              text: `Se ha finalizado la compra`,
-              showConfirmButton: true,
-              confirmButtonText: "Ok"
-            }).finally(() => {
-              // this.groupForm.reset();
-              this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ver-factura'] } }]);
-            });
-          
+        Swal.fire({
+          icon: 'success',
+          title: 'Finalizado Correctamente.',
+          text: `Se ha finalizado la compra`,
+          showConfirmButton: true,
+          confirmButtonText: "Ok"
+        }).finally(() => {
+          // this.groupForm.reset();
+          this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ver-factura'] } }]);
+        });
+
       } else if (result.isDenied) {
         Swal.fire('No se finalizó la compra', '', 'info')
       }

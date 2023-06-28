@@ -8,11 +8,11 @@ import { SociedadesEntity } from 'src/app/models/sociedades';
 import { AlmacenesService } from 'src/app/services/almacenes.service';
 
 @Component({
-  selector: 'app-almacenesegresos',
-  templateUrl: './almacenesegresos.component.html',
-  styleUrls: ['./almacenesegresos.component.css']
+  selector: 'app-almacenesshooping',
+  templateUrl: './almacenesshooping.component.html',
+  styleUrls: ['./almacenesshooping.component.css']
 })
-export class AlmacenesegresosComponent implements OnInit {
+export class AlmacenesshoopingComponent implements OnInit {
 
   ///Iconos para la pagina de grupos
   faUserFriends = faUserFriends;
@@ -71,9 +71,8 @@ export class AlmacenesegresosComponent implements OnInit {
   }
 
   abrirVista(almacen: AlmacenesEntity) {
-
     localStorage.setItem('almacenid', almacen.idAlmacen)
-    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ventaprov'] } }]);
-
+    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['compraprov'] } }]);
   }
+  
 }

@@ -1,0 +1,18 @@
+.dialog-content {
+    position: relative;
+  }
+  
+  .btn-cerrar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  .d-flex {
+    display: flex;
+  }
+
+  
+  .small-input {
+    padding-right: 38px; /* Ajusta el valor según sea necesario */
+  }

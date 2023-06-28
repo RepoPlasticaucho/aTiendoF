@@ -4,12 +4,12 @@
         <div class="card-header d-flex justify-content-between">
             <div class="row mx-3">
                 <fa-icon [icon]="faShoppingBag" [size]="'3x'" style="color: #636363"></fa-icon>
-                <h1 class="mx-5" style="color: #636363">FACTURACIÓN</h1>
+                <h1 class="mx-5" style="color: #636363">COMPRAS</h1>
             </div>
         </div>
         <div class="card-body">
             <div class="row mx-3">
-                <a class="btn button" href="./navegation-cl/(contentClient:ventaprov)" style="text-align:center;
+                <a class="btn button" href="./navegation-cl/(contentClient:compraprov)" style="text-align:center;
                             font-size: 15px; width:140px; 
                                height:35px;
                                text-align:center; 
@@ -25,6 +25,23 @@
                     - AÑADIR
                 </button>
             </div>
+            <form [formGroup]="clienteForm">
+                <div class="form-group">
+                    <div class="d-flex">
+                        <select class="form-control small-select" (change)="changeGroup($event)" formControlName="tipo">
+                            <option value="0" selected>Seleccione un proveedor</option>
+                            <option *ngFor="let proveedor of lstProveedores" [value]="proveedor.nombre">
+                                {{proveedor.nombre}}
+                            </option>
+                        </select>
+                    </div>
+                    <small *ngIf="selectTipo">
+                        <small *ngIf="selectTipo" style="color: red; ">
+                            Debe seleccionar un proveedor.
+                        </small>
+                    </small>
+                </div>
+            </form>
             <br><br>
             <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                 <thead style="color: #636363;">

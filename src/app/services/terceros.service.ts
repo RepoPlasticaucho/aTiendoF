@@ -54,6 +54,10 @@ export class TercerosService {
     return this.http.post<Terceros>(`${environment.apiUrl}terceros/ObtenerTerceros`, tercero );
   }
   
+  obtenerTerceroCedula(tercero: TercerosEntity): Observable<Terceros> {
+    return this.http.post<Terceros>(`${environment.apiUrl}terceros/ObtenerTerceroCedula`, tercero );
+  }
+
   agregarTerceros(tercero: TercerosEntity): Observable<Terceros> {
     return this.http.post<Terceros>(`${environment.apiUrl}terceros/InsertarTercero`, tercero);
   }

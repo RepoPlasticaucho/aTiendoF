@@ -130,6 +130,9 @@ import { VerCompraComponent } from './components/shooping/ver-compra/ver-compra.
 import { VerCompraDetalleComponent } from './components/shooping/ver-compra-detalle/ver-compra-detalle.component';
 import { CompraNuevoComponent } from './components/shooping/compra-nuevo/compra-nuevo.component';
 import { CompraEditarComponent } from './components/shooping/compra-editar/compra-editar.component';
+import { VerClienteComponent } from './components/sales/ver-cliente/ver-cliente.component';
+import { AlmacenesshoopingComponent } from './components/shooping/almacenesshooping/almacenesshooping.component';
+import { CompraprovComponent } from './components/shooping/compraprov/compraprov.component';
 
 @NgModule({
   declarations: [
@@ -236,7 +239,10 @@ import { CompraEditarComponent } from './components/shooping/compra-editar/compr
     VerCompraComponent,
     VerCompraDetalleComponent,
     CompraNuevoComponent,
-    CompraEditarComponent
+    CompraEditarComponent,
+    VerClienteComponent,
+    AlmacenesshoopingComponent,
+    CompraprovComponent
   ],
   imports: [
     BrowserModule,

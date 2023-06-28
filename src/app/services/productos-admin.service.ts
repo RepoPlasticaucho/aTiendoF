@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment.prod';
 import { ProductosEditComponent } from '../components/all_components';
 import { ProducAdmEntity, ProductAdm } from '../models/productadm';
 import { ModeloProductosEntity } from '../models/modeloproductos';
+import { ProveedoresEntity } from '../models/proveedores';
 
 const initProduct : ProducAdmEntity ={
   id: "",
@@ -54,8 +55,11 @@ export class ProductosAdminService {
   obtenerProductosModeloProducto(modeloProducto: ModeloProductosEntity): Observable<ProductAdm> {
     return this.http.post<ProductAdm>(`${environment.apiUrl}productos/ObtenerProductosModeloProducto`, modeloProducto);
   }
+  obtenerProductosProveedor(proveedor: ProveedoresEntity): Observable<ProductAdm> {
+    return this.http.post<ProductAdm>(`${environment.apiUrl}productos/ObtenerProductosProveedor`, proveedor);
+  }
   obtenerProductosN(producto: ProducAdmEntity): Observable<ProductAdm> {
-    return this.http.post<ProductAdm>(`${environment.apiUrl}productos/ObtenerProductosN`, producto);
+    return this.http.post<ProductAdm>(`${environment.apiUrl}productos/ObtenerProductosProveedor`, producto);
   }
   verificarProductosMP(color_id: string, tamanio: string, cod_fam: string): Observable<ProductAdm> {
     return this.http.get<ProductAdm>(`${environment.apiUrl}productos/VerificarProductosMP?color_id=`+ color_id + `&tamanio=` + tamanio + `&cod_fam=` + cod_fam);

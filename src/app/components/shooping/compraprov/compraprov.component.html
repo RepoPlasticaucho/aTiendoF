@@ -1,0 +1,49 @@
+<div style="max-width: 95%;margin: auto;">
+    <div class="card">
+        <div class="card-header">
+            <div class="row mx-3">
+                <fa-icon [icon]="faList" [size]="'3x'" style="color: #636363;"></fa-icon>
+                <h1 class="mx-5 " style="color: #636363;">COMPRAS</h1>
+                <div style="position: absolute;right:0;" class="mx-3">
+                    <a class="btn btn-success" (click)="crearCompra()" style=" border-radius: 5px; 
+                            font-size: 12px; width:150px; 
+                            height:35px;
+                            margin-top: 25px;
+                            text-align:center; 
+                            ;">NUEVO
+                    </a>
+                </div>
+            </div>
+            <br>
+        </div>
+        <div class="card-body ">
+            <div class="row mx-3">
+                <a class="btn button" href="./navegation-cl/(contentClient:almacenesshooping)" style="text-align:center;
+                            font-size: 15px; width:140px; 
+                               height:35px;
+                               text-align:center; 
+                               margin-top: 10px;
+                               background: rgb(54,169,225,0.8);"><span style="color: white;">
+                        Volver
+                    </span>
+                </a>
+            </div>
+            <br><br><br>
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                <thead style="color: #636363;">
+                    <tr>
+                        <th style="width: 20%; ">CÓDIGO</th>
+                        <th style="width: 20%; ">FECHA</th>
+                    </tr>
+                </thead>
+                <tbody style="color: #767695;">
+                    <tr *ngFor="let movimiento of lstMovimientos" class="table-row"
+                        class="table-row">
+                        <td >{{movimiento.id}}</td>
+                        <td>{{movimiento.fecha_emision | slice:0:10}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

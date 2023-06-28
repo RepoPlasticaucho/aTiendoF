@@ -68,6 +68,10 @@ export class MovimientosService {
     return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientosAlmacenV`, movimiento );
   }
 
+  obtenerMovimientosAlmacenc(movimiento: MovimientosEntity): Observable<Movimientos> {
+    return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientosAlmacenC`, movimiento );
+  }
+
   finalizarPedido(movimiento: MovimientosEntity): Observable<Movimientos> {
     return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/FinalizarPedido`, movimiento);
   }
@@ -75,4 +79,9 @@ export class MovimientosService {
   actualizarTerceroPedido(movimiento: MovimientosEntity): Observable<Movimientos> {
     return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/ActualizarTerceroPedido`, movimiento);
   }
+
+  actualizarClientePedido(movimiento: MovimientosEntity): Observable<Movimientos> {
+    return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/ActualizarClientePedido`, movimiento);
+  }
+
 }

@@ -11,6 +11,7 @@ import '../../../../../src/disable-alerts';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MovimientosService } from 'src/app/services/movimientos.service';
 import { MovimientosEntity } from 'src/app/models/movimientos';
+import { VerClienteComponent } from '../ver-cliente/ver-cliente.component';
 
 
 @Component({
@@ -111,18 +112,25 @@ export class MenuventComponent implements OnInit {
         }
       });
     } else if (selectedOption === 'CLIENTE') {
-      // Realizar acción para el cliente
-      // Por ejemplo:
-      console.log('Seleccionó Cliente');
+      const dialogRef = this.dialog.open(VerClienteComponent, {
+        width: '900px',
+        height: '600px'
+        
+        // Agrega cualquier configuración adicional del modal aquí
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        // Lógica para manejar el resultado después de cerrar el modal
+      });
     } else {
-      // Acción por defecto o error
+      console.log('ERROR')
     }
   }
 
   verCarrito() {
     const dialogRef = this.dialog.open(VerCarritoComponent, {
       width: '900px',
-      
+      height: '600px'
       // Agrega cualquier configuración adicional del modal aquí
     });
   

@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { ProductosAdminService } from 'src/app/services/productos-admin.service';
 import { ProducAdmEntity } from 'src/app/models/productadm';
+import { ProveedoresEntity } from 'src/app/models/proveedores';
 
 @Component({
   selector: 'app-compra-nuevo',
@@ -51,13 +52,24 @@ export class CompraNuevoComponent implements OnInit {
       info: true,
       responsive: true
     }
+
+    const newProveedor: ProveedoresEntity = {
+      id: localStorage.getItem('proveedorid')!,
+      id_fiscal: '',
+      ciudadid: '',
+      correo: '',
+      direccionprov: '',
+      nombre: '',
+      telefono: ''
+    }
+
     Swal.fire({
       title: 'CARGANDO...',
       html: 'Se están cargando los productos.',
       timer: 30000,
       didOpen: () => {
         Swal.showLoading();
-        this.httpServiceProductos.obtenerProductos().subscribe((res1) => {
+        this.httpServiceProductos.obtenerProductosProveedor(newProveedor).subscribe((res1) => {
           if (res1.codigoError != 'OK') {
             Swal.fire({
               icon: 'error',
