@@ -43,6 +43,10 @@ export class DetallesmovimientoService {
     return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/InsertarDetallePedido`, detalle);
   }
 
+  agregarDetalleCompras(detalle: DetallesMovimientoEntity): Observable<DetallesMovimiento> {
+    return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/InsertarDetalleCompras`, detalle);
+  }
+
   agregarDetalleCompra(detalle: DetallesMovimientoEntity): Observable<DetallesMovimiento> {
     return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/InsertarDetalleCompra`, detalle);
   }
@@ -51,7 +55,15 @@ export class DetallesmovimientoService {
     return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ModificarDetallePedido`, detalle);
   }
 
+  modificarDetalleCompra(detalle: DetallesMovimientoEntity): Observable<DetallesMovimiento> {
+    return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ModificarDetalleCompra`, detalle);
+  }
+
   eliminarDetallePedido(detalle: DetallesMovimientoEntity): Observable<DetallesMovimiento> {
     return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/EliminarDetalleMovimiento`, detalle);
+  }
+
+  eliminarDetalleCompra(detalle: DetallesMovimientoEntity): Observable<DetallesMovimiento> {
+    return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/EliminarDetalleCompra`, detalle);
   }
 }

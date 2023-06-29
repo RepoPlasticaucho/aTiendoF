@@ -119,6 +119,9 @@ export class InventariosService {
   obtenerPortafoliosColores(inventario: InventariosEntity): Observable<Inventarios> {
     return this.http.post<Inventarios>(`${environment.apiUrl}inventarios/ObtenerPortafoliosModelosColores`,inventario );
   }
+  obtenerInventariosExiste(inventario: InventariosEntity): Observable<Inventarios> {
+    return this.http.post<Inventarios>(`${environment.apiUrl}inventarios/ObtenerInventarioExiste`,inventario );
+  }
   agregarInventario(inventario: InventariosEntity): Observable<Inventarios> {
     return this.http.post<Inventarios>(`${environment.apiUrl}inventarios/InsertarInventarios`, inventario);
   }

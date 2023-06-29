@@ -88,6 +88,7 @@ export class MenucomprComponent implements OnInit {
   changeGroup(tipoC: any): void {
     if (tipoC.target.value == 0) {
       this.selectTipo = true;
+      localStorage.setItem('proveedorid', '0')
     } else {
       this.selectTipo = false;
     }
@@ -115,50 +116,6 @@ export class MenucomprComponent implements OnInit {
     })
   }
 
-  /*
-  realizarAccion() {
-    console.log(localStorage.getItem('movimiento_id'))
-    const selectedOption = this.clienteForm.get('tipo')!.value;
-    if (selectedOption === 'CONSUMIDOR FINAL') {
-      const newMovimiento: MovimientosEntity = {
-        id: localStorage.getItem('movimiento_id')!,
-        tipo_id: '',
-        tipo_emision_cod: '',
-        estado_fact_id: '',
-        tipo_comprb_id: '',
-        almacen_id: localStorage.getItem('almacenid')!,
-        cod_doc: '',
-        secuencial: ''
-      }
-      this.httpServiceMov.actualizarTerceroPedido(newMovimiento).subscribe(res => {
-        if (res.codigoError != "OK") {
-          Swal.fire({
-            icon: 'info',
-            title: 'Información',
-            text: 'Ha ocurrido un error',
-            showConfirmButton: true,
-            // timer: 3000
-          });
-        } else {
-          Swal.fire({
-            icon: 'info',
-            title: 'Información',
-            text: 'Se ha elegido al Consumidor Final',
-            showConfirmButton: true,
-            // timer: 3000
-          });
-        }
-      });
-    } else if (selectedOption === 'CLIENTE') {
-      // Realizar acción para el cliente
-      // Por ejemplo:
-      console.log('Seleccionó Cliente');
-    } else {
-      // Acción por defecto o error
-    }
-  }
-
-  */
 
   verCarrito() {
     const dialogRef = this.dialog.open(CompraNuevoComponent, {
@@ -225,7 +182,7 @@ export class MenucomprComponent implements OnInit {
       denyButtonText: 'No',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.httpService.eliminarDetallePedido(detalle).subscribe(res => {
+        this.httpService.eliminarDetalleCompra(detalle).subscribe(res => {
           if (res.codigoError == 'OK') {
             Swal.fire({
               icon: 'success',
@@ -261,7 +218,7 @@ export class MenucomprComponent implements OnInit {
     if (this.detalleEditIndex >= 0 && this.detalleEditBackup) {
       // Realizar lógica de guardado o actualización del detalle en tu servicio
       // Por ejemplo:
-      this.httpService.modificarDetallePedido(this.lstDetalleMovimientos[this.detalleEditIndex]).subscribe(res => {
+      this.httpService.modificarDetalleCompra(this.lstDetalleMovimientos[this.detalleEditIndex]).subscribe(res => {
         if (res.codigoError == 'OK') {
           Swal.fire({
             icon: 'success',
