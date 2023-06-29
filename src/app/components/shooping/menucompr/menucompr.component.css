@@ -100,9 +100,12 @@ border: 1px solid #35b0e9;
 }
 
 .input-1 {
+  height: 40px;
   width: 250px; /* Ajusta el ancho según tus necesidades */
   border: 1px solid #a5b9c2;
   border-radius: 5px;
+  margin-right: 10px;
+  font-size: 16px;
   }
 
 .button-container button {
@@ -116,6 +119,7 @@ text-align: center;
 
 .d-flex {
   display: flex;
+  margin-top: 10px;
 }
 
 .combobox-container {
@@ -127,4 +131,10 @@ text-align: center;
   top: 100%;
   left: 0;
   width: 100%;
+}
+
+.custom-datepicker {
+  border: 1px solid #a5b9c2;
+  background-color: #dbe0ec;
+  height: 50px;
 }

@@ -31,7 +31,7 @@
                     placeholder="Ingrese el número de Identificación" [maxlength]="idFiscalMaxLength"
                     formControlName="id_fiscal">
                 <div class="input-group-append">
-                    <button class="btn btn-primary" type="button">
+                    <button class="btn btn-primary" type="button" (click)="onClick()">
                         <fa-icon [icon]="faSearch" [size]="'lg'" style="color: #ffffff">
                         </fa-icon>
                     </button>

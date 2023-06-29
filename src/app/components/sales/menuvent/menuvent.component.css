@@ -109,4 +109,5 @@ text-align: center;
 
 .d-flex {
   display: flex;
+  margin-top: 10px;
 }

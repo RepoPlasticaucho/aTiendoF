@@ -25,7 +25,6 @@
                     - AÑADIR
                 </button>
             </div>
-            <form [formGroup]="clienteForm">
                 <div class="form-group">
                     <div class="d-flex">
                         <select class="form-control small-select" (change)="changeGroup($event)" [disabled]="disableProveedor">
@@ -34,21 +33,35 @@
                                 {{proveedor.nombre}}
                             </option>
                         </select>
-                        <select class="form-control small-select">
+                        <select class="form-control small-select" (change)="changeGroup2($event)">
                             <option value="0" selected>Seleccione un sustento</option>
                             <option *ngFor="let sustento of lstSustentos" [value]="sustento.sustento">
                                 {{sustento.sustento}}
                             </option>
                         </select>
-                        <input type="text" class="input-1" placeholder="Ingrese el comprobante de venta">
+                        <input type="text" [(ngModel)]="comprobante" class="form-control input-1" placeholder="Comprobante de venta">
                     </div>
                     <small *ngIf="selectTipo">
                         <small *ngIf="selectTipo" style="color: red; ">
                             Debe seleccionar un proveedor.
                         </small>
                     </small>
+                    <div class="d-flex">
+                        <input type="text" [(ngModel)]="autorizacion" class="form-control input-1" placeholder="Autorización de venta">
+                        
+                        <mat-form-field appearance="fill" class="custom-datepicker">
+                            <mat-label>FECHA DE EMISIÓN</mat-label>
+                            <input id="fecha_nac" 
+                                matInput [matDatepicker]="picker" 
+                                [(ngModel)]="fechaSeleccionada" [disabled]="true">
+    
+                                <mat-datepicker-toggle matSuffix [for]="picker">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #picker disabled="false">
+                                </mat-datepicker>
+                        </mat-form-field>
+                    </div>
                 </div>
-            </form>
             <br><br>
             <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                 <thead style="color: #636363;">

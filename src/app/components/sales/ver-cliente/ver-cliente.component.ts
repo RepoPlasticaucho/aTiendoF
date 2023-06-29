@@ -31,6 +31,7 @@ export class VerClienteComponent implements OnInit {
   faUserFriends = faUserFriends;
   faSave = faSave;
   faSearch = faSearch;
+  private nombreCompleto: string = '';
 
   // Control de dígitos que ingresan al número de id
   idFiscalMaxLength: number = 0;
@@ -134,6 +135,60 @@ export class VerClienteComponent implements OnInit {
     this.TercerosForm.controls['ciudad_id'].setValue(ciudad.idCiudad);
   }
 
+  onClick(){
+    const tercerodatos: TercerosEntity = {
+      id: '',
+      almacen_id: '',
+      sociedad_id: '',
+      tipotercero_id: '',
+      tipousuario_id: '1',
+      nombresociedad: "",
+      nombrealmacen: "",
+      nombretercero: "",
+      tipousuario: "",
+      nombre: '',
+      id_fiscal: this.TercerosForm.value!.id_fiscal ?? "",
+      direccion: "",
+      telefono: "",
+      correo: "",
+      fecha_nac: "",
+      ciudad: '',
+      provincia: "",
+      ciudadid: ''
+    }
+    this.httpService.obtenerTerceroCedula(tercerodatos).subscribe(res1 => {
+      console.log(res1)
+      if (res1.codigoError == "OK") {
+        Swal.fire({
+          icon: 'info',
+          title: 'Información',
+          text: 'Datos cargados correctamente',
+          showConfirmButton: true,
+          // timer: 3000
+        });
+        this.nombreCompleto = res1.lstTerceros[0].nombre;
+        const nombreApellido = this.nombreCompleto.split(' ');
+        this.TercerosForm.get('nombre')?.setValue(
+          nombreApellido[0] + ' ' + nombreApellido[1]
+        );
+        this.TercerosForm.get('apellido')?.setValue(
+          nombreApellido[2] + ' ' + nombreApellido[3]
+        );
+        this.TercerosForm.get('ciudad_id')?.setValue(res1.lstTerceros[0].ciudad);
+        this.TercerosForm.get('correo')?.setValue(res1.lstTerceros[0].correo);
+        this.TercerosForm.get('direccion')?.setValue(res1.lstTerceros[0].direccion);
+        this.TercerosForm.get('telefono')?.setValue(res1.lstTerceros[0].telefono);
+      } else {
+        Swal.fire({
+          icon: 'info',
+          title: 'Información',
+          text: 'No existe el cliente',
+          showConfirmButton: true,
+          // timer: 3000
+        });
+      }
+    });
+  }
 
   onSubmit() {
     if (!this.TercerosForm.valid) {
@@ -160,7 +215,7 @@ export class VerClienteComponent implements OnInit {
         provincia: "",
         ciudadid: this.TercerosForm.value!.ciudad_id ?? ''
       }
-
+      localStorage.setItem('idfiscalCl', this.TercerosForm.value!.id_fiscal!);
       this.httpService.agregarTerceros(tercerodatos).subscribe(res => {
         if (res.codigoError == "OK") {
           this.httpService.obtenerTerceroCedula(tercerodatos).subscribe(res1 => {
@@ -176,8 +231,6 @@ export class VerClienteComponent implements OnInit {
                 secuencial: '',
                 tercero_id: res1.lstTerceros[0].id!
               }
-              console.log(res1)
-              console.log(newMovimiento)
               this.httpServiceMov.actualizarClientePedido(newMovimiento).subscribe(res2 => {
                 if (res2.codigoError != "OK") {
                   Swal.fire({
@@ -188,14 +241,7 @@ export class VerClienteComponent implements OnInit {
                     // timer: 3000
                   });
                 } else {
-                  Swal.fire({
-                    icon: 'info',
-                    title: 'Información',
-                    text: 'Se ha elegido al Cliente',
-                    showConfirmButton: true,
-                    // timer: 3000
-                  });
-                  this.cerrarDialog();
+                  
                 }
               });
             }
@@ -208,6 +254,14 @@ export class VerClienteComponent implements OnInit {
             showConfirmButton: false,
           });
         }
+        Swal.fire({
+          icon: 'info',
+          title: 'Información',
+          text: 'Se ha elegido al Cliente',
+          showConfirmButton: true,
+          // timer: 3000
+        });
+        this.cerrarDialog();
       })
     }
 

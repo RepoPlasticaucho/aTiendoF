@@ -19,6 +19,10 @@ const initMovement: MovimientosEntity = {
   clave_acceso: '',
   total_si: '',
   total_desc: '',
+  proveedor_id: '',
+  autorizacion_venta: '',
+  comp_venta: '',
+  sustento_id: '',
   total_imp: '',
   propina: '',
   importe_total: '',
@@ -74,6 +78,10 @@ export class MovimientosService {
 
   finalizarPedido(movimiento: MovimientosEntity): Observable<Movimientos> {
     return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/FinalizarPedido`, movimiento);
+  }
+
+  finalizarCompra(movimiento: MovimientosEntity): Observable<Movimientos> {
+    return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/FinalizarCompra`, movimiento);
   }
 
   actualizarTerceroPedido(movimiento: MovimientosEntity): Observable<Movimientos> {

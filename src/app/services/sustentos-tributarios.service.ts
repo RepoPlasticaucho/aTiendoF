@@ -30,4 +30,8 @@ export class SustentosTributariosService {
   obtenerSustentos(): Observable<SustentosTributarios> {
     return this.http.get<SustentosTributarios>(`${environment.apiUrl}sustentos_tributarios/ObtenerSustentos`);
   }
+
+  obtenerSustentosN(sustento: SustentosTributariosEntity):Observable<SustentosTributarios>{
+    return this.http.post<SustentosTributarios>(`${environment.apiUrl}sustentos_tributarios/ObtenerSustentosN`, sustento);
+}
 }

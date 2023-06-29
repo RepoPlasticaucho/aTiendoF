@@ -20,6 +20,10 @@ export interface MovimientosEntity {
     total_desc?: string;
     total_imp?: string;
     propina?: string;
+    proveedor_id?: string;
+    comp_venta?: string;
+    sustento_id?: string;
+    autorizacion_venta?: string;
     fecha_emision?: string;
     importe_total?: string;
     valor_rete_iva?: string;

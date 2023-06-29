@@ -15,16 +15,15 @@ import { ProveedoresEntity } from 'src/app/models/proveedores';
 import { ProveedoresService } from 'src/app/services/proveedores.service';
 import { SustentosTributariosService } from 'src/app/services/sustentos-tributarios.service';
 import { SustentosTributariosEntity } from 'src/app/models/sustentos_tributarios';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-menucompr',
   templateUrl: './menucompr.component.html',
-  styleUrls: ['./menucompr.component.css']
+  styleUrls: ['./menucompr.component.css'],
+  providers: [DatePipe]
 })
 export class MenucomprComponent implements OnInit {
-  editarDetalle: boolean = false;
-  selectTipo: boolean = false;
-  disableProveedor: boolean = false;
 
   clienteForm = new FormGroup({
     tipo: new FormControl('0', Validators.required)
@@ -53,12 +52,20 @@ export class MenucomprComponent implements OnInit {
   lstProveedores2: ProveedoresEntity[] = [];
   lstSustentos: SustentosTributariosEntity[] = [];
   lstSustentos2: SustentosTributariosEntity[] = [];
+  editarDetalle: boolean = false;
+  selectTipo: boolean = false;
+  disableProveedor: boolean = false;
+  autorizacion: string = '';
+  comprobante: string = '';
+  fechaSeleccionada: Date | null = null;
+  fechaFormateada: any = '';
 
   constructor(private dialog: MatDialog,
     private readonly httpService: DetallesmovimientoService,
     private readonly httpServiceProv: ProveedoresService,
     private readonly httpServiceMov: MovimientosService,
     private readonly httpServiceSus: SustentosTributariosService,
+    private datePipe: DatePipe,
     private router: Router) { }
 
   ngOnInit(): void {
@@ -102,7 +109,6 @@ export class MenucomprComponent implements OnInit {
 
     this.cargarTablaMenucompr();
     this.checkRegistros();
-    console.log(this.lstDetalleMovimientos.length)
   }
 
   checkRegistros() {
@@ -136,6 +142,31 @@ export class MenucomprComponent implements OnInit {
         });
       } else {
         localStorage.setItem('proveedorid', res.lstProveedores[0].id);
+      }
+    })
+  }
+
+  changeGroup2(sustento: any): void {
+    if (sustento.target.value == 0) {
+      localStorage.setItem('sustentoid', '0')
+    }
+    const sustentos: SustentosTributariosEntity = {
+      id: '',
+      etiquetas: '',
+      codigo: '',
+      sustento: sustento.target.value,
+    }
+
+    this.httpServiceSus.obtenerSustentosN(sustentos).subscribe(res => {
+      if (res.codigoError != "OK") {
+        Swal.fire({
+          icon: 'error',
+          title: 'No se pudo obtener el sustento',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      } else {
+        localStorage.setItem('sustentoid', res.lstSustentos[0].id);
       }
     })
   }
@@ -295,14 +326,30 @@ export class MenucomprComponent implements OnInit {
   }
 
   finalizarPedido() {
+    this.fechaFormateada = this.datePipe.transform(this.fechaSeleccionada, 'yyyy-MM-dd');
     Swal.fire({
       title: '¿Estás seguro de terminar la compra?',
       showDenyButton: true,
       confirmButtonText: 'SÍ',
       denyButtonText: `NO`,
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
+      const newMov: MovimientosEntity = {
+        id: localStorage.getItem('movimiento_id')!,
+        tipo_id: '',
+        tipo_emision_cod: '',
+        estado_fact_id: '',
+        tipo_comprb_id: '',
+        almacen_id: '',
+        cod_doc: '',
+        secuencial: '',
+        proveedor_id: localStorage.getItem('proveedorid')!,
+        autorizacion_venta: this.autorizacion,
+        comp_venta: this.comprobante,
+        fecha_emision: this.fechaFormateada,
+        sustento_id: localStorage.getItem('sustentoid')!
+      }
       if (result.isConfirmed) {
+        this.httpServiceMov.finalizarCompra(newMov).subscribe(res => {
         Swal.fire({
           icon: 'success',
           title: 'Finalizado Correctamente.',
@@ -311,14 +358,38 @@ export class MenucomprComponent implements OnInit {
           confirmButtonText: "Ok"
         }).finally(() => {
           // this.groupForm.reset();
-          this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ver-factura'] } }]);
+          //this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ver-factura'] } }]);
         });
-
+      });
       } else if (result.isDenied) {
         Swal.fire('No se finalizó la compra', '', 'info')
       }
     });
   }
+
+  formatDate(event: any): void {
+    // Obtener el valor ingresado por el usuario
+    let input = event.target.value;
+  
+    // Eliminar cualquier carácter que no sea un número
+    input = input.replace(/\D/g, '');
+  
+    // Aplicar el formato deseado
+    let formattedDate = '';
+    if (input.length > 0) {
+      formattedDate += input.slice(0, 2) ; // Primeros dos números
+    }
+    if (input.length > 2) {
+      formattedDate += '-' + input.slice(2, 4); // Siguiente dos números
+    }
+    if (input.length > 4) {
+      formattedDate += '-' + input.slice(4, 8); // Últimos cuatro números
+    }
+  
+    // Actualizar el valor del input con el formato
+    event.target.value = formattedDate;
+  }
+  
 
 
 
