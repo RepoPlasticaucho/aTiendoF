@@ -13,6 +13,8 @@ import { MovimientosService } from 'src/app/services/movimientos.service';
 import { MovimientosEntity } from 'src/app/models/movimientos';
 import { ProveedoresEntity } from 'src/app/models/proveedores';
 import { ProveedoresService } from 'src/app/services/proveedores.service';
+import { SustentosTributariosService } from 'src/app/services/sustentos-tributarios.service';
+import { SustentosTributariosEntity } from 'src/app/models/sustentos_tributarios';
 
 @Component({
   selector: 'app-menucompr',
@@ -22,6 +24,7 @@ import { ProveedoresService } from 'src/app/services/proveedores.service';
 export class MenucomprComponent implements OnInit {
   editarDetalle: boolean = false;
   selectTipo: boolean = false;
+  disableProveedor: boolean = false;
 
   clienteForm = new FormGroup({
     tipo: new FormControl('0', Validators.required)
@@ -48,11 +51,14 @@ export class MenucomprComponent implements OnInit {
   formGroup: any;
   lstProveedores: ProveedoresEntity[] = [];
   lstProveedores2: ProveedoresEntity[] = [];
+  lstSustentos: SustentosTributariosEntity[] = [];
+  lstSustentos2: SustentosTributariosEntity[] = [];
 
   constructor(private dialog: MatDialog,
     private readonly httpService: DetallesmovimientoService,
     private readonly httpServiceProv: ProveedoresService,
     private readonly httpServiceMov: MovimientosService,
+    private readonly httpServiceSus: SustentosTributariosService,
     private router: Router) { }
 
   ngOnInit(): void {
@@ -81,8 +87,26 @@ export class MenucomprComponent implements OnInit {
       }
     });
 
-    this.cargarTablaMenucompr();
+    this.httpServiceSus.obtenerSustentos().subscribe(res => {
+      if (res.codigoError != "OK") {
+        Swal.fire({
+          icon: 'error',
+          title: 'No se pudo obtener sustentos.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      } else {
+        this.lstSustentos = res.lstSustentos;
+      }
+    });
 
+    this.cargarTablaMenucompr();
+    this.checkRegistros();
+    console.log(this.lstDetalleMovimientos.length)
+  }
+
+  checkRegistros() {
+    this.disableProveedor = this.lstDetalleMovimientos.length > 0;
   }
 
   changeGroup(tipoC: any): void {
@@ -127,6 +151,7 @@ export class MenucomprComponent implements OnInit {
     dialogRef.componentInstance.productoAgregado.subscribe((producto: any) => {
       // Actualizar la tabla
       this.cargarTablaMenucompr();
+      this.checkRegistros();
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -157,11 +182,13 @@ export class MenucomprComponent implements OnInit {
         });
       } else {
         this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+        this.disableProveedor = this.lstDetalleMovimientos.length > 0;
         this.dtTrigger.next('');
         this.calcularSumaTotal();
         Swal.close();
       }
     });
+    
   }
 
 

@@ -28,12 +28,19 @@
             <form [formGroup]="clienteForm">
                 <div class="form-group">
                     <div class="d-flex">
-                        <select class="form-control small-select" (change)="changeGroup($event)" formControlName="tipo">
+                        <select class="form-control small-select" (change)="changeGroup($event)" [disabled]="disableProveedor">
                             <option value="0" selected>Seleccione un proveedor</option>
                             <option *ngFor="let proveedor of lstProveedores" [value]="proveedor.nombre">
                                 {{proveedor.nombre}}
                             </option>
                         </select>
+                        <select class="form-control small-select">
+                            <option value="0" selected>Seleccione un sustento</option>
+                            <option *ngFor="let sustento of lstSustentos" [value]="sustento.sustento">
+                                {{sustento.sustento}}
+                            </option>
+                        </select>
+                        <input type="text" class="input-1" placeholder="Ingrese el comprobante de venta">
                     </div>
                     <small *ngIf="selectTipo">
                         <small *ngIf="selectTipo" style="color: red; ">
