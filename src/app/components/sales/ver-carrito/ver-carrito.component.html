@@ -16,6 +16,7 @@
                         <th style="width: 20%; ">NOMBRE</th>
                         <th style="width: 20%; ">CANTIDAD</th>
                         <th style="width: 20%; ">PVP</th>
+                        <th style="width: 20%; ">STOCK ACTUAL</th>
                         <th style="width: 20%; "></th>
                     </tr>
                 </thead>
@@ -27,6 +28,7 @@
                             <input class="cool-input" (input)="onInput($event)" *ngIf="true" type="text" [(ngModel)]="inventario.cantidad" />
                         </td>
                         <td>{{inventario.pvp2}}</td>
+                        <td>{{ inventario.stock | number: '.0-0' }}</td>
                         <td style="text-align: center;">
                             <a class="btn button" (click)=" crearDetalle(inventario)"
                                 style="border-radius: 5px; 

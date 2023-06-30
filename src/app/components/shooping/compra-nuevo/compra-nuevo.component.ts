@@ -154,7 +154,6 @@ export class CompraNuevoComponent implements OnInit {
                     costo: this.costo,
                     precio: this.precio
                   }
-                  console.log(newDetalle)
                   this.httpServiceDetalle.agregarDetalleCompra(newDetalle).subscribe(res4 => {
                     if (res4.codigoError != 'OK') {
                       Swal.fire({

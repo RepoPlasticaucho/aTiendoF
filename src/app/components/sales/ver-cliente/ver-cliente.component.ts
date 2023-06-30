@@ -17,6 +17,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MenuventComponent } from '../menuvent/menuvent.component';
 import { MovimientosEntity } from 'src/app/models/movimientos';
 import { MovimientosService } from 'src/app/services/movimientos.service';
+import { finalize } from 'rxjs';
 
 
 @Component({
@@ -135,7 +136,7 @@ export class VerClienteComponent implements OnInit {
     this.TercerosForm.controls['ciudad_id'].setValue(ciudad.idCiudad);
   }
 
-  onClick(){
+  onClick() {
     const tercerodatos: TercerosEntity = {
       id: '',
       almacen_id: '',
@@ -216,10 +217,10 @@ export class VerClienteComponent implements OnInit {
         ciudadid: this.TercerosForm.value!.ciudad_id ?? ''
       }
       localStorage.setItem('idfiscalCl', this.TercerosForm.value!.id_fiscal!);
-      this.httpService.agregarTerceros(tercerodatos).subscribe(res => {
-        if (res.codigoError == "OK") {
-          this.httpService.obtenerTerceroCedula(tercerodatos).subscribe(res1 => {
-            if (res1.codigoError == "OK") {
+      this.httpService.obtenerTerceroCedula(tercerodatos).subscribe(res1 => {
+        if (res1.codigoError == "NEXISTE") {
+          this.httpService.agregarTerceros(tercerodatos).pipe(finalize(() => { 
+            this.httpService.obtenerTerceroCedula(tercerodatos).subscribe(res3 => { 
               const newMovimiento: MovimientosEntity = {
                 id: localStorage.getItem('movimiento_id')!,
                 tipo_id: '',
@@ -229,7 +230,7 @@ export class VerClienteComponent implements OnInit {
                 almacen_id: '',
                 cod_doc: '',
                 secuencial: '',
-                tercero_id: res1.lstTerceros[0].id!
+                tercero_id: res3.lstTerceros[0].id!
               }
               this.httpServiceMov.actualizarClientePedido(newMovimiento).subscribe(res2 => {
                 if (res2.codigoError != "OK") {
@@ -241,30 +242,63 @@ export class VerClienteComponent implements OnInit {
                     // timer: 3000
                   });
                 } else {
-                  
+                  Swal.fire({
+                    icon: 'info',
+                    title: 'Información',
+                    text: 'Se ha elegido al Cliente',
+                    showConfirmButton: true,
+                    // timer: 3000
+                  });
                 }
+              });
+            });
+          })).subscribe(res => {
+            if (res.codigoError == "OK") {
+              
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Ha ocurrido un error.',
+                text: res.descripcionError,
+                showConfirmButton: false,
               });
             }
           })
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Ha ocurrido un error.',
-            text: res.descripcionError,
-            showConfirmButton: false,
+        } else if (res1.codigoError == 'OK') {
+          const newMovimiento: MovimientosEntity = {
+            id: localStorage.getItem('movimiento_id')!,
+            tipo_id: '',
+            tipo_emision_cod: '',
+            estado_fact_id: '',
+            tipo_comprb_id: '',
+            almacen_id: '',
+            cod_doc: '',
+            secuencial: '',
+            tercero_id: res1.lstTerceros[0].id!
+          }
+          this.httpServiceMov.actualizarClientePedido(newMovimiento).subscribe(res2 => {
+            if (res2.codigoError != "OK") {
+              Swal.fire({
+                icon: 'info',
+                title: 'Información',
+                text: 'Ha ocurrido un error',
+                showConfirmButton: true,
+                // timer: 3000
+              });
+            } else {
+              Swal.fire({
+                icon: 'info',
+                title: 'Información',
+                text: 'Se ha elegido al Cliente',
+                showConfirmButton: true,
+                // timer: 3000
+              });
+            }
           });
         }
-        Swal.fire({
-          icon: 'info',
-          title: 'Información',
-          text: 'Se ha elegido al Cliente',
-          showConfirmButton: true,
-          // timer: 3000
-        });
-        this.cerrarDialog();
-      })
+      });
+      this.cerrarDialog();
     }
-
   }
 
 
