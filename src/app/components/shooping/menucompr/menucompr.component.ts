@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { Subject } from 'rxjs';
-import { faShoppingBag, faSave, faList, faTimes, faShoppingCart, faEdit, faTrashAlt, faMoneyBillAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faShoppingBag, faSave, faList, faTimes, faShoppingCart, faEdit, faTrashAlt, faMoneyBillAlt, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
 import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service';
 import { CompraNuevoComponent } from '../compra-nuevo/compra-nuevo.component';
@@ -16,6 +16,7 @@ import { ProveedoresService } from 'src/app/services/proveedores.service';
 import { SustentosTributariosService } from 'src/app/services/sustentos-tributarios.service';
 import { SustentosTributariosEntity } from 'src/app/models/sustentos_tributarios';
 import { DatePipe } from '@angular/common';
+import { NuevoProductoComponent } from '../nuevo-producto/nuevo-producto.component';
 
 @Component({
   selector: 'app-menucompr',
@@ -34,6 +35,7 @@ export class MenucomprComponent implements OnInit {
   faTimes = faTimes;
   faCheck = faCheck;
   faSave = faSave;
+  faPlus = faPlus;
   faShoppingCart = faShoppingCart;
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;
@@ -119,6 +121,7 @@ export class MenucomprComponent implements OnInit {
     if (tipoC.target.value == 0) {
       this.selectTipo = true;
       localStorage.setItem('proveedorid', '0')
+      localStorage.setItem('proveedor','')
     } else {
       this.selectTipo = false;
     }
@@ -142,6 +145,7 @@ export class MenucomprComponent implements OnInit {
         });
       } else {
         localStorage.setItem('proveedorid', res.lstProveedores[0].id);
+        localStorage.setItem('proveedor',tipoC.target.options[tipoC.target.selectedIndex].text);
       }
     })
   }
@@ -183,6 +187,18 @@ export class MenucomprComponent implements OnInit {
       // Actualizar la tabla
       this.cargarTablaMenucompr();
       this.checkRegistros();
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      // Lógica para manejar el resultado después de cerrar el modal
+    });
+  }
+
+  nuevoProducto() {
+    const dialogRef = this.dialog.open(NuevoProductoComponent, {
+      width: '900px',
+      height: '600px'
+      // Agrega cualquier configuración adicional del modal aquí
     });
 
     dialogRef.afterClosed().subscribe(result => {

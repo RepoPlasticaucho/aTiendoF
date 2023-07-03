@@ -1,0 +1,162 @@
+<div class="dialogo" style="max-width: 95%; margin: auto">
+    <div class="dialog-content">
+        <div class="btn-cerrar">
+            <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip" data-placement="bottom" (click)="cerrarDialog()"
+                title="Regresar a pedidos">
+            </fa-icon>
+        </div>
+        <fa-icon [icon]="faUserFriends" [size]="'3x'" style="color: #636363;"></fa-icon>
+        <h1 class="mx-5 " style="color: #636363;">Nuevo Producto</h1>
+    </div>
+    <br>
+    <form [formGroup]="modelProductForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label for="proveedor">Proveedores</label>
+            <select class="form-control" [disabled]="true">
+                <option [value]=" 0 " selected>{{proveedor}}</option>
+            </select>
+            <small *ngIf="selectProveedor">
+                <small *ngIf="selectProveedor" style="color: red; ">
+                    Debe seleccionar un proveedor.
+                </small>
+            </small>
+        </div>
+        <div class="form-group">
+            <label for="marca">Marcas</label>
+            <select class="form-control" (change)="changeMark($event)" formControlName="marca">
+                <option [value]=" 0 " selected>Seleccione una marca</option>
+                <option *ngFor="let marca of lstMarcas" [value]="marca.marca">
+                    {{marca.marca}}
+                </option>
+            </select>
+            <small *ngIf="selectMarca">
+                <small *ngIf="selectMarca" style="color: red; ">
+                    Debe seleccionar una marca.
+                </small>
+            </small>
+        </div>
+        <div class="form-group">
+            <label for="grupo">Categoria</label>
+            <select class="form-control" (change)="changeGroup1($event)" formControlName="categoria">
+                <option [value]="0" selected>Seleccione una categoría</option>
+                <option *ngFor="let categoria of lstCategorias" [value]="categoria.categoria">
+                    {{categoria.categoria}}
+                </option>
+            </select>
+            <small *ngIf="selectCategoria">
+                <small *ngIf="selectCategoria" style="color: red; ">
+                    Debe seleccionar una categoría.
+                </small>
+            </small>
+        </div>
+
+        <div class="form-group">
+            <label for="grupo">Tipos</label>
+            <select class="form-control" (change)="changeGroup2($event)" formControlName="linea">
+                <option [value]=" 0 " selected>Seleccione un tipo</option>
+                <option *ngFor="let linea of lstLineas" [value]="linea.linea">
+                    {{linea.linea}}
+                </option>
+            </select>
+            <small *ngIf="selectLinea">
+                <small *ngIf="selectLinea" style="color: red; ">
+                    Debe seleccionar un tipo.
+                </small>
+            </small>
+        </div>
+        <div class="form-group">
+            <label for="grupo">Modelos</label>
+            <select class="form-control" (change)="changeGroup3($event)" formControlName="modelo">
+                <option [value]=" 0 " selected>Seleccione un modelo</option>
+                <option *ngFor="let modelo of lstModelos" [value]="modelo.modelo">
+                    {{modelo.modelo}}
+                </option>
+            </select>
+            <small *ngIf="selectModelo">
+                <small *ngIf="selectModelo" style="color: red; ">
+                    Debe seleccionar un modelo.
+                </small>
+            </small>
+        </div>
+        <div class="form-group">
+            <label for="modeloproducto_id">Modelo Producto:</label>
+            <ng-autocomplete [data]="lstModeloProductos" (selected)='selectEventModel($event)'
+                [searchKeyword]="keywordModelProduct" placeholder="Seleccione el Modelo Producto"
+                [itemTemplate]="itemTemplateModel" [notFoundTemplate]="notFoundTemplateModel"
+                class="form-control" style="width: 100%;padding: 0%;"
+                (inputChanged)='onChangeSearchModel($event)' (inputCleared)="onInputClearedModel()">
+            </ng-autocomplete>
+            <ng-template #itemTemplateModel let-item>
+                <a [innerHTML]="item.modelo_producto"></a>
+            </ng-template>
+            <ng-template #notFoundTemplateModel let-notFound>
+                <p>No se encontro datos</p>
+            </ng-template>
+            <small *ngIf="selectModeloProducto">
+                <small *ngIf="selectModeloProducto " style="color: red; ">
+                    Debe seleccionar un Modelo.
+                </small>
+            </small>
+        </div>
+
+        <div class="form-group ">
+            <label for="producto" style="margin: 0;">Nombre del Producto</label>
+            <input [(ngModel)]="selectedModeloProducto" type="text " class="form-control " id="producto"
+                placeholder="Ingrese la descripción del Producto." formControlName="producto">
+            <small
+                *ngIf="modelProductForm.controls['producto'].invalid && (modelProductForm.controls['producto'].dirty || modelProductForm.controls['producto'].touched)">
+                <small *ngIf="modelProductForm.controls['producto'].errors?.['required']" style="color: red;">
+                    Debe ingresar la descripción del producto
+                </small>
+            </small>
+        </div>
+        <div class="form-group ">
+            <label for="producto" style="margin: 0;">Etiquetas</label>
+            <input type="text " class="form-control " id="etiquetas"
+                placeholder="Ingrese las etiquetas del Producto." formControlName="etiquetas">
+            <small
+                *ngIf="modelProductForm.controls['etiquetas'].invalid && (modelProductForm.controls['etiquetas'].dirty || modelProductForm.controls['etiquetas'].touched)">
+                <small *ngIf="modelProductForm.controls['etiquetas'].errors?.['required']" style="color: red;">
+                    Debe ingresar la descripción del producto
+                </small>
+            </small>
+        </div>
+        <div class="form-group ">
+            <label for="tamanio" style="margin: 0;">Tamaño</label>
+            <input type="text " class="form-control " id="tamanio" placeholder="Ingrese el tamaño del Producto."
+                formControlName="tamanio">
+            <small
+                *ngIf="modelProductForm.controls['tamanio'].invalid && (modelProductForm.controls['tamanio'].dirty || modelProductForm.controls['tamanio'].touched)">
+                <small *ngIf="modelProductForm.controls['tamanio'].errors?.['required']" style="color: red;">
+                    Debe ingresar el tamaño del producto.
+                </small>
+            </small>
+        </div>
+        <div class="form-group ">
+            <label for="stock" style="margin: 0;">Stock</label>
+            <input type="text " class="form-control " id="stock"
+                placeholder="Ingrese la cantidad/stock del Producto." formControlName="stock">
+            <small
+                *ngIf="modelProductForm.controls['stock'].invalid && (modelProductForm.controls['stock'].dirty || modelProductForm.controls['stock'].touched)">
+                <small *ngIf="modelProductForm.controls['stock'].errors?.['required']" style="color: red;">
+                    Debe ingresar el stock del producto
+                </small>
+            </small>
+        </div>
+        <div class="form-group ">
+            <label for="precio" style="margin: 0;">Precio</label>
+            <input type="text " class="form-control " id="precio"
+                placeholder="Ingrese el precio del Producto." formControlName="precio">
+            <small
+                *ngIf="modelProductForm.controls['precio'].invalid && (modelProductForm.controls['precio'].dirty || modelProductForm.controls['precio'].touched)">
+                <small *ngIf="modelProductForm.controls['precio'].errors?.['required']" style="color: red;">
+                    Debe ingresar el precio del Producto.
+                </small>
+            </small>
+        </div>
+        <button type="submit" class="btn btn-primary">
+            <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
+            Guardar
+        </button>
+    </form>
+</div>

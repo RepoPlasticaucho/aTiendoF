@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { Marcas, MarcasEntity } from '../models/marcas';
 import { CategoriasEntity } from '../models/categorias';
+import { Proveedores, ProveedoresEntity } from '../models/proveedores';
 
 const initMark: MarcasEntity = {
   id: "",
@@ -34,6 +35,9 @@ export class MarcasService {
   }
   obtenerMarcaCategoria(categoria: CategoriasEntity): Observable<Marcas> {
     return this.http.post<Marcas>(`${environment.apiUrl}marcas/ObtenerMarcaCategoria`, categoria);
+  }
+  obtenerMarcasProveedor(proveedor: ProveedoresEntity): Observable<Marcas> {
+    return this.http.post<Marcas>(`${environment.apiUrl}marcas/ObtenerMarcasProveedor`, proveedor);
   }
   agregarMarca(marca: MarcasEntity): Observable<Marcas> {
     return this.http.post<Marcas>(`${environment.apiUrl}marcas/InsertarMarcas`, marca);

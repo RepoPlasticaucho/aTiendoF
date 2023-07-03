@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { faSave, faTimes, faUserFriends, faSearch } from '@fortawesome/free-solid-svg-icons';
-import { ProvinciasService } from 'src/app/services/provincias.service';
 import { TipotercerosEntity } from 'src/app/models/tipotercero';
 import { TipousuariosEntity } from 'src/app/models/tipousuario';
 import { CiudadesService } from 'src/app/services/ciudades.service';

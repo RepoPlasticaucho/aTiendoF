@@ -133,6 +133,7 @@ import { CompraEditarComponent } from './components/shooping/compra-editar/compr
 import { VerClienteComponent } from './components/sales/ver-cliente/ver-cliente.component';
 import { AlmacenesshoopingComponent } from './components/shooping/almacenesshooping/almacenesshooping.component';
 import { CompraprovComponent } from './components/shooping/compraprov/compraprov.component';
+import { NuevoProductoComponent } from './components/shooping/nuevo-producto/nuevo-producto.component';
 
 @NgModule({
   declarations: [
@@ -242,7 +243,8 @@ import { CompraprovComponent } from './components/shooping/compraprov/compraprov
     CompraEditarComponent,
     VerClienteComponent,
     AlmacenesshoopingComponent,
-    CompraprovComponent
+    CompraprovComponent,
+    NuevoProductoComponent
   ],
   imports: [
     BrowserModule,

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { Categorias, CategoriasEntity } from '../models/categorias';
+import { MarcasEntity } from '../models/marcas';
 
 const initCategory: CategoriasEntity = {
   id: "",
@@ -48,6 +49,10 @@ export class CategoriasService {
   obtenerCategoriaNombre(categoria: CategoriasEntity): Observable<Categorias> {
     return this.http.post<Categorias>(`${environment.apiUrl}almacenes/ObtenerCategoriaNombre`, categoria );
   }
+  obtenerCategoriaMarca(marca: MarcasEntity): Observable<Categorias> {
+    return this.http.post<Categorias>(`${environment.apiUrl}categorias/ObtenerCategoriaMarca`, marca );
+  }
+  
   agregarCategoriaBDD=(categoria: CategoriasEntity) =>{
     categoria._id=new Date().toISOString();
     this.db.get(categoria._id)
