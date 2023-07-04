@@ -141,7 +141,6 @@ export class NuevoProductoComponent implements OnInit {
           text: res.descripcionError,
           showConfirmButton: false,
         });
-        this.lstMarcas = [];
       } else {
         this.lstMarcas = res.lstMarcas;
       }
@@ -241,14 +240,12 @@ export class NuevoProductoComponent implements OnInit {
       this.selectCategoria = true;
       this.lstLineas = [];
       this.lstModelos = [];
-      this.lstMarcas = [];
     } else {
       this.selectCategoria = false;
     }
     if (e.target.value == null || undefined) {
       this.lstLineas = [];
       this.lstModelos = [];
-      this.lstMarcas = [];
     } else {
       const categoria: CategoriasEntity = {
         id: '',
@@ -267,7 +264,6 @@ export class NuevoProductoComponent implements OnInit {
           });
           this.lstLineas = [];
           this.lstModelos = [];
-          this.lstMarcas = [];
         } else {
           this.lstLineas = res.lstLineas;
         }
@@ -296,6 +292,7 @@ export class NuevoProductoComponent implements OnInit {
         cod_sap: '',
         almacen_id: ''
       }
+      /*
       this.httpServiceModelos.obtenerModelosLineasAdm(linea).subscribe(res => {
         if (res.codigoError != "OK") {
           Swal.fire({
@@ -311,6 +308,20 @@ export class NuevoProductoComponent implements OnInit {
           this.modelProductForm.get("marca")?.setValue("0");
         }
       })
+      */
+      this.httpServiceModelos.obtenerModelosLineasMarcas(this.modelProductForm.value!.linea ?? '', this.modelProductForm.value!.marca ?? '').subscribe((res) => {
+        if (res.codigoError != 'OK') {
+          Swal.fire({
+            icon: 'error',
+            title: 'No se pudo obtener los Modelos.',
+            text: res.descripcionError,
+            showConfirmButton: false,
+          });
+          this.lstModelos = [];
+        } else {
+          this.lstModelos = res.lstModelos;
+        }
+      });
     }
   }
 
@@ -375,23 +386,21 @@ export class NuevoProductoComponent implements OnInit {
         url_image: ''
       }
       this.httpServiceCategorias.obtenerCategoriaMarca(marcaNew).subscribe((res1) => {
-      
+        if (res1.codigoError != 'OK') {
+          Swal.fire({
+            icon: 'error',
+            title: 'No se pudo obtener las categorías.',
+            text: res1.descripcionError,
+            showConfirmButton: false,
+          });
+          this.lstCategorias = [];
+        } else {
+          this.lstCategorias = res1.lstCategorias;
+        }
       });
       
       /*
-      this.httpServiceModelos.obtenerModelosLineasMarcas(this.modelProductForm.value!.linea ?? '', marca.target.value).subscribe((res) => {
-          if (res.codigoError != 'OK') {
-            Swal.fire({
-              icon: 'error',
-              title: 'No se pudo obtener los Modelos.',
-              text: res.descripcionError,
-              showConfirmButton: false,
-            });
-            this.lstModelos = [];
-          } else {
-            this.lstModelos = res.lstModelos;
-          }
-        });
+      
         */
     }
   }
