@@ -8,6 +8,7 @@ export interface ProveedoresEntity {
     id: string;
     id_fiscal: string;
     ciudadid: string;
+    ciudad?: string;
     correo: string;
     created_at?: string;
     direccionprov: string;

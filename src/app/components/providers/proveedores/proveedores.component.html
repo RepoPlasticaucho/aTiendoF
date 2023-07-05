@@ -1,17 +1,15 @@
-<!--
-    <br>
+<br>
 <div class="card" style="max-width: 95%;margin: auto;">
     <div class="card-header">
         <div class="row mx-3">
             <fa-icon [icon]="faList" [size]="'3x'" style="color: #636363;"></fa-icon>
-            <h1 class="mx-5 " style="color: #636363;">Productos</h1>
+            <h1 class="mx-5 " style="color: #636363;">Proveedores</h1>
             <div style="position: absolute;right:0;" class="mx-3">
                 <fa-icon [icon]="faPlus" class="btn btn-success" [size]="'lg'" data-toggle="tooltip"
                     data-placement="bottom" title="Agregar una nuevo Proveedor"
                     (click)="agregarProveedor()"></fa-icon>
             </div>
         </div>
-
     </div>
     <div class="card-body ">
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
@@ -27,21 +25,20 @@
             </thead>
             <tbody style="color: #767695;">
                 <tr *ngFor="let proveedor of lstProveedores">
-                    <td>{{producto.marca_nombre}}</td>
-                    <td>{{producto.color_nombre}}</td>
-                    <td>{{producto.atributo_nombre}}</td>
-                    <td>{{producto.genero_nombre}}</td>
-                    <td>{{producto.modelo_nombre}}</td>
+                    <td>{{proveedor.nombre}}</td>
+                    <td>{{proveedor.correo}}</td>
+                    <td>{{proveedor.telefono}}</td>
+                    <td>{{proveedor.ciudad}}</td>
+                    <td>{{proveedor.direccionprov}}</td>
                     <td style="text-align: center;">
                         <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'lg'" style="margin-right: 5px;"
                             data-placement="bottom" title="Editar Modelo Producto"
-                            (click)=" editarProducto(producto) "></fa-icon>
+                            (click)=" editarProducto(proveedor) "></fa-icon>
                         <fa-icon [icon]="faTrashAlt " class="btn btn-danger " [size]=" 'lg' " data-placement="bottom "
-                            title="Eliminar Modelo Producto" (click)="deshabilitarProducto(producto)"></fa-icon>
+                            title="Eliminar Modelo Producto" (click)="eliminarProducto(proveedor)"></fa-icon>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
--->

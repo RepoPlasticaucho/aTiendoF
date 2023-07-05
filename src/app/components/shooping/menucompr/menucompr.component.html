@@ -37,13 +37,13 @@
                                 {{proveedor.nombre}}
                             </option>
                         </select>
-                        <select class="form-control small-select" (change)="changeGroup2($event)">
+                        <select class="form-control small-select" (change)="changeGroup2($event)" [disabled]="disableProveedor">
                             <option value="0" selected>Seleccione un sustento</option>
                             <option *ngFor="let sustento of lstSustentos" [value]="sustento.sustento">
                                 {{sustento.sustento}}
                             </option>
                         </select>
-                        <input type="text" [(ngModel)]="comprobante" class="form-control input-1" placeholder="Comprobante de venta" (input)="onInputComprobante($event)">
+                        <input type="text" [disabled]="disableProveedor" (keypress)="keyPressNumbers($event)" [(ngModel)]="comprobante" class="form-control input-1" placeholder="Comprobante de venta" (input)="onInputComprobante($event)">
                     </div>
                     <small *ngIf="selectTipo">
                         <small *ngIf="selectTipo" style="color: red; ">
@@ -51,9 +51,9 @@
                         </small>
                     </small>
                     <div class="d-flex">
-                        <input type="text" [(ngModel)]="autorizacion" class="form-control input-1" placeholder="Autorización de venta" (input)="onInputAutorizacion($event)">
+                        <input type="text" [disabled]="disableProveedor" (keypress)="keyPressNumbers($event)" [(ngModel)]="autorizacion" class="form-control input-1" placeholder="Autorización de venta" (input)="onInputAutorizacion($event)">
                         
-                        <mat-form-field appearance="fill" class="custom-datepicker">
+                        <mat-form-field appearance="fill" class="custom-datepicker" >
                             <mat-label>FECHA DE EMISIÓN</mat-label>
                             <input id="fecha_nac"
                                 matInput [matDatepicker]="picker" 
@@ -61,7 +61,7 @@
     
                                 <mat-datepicker-toggle matSuffix [for]="picker">
                                 </mat-datepicker-toggle>
-                                <mat-datepicker #picker disabled="false">
+                                <mat-datepicker #picker [disabled]="disableProveedor">
                                 </mat-datepicker>
                         </mat-form-field>
                     </div>

@@ -37,7 +37,17 @@ export class ProveedoresService {
     return this.http.get<Proveedores>(`${environment.apiUrl}proveedores/ObtenerProveedores`);
   }
 
+  obtenerProveedoresAll(): Observable<Proveedores> {
+    return this.http.get<Proveedores>(`${environment.apiUrl}proveedores/ObtenerProveedoresAll`);
+  }
+
   obtenerProveedoresN(proveedor: ProveedoresEntity): Observable<Proveedores> {
     return this.http.post<Proveedores>(`${environment.apiUrl}proveedores/ObtenerProveedoresN`, proveedor);
-}
+  }
+  agregarProveedores(proveedor: ProveedoresEntity): Observable<Proveedores> {
+    return this.http.post<Proveedores>(`${environment.apiUrl}proveedores/InsertarProveedores`, proveedor);
+  }
+  actualizarProveedores(proveedor: ProveedoresEntity): Observable<Proveedores> {
+    return this.http.post<Proveedores>(`${environment.apiUrl}proveedores/ModificarProveedores`, proveedor);
+  }
 }

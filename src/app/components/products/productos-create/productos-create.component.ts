@@ -280,8 +280,8 @@ export class ProductosCreateComponent implements OnInit {
       })
     }   
   }
-  changeGroup2(e: any) {
 
+  changeGroup2(e: any) {
     if (e.target.value == 0) {
       this.selectLinea = true;
       this.lstModelos = [];

@@ -48,7 +48,6 @@ export class NuevoProductoComponent implements OnInit {
     producto: new FormControl('', [Validators.required]),
     etiquetas: new FormControl('', [Validators.required]),
     tamanio: new FormControl('', [Validators.required]),
-    stock: new FormControl('', [Validators.required]),
     precio: new FormControl('', [Validators.required])
   });
   //Variables para listas desplegables

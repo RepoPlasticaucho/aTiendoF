@@ -359,9 +359,15 @@ export class MenucomprComponent implements OnInit {
     this.buttonsDisabled = !this.checkAllConditions();
   }
 
-  onFechaSeleccionada(event: any) {
-    this.fechaSeleccionada = event.value;
-    this.buttonsDisabled = !this.checkAllConditions();
+  keyPressNumbers(event: any) {
+    var charCode = (event.which) ? event.which : event.keyCode;
+    // Only Numbers 0-9
+    if ((charCode < 48 || charCode > 57)) {
+      event.preventDefault();
+      return false;
+    } else {
+      return true;
+    }
   }
 
   // Función para verificar si se cumplen todas las condiciones
@@ -413,7 +419,7 @@ export class MenucomprComponent implements OnInit {
             confirmButtonText: "Ok"
           }).finally(() => {
             // this.groupForm.reset();
-            //this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ver-factura'] } }]);
+            this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ver-factura'] } }]);
           });
         });
       } else if (result.isDenied) {

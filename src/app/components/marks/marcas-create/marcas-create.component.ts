@@ -4,8 +4,10 @@ import { Router } from '@angular/router';
 import { faBookmark, faTimes, faSave } from '@fortawesome/free-solid-svg-icons';
 import { ImagenesEntity } from 'src/app/models/imagenes';
 import { MarcasEntity } from 'src/app/models/marcas';
+import { ProveedoresEntity } from 'src/app/models/proveedores';
 import { ImagenesService } from 'src/app/services/imagenes.service';
 import { MarcasService } from 'src/app/services/marcas.service';
+import { ProveedoresService } from 'src/app/services/proveedores.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -21,6 +23,7 @@ export class MarcasCreateComponent implements OnInit {
   faSave = faSave;
   //Creación de la variable para formulario
   markForm = new FormGroup({
+    proveedor: new FormControl('0', Validators.required),
     marca: new FormControl('', Validators.required),
     etiquetas: new FormControl(''),
     urlImagen: new FormControl(''),
@@ -32,10 +35,57 @@ export class MarcasCreateComponent implements OnInit {
   imageName: string = "";
   codigoError: string = "";
   descripcionError: string = "";
+  selectProveedor: boolean = false;
+  lstProveedores: ProveedoresEntity[] = [];
+  codigo: any;
 
-  constructor(private httpService: MarcasService, private httpServiceImage: ImagenesService, private router: Router) { }
-  
+  constructor(private httpService: MarcasService, private httpServiceImage: ImagenesService,
+    private router: Router, private httpServiceProv: ProveedoresService) { }
+
   ngOnInit(): void {
+    //Obtenemos Proveedores
+    this.httpServiceProv.obtenerProveedores().subscribe(res => {
+      if (res.codigoError != "OK") {
+        Swal.fire({
+          icon: 'error',
+          title: 'No se pudo obtener proveedores.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      } else {
+        this.lstProveedores = res.lstProveedores;
+      }
+    });
+  }
+
+  changeGroup(tipoC: any): void {
+    if (tipoC.target.value == 0) {
+      this.selectProveedor = true;
+    } else {
+      this.selectProveedor = false;
+    }
+    const proveedores: ProveedoresEntity = {
+      id: '',
+      id_fiscal: '',
+      ciudadid: '',
+      correo: '',
+      direccionprov: '',
+      nombre: tipoC.target.value,
+      telefono: ''
+    }
+
+    this.httpServiceProv.obtenerProveedoresN(proveedores).subscribe(res => {
+      if (res.codigoError != "OK") {
+        Swal.fire({
+          icon: 'error',
+          title: 'No se pudo obtener la Sociedad.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      } else {
+        this.codigo = res.lstProveedores[0].id;
+      }
+    })
   }
 
   onSubmit(): void {
@@ -57,6 +107,8 @@ export class MarcasCreateComponent implements OnInit {
             const markEntity: MarcasEntity = {
               id: "",
               marca: this.markForm.value!.marca ?? "",
+              proveedor: this.markForm.value!.proveedor ?? "",
+              proveedor_id: this.codigo,
               etiquetas: this.markForm.value!.etiquetas ?? "",
               url_image: this.imageName == "" ? this.imageUrl : this.imageName
             }
@@ -93,6 +145,8 @@ export class MarcasCreateComponent implements OnInit {
         const markEntity: MarcasEntity = {
           id: "",
           marca: this.markForm.value!.marca ?? "",
+          proveedor: this.markForm.value!.proveedor ?? "",
+          proveedor_id: this.codigo,
           etiquetas: this.markForm.value!.etiquetas ?? "",
           url_image: this.imageName == "" ? this.imageUrl : this.imageName
         }
