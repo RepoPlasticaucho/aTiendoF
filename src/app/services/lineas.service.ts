@@ -39,6 +39,9 @@ export class LineasService {
   obtenerCategoriaLinea(categoria: CategoriasEntity): Observable<Lineas> {
     return this.http.post<Lineas>(`${environment.apiUrl}lineas/ObtenerCategoriaLinea`, categoria);
   }
+  obtenerLineasCategoriaMarca(categoria: string, marca: string): Observable<Lineas> {
+    return this.http.get<Lineas>(`${environment.apiUrl}lineas/ObtenerLineasCategoriaMarca?categoria=`+ categoria + `&marca=`+ marca);
+  }
   agregarLinea(linea: LineasEntity): Observable<Lineas> {
     return this.http.post<Lineas>(`${environment.apiUrl}lineas/InsertarLineas`, linea);
   }

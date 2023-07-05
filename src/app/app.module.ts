@@ -134,6 +134,9 @@ import { VerClienteComponent } from './components/sales/ver-cliente/ver-cliente.
 import { AlmacenesshoopingComponent } from './components/shooping/almacenesshooping/almacenesshooping.component';
 import { CompraprovComponent } from './components/shooping/compraprov/compraprov.component';
 import { NuevoProductoComponent } from './components/shooping/nuevo-producto/nuevo-producto.component';
+import { ProveedoresComponent } from './components/providers/proveedores/proveedores.component';
+import { ProveedoresCreateComponent } from './components/providers/proveedores-create/proveedores-create.component';
+import { ProveedoresEditComponent } from './components/providers/proveedores-edit/proveedores-edit.component';
 
 @NgModule({
   declarations: [
@@ -244,7 +247,10 @@ import { NuevoProductoComponent } from './components/shooping/nuevo-producto/nue
     VerClienteComponent,
     AlmacenesshoopingComponent,
     CompraprovComponent,
-    NuevoProductoComponent
+    NuevoProductoComponent,
+    ProveedoresComponent,
+    ProveedoresCreateComponent,
+    ProveedoresEditComponent
   ],
   imports: [
     BrowserModule,

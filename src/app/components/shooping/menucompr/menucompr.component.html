@@ -20,11 +20,11 @@
                 </a>
             </div>
             <div class="d-flex justify-content-end">
-                <button class="btn button boton-adicional" (click)="nuevoProducto()">
+                <button class="btn button boton-adicional" (click)="nuevoProducto()" [disabled]="buttonsDisabled">
                     <fa-icon [icon]="faPlus" [size]="'lg'" style="color: #ffffff"></fa-icon>
                     CREAR
                 </button>
-                <button class="btn button carrito-button" (click)="verCarrito()">
+                <button class="btn button carrito-button" (click)="verCarrito()" [disabled]="buttonsDisabled">
                     <fa-icon [icon]="faShoppingCart" [size]="'lg'" style="color: #ffffff"></fa-icon>
                     - AÑADIR
                 </button>
@@ -43,7 +43,7 @@
                                 {{sustento.sustento}}
                             </option>
                         </select>
-                        <input type="text" [(ngModel)]="comprobante" class="form-control input-1" placeholder="Comprobante de venta">
+                        <input type="text" [(ngModel)]="comprobante" class="form-control input-1" placeholder="Comprobante de venta" (input)="onInputComprobante($event)">
                     </div>
                     <small *ngIf="selectTipo">
                         <small *ngIf="selectTipo" style="color: red; ">
@@ -51,11 +51,11 @@
                         </small>
                     </small>
                     <div class="d-flex">
-                        <input type="text" [(ngModel)]="autorizacion" class="form-control input-1" placeholder="Autorización de venta">
+                        <input type="text" [(ngModel)]="autorizacion" class="form-control input-1" placeholder="Autorización de venta" (input)="onInputAutorizacion($event)">
                         
                         <mat-form-field appearance="fill" class="custom-datepicker">
                             <mat-label>FECHA DE EMISIÓN</mat-label>
-                            <input id="fecha_nac" 
+                            <input id="fecha_nac"
                                 matInput [matDatepicker]="picker" 
                                 [(ngModel)]="fechaSeleccionada" [disabled]="true">
     

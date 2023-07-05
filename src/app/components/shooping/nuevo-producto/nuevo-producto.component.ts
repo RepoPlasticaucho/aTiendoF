@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { faSave, faTimes, faUserFriends, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faTimes, faUserFriends, faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 import { ModeloProductosEntity } from 'src/app/models/modeloproductos';
 import { ProducAdmEntity } from 'src/app/models/productadm';
@@ -19,9 +19,6 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MenucomprComponent } from '../menucompr/menucompr.component';
 import { ProveedoresEntity } from 'src/app/models/proveedores';
 import { ProveedoresService } from 'src/app/services/proveedores.service';
-import { finalize } from 'rxjs';
-import { InventariosEntity } from 'src/app/models/inventarios';
-import { InventariosService } from 'src/app/services/inventarios.service';
 
 
 @Component({
@@ -33,7 +30,7 @@ export class NuevoProductoComponent implements OnInit {
 
   //Iconos para la pagina de grupos
   faTimes = faTimes;
-  faUserFriends = faUserFriends;
+  faPlus = faPlus;
   faSave = faSave;
   faSearch = faSearch;
 
@@ -47,6 +44,7 @@ export class NuevoProductoComponent implements OnInit {
     linea: new FormControl('0',),
     marca: new FormControl('0'),
     modelo: new FormControl('0',),
+    medida: new FormControl('', [Validators.required]),
     producto: new FormControl('', [Validators.required]),
     etiquetas: new FormControl('', [Validators.required]),
     tamanio: new FormControl('', [Validators.required]),
@@ -93,6 +91,8 @@ export class NuevoProductoComponent implements OnInit {
     private dialogRef: MatDialogRef<MenucomprComponent>,
     private router: Router
   ) {}
+
+ 
 
   ngOnInit(): void {
     
@@ -178,6 +178,7 @@ export class NuevoProductoComponent implements OnInit {
           impuesto_id: '',
           impuesto_nombre: '',
           marca_nombre: '',
+          unidad_medida: this.modelProductForm.value!.medida ?? "",
           color_nombre: '',
           pvp: this.modelProductForm.value!.precio ?? "",
           atributo_nombre: '',
@@ -247,14 +248,7 @@ export class NuevoProductoComponent implements OnInit {
       this.lstLineas = [];
       this.lstModelos = [];
     } else {
-      const categoria: CategoriasEntity = {
-        id: '',
-        categoria: e.target.value,
-        cod_sap: '',
-        etiquetas: '',
-        almacen_id : '',
-      }
-      this.httpServiceLineas.obtenerLineasCategoriaAdm(categoria).subscribe(res => {
+      this.httpServiceLineas.obtenerLineasCategoriaMarca(this.modelProductForm.value.categoria!, this.modelProductForm.value.marca!).subscribe(res => {
         if (res.codigoError != "OK") {
           Swal.fire({
             icon: 'error',
@@ -270,8 +264,9 @@ export class NuevoProductoComponent implements OnInit {
       })
     }   
   }
-  changeGroup2(e: any) {
 
+
+  changeGroup2(e: any) {
     if (e.target.value == 0) {
       this.selectLinea = true;
       this.lstModelos = [];
@@ -292,23 +287,6 @@ export class NuevoProductoComponent implements OnInit {
         cod_sap: '',
         almacen_id: ''
       }
-      /*
-      this.httpServiceModelos.obtenerModelosLineasAdm(linea).subscribe(res => {
-        if (res.codigoError != "OK") {
-          Swal.fire({
-            icon: 'error',
-            title: 'No se pudo obtener los modelos.',
-            text: res.descripcionError,
-            showConfirmButton: false,
-          });
-          this.lstModelos = [];
-          this.modelProductForm.get("marca")?.setValue("0");
-        } else {
-          this.lstModelos = res.lstModelos;
-          this.modelProductForm.get("marca")?.setValue("0");
-        }
-      })
-      */
       this.httpServiceModelos.obtenerModelosLineasMarcas(this.modelProductForm.value!.linea ?? '', this.modelProductForm.value!.marca ?? '').subscribe((res) => {
         if (res.codigoError != 'OK') {
           Swal.fire({
@@ -369,8 +347,6 @@ export class NuevoProductoComponent implements OnInit {
           console.log(this.lstModeloProductos)
         }
       });
-
-      //this.warehousesForm.get("sociedad")?.setValue(sociedad.target.value);
     }
   }
 
@@ -399,9 +375,6 @@ export class NuevoProductoComponent implements OnInit {
         }
       });
       
-      /*
-      
-        */
     }
   }
 

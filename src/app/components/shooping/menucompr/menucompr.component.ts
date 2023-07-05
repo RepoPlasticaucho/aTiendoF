@@ -41,6 +41,12 @@ export class MenucomprComponent implements OnInit {
   faTrashAlt = faTrashAlt;
   faMoneyBillAlt = faMoneyBillAlt;
   faShoppingBag = faShoppingBag;
+  public buttonsDisabled = true;
+
+  public proveedorSeleccionado = false;
+  public sustentoSeleccionado = false;
+  public comprobanteLleno = false;
+  public autorizacionLlena = false;
 
   //Declaración de variables
   dtOptions: DataTables.Settings = {};
@@ -118,12 +124,15 @@ export class MenucomprComponent implements OnInit {
   }
 
   changeGroup(tipoC: any): void {
+    this.proveedorSeleccionado = tipoC.target.value !== "0";
+    this.buttonsDisabled = !this.checkAllConditions();
     if (tipoC.target.value == 0) {
       this.selectTipo = true;
       localStorage.setItem('proveedorid', '0')
-      localStorage.setItem('proveedor','')
+      localStorage.setItem('proveedor', '')
     } else {
       this.selectTipo = false;
+
     }
     const proveedores: ProveedoresEntity = {
       id: '',
@@ -145,14 +154,18 @@ export class MenucomprComponent implements OnInit {
         });
       } else {
         localStorage.setItem('proveedorid', res.lstProveedores[0].id);
-        localStorage.setItem('proveedor',tipoC.target.options[tipoC.target.selectedIndex].text);
+        localStorage.setItem('proveedor', tipoC.target.options[tipoC.target.selectedIndex].text);
       }
     })
   }
 
   changeGroup2(sustento: any): void {
+    this.sustentoSeleccionado = sustento.target.value !== "0";
+    this.buttonsDisabled = !this.checkAllConditions();
     if (sustento.target.value == 0) {
       localStorage.setItem('sustentoid', '0')
+    } else {
+
     }
     const sustentos: SustentosTributariosEntity = {
       id: '',
@@ -235,7 +248,7 @@ export class MenucomprComponent implements OnInit {
         Swal.close();
       }
     });
-    
+
   }
 
 
@@ -336,8 +349,34 @@ export class MenucomprComponent implements OnInit {
     event.target.value = inputValue.replace(/[^0-9]/g, ''); // Filtra solo números
   }
 
+  onInputComprobante(event: any) {
+    this.comprobanteLleno = event.target.value.trim() !== "";
+    this.buttonsDisabled = !this.checkAllConditions();
+  }
+
+  onInputAutorizacion(event: any) {
+    this.autorizacionLlena = event.target.value.trim() !== "";
+    this.buttonsDisabled = !this.checkAllConditions();
+  }
+
+  onFechaSeleccionada(event: any) {
+    this.fechaSeleccionada = event.value;
+    this.buttonsDisabled = !this.checkAllConditions();
+  }
+
+  // Función para verificar si se cumplen todas las condiciones
+  checkAllConditions(): boolean {
+    return (
+      this.proveedorSeleccionado &&
+      this.sustentoSeleccionado &&
+      this.comprobanteLleno &&
+      this.autorizacionLlena
+    );
+  }
+
   onInput2(event: any) {
     const inputValue = event.target.value;
+    this.autorizacionLlena = event.target.value.trim() !== "";
     event.target.value = inputValue.replace(/[^0-9.]/g, ''); // Filtra solo números y punto
   }
 
@@ -366,46 +405,23 @@ export class MenucomprComponent implements OnInit {
       }
       if (result.isConfirmed) {
         this.httpServiceMov.finalizarCompra(newMov).subscribe(res => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Finalizado Correctamente.',
-          text: `Se ha finalizado la compra`,
-          showConfirmButton: true,
-          confirmButtonText: "Ok"
-        }).finally(() => {
-          // this.groupForm.reset();
-          //this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ver-factura'] } }]);
+          Swal.fire({
+            icon: 'success',
+            title: 'Finalizado Correctamente.',
+            text: `Se ha finalizado la compra`,
+            showConfirmButton: true,
+            confirmButtonText: "Ok"
+          }).finally(() => {
+            // this.groupForm.reset();
+            //this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ver-factura'] } }]);
+          });
         });
-      });
       } else if (result.isDenied) {
         Swal.fire('No se finalizó la compra', '', 'info')
       }
     });
   }
 
-  formatDate(event: any): void {
-    // Obtener el valor ingresado por el usuario
-    let input = event.target.value;
-  
-    // Eliminar cualquier carácter que no sea un número
-    input = input.replace(/\D/g, '');
-  
-    // Aplicar el formato deseado
-    let formattedDate = '';
-    if (input.length > 0) {
-      formattedDate += input.slice(0, 2) ; // Primeros dos números
-    }
-    if (input.length > 2) {
-      formattedDate += '-' + input.slice(2, 4); // Siguiente dos números
-    }
-    if (input.length > 4) {
-      formattedDate += '-' + input.slice(4, 8); // Últimos cuatro números
-    }
-  
-    // Actualizar el valor del input con el formato
-    event.target.value = formattedDate;
-  }
-  
 
 
 

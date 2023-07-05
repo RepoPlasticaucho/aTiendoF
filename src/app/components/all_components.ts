@@ -89,3 +89,6 @@ export { MenucomprComponent } from './shooping/menucompr/menucompr.component';
 export { VerFacturaComponent } from "./sales/ver-factura/ver-factura.component";
 export { AlmacenesshoopingComponent } from './shooping/almacenesshooping/almacenesshooping.component';
 export { CompraprovComponent } from './shooping/compraprov/compraprov.component';
+export { ProveedoresComponent } from './providers/proveedores/proveedores.component';
+export { ProveedoresCreateComponent } from './providers/proveedores-create/proveedores-create.component';
+export { ProveedoresEditComponent } from './providers/proveedores-edit/proveedores-edit.component'

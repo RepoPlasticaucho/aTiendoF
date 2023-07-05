@@ -5,7 +5,7 @@
                 title="Regresar a pedidos">
             </fa-icon>
         </div>
-        <fa-icon [icon]="faUserFriends" [size]="'3x'" style="color: #636363;"></fa-icon>
+        <fa-icon [icon]="faPlus" [size]="'3x'" style="color: #636363;"></fa-icon>
         <h1 class="mx-5 " style="color: #636363;">Nuevo Producto</h1>
     </div>
     <br>
@@ -64,6 +64,7 @@
                 </small>
             </small>
         </div>
+        
         <div class="form-group">
             <label for="grupo">Modelos</label>
             <select class="form-control" (change)="changeGroup3($event)" formControlName="modelo">
@@ -122,6 +123,17 @@
             </small>
         </div>
         <div class="form-group ">
+            <label for="medida" style="margin: 0;">Unidad de Medida</label>
+            <input type="text " class="form-control " id="medida" placeholder="Ingrese la unidad de medida para el tamaño. (par/ml/cm/cc/etc.)"
+                formControlName="medida">
+            <small
+                *ngIf="modelProductForm.controls['medida'].invalid && (modelProductForm.controls['medida'].dirty || modelProductForm.controls['medida'].touched)">
+                <small *ngIf="modelProductForm.controls['medida'].errors?.['required']" style="color: red;">
+                    Debe ingresar la unidad de medida.
+                </small>
+            </small>
+        </div>
+        <div class="form-group ">
             <label for="tamanio" style="margin: 0;">Tamaño</label>
             <input type="text " class="form-control " id="tamanio" placeholder="Ingrese el tamaño del Producto."
                 formControlName="tamanio">
@@ -144,7 +156,7 @@
             </small>
         </div>
         <div class="form-group ">
-            <label for="precio" style="margin: 0;">Precio</label>
+            <label for="precio" style="margin: 0;">Precio unitario</label>
             <input type="text " class="form-control " id="precio"
                 placeholder="Ingrese el precio del Producto." formControlName="precio">
             <small
