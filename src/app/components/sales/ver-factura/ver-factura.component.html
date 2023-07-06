@@ -6,6 +6,12 @@
           <fa-icon [icon]="faFileInvoice" [size]="'3x'" style="color: #636363"></fa-icon>
           <h1 class="mx-5" style="color: #636363">FACTURA</h1>
         </div>
+        <select class="form-control small-select" style="margin-left: 150px;">
+          <option value="0" selected>Seleccionar método de pago</option>
+          <option>Tarjeta de Débito/Crédito</option>
+          <option>Efectivo</option>
+          <option>Tarjeta de Regalo</option>
+        </select>
       </div>
       <div class="card-body">
         <div class="invoice-header">
@@ -39,13 +45,7 @@
             </div>
           </div>
         </div>
-        <div class="invoice-details">
-          <div class="icon-container">
-            <label for="total" class="label-input">TOTAL:</label>
-            <input type="text" [(ngModel)]="sumaTotal" class="cool-input resultado-input" readonly>
-          </div>
-  
-          <br><br><br>
+        <div class="invoice-details">  
           <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
             <thead style="color: #636363;">
               <tr>
@@ -68,6 +68,12 @@
               </tr>
             </tbody>
           </table>
+          <br><br>
+          <div class="icon-container">
+            <label for="total" class="label-input">TOTAL:</label>
+            <input type="text" [(ngModel)]="sumaTotal" class="cool-input resultado-input" readonly>
+          </div>
+          <br>
         </div>
       </div>
       <br>

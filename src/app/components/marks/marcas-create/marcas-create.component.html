@@ -17,7 +17,7 @@
                         <form [formGroup]="markForm" (ngSubmit)="onSubmit()">
                             <div class="form-group">
                                 <label for="proveedor">Proveedores</label>
-                                <select class="form-control" (change)="changeGroup($event)" [disabled]="true" formControlName="proveedor">
+                                <select class="form-control" (change)="changeGroup($event)" formControlName="proveedor">
                                     <option value="0" selected>Seleccione un proveedor</option>
                                     <option *ngFor="let proveedor of lstProveedores" [value]="proveedor.nombre">
                                         {{proveedor.nombre}}

@@ -50,4 +50,7 @@ export class ProveedoresService {
   actualizarProveedores(proveedor: ProveedoresEntity): Observable<Proveedores> {
     return this.http.post<Proveedores>(`${environment.apiUrl}proveedores/ModificarProveedores`, proveedor);
   }
+  eliminarProveedor(proveedor: ProveedoresEntity): Observable<Proveedores> {
+    return this.http.post<Proveedores>(`${environment.apiUrl}proveedores/EliminarProveedor`, proveedor);
+  }
 }

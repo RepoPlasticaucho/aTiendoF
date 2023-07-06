@@ -211,7 +211,7 @@ export class ModeloproductosEditComponent implements OnInit {
         this.initialColor = res.color!;
         this.initialAttribute = res.atributo!;
         this.initialGenre = res.genero!;
-        this.imageUrl = res.url_image;        
+        this.imageUrl = res.url_image;   
         this.imageNameOriginal = res.url_image!.split('/')[5];
       }
     });
@@ -381,7 +381,6 @@ export class ModeloproductosEditComponent implements OnInit {
                   cod_sap: this.modelProductForm.value!.codigoSAP ?? '',
                   url_image: this.imageName == '' ? this.imageUrl : this.imageName
           };
-          console.log(modelProductEntity);
           this.httpService
             .actualizarModeloProducto(modelProductEntity)
             .subscribe((res) => {

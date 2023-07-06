@@ -303,6 +303,4 @@ export class MenuventComponent implements OnInit {
     });
   }
 
-
-
 }

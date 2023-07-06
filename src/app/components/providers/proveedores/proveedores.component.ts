@@ -11,8 +11,8 @@ import Swal from 'sweetalert2';
   templateUrl: './proveedores.component.html',
   styleUrls: ['./proveedores.component.css']
 })
-export class ProveedoresComponent implements OnInit {
 
+export class ProveedoresComponent implements OnInit {
   faList = faList;
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;
@@ -69,13 +69,13 @@ export class ProveedoresComponent implements OnInit {
     });
   }
 
-  editarProducto(proveedor: ProveedoresEntity): void {
+  editarProveedor(proveedor: ProveedoresEntity): void {
     this.httpService.asignarProveedor(proveedor);
     // console.log(producto);
     this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['proveedores-edit'] } }]);
   }
 
-  eliminarProducto(proveedor: ProveedoresEntity): void {
+  eliminarProveedor(proveedor: ProveedoresEntity): void {
     Swal.fire({
       icon: 'question',
       title: `¿Esta seguro de eliminar ${proveedor.nombre}?`,
@@ -84,13 +84,12 @@ export class ProveedoresComponent implements OnInit {
       denyButtonText: 'No',
     }).then((result) => {
       if (result.isConfirmed) {
-        /*
-        this.httpService.eliminarProducto(producto).subscribe(res => {
+        this.httpService.eliminarProveedor(proveedor).subscribe(res => {
           if (res.codigoError == 'OK') {
             Swal.fire({
               icon: 'success',
               title: 'Eliminado Exitosamente.',
-              text: `Se ha eliminado el Producto ${producto.nombre}`,
+              text: `Se ha eliminado el proveedor ${proveedor.nombre}`,
               showConfirmButton: true,
               confirmButtonText: "Ok"
             }).then(() => {
@@ -106,7 +105,7 @@ export class ProveedoresComponent implements OnInit {
             });
           }
         })
-        */
+        
       }
     })
   }

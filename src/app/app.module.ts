@@ -137,6 +137,7 @@ import { NuevoProductoComponent } from './components/shooping/nuevo-producto/nue
 import { ProveedoresComponent } from './components/providers/proveedores/proveedores.component';
 import { ProveedoresCreateComponent } from './components/providers/proveedores-create/proveedores-create.component';
 import { ProveedoresEditComponent } from './components/providers/proveedores-edit/proveedores-edit.component';
+import { MovimientosComponent } from './components/movements/movimientos/movimientos.component';
 
 @NgModule({
   declarations: [
@@ -250,7 +251,8 @@ import { ProveedoresEditComponent } from './components/providers/proveedores-edi
     NuevoProductoComponent,
     ProveedoresComponent,
     ProveedoresCreateComponent,
-    ProveedoresEditComponent
+    ProveedoresEditComponent,
+    MovimientosComponent
   ],
   imports: [
     BrowserModule,

@@ -10,6 +10,8 @@ const initMark: MarcasEntity = {
   id: "",
   marca: "",
   etiquetas: "",
+  proveedor: "",
+  proveedor_id: "",
   url_image: ""
 }
 

@@ -1,0 +1,31 @@
+<br>
+<div class="card" style="max-width: 95%;margin: auto;">
+    <div class="card-header">
+        <div class="row mx-3">
+            <fa-icon [icon]="faList" [size]="'3x'" style="color: #636363;"></fa-icon>
+            <h1 class="mx-5 " style="color: #636363;">MOVIMIENTOS</h1>
+        </div>
+    </div>
+    <div class="card-body ">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+            <thead style="color: #636363;">
+                <tr>
+                    <th style="width: 10%; ">PROUCTO</th>
+                    <th style="width: 10%; ">PUNTO DE EMISIÓN</th>
+                    <th style="width: 10%; ">FECHA</th>
+                    <th style="width: 10%; ">TIPO</th>
+                    <th style="width: 10%; ">CANTIDAD</th>
+                </tr>
+            </thead>
+            <tbody style="color: #767695;">
+                <tr *ngFor="let detalle of lstDetalleMovimientos">
+                    <td>{{detalle.producto_nombre}}</td>
+                    <td>{{detalle.pto_emision}}</td>
+                    <td>{{detalle.created_at}}</td>
+                    <td [ngClass]="{'text-success': detalle.tipo_movimiento === 'Ingreso', 'text-danger': detalle.tipo_movimiento === 'Egreso'}">{{detalle.tipo_movimiento}}</td>
+                    <td [ngClass]="{'text-success': detalle.tipo_movimiento === 'Ingreso', 'text-danger': detalle.tipo_movimiento === 'Egreso'}">{{detalle.cantidad}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

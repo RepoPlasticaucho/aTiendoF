@@ -15,6 +15,20 @@
                     <td style="width: 60%;">
                         <form [formGroup]="markForm" (ngSubmit)="onSubmit()">
                             <div class="form-group">
+                                <label for="proveedor">Proveedores</label>
+                                <select class="form-control" (change)="changeGroup($event)" formControlName="proveedor">
+                                    <option value="0" selected>Seleccione un proveedor</option>
+                                    <option *ngFor="let proveedor of lstProveedores" [value]="proveedor.nombre">
+                                        {{proveedor.nombre}}
+                                    </option>
+                                </select>
+                                <small *ngIf="selectProveedor">
+                                    <small *ngIf="selectProveedor" style="color: red; ">
+                                        Debe seleccionar un proveedor.
+                                    </small>
+                                </small>
+                            </div>
+                            <div class="form-group">
                                 <label for="atributo">Marca</label>
                                 <input type="text" class="form-control" id="atributo" placeholder="Ingrese el nombre de la marca" formControlName="marca">
                                 <small *ngIf="markForm.controls['marca'].invalid && (markForm.controls['marca'].dirty || markForm.controls['marca'].touched)">

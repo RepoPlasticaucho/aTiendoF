@@ -53,7 +53,7 @@ export class CompraprovComponent implements OnInit {
       paging: true,
       search: false,
       searching: true,
-      ordering: false,
+      ordering: true,
       info: true,
       responsive: true
     }

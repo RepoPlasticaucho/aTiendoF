@@ -91,4 +91,5 @@ export { AlmacenesshoopingComponent } from './shooping/almacenesshooping/almacen
 export { CompraprovComponent } from './shooping/compraprov/compraprov.component';
 export { ProveedoresComponent } from './providers/proveedores/proveedores.component';
 export { ProveedoresCreateComponent } from './providers/proveedores-create/proveedores-create.component';
-export { ProveedoresEditComponent } from './providers/proveedores-edit/proveedores-edit.component'
+export { ProveedoresEditComponent } from './providers/proveedores-edit/proveedores-edit.component';
+export { MovimientosComponent } from './movements/movimientos/movimientos.component';

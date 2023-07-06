@@ -126,8 +126,8 @@
                 <input type="text" [(ngModel)]="sumaTotal" class="cool-input resultado-input" readonly>
             </div>
             <br><br><br>
-            <div class="button-container" *ngIf="lstDetalleMovimientos.length > 0">
-                <button class="btn btn-primary" (click)="finalizarPedido()">
+            <div class="button-container">
+                <button class="btn btn-primary" [disabled]="lstDetalleMovimientos.length == 0" (click)="finalizarPedido()">
                     <span style="color: white"> Finalizar Compra </span>
                 </button>
             </div>
