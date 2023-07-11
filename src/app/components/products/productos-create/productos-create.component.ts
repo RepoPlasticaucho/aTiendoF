@@ -16,6 +16,7 @@ import { CategoriasService } from 'src/app/services/categorias.service';
 import { MarcasService } from 'src/app/services/marcas.service';
 import { MarcasEntity } from 'src/app/models/marcas';
 import { ProveedoresEntity } from 'src/app/models/proveedores';
+import { TarifasEntity } from 'src/app/models/tarifas';
 
 @Component({
   selector: 'app-productos-create',
@@ -37,10 +38,12 @@ export class ProductosCreateComponent implements OnInit {
     proveedor: new FormControl('0',),
     categoria: new FormControl('0',),
     linea: new FormControl('0',),
+    precio: new FormControl('0',),
     marca: new FormControl('0'),
     modelo: new FormControl('0',),
     producto: new FormControl('', [Validators.required]),
     etiquetas: new FormControl('', [Validators.required]),
+    medida: new FormControl('',),
     tamanio: new FormControl('', [Validators.required]),
     codigoSAP: new FormControl('', [Validators.required])
   });
@@ -51,10 +54,15 @@ export class ProductosCreateComponent implements OnInit {
   lstMarcas: MarcasEntity[] = [];
   selectMarca: boolean = false;
 
+  lstTarifas: TarifasEntity[] = [];
+  lstTarifas2: TarifasEntity[] = [];
+  selectTarifa: boolean = false;
+
   lstLineas: LineasEntity[] = [];
   selectLinea: boolean = false;
 
   lstProveedores: ProveedoresEntity[] = [];
+  lstProveedores2: ProveedoresEntity[] = [];
   selectProveedor: boolean = false;
 
   lstModelos: ModelosEntity[] = [];

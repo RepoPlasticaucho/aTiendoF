@@ -24,10 +24,10 @@ export class DashboardClComponent {
           { title: 'Cuentas', cols: 1, rows: 1, name: "las cuentas", figure: "monetization_on" },
           // { title: 'Productos', cols: 1, rows: 1, name: "los productos", figure: "apps" , dir: "navegation-cl/(contentClient:inventarios-productos)"},
           { title: 'Inventarios', cols: 1, rows: 1, name: "los inventarios", figure: "apps" , dir: "navegation-cl/(contentClient:inventarios-almacen)"},
-          { title: 'Pedido Sugerido', cols: 1, rows: 1, name: "el pedido sugerido", figure: "widgets", dir: "navegation-cl/(contentClient:pedido-sugeridos)"},
+          { title: 'Pedido Sugerido', cols: 1, rows: 1, name: "los pedidos sugeridos a Platicaucho", figure: "widgets", dir: "navegation-cl/(contentClient:pedido-sugeridos)"},
           { title: 'Movimientos', cols: 1, rows: 1, name: "los movimientos", figure: "monitor" ,  dir: "navegation-cl/(contentClient:movimientos)"},
           { title: 'Almacenes', cols: 1, rows: 1, name: "los almacenes", figure: "location_city", dir: "navegation-cl/(contentClient:almacenes)" },
-          { title: 'Usuarios', cols: 1, rows: 1, name: "los usuarios", figure: "person", dir: "navegation-cl/(contentClient:tercerosalmacen)" },
+          { title: 'Terceros', cols: 1, rows: 1, name: "los terceros", figure: "person", dir: "navegation-cl/(contentClient:tercerosalmacen)" },
           { title: 'Pedidos Plasticaucho', cols: 1, rows: 1, name: "plasticaucho", figure: "book" , dir: "navegation-cl/(contentClient:almaceningresos)"},
 
         ];
@@ -39,10 +39,10 @@ export class DashboardClComponent {
         { title: 'Cuentas', cols: 1, rows: 1, name: "las cuentas", figure: "monetization_on" },
         //{ title: 'Productos', cols: 1, rows: 1, name: "los productos", figure: "apps" , dir: "navegation-cl/(contentClient:inventarios-productos)"},
         { title: 'Inventarios', cols: 1, rows: 1, name: "los inventarios", figure: "apps" , dir: "navegation-cl/(contentClient:inventarios-almacen)"},
-        { title: 'Pedido Sugerido', cols: 1, rows: 1, name: "los pedidos sugerido", figure: "widgets", dir: "navegation-cl/(contentClient:pedido-sugeridos)"},
+        { title: 'Pedido Sugerido', cols: 1, rows: 1, name: "los pedidos sugeridos a Platicaucho", figure: "widgets", dir: "navegation-cl/(contentClient:pedido-sugeridos)"},
         { title: 'Movimientos', cols: 1, rows: 1, name: "los movimientos", figure: "monitor" ,  dir: "navegation-cl/(contentClient:movimientos)"},
         { title: 'Almacenes', cols: 1, rows: 1, name: "los almacenes", figure: "location_city", dir: "navegation-cl/(contentClient:almacenes)" },
-        { title: 'Usuarios', cols: 1, rows: 1, name: "los usuarios", figure: "person", dir: "navegation-cl/(contentClient:tercerosalmacen)" },
+        { title: 'Terceros', cols: 1, rows: 1, name: "los terceros", figure: "person", dir: "navegation-cl/(contentClient:tercerosalmacen)" },
         { title: 'Plasticaucho', cols: 1, rows: 1, name: "plasticaucho", figure: "book" , dir: "navegation-cl/(contentClient:almaceningresos)"},
 
       ];
