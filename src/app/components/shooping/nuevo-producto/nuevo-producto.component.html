@@ -155,6 +155,20 @@
                 </small>
             </small>
         </div>
+        <div class="form-group">
+            <label for="tarifa">Tarifa</label>
+            <select class="form-control" formControlName="tarifa" (change)="changeGroup4($event)">
+                <option [value]=" 0 " selected>Seleccione una tarifa</option>
+                <option *ngFor="let tarifa of lstTarifas" [value]="tarifa.descripcion">
+                    {{tarifa.descripcion}}
+                </option>
+            </select>
+            <small *ngIf="selectTarifa">
+                <small *ngIf="selectTarifa" style="color: red; ">
+                    Debe seleccionar una tarifa.
+                </small>
+            </small>
+        </div>
         <button type="submit" class="btn btn-primary">
             <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
             Guardar

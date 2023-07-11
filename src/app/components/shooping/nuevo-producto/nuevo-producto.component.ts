@@ -19,6 +19,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MenucomprComponent } from '../menucompr/menucompr.component';
 import { ProveedoresEntity } from 'src/app/models/proveedores';
 import { ProveedoresService } from 'src/app/services/proveedores.service';
+import { TarifasEntity } from 'src/app/models/tarifas';
+import { TarifasService } from 'src/app/services/tarifas.service';
 
 
 @Component({
@@ -48,6 +50,7 @@ export class NuevoProductoComponent implements OnInit {
     producto: new FormControl('', [Validators.required]),
     etiquetas: new FormControl('', [Validators.required]),
     tamanio: new FormControl('', [Validators.required]),
+    tarifa: new FormControl('0', [Validators.required]),
     precio: new FormControl('', [Validators.required])
   });
   //Variables para listas desplegables
@@ -63,6 +66,10 @@ export class NuevoProductoComponent implements OnInit {
   lstModelos: ModelosEntity[] = [];
   lstModelos2: ModelosEntity[] = [];
   selectModelo: boolean = false;
+
+  lstTarifas: TarifasEntity[] = [];
+  lstTarifas2: TarifasEntity[] = [];
+  selectTarifa: boolean = false;
   // lstModelos: ModelosEntity[] = [];
   // lstLineas: LineasEntity[] = [];
   
@@ -86,6 +93,7 @@ export class NuevoProductoComponent implements OnInit {
     private readonly httpService: ProductosAdminService,
     private readonly httpServiceCategorias: CategoriasService,
     private readonly httpServiceLineas: LineasService,
+    private readonly httpServiceTarifas: TarifasService,
     private readonly httpServiceProv: ProveedoresService,
     private dialogRef: MatDialogRef<MenucomprComponent>,
     private router: Router
@@ -106,6 +114,20 @@ export class NuevoProductoComponent implements OnInit {
         });
       } else {
         this.lstCategorias = res.lstCategorias;
+      }
+    });
+
+    // Obtener Tarifas
+    this.httpServiceTarifas.obtenerTarifas().subscribe(res => {
+      if (res.codigoError != "OK") {
+        Swal.fire({
+          icon: 'error',
+          title: 'No se pudo obtener la Sociedad.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      } else {
+        this.lstTarifas = res.lstTarifas;
       }
     });
 
@@ -176,6 +198,7 @@ export class NuevoProductoComponent implements OnInit {
           cod_sap: '',
           impuesto_id: '',
           impuesto_nombre: '',
+          tarifa_ice_iva_id: this.lstTarifas2[0].id,
           marca_nombre: '',
           unidad_medida: this.modelProductForm.value!.medida ?? "",
           color_nombre: '',
@@ -344,6 +367,41 @@ export class NuevoProductoComponent implements OnInit {
         } else {
           this.lstModeloProductos = res.lstModelo_Productos;
           console.log(this.lstModeloProductos)
+        }
+      });
+    }
+  }
+
+  changeGroup4(event: any): void {
+    if (event.target.value == 0) {
+      this.selectTarifa = true;
+    } else {
+      this.selectTarifa = false;
+
+      // Obtener ID del modelo
+      const tarifanew: TarifasEntity = {
+        id: '',
+        impuesto_id: '',
+        codigo: '',
+        porcentaje: '',
+        descripcion: event.target.value,
+        tarifa_ad_valorem_e_d_2020: '',
+        tarifa_esp_e_d_2020: '',
+        tarifa_esp_9_mayo_diciembre_2020: '',
+        created_at: '',
+        updated_at: ''
+      }
+      this.httpServiceTarifas.obtenerTarifasN(tarifanew).subscribe((res) => {
+        console.log(res);
+        if (res.codigoError != 'OK') {
+          Swal.fire({
+            icon: 'error',
+            title: 'No se pudo obtener Tarifas.',
+            text: res.descripcionError,
+            showConfirmButton: false,
+          });
+        } else {
+          this.lstTarifas2 = res.lstTarifas;
         }
       });
     }

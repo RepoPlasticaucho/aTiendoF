@@ -21,6 +21,8 @@ const initGruop: InventariosEntity = {
   idProducto: "",
   Producto: "",
   id: "",
+  tarifa_ice_iva: "",
+  tarifa_ice_iva_id: "",
   dInventario: "",
   producto_id: "",
   almacen_id: "",

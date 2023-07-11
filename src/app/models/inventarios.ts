@@ -25,6 +25,8 @@ export interface InventariosEntity {
     id : string;
     dInventario : string;
     producto_id : string;
+    tarifa_ice_iva?: string;
+    tarifa_ice_iva_id?: string;
     almacen_id : string;
     producto_nombre? : string;
     almacen : string;

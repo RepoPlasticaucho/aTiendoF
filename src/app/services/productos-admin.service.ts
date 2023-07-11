@@ -22,6 +22,8 @@ const initProduct : ProducAdmEntity ={
   impuesto_nombre: "",
   marca_nombre: "",
   color_nombre: "",
+  tarifa_ice_iva: "",
+  tarifa_ice_iva_id: "",
   atributo_nombre: "",
   genero_nombre: "",
   modelo_nombre: "",

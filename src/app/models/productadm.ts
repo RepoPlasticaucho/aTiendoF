@@ -21,6 +21,8 @@ export interface ProducAdmEntity {
     impuesto_nombre: string;
     marca_nombre: string;
     color_nombre: string;
+    tarifa_ice_iva_id?: string;
+    tarifa_ice_iva?: string;
     unidad_medida?: string;
     atributo_nombre: string;
     genero_nombre: string;
