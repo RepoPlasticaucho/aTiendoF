@@ -15,6 +15,7 @@ import { CategoriasEntity } from 'src/app/models/categorias';
 import { CategoriasService } from 'src/app/services/categorias.service';
 import { MarcasService } from 'src/app/services/marcas.service';
 import { MarcasEntity } from 'src/app/models/marcas';
+import { ProveedoresEntity } from 'src/app/models/proveedores';
 
 @Component({
   selector: 'app-productos-create',
@@ -33,6 +34,7 @@ export class ProductosCreateComponent implements OnInit {
     // modelo: new FormControl('',),
     // linea: new FormControl('',),
     // categoria: new FormControl('',),
+    proveedor: new FormControl('0',),
     categoria: new FormControl('0',),
     linea: new FormControl('0',),
     marca: new FormControl('0'),
@@ -51,6 +53,9 @@ export class ProductosCreateComponent implements OnInit {
 
   lstLineas: LineasEntity[] = [];
   selectLinea: boolean = false;
+
+  lstProveedores: ProveedoresEntity[] = [];
+  selectProveedor: boolean = false;
 
   lstModelos: ModelosEntity[] = [];
   lstModelos2: ModelosEntity[] = [];

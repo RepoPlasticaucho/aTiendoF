@@ -1,3 +1,4 @@
+<!--
 <div style="width: 90%;margin: auto;">
     <div class="card">
         <div class="card-header">
@@ -14,7 +15,7 @@
 
         <div class="card-body ">
             <form [formGroup]="modelProductForm" (ngSubmit)="onSubmit()">
-                <!--
+                
             <table style="width: 90%">
                 <tr>
                     <td style="width: 30%; text-align: center">
@@ -35,65 +36,79 @@
                 </tr>
             </table>
             <br>
-            -->
-                <div class="form-group">
-                    <label for="grupo">Categoria</label>
-                    <select class="form-control" (change)="changeGroup1($event)" formControlName="categoria">
-                        <option [value]="0" selected>Seleccione una categoría</option>
-                        <option *ngFor="let categoria of lstCategorias" [value]="categoria.categoria">
-                            {{categoria.categoria}}
-                        </option>
-                    </select>
-                    <small *ngIf="selectCategoria">
-                        <small *ngIf="selectCategoria" style="color: red; ">
-                            Debe seleccionar una categoría.
-                        </small>
+            
+            <div class="form-group">
+                <label for="proveedor">Proveedores</label>
+                <select class="form-control" formControlName="proveedor">
+                    <option [value]=" 0 " selected>Seleccione un proveedor</option>
+                    <option *ngFor="let proveedor of lstProveedores" [value]="proveedor.nombre">
+                        {{proveedor.nombre}}
+                    </option>
+                </select>
+                <small *ngIf="selectProveedor">
+                    <small *ngIf="selectProveedor" style="color: red; ">
+                        Debe seleccionar un proveedor.
                     </small>
-                </div>
-
-                <div class="form-group">
-                    <label for="grupo">Líneas</label>
-                    <select class="form-control" (change)="changeGroup2($event)" formControlName="linea">
-                        <option [value]=" 0 " selected>Seleccione una línea</option>
-                        <option *ngFor="let linea of lstLineas" [value]="linea.linea">
-                            {{linea.linea}}
-                        </option>
-                    </select>
-                    <small *ngIf="selectLinea">
-                        <small *ngIf="selectLinea" style="color: red; ">
-                            Debe seleccionar una línea.
-                        </small>
+                </small>
+            </div>
+            <div class="form-group">
+                <label for="marca">Marcas</label>
+                <select class="form-control" (change)="changeMark($event)" formControlName="marca">
+                    <option [value]=" 0 " selected>Seleccione una marca</option>
+                    <option *ngFor="let marca of lstMarcas" [value]="marca.marca">
+                        {{marca.marca}}
+                    </option>
+                </select>
+                <small *ngIf="selectMarca">
+                    <small *ngIf="selectMarca" style="color: red; ">
+                        Debe seleccionar una marca.
                     </small>
-                </div>
-                <div class="form-group">
-                    <label for="marca">Marcas</label>
-                    <select class="form-control" (change)="changeMark($event)" formControlName="marca">
-                        <option [value]=" 0 " selected>Seleccione una marca</option>
-                        <option *ngFor="let marca of lstMarcas" [value]="marca.marca">
-                            {{marca.marca}}
-                        </option>
-                    </select>
-                    <small *ngIf="selectMarca">
-                        <small *ngIf="selectMarca" style="color: red; ">
-                            Debe seleccionar una marca.
-                        </small>
+                </small>
+            </div>
+            <div class="form-group">
+                <label for="grupo">Categoria</label>
+                <select class="form-control" (change)="changeGroup1($event)" formControlName="categoria">
+                    <option [value]="0" selected>Seleccione una categoría</option>
+                    <option *ngFor="let categoria of lstCategorias" [value]="categoria.categoria">
+                        {{categoria.categoria}}
+                    </option>
+                </select>
+                <small *ngIf="selectCategoria">
+                    <small *ngIf="selectCategoria" style="color: red; ">
+                        Debe seleccionar una categoría.
                     </small>
-                </div>
-
-                <div class="form-group">
-                    <label for="grupo">Modelos</label>
-                    <select class="form-control" (change)="changeGroup3($event)" formControlName="modelo">
-                        <option [value]=" 0 " selected>Seleccione un modelo</option>
-                        <option *ngFor="let modelo of lstModelos" [value]="modelo.modelo">
-                            {{modelo.modelo}}
-                        </option>
-                    </select>
-                    <small *ngIf="selectModelo">
-                        <small *ngIf="selectModelo" style="color: red; ">
-                            Debe seleccionar un modelo.
-                        </small>
+                </small>
+            </div>
+    
+            <div class="form-group">
+                <label for="grupo">Tipos</label>
+                <select class="form-control" (change)="changeGroup2($event)" formControlName="linea">
+                    <option [value]=" 0 " selected>Seleccione un tipo</option>
+                    <option *ngFor="let linea of lstLineas" [value]="linea.linea">
+                        {{linea.linea}}
+                    </option>
+                </select>
+                <small *ngIf="selectLinea">
+                    <small *ngIf="selectLinea" style="color: red; ">
+                        Debe seleccionar un tipo.
                     </small>
-                </div>
+                </small>
+            </div>
+            
+            <div class="form-group">
+                <label for="grupo">Modelos</label>
+                <select class="form-control" (change)="changeGroup3($event)" formControlName="modelo">
+                    <option [value]=" 0 " selected>Seleccione un modelo</option>
+                    <option *ngFor="let modelo of lstModelos" [value]="modelo.modelo">
+                        {{modelo.modelo}}
+                    </option>
+                </select>
+                <small *ngIf="selectModelo">
+                    <small *ngIf="selectModelo" style="color: red; ">
+                        Debe seleccionar un modelo.
+                    </small>
+                </small>
+            </div>
                 <div class="form-group">
                     <label for="modeloproducto_id">Modelo Producto:</label>
                     <ng-autocomplete [data]="lstModeloProductos" (selected)='selectEventModel($event)'
@@ -138,13 +153,49 @@
                     </small>
                 </div>
                 <div class="form-group ">
-                    <label for="tamanio" style="margin: 0;">Talla</label>
-                    <input type="text " class="form-control " id="tamanio" placeholder="Ingrese la talla del Producto."
+                    <label for="medida" style="margin: 0;">Unidad de Medida</label>
+                    <input type="text " class="form-control " id="medida" placeholder="Ingrese la unidad de medida para el tamaño. (par/ml/cm/cc/etc.)"
+                        formControlName="medida">
+                    <small
+                        *ngIf="modelProductForm.controls['medida'].invalid && (modelProductForm.controls['medida'].dirty || modelProductForm.controls['medida'].touched)">
+                        <small *ngIf="modelProductForm.controls['medida'].errors?.['required']" style="color: red;">
+                            Debe ingresar la unidad de medida.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group ">
+                    <label for="tamanio" style="margin: 0;">Tamaño</label>
+                    <input type="text " class="form-control " id="tamanio" placeholder="Ingrese el tamaño del Producto."
                         formControlName="tamanio">
                     <small
                         *ngIf="modelProductForm.controls['tamanio'].invalid && (modelProductForm.controls['tamanio'].dirty || modelProductForm.controls['tamanio'].touched)">
                         <small *ngIf="modelProductForm.controls['tamanio'].errors?.['required']" style="color: red;">
-                            Debe ingresar la descripción del Producto
+                            Debe ingresar el tamaño del producto.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group ">
+                    <label for="precio" style="margin: 0;">Precio unitario</label>
+                    <input type="text " class="form-control " id="precio"
+                        placeholder="Ingrese el precio del Producto." formControlName="precio">
+                    <small
+                        *ngIf="modelProductForm.controls['precio'].invalid && (modelProductForm.controls['precio'].dirty || modelProductForm.controls['precio'].touched)">
+                        <small *ngIf="modelProductForm.controls['precio'].errors?.['required']" style="color: red;">
+                            Debe ingresar el precio del Producto.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="tarifa">Tarifa</label>
+                    <select class="form-control" formControlName="tarifa" (change)="changeGroup4($event)">
+                        <option [value]=" 0 " selected>Seleccione una tarifa</option>
+                        <option *ngFor="let tarifa of lstTarifas" [value]="tarifa.descripcion">
+                            {{tarifa.descripcion}}
+                        </option>
+                    </select>
+                    <small *ngIf="selectTarifa">
+                        <small *ngIf="selectTarifa" style="color: red; ">
+                            Debe seleccionar una tarifa.
                         </small>
                     </small>
                 </div>
@@ -161,3 +212,4 @@
         </div>
     </div>
 </div>
+-->
