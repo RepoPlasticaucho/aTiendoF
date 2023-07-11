@@ -81,3 +81,8 @@ h5 {
   border-bottom-right-radius: 50% 50%;
   border-bottom-left-radius: 50% 50%;
 }
+
+.disabled-card {
+  pointer-events: none;
+  background-color: #d3d7da;
+}
