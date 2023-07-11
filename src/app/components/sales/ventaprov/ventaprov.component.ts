@@ -120,6 +120,7 @@ export class VentaprovComponent implements OnInit {
       cod_doc: '',
       secuencial: ''
     }
+    localStorage.setItem('idfiscalCl', '');
     this.httpService.agregarMovimiento(newMovimiento).subscribe(res => {
       if (res.codigoError == "OK") {
         

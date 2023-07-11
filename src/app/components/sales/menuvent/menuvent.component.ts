@@ -12,6 +12,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MovimientosService } from 'src/app/services/movimientos.service';
 import { MovimientosEntity } from 'src/app/models/movimientos';
 import { VerClienteComponent } from '../ver-cliente/ver-cliente.component';
+import { TercerosService } from 'src/app/services/terceros.service';
+import { TercerosEntity } from 'src/app/models/terceros';
 
 
 @Component({
@@ -47,10 +49,17 @@ export class MenuventComponent implements OnInit {
   detalleEditIndex: number = -1;
   detalleEditBackup: DetallesMovimientoEntity | null = null;
   formGroup: any;
+  nombre: string = '';
+  identificacion: string = '';
+  correo: string = '';
+  telefono: string = '';
+  ciudad: string = '';
+  direccion: string = '';
 
   constructor(private dialog: MatDialog,
     private readonly httpService: DetallesmovimientoService,
     private readonly httpServiceMov: MovimientosService,
+    private readonly httpServiceTer: TercerosService,
     private router: Router) { }
 
   ngOnInit(): void {
@@ -65,6 +74,36 @@ export class MenuventComponent implements OnInit {
       info: false,
       responsive: true,
     }
+    
+    const terceroNew: TercerosEntity = {
+      almacen_id: '',
+      sociedad_id: '',
+      tipotercero_id: '',
+      tipousuario_id: '',
+      nombresociedad: '',
+      nombrealmacen: '',
+      nombretercero: '',
+      tipousuario: '',
+      nombre: '',
+      id_fiscal: localStorage.getItem('idfiscalCl')!,
+      direccion: '',
+      telefono: '',
+      correo: '',
+      fecha_nac: '',
+      ciudad: '',
+      provincia: '',
+      ciudadid: ''
+    }
+    this.httpServiceTer.obtenerTerceroCedula(terceroNew).subscribe(res => {
+      if (res.codigoError == "OK") {
+        this.nombre = res.lstTerceros[0].nombre;
+        this.identificacion = res.lstTerceros[0].id_fiscal;
+        this.correo = res.lstTerceros[0].correo;
+        this.telefono = res.lstTerceros[0].telefono;
+        this.direccion = res.lstTerceros[0].direccion;
+        this.ciudad = res.lstTerceros[0].ciudad;
+      } 
+    });
     
     this.cargarTablaMenuvent();
 
@@ -82,6 +121,7 @@ export class MenuventComponent implements OnInit {
     console.log(localStorage.getItem('movimiento_id'))
     const selectedOption = this.clienteForm.get('tipo')!.value;
     if (selectedOption === 'CONSUMIDOR FINAL') {
+      localStorage.setItem('idfiscalCl', '9999999999999')
       const newMovimiento: MovimientosEntity = {
         id: localStorage.getItem('movimiento_id')!,
         tipo_id: '',
@@ -92,6 +132,13 @@ export class MenuventComponent implements OnInit {
         cod_doc: '',
         secuencial: ''
       }
+
+          this.nombre = 'CONSUMIDOR FINAL';
+          this.identificacion = 'CONSUMIDOR FINAL';
+          this.correo = 'CONSUMIDOR FINAL';
+          this.telefono = 'CONSUMIDOR FINAL';
+          this.direccion = 'CONSUMIDOR FINAL';
+          this.ciudad = 'CONSUMIDOR FINAL';
       this.httpServiceMov.actualizarTerceroPedido(newMovimiento).subscribe(res => {
         if (res.codigoError != "OK") {
           Swal.fire({
@@ -121,6 +168,35 @@ export class MenuventComponent implements OnInit {
   
       dialogRef.afterClosed().subscribe(result => {
         // Lógica para manejar el resultado después de cerrar el modal
+        const terceroNew: TercerosEntity = {
+          almacen_id: '',
+          sociedad_id: '',
+          tipotercero_id: '',
+          tipousuario_id: '',
+          nombresociedad: '',
+          nombrealmacen: '',
+          nombretercero: '',
+          tipousuario: '',
+          nombre: '',
+          id_fiscal: localStorage.getItem('idfiscalCl')!,
+          direccion: '',
+          telefono: '',
+          correo: '',
+          fecha_nac: '',
+          ciudad: '',
+          provincia: '',
+          ciudadid: ''
+        }
+        this.httpServiceTer.obtenerTerceroCedula(terceroNew).subscribe(res => {
+          if (res.codigoError == "OK") {
+            this.nombre = res.lstTerceros[0].nombre;
+            this.identificacion = res.lstTerceros[0].id_fiscal;
+            this.correo = res.lstTerceros[0].correo;
+            this.telefono = res.lstTerceros[0].telefono;
+            this.direccion = res.lstTerceros[0].direccion;
+            this.ciudad = res.lstTerceros[0].ciudad;
+          } 
+        });
       });
     } else {
       console.log('ERROR')
