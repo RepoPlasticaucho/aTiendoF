@@ -94,8 +94,8 @@
             <ng-autocomplete [data]="lstCiudades" (selected)="selectEventCiudad($event)"
                 [searchKeyword]="keywordCiudad" placeholder="Seleccione la ciudad"
                 [itemTemplate]="itemTemplateCiudad" [notFoundTemplate]="notFoundTemplateCiudad"
-                class="form-control" style="width: 100%; padding: 0%"
-                (inputChanged)="onChangeSearchCiudad($event)" (inputCleared)="onInputClearedCiudad()">
+                class="form-control" style="width: 100%; padding: 0%" [initialValue]="initialCiudad"
+                (inputChanged)="onChangeSearchCiudad($event)" (inputCleared)="onInputClearedCiudad()" id="ciudadInput">
             </ng-autocomplete>
             <ng-template #itemTemplateCiudad let-ciudad>
                 <a [innerHTML]="ciudad.ciudad"></a>

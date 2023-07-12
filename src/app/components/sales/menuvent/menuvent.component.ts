@@ -75,6 +75,7 @@ export class MenuventComponent implements OnInit {
       responsive: true,
     }
     
+    /*
     const terceroNew: TercerosEntity = {
       almacen_id: '',
       sociedad_id: '',
@@ -102,9 +103,10 @@ export class MenuventComponent implements OnInit {
         this.telefono = res.lstTerceros[0].telefono;
         this.direccion = res.lstTerceros[0].direccion;
         this.ciudad = res.lstTerceros[0].ciudad;
-      } 
+      }
     });
-    
+    */
+       
     this.cargarTablaMenuvent();
 
   }
@@ -132,7 +134,6 @@ export class MenuventComponent implements OnInit {
         cod_doc: '',
         secuencial: ''
       }
-
           this.nombre = 'CONSUMIDOR FINAL';
           this.identificacion = 'CONSUMIDOR FINAL';
           this.correo = 'CONSUMIDOR FINAL';

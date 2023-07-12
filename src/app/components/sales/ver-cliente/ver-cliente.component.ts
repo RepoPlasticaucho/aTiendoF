@@ -36,11 +36,13 @@ export class VerClienteComponent implements OnInit {
   // Control de dígitos que ingresan al número de id
   idFiscalMaxLength: number = 0;
   email: string = '';
+  initialCiudad: string = '';
+  codigo: any;
 
   //Creación de la variable para formulario
   TercerosForm = new FormGroup({
     tipo_tercero: new FormControl('0', Validators.required),
-    ciudad_id: new FormControl('0', Validators.required),
+    ciudad_id: new FormControl('0',),
     nombre: new FormControl('', Validators.required),
     apellido: new FormControl('', Validators.required),
     id_fiscal: new FormControl('', Validators.required),
@@ -87,8 +89,17 @@ export class VerClienteComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  verificarValores(): void {
+    if(this.TercerosForm.value.id_fiscal == ''){
+      localStorage.setItem('idfiscalCl', '');
+    }
+  }
+
 
   ngOnInit(): void {
+    $(document).ready(() => {
+      $('#ciudadInput :input').val(this.initialCiudad);
+    });
     this.httpServiceTipoTercero.obtenerTipoterceros().subscribe(res => {
       if (res.codigoError != "OK") {
         Swal.fire({
@@ -157,7 +168,6 @@ export class VerClienteComponent implements OnInit {
       ciudadid: ''
     }
     this.httpService.obtenerTerceroCedula(tercerodatos).subscribe(res1 => {
-      console.log(res1)
       if (res1.codigoError == "OK") {
         Swal.fire({
           icon: 'info',
@@ -166,6 +176,7 @@ export class VerClienteComponent implements OnInit {
           showConfirmButton: true,
           // timer: 3000
         });
+        this.codigo = res1.lstTerceros[0].id;
         this.nombreCompleto = res1.lstTerceros[0].nombre;
         const nombreApellido = this.nombreCompleto.split(' ');
         this.TercerosForm.get('nombre')?.setValue(
@@ -178,6 +189,7 @@ export class VerClienteComponent implements OnInit {
         this.TercerosForm.get('correo')?.setValue(res1.lstTerceros[0].correo);
         this.TercerosForm.get('direccion')?.setValue(res1.lstTerceros[0].direccion);
         this.TercerosForm.get('telefono')?.setValue(res1.lstTerceros[0].telefono);
+        this.initialCiudad = res1.lstTerceros[0].ciudad!;
       } else {
         Swal.fire({
           icon: 'info',
@@ -191,6 +203,7 @@ export class VerClienteComponent implements OnInit {
   }
 
   onSubmit() {
+    
     if (!this.TercerosForm.valid) {
       this.TercerosForm.markAllAsTouched();
       console.log("Error");
@@ -215,6 +228,7 @@ export class VerClienteComponent implements OnInit {
         provincia: "",
         ciudadid: this.TercerosForm.value!.ciudad_id ?? ''
       }
+      console.log(tercerodatos)
       localStorage.setItem('idfiscalCl', this.TercerosForm.value!.id_fiscal!);
       this.httpService.obtenerTerceroCedula(tercerodatos).subscribe(res1 => {
         if (res1.codigoError == "NEXISTE") {
@@ -275,6 +289,32 @@ export class VerClienteComponent implements OnInit {
             secuencial: '',
             tercero_id: res1.lstTerceros[0].id!
           }
+          const tercerodatos2: TercerosEntity = {
+            id: this.codigo,
+            almacen_id: localStorage.getItem('almacenid')!,
+            sociedad_id: localStorage.getItem('sociedadid')!,
+            tipotercero_id: this.lstTipoTerceros2[0].idTipo_tercero ?? 0,
+            tipousuario_id: '1',
+            nombresociedad: "",
+            nombrealmacen: "",
+            nombretercero: this.TercerosForm.value!.tipo_tercero ?? "",
+            tipousuario: "",
+            nombre: (this.TercerosForm.value!.nombre ?? "").concat(" " + this.TercerosForm.value!.apellido ?? ""),
+            id_fiscal: this.TercerosForm.value!.id_fiscal ?? "",
+            direccion: this.TercerosForm.value!.direccion ?? "",
+            telefono: this.TercerosForm.value!.telefono ?? "",
+            correo: this.TercerosForm.value!.correo ?? "",
+            fecha_nac: "01-01-2000",
+            ciudad: '',
+            provincia: "",
+            ciudadid: this.TercerosForm.value!.ciudad_id ?? ''
+          }
+          this.httpService.actualizarTerceros(tercerodatos).subscribe(res3 => {
+            if (res3.codigoError != "OK") {
+              console.log(res3.descripcionError)
+            }
+          });
+
           this.httpServiceMov.actualizarClientePedido(newMovimiento).subscribe(res2 => {
             if (res2.codigoError != "OK") {
               Swal.fire({

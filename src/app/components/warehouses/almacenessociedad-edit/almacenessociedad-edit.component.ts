@@ -22,7 +22,6 @@ export class AlmacenessociedadEditComponent implements OnInit {
   //Creación de la variable para formulario
   warehousesForm = new FormGroup({
     nombre_almacen: new FormControl('', Validators.required),
-    sociedad: new FormControl('0', Validators.required),
     Direccion: new FormControl('', [Validators.required]),
     codigo: new FormControl('', [Validators.required]),
     pto_emision: new FormControl('', [Validators.required]),
@@ -65,7 +64,6 @@ export class AlmacenessociedadEditComponent implements OnInit {
         });
       } else {
         this.codigo = res.idAlmacen ?? "";
-        this.warehousesForm.get("sociedad")?.setValue(res.sociedad_id);
         this.warehousesForm.get("Direccion")?.setValue(res.direccion);
         this.warehousesForm.get("codigo")?.setValue(res.codigo);
         this.warehousesForm.get("pto_emision")?.setValue(res.pto_emision);
@@ -123,15 +121,7 @@ export class AlmacenessociedadEditComponent implements OnInit {
         return true;
       }
     }
-  
-    changeGroup(sociedad: any): void {
-      if (sociedad.target.value == 0) {
-        this.selectSociedades = true;
-      } else {
-        this.selectSociedades = false;
-        this.warehousesForm.get("sociedad")?.setValue(sociedad.target.value);
-      }
-    }
+
   
     visualizarAlmacenes() {
       this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['almacenes'] } }]);

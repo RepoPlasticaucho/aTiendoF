@@ -26,21 +26,6 @@
                     </small>
                 </div>
                 <div class="form-group">
-                    <label for="grupo">Sociedades</label>
-                    <select class="form-control" (change)="changeGroup($event)" formControlName="sociedad">
-                        <option [value]=" 0 " selected>Seleccione una sociedad</option>
-                        <option *ngFor="let sociedad of lstSociedades" [value]="sociedad.idSociedad ">
-                            {{sociedad.nombre_comercial}}
-                        </option>
-                    </select>
-                    <small *ngIf="selectSociedades">
-                        <small *ngIf="selectSociedades " style="color: red; ">
-                            Debe seleccionar una sociedad.
-                        </small>
-                    </small>
-                
-                </div>
-                <div class="form-group">
                     <label for="direccion">Direccion</label>
                     <input type="text" class="form-control" id="Direccion"
                         placeholder="Ingrese la direccion " formControlName="Direccion">
