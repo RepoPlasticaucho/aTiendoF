@@ -424,12 +424,14 @@ export class TercerosCreateComponent implements OnInit {
         idAlmacen: '',
         sociedad_id: '',
         nombresociedad: '',
-        direccion: almacen.target.value,
+        direccion: '',
+        nombre_almacen: almacen.target.value,
         telefono: '',
         codigo: '',
         pto_emision: ''
       }
       this.httpServiceAlmacenes.obtenerAlmacenN(almacenNew).subscribe(res => {
+        console.log(res)
         if (res.codigoError != "OK") {
           Swal.fire({
             icon: 'error',

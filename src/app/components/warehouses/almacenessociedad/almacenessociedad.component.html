@@ -14,6 +14,7 @@
             <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                 <thead style="color: #636363;">
                     <tr>
+                        <th style="width: 20%; ">Nombre</th>
                         <th style="width: 20%; ">Direccion</th>
                         <th style="width: 20%; ">Telefono</th>
                         <th style="width: 20%; ">Codigo</th>
@@ -23,6 +24,7 @@
                 </thead>
                 <tbody style="color: #767695;">
                     <tr *ngFor="let almacen of lstAlmacenes">
+                        <td>{{almacen.nombre_almacen}}</td>
                         <td>{{almacen.direccion}}</td>
                         <td>{{almacen.telefono}}</td>
                         <td>{{almacen.codigo}}</td>

@@ -23,6 +23,7 @@ export class AlmacenesCreateComponent implements OnInit {
    //Creación de la variable para formulario
    warehousesForm = new FormGroup({
      sociedad: new FormControl('0', Validators.required),
+     nombre_almacen: new FormControl('', Validators.required),
      Direccion: new FormControl('', [Validators.required]),
      codigo: new FormControl('', [Validators.required]),
      pto_emision: new FormControl('', [Validators.required]),
@@ -74,16 +75,15 @@ export class AlmacenesCreateComponent implements OnInit {
            pto_emision: this.warehousesForm.value!.pto_emision ?? "",
            telefono: this.warehousesForm.value!.telefono ?? "",
            idAlmacen: '',
+           nombre_almacen: this.warehousesForm.value!.nombre_almacen ?? "",
            nombresociedad: ''
          };
-         console.log(almacenEntity)
-         console.log(almacenEntity);
          this.httpService.agregarAlmacen(almacenEntity).subscribe(res => {
            if (res.codigoError == "OK") {
              Swal.fire({
                icon: 'success',
                title: 'Guardado Exitosamente.',
-               text: `Se ha creado la sociedad ${this.warehousesForm.value.Direccion}`,
+               text: `Se ha creado el almacén ${this.warehousesForm.value.nombre_almacen}`,
                showConfirmButton: true,
                confirmButtonText: "Ok"
              }).finally(() => {

@@ -8,6 +8,7 @@ import { SociedadesEntity } from '../models/sociedades';
 const initGruop: AlmacenesEntity = {
   idAlmacen : "",
   sociedad_id : "",
+  nombre_almacen: "",
   nombresociedad: "",
   direccion : "",
   telefono : "",
@@ -54,7 +55,7 @@ export class AlmacenesService {
   obtenerAlmacenesS(almacen: SociedadesEntity): Observable<Almacenes> {
     return this.http.post<Almacenes>(`${environment.apiUrl}almacenes/ObtenerAlmacenesS`, almacen);
   }
-  obtenerAlmacenN(direccion: AlmacenesEntity):Observable<Almacenes>{
-    return this.http.post<Almacenes>(`${environment.apiUrl}almacenes/ObtenerAlmacenN`, direccion);
+  obtenerAlmacenN(nombre_almacen: AlmacenesEntity):Observable<Almacenes>{
+    return this.http.post<Almacenes>(`${environment.apiUrl}almacenes/ObtenerAlmacenN`, nombre_almacen);
   }
 }

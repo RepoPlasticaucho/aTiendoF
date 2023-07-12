@@ -10,6 +10,7 @@ export interface AlmacenesEntity {
     nombresociedad: string;
     direccion : string;
     telefono : string;
+    nombre_almacen?: string;
     codigo : string;
     pto_emision : string;
     

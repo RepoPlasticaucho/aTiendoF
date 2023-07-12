@@ -74,7 +74,7 @@ export class AlmacenessociedadComponent implements OnInit {
   eliminarAlmacenes(almacen: AlmacenesEntity): void {
     Swal.fire({
       icon: 'question',
-      title: `¿Esta seguro de eliminar ${almacen.direccion}?`,
+      title: `¿Esta seguro de eliminar ${almacen.nombre_almacen}?`,
       showDenyButton: true,
       confirmButtonText: 'Si',
       denyButtonText: 'No',

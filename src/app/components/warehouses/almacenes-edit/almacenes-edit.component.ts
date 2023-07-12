@@ -22,6 +22,7 @@ export class AlmacenesEditComponent implements OnInit {
   //Creación de la variable para formulario
   warehousesForm = new FormGroup({
     sociedad: new FormControl('0', Validators.required),
+    nombre_almacen: new FormControl('', Validators.required),
     Direccion: new FormControl('', [Validators.required]),
     codigo: new FormControl('', [Validators.required]),
     pto_emision: new FormControl('', [Validators.required]),
@@ -66,6 +67,7 @@ export class AlmacenesEditComponent implements OnInit {
         this.codigo = res.idAlmacen ?? "";
         this.warehousesForm.get("sociedad")?.setValue(res.sociedad_id);
         this.warehousesForm.get("Direccion")?.setValue(res.direccion);
+        this.warehousesForm.get("nombre_almacen")?.setValue(res.nombre_almacen!);
         this.warehousesForm.get("codigo")?.setValue(res.codigo);
         this.warehousesForm.get("pto_emision")?.setValue(res.pto_emision);
         this.warehousesForm.get("telefono")?.setValue(res.telefono);
@@ -91,6 +93,7 @@ export class AlmacenesEditComponent implements OnInit {
           pto_emision: this.warehousesForm.value!.pto_emision ?? "",
           telefono: this.warehousesForm.value!.telefono ?? "",
           idAlmacen: this.codigo,
+          nombre_almacen: this.warehousesForm.value!.nombre_almacen ?? "",
           nombresociedad: ''
         };
         this.httpService.actualizarAlmacen(almacenEntity).subscribe(res => {

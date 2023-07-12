@@ -263,7 +263,8 @@ export class TercerosEditComponent implements OnInit {
       idAlmacen: '',
       sociedad_id: '',
       nombresociedad: '',
-      direccion: this.TercerosForm.value!.almacen ?? '',
+      direccion: '',
+      nombre_almacen: this.TercerosForm.value!.almacen ?? '',
       telefono: '',
       codigo: '',
       pto_emision: ''
@@ -286,7 +287,8 @@ export class TercerosEditComponent implements OnInit {
         idAlmacen: '',
         sociedad_id: '',
         nombresociedad: '',
-        direccion: this.TercerosForm.value!.almacen ?? '',
+        nombre_almacen: this.TercerosForm.value!.almacen ?? '',
+        direccion: '',
         telefono: '',
         codigo: '',
         pto_emision: ''

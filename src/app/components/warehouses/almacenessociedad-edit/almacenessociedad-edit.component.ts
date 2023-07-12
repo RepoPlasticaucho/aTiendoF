@@ -21,6 +21,7 @@ export class AlmacenessociedadEditComponent implements OnInit {
   faSave = faSave;
   //Creación de la variable para formulario
   warehousesForm = new FormGroup({
+    nombre_almacen: new FormControl('', Validators.required),
     sociedad: new FormControl('0', Validators.required),
     Direccion: new FormControl('', [Validators.required]),
     codigo: new FormControl('', [Validators.required]),
@@ -69,6 +70,7 @@ export class AlmacenessociedadEditComponent implements OnInit {
         this.warehousesForm.get("codigo")?.setValue(res.codigo);
         this.warehousesForm.get("pto_emision")?.setValue(res.pto_emision);
         this.warehousesForm.get("telefono")?.setValue(res.telefono);
+        this.warehousesForm.get("nombre_almacen")?.setValue(res.nombre_almacen!);
       }
     });
   }
@@ -84,6 +86,7 @@ export class AlmacenessociedadEditComponent implements OnInit {
           codigo: this.warehousesForm.value!.codigo ?? "",
           pto_emision: this.warehousesForm.value!.pto_emision ?? "",
           telefono: this.warehousesForm.value!.telefono ?? "",
+          nombre_almacen: this.warehousesForm.value!.nombre_almacen ?? "",
           idAlmacen: this.codigo,
           nombresociedad: ''
         };
