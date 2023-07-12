@@ -38,11 +38,13 @@ export class VerClienteComponent implements OnInit {
   email: string = '';
   initialCiudad: string = '';
   codigo: any;
+  idCiudad: string = '';
+  ciudad: string = '';
 
   //Creación de la variable para formulario
   TercerosForm = new FormGroup({
     tipo_tercero: new FormControl('0', Validators.required),
-    ciudad_id: new FormControl('0',),
+    ciudad_id: new FormControl('0'),
     nombre: new FormControl('', Validators.required),
     apellido: new FormControl('', Validators.required),
     id_fiscal: new FormControl('', Validators.required),
@@ -90,7 +92,7 @@ export class VerClienteComponent implements OnInit {
   }
 
   verificarValores(): void {
-    if(this.TercerosForm.value.id_fiscal == ''){
+    if (this.TercerosForm.value.id_fiscal == '') {
       localStorage.setItem('idfiscalCl', '');
     }
   }
@@ -189,6 +191,7 @@ export class VerClienteComponent implements OnInit {
         this.TercerosForm.get('correo')?.setValue(res1.lstTerceros[0].correo);
         this.TercerosForm.get('direccion')?.setValue(res1.lstTerceros[0].direccion);
         this.TercerosForm.get('telefono')?.setValue(res1.lstTerceros[0].telefono);
+        this.ciudad = this.TercerosForm.value.ciudad_id!;
         this.initialCiudad = res1.lstTerceros[0].ciudad!;
       } else {
         Swal.fire({
@@ -203,7 +206,6 @@ export class VerClienteComponent implements OnInit {
   }
 
   onSubmit() {
-    
     if (!this.TercerosForm.valid) {
       this.TercerosForm.markAllAsTouched();
       console.log("Error");
@@ -228,12 +230,11 @@ export class VerClienteComponent implements OnInit {
         provincia: "",
         ciudadid: this.TercerosForm.value!.ciudad_id ?? ''
       }
-      console.log(tercerodatos)
       localStorage.setItem('idfiscalCl', this.TercerosForm.value!.id_fiscal!);
       this.httpService.obtenerTerceroCedula(tercerodatos).subscribe(res1 => {
         if (res1.codigoError == "NEXISTE") {
-          this.httpService.agregarTerceros(tercerodatos).pipe(finalize(() => { 
-            this.httpService.obtenerTerceroCedula(tercerodatos).subscribe(res3 => { 
+          this.httpService.agregarTerceros(tercerodatos).pipe(finalize(() => {
+            this.httpService.obtenerTerceroCedula(tercerodatos).subscribe(res3 => {
               const newMovimiento: MovimientosEntity = {
                 id: localStorage.getItem('movimiento_id')!,
                 tipo_id: '',
@@ -267,7 +268,7 @@ export class VerClienteComponent implements OnInit {
             });
           })).subscribe(res => {
             if (res.codigoError == "OK") {
-              
+
             } else {
               Swal.fire({
                 icon: 'error',
@@ -289,51 +290,115 @@ export class VerClienteComponent implements OnInit {
             secuencial: '',
             tercero_id: res1.lstTerceros[0].id!
           }
-          const tercerodatos2: TercerosEntity = {
-            id: this.codigo,
-            almacen_id: localStorage.getItem('almacenid')!,
-            sociedad_id: localStorage.getItem('sociedadid')!,
-            tipotercero_id: this.lstTipoTerceros2[0].idTipo_tercero ?? 0,
-            tipousuario_id: '1',
-            nombresociedad: "",
-            nombrealmacen: "",
-            nombretercero: this.TercerosForm.value!.tipo_tercero ?? "",
-            tipousuario: "",
-            nombre: (this.TercerosForm.value!.nombre ?? "").concat(" " + this.TercerosForm.value!.apellido ?? ""),
-            id_fiscal: this.TercerosForm.value!.id_fiscal ?? "",
-            direccion: this.TercerosForm.value!.direccion ?? "",
-            telefono: this.TercerosForm.value!.telefono ?? "",
-            correo: this.TercerosForm.value!.correo ?? "",
-            fecha_nac: "01-01-2000",
-            ciudad: '',
-            provincia: "",
-            ciudadid: this.TercerosForm.value!.ciudad_id ?? ''
+          if (this.TercerosForm.value.ciudad_id == undefined) {
+            const ciudadNew: CiudadesEntity = {
+              idCiudad: '',
+              ciudad: this.ciudad,
+              provinciaid: '',
+              provincia: '',
+              codigo: '',
+              created_at: '',
+              update_at: ''
+            }
+            this.httpServiceCiudades.obtenerCiudadesN(ciudadNew).subscribe(res3 => {
+              if (res3.codigoError != "OK") {
+                console.log(res3.descripcionError)
+              } else {
+                this.idCiudad = res3.lstCiudades[0].idCiudad!;
+                const tercerodatos2: TercerosEntity = {
+                  id: this.codigo,
+                  almacen_id: localStorage.getItem('almacenid')!,
+                  sociedad_id: localStorage.getItem('sociedadid')!,
+                  tipotercero_id: this.lstTipoTerceros2[0].idTipo_tercero ?? 0,
+                  tipousuario_id: '1',
+                  nombresociedad: "",
+                  nombrealmacen: "",
+                  nombretercero: this.TercerosForm.value!.tipo_tercero ?? "",
+                  tipousuario: "",
+                  nombre: (this.TercerosForm.value!.nombre ?? "").concat(" " + this.TercerosForm.value!.apellido ?? ""),
+                  id_fiscal: this.TercerosForm.value!.id_fiscal ?? "",
+                  direccion: this.TercerosForm.value!.direccion ?? "",
+                  telefono: this.TercerosForm.value!.telefono ?? "",
+                  correo: this.TercerosForm.value!.correo ?? "",
+                  fecha_nac: "01-01-2000",
+                  ciudad: '',
+                  provincia: "",
+                  ciudadid: this.idCiudad
+                }
+                console.log(tercerodatos2)
+                this.httpService.actualizarTerceros(tercerodatos2).subscribe(res3 => {
+                  if (res3.codigoError != "OK") {
+                    console.log(res3.descripcionError)
+                  }
+                });
+                this.httpServiceMov.actualizarClientePedido(newMovimiento).subscribe(res2 => {
+                  if (res2.codigoError != "OK") {
+                    Swal.fire({
+                      icon: 'info',
+                      title: 'Información',
+                      text: 'Ha ocurrido un error',
+                      showConfirmButton: true,
+                      // timer: 3000
+                    });
+                  } else {
+                    Swal.fire({
+                      icon: 'info',
+                      title: 'Información',
+                      text: 'Se ha elegido al Cliente',
+                      showConfirmButton: true,
+                      // timer: 3000
+                    });
+                  }
+                });
+              }
+            });
+          } else {
+            const tercerodatos2: TercerosEntity = {
+              id: this.codigo,
+              almacen_id: localStorage.getItem('almacenid')!,
+              sociedad_id: localStorage.getItem('sociedadid')!,
+              tipotercero_id: this.lstTipoTerceros2[0].idTipo_tercero ?? 0,
+              tipousuario_id: '1',
+              nombresociedad: "",
+              nombrealmacen: "",
+              nombretercero: this.TercerosForm.value!.tipo_tercero ?? "",
+              tipousuario: "",
+              nombre: (this.TercerosForm.value!.nombre ?? "").concat(" " + this.TercerosForm.value!.apellido ?? ""),
+              id_fiscal: this.TercerosForm.value!.id_fiscal ?? "",
+              direccion: this.TercerosForm.value!.direccion ?? "",
+              telefono: this.TercerosForm.value!.telefono ?? "",
+              correo: this.TercerosForm.value!.correo ?? "",
+              fecha_nac: "01-01-2000",
+              ciudad: '',
+              provincia: "",
+              ciudadid: this.TercerosForm.value.ciudad_id!
+            }
+            console.log(tercerodatos2)
+            this.httpService.actualizarTerceros(tercerodatos2).subscribe(res3 => {
+              if (res3.codigoError != "OK") {
+                console.log(res3.descripcionError)
+              }
+            });
+            this.httpServiceMov.actualizarClientePedido(newMovimiento).subscribe(res2 => {
+              if (res2.codigoError != "OK") {
+                Swal.fire({
+                  icon: 'info',
+                  title: 'Información',
+                  text: 'Ha ocurrido un error',
+                  showConfirmButton: true,
+                  // timer: 3000
+                });
+              } else {
+                Swal.fire({
+                  icon: 'info',
+                  title: 'Información',
+                  text: 'Se ha elegido al Cliente',
+                  showConfirmButton: true,
+                  // timer: 3000
+                });
+              }
+            });
           }
-          this.httpService.actualizarTerceros(tercerodatos).subscribe(res3 => {
-            if (res3.codigoError != "OK") {
-              console.log(res3.descripcionError)
-            }
-          });
-
-          this.httpServiceMov.actualizarClientePedido(newMovimiento).subscribe(res2 => {
-            if (res2.codigoError != "OK") {
-              Swal.fire({
-                icon: 'info',
-                title: 'Información',
-                text: 'Ha ocurrido un error',
-                showConfirmButton: true,
-                // timer: 3000
-              });
-            } else {
-              Swal.fire({
-                icon: 'info',
-                title: 'Información',
-                text: 'Se ha elegido al Cliente',
-                showConfirmButton: true,
-                // timer: 3000
-              });
-            }
-          });
         }
       });
       this.cerrarDialog();

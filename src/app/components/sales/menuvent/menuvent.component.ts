@@ -169,41 +169,44 @@ export class MenuventComponent implements OnInit {
   
       dialogRef.afterClosed().subscribe(result => {
         // Lógica para manejar el resultado después de cerrar el modal
-        const terceroNew: TercerosEntity = {
-          almacen_id: '',
-          sociedad_id: '',
-          tipotercero_id: '',
-          tipousuario_id: '',
-          nombresociedad: '',
-          nombrealmacen: '',
-          nombretercero: '',
-          tipousuario: '',
-          nombre: '',
-          id_fiscal: localStorage.getItem('idfiscalCl')!,
-          direccion: '',
-          telefono: '',
-          correo: '',
-          fecha_nac: '',
-          ciudad: '',
-          provincia: '',
-          ciudadid: ''
-        }
-        this.httpServiceTer.obtenerTerceroCedula(terceroNew).subscribe(res => {
-          if (res.codigoError == "OK") {
-            this.nombre = res.lstTerceros[0].nombre;
-            this.identificacion = res.lstTerceros[0].id_fiscal;
-            this.correo = res.lstTerceros[0].correo;
-            this.telefono = res.lstTerceros[0].telefono;
-            this.direccion = res.lstTerceros[0].direccion;
-            this.ciudad = res.lstTerceros[0].ciudad;
-          } 
-        });
+       
       });
     } else {
       console.log('ERROR')
     }
   }
 
+  verDatos() {
+    const terceroNew: TercerosEntity = {
+      almacen_id: '',
+      sociedad_id: '',
+      tipotercero_id: '',
+      tipousuario_id: '',
+      nombresociedad: '',
+      nombrealmacen: '',
+      nombretercero: '',
+      tipousuario: '',
+      nombre: '',
+      id_fiscal: localStorage.getItem('idfiscalCl')!,
+      direccion: '',
+      telefono: '',
+      correo: '',
+      fecha_nac: '',
+      ciudad: '',
+      provincia: '',
+      ciudadid: ''
+    }
+    this.httpServiceTer.obtenerTerceroCedula(terceroNew).subscribe(res => {
+      if (res.codigoError == "OK") {
+        this.nombre = res.lstTerceros[0].nombre;
+        this.identificacion = res.lstTerceros[0].id_fiscal;
+        this.correo = res.lstTerceros[0].correo;
+        this.telefono = res.lstTerceros[0].telefono;
+        this.direccion = res.lstTerceros[0].direccion;
+        this.ciudad = res.lstTerceros[0].ciudad;
+      } 
+    });
+  }
   verCarrito() {
     const dialogRef = this.dialog.open(VerCarritoComponent, {
       width: '900px',
