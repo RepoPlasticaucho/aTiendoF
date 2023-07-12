@@ -124,8 +124,16 @@
         </div>
         <div class="form-group ">
             <label for="medida" style="margin: 0;">Unidad de Medida</label>
-            <input type="text " class="form-control " id="medida" placeholder="Ingrese la unidad de medida para el tamaño. (par/ml/cm/cc/etc.)"
-                formControlName="medida">
+            <select class="form-control" id="medida" formControlName="medida">
+                <option [value]=" 0 " selected>Seleccione una unidad de medida</option>
+                <option>par</option>
+                <option>ml.</option>
+                <option>l.</option>
+                <option>cm.</option>
+                <option>plg.</option>
+                <option>kg.</option>
+                <option>g.</option>
+            </select>
             <small
                 *ngIf="modelProductForm.controls['medida'].invalid && (modelProductForm.controls['medida'].dirty || modelProductForm.controls['medida'].touched)">
                 <small *ngIf="modelProductForm.controls['medida'].errors?.['required']" style="color: red;">

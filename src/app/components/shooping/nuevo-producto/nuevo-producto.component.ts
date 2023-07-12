@@ -46,7 +46,7 @@ export class NuevoProductoComponent implements OnInit {
     linea: new FormControl('0',),
     marca: new FormControl('0'),
     modelo: new FormControl('0',),
-    medida: new FormControl('', [Validators.required]),
+    medida: new FormControl('0', [Validators.required]),
     producto: new FormControl('', [Validators.required]),
     etiquetas: new FormControl('', [Validators.required]),
     tamanio: new FormControl('', [Validators.required]),
