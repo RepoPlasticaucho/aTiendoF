@@ -105,6 +105,18 @@
     width: 100px; /* Ajusta el tamaño de los inputs según tus necesidades */
   }
 
+  .cool-input2 {
+    width: 100px;
+    height: 40px;
+    margin-left: 20px;
+  }
+
+  .boton {
+    width: 100px;
+    height: 40px;
+    margin-left: 20px;
+  }
+
   .button-container button {
     margin-bottom: 50px; /* Margen inferior entre los botones */
   }

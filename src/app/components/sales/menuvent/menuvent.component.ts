@@ -14,6 +14,8 @@ import { MovimientosEntity } from 'src/app/models/movimientos';
 import { VerClienteComponent } from '../ver-cliente/ver-cliente.component';
 import { TercerosService } from 'src/app/services/terceros.service';
 import { TercerosEntity } from 'src/app/models/terceros';
+import { CiudadesService } from 'src/app/services/ciudades.service';
+import { CiudadesEntity } from 'src/app/models/ciudades';
 
 
 @Component({
@@ -45,6 +47,8 @@ export class MenuventComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
   lstDetalleMovimientos: DetallesMovimientoEntity[] = [];
+  lstCiudades: CiudadesEntity[] = [];
+  lstCiudades2: CiudadesEntity[] = [];
   sumaTotal: any;
   detalleEditIndex: number = -1;
   detalleEditBackup: DetallesMovimientoEntity | null = null;
@@ -55,8 +59,10 @@ export class MenuventComponent implements OnInit {
   telefono: string = '';
   ciudad: string = '';
   direccion: string = '';
+  ciudadId: any;
 
   constructor(private dialog: MatDialog,
+    private readonly httpServiceCiudades: CiudadesService,
     private readonly httpService: DetallesmovimientoService,
     private readonly httpServiceMov: MovimientosService,
     private readonly httpServiceTer: TercerosService,
@@ -74,6 +80,19 @@ export class MenuventComponent implements OnInit {
       info: false,
       responsive: true,
     }
+
+    this.httpServiceCiudades.obtenerCiudadesAll().subscribe(res => {
+      if (res.codigoError != "OK") {
+        Swal.fire({
+          icon: 'error',
+          title: 'No se pudo obtener las ciudades.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      } else {
+        this.lstCiudades = res.lstCiudades;
+      }
+    })
     
     /*
     const terceroNew: TercerosEntity = {
@@ -117,6 +136,74 @@ export class MenuventComponent implements OnInit {
     } else {
       this.selectTipo = false;
     }
+  }
+
+
+  actualizar(){
+    const city = document.getElementById('ciudad') as HTMLSelectElement;
+    const newCiudad: CiudadesEntity = {
+      idCiudad: '',
+      ciudad: city.value,
+      provinciaid: '',
+      provincia: '',
+      codigo: '',
+      created_at: '',
+      update_at: ''
+    }
+    
+    this.httpServiceCiudades.obtenerCiudadesN(newCiudad).subscribe(res => {
+      if(res.codigoError != 'OK'){
+        Swal.fire({
+          icon: 'info',
+          title: 'Información',
+          text: 'Ha ocurrido un error',
+          showConfirmButton: true,
+          // timer: 3000
+        });
+      } else {
+        this.ciudadId = res.lstCiudades[0].idCiudad!;
+        const newTercero: TercerosEntity = {
+          almacen_id: '',
+          id: localStorage.getItem('idClVenta')!,
+          sociedad_id: '',
+          tipotercero_id: '',
+          tipousuario_id: '',
+          nombresociedad: '',
+          nombrealmacen: '',
+          nombretercero: this.nombre,
+          tipousuario: '',
+          nombre: this.nombre,
+          id_fiscal: '',
+          direccion: this.direccion,
+          telefono: this.telefono,
+          correo: this.correo,
+          fecha_nac: '',
+          ciudad: '',
+          provincia: '',
+          ciudadid: this.ciudadId
+        }
+        console.log(newTercero)
+        this.httpServiceTer.actualizarCliente(newTercero).subscribe(res => {
+          if(res.codigoError != 'OK'){
+            Swal.fire({
+              icon: 'info',
+              title: 'Información',
+              text: res.descripcionError,
+              showConfirmButton: true,
+              // timer: 3000
+            });
+          } else {
+            Swal.fire({
+              icon: 'success',
+              title: 'Actualizado',
+              text: 'Se han actualizado los datos',
+              showConfirmButton: true,
+              // timer: 3000
+            });
+          }
+        });
+      }
+    });
   }
 
   realizarAccion() {

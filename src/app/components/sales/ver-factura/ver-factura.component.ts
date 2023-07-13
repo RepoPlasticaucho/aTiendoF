@@ -11,6 +11,8 @@ import Swal from 'sweetalert2';
 import { SociedadesEntity } from 'src/app/models/sociedades';
 import { TercerosService } from 'src/app/services/terceros.service';
 import { TercerosEntity } from 'src/app/models/terceros';
+import { FormasPagoService } from 'src/app/services/formas-pago.service';
+import { FormasPagoEntity } from 'src/app/models/formas-pago';
 
 @Component({
   selector: 'app-ver-factura',
@@ -24,6 +26,8 @@ export class VerFacturaComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
   lstDetalleMovimientos: DetallesMovimientoEntity[] = [];
+  lstFormasPago: FormasPagoEntity[] = [];
+  lstFormasPago2: FormasPagoEntity[] = [];
   sumaTotal: any;
   nombreGrupo: string = '';
   idFiscal: string = '';
@@ -40,6 +44,7 @@ export class VerFacturaComponent implements OnInit {
     private readonly httpServiceMovimiento: MovimientosService,
     private readonly httpServiceSociedad: SociedadesService,
     private readonly httpServiceTercero: TercerosService,
+    private readonly httpServiceForma: FormasPagoService,
     private router: Router) { }
 
   ngOnInit(): void {
@@ -55,6 +60,18 @@ export class VerFacturaComponent implements OnInit {
       info: false,
       responsive: true
     }
+    this.httpServiceForma.obtenerFormasPago().subscribe(res => {
+      if(res.codigoError == 'OK'){
+        this.lstFormasPago = res.lstFormasPago;
+      } else {
+        Swal.fire({
+          icon: 'info',
+          title: 'Información',
+          text: 'Ha ocurrido un error',
+          showConfirmButton: true,
+        });
+      }
+    });
     const newDetalle: DetallesMovimientoEntity = {
       id: '',
       producto_nombre: '',
@@ -185,7 +202,6 @@ export class VerFacturaComponent implements OnInit {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
           this.httpServiceMovimiento.finalizarPedido(newPedido).subscribe(res => {
-        
             if (res.codigoError == 'OK') {
               Swal.fire({
                 icon: 'success',
@@ -211,6 +227,36 @@ export class VerFacturaComponent implements OnInit {
         }
       });
     });
+  }
+
+  changePago(event: any): void{
+    const newPago: FormasPagoEntity = {
+      id: '',
+      nombre: event.target.value,
+      codigo: '',
+      fecha_inicio: '',
+      fecha_fin: '',
+      created_at: '',
+      updated_at: ''
+    }
+
+    this.httpServiceForma.obtenerFormasPagoN(newPago).subscribe(res => {
+      if(res.codigoError != 'OK'){
+        Swal.fire({
+          icon: 'info',
+          title: 'Información',
+          text: 'Ha ocurrido un error',
+          showConfirmButton: true,
+        });
+      } else {
+        this.lstFormasPago2 = res.lstFormasPago;
+      }
+    })
+  }
+
+
+  abonar(){
+
   }
 
 }

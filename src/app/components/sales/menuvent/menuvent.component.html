@@ -51,13 +51,19 @@
             <div class="form-group">
                 <div class="d-flex">
                     <input type="text" [disabled]="true" [(ngModel)]="identificacion" class="form-control input-1" placeholder="Cédula/RUC">
-                    <input type="text" [disabled]="true" [(ngModel)]="nombre" class="form-control input-1" placeholder="Nombre">
-                    <input type="text" [disabled]="true" [(ngModel)]="correo" class="form-control input-1" placeholder="Correo">
+                    <input type="text" [disabled]="nombre == ''" [(ngModel)]="nombre" class="form-control input-1" placeholder="Nombre">
+                    <input type="text" [disabled]="correo == ''" [(ngModel)]="correo" class="form-control input-1" placeholder="Correo">
                 </div>
                 <div class="d-flex">
-                    <input type="text" [disabled]="true" [(ngModel)]="ciudad" class="form-control input-1" placeholder="Ciudad">
-                    <input type="text" [disabled]="true" [(ngModel)]="direccion" class="form-control input-1" placeholder="Dirección">
-                    <input type="text" [disabled]="true" [(ngModel)]="telefono" class="form-control input-1" placeholder="Teléfono">
+                    <select class="form-control" id="ciudad" [disabled]="ciudad == ''">
+                        <option *ngIf="ciudad == ''" value="0" selected>Ciudad</option>
+                        <option *ngFor="let ciudad of lstCiudades" [value]="ciudad.ciudad">
+                            {{ciudad.ciudad}}
+                        </option>
+                    </select>
+                    <input type="text" [disabled]="direccion == ''" [(ngModel)]="direccion" class="form-control input-1" placeholder="Dirección">
+                    <input type="text" [disabled]="telefono == ''" [(ngModel)]="telefono" class="form-control input-1" placeholder="Teléfono">
+                    <button class="btn btn-primary ml-2" [disabled]="identificacion == '' || nombre == '' || correo == '' || ciudad == '' || direccion == '' || telefono == ''" (click)="actualizar()">Actualizar</button>
                 </div>
             </div>
             <br><br>
@@ -122,7 +128,7 @@
             <br><br><br>
             <div class="button-container">
                 <button class="btn btn-primary" [disabled]="lstDetalleMovimientos.length == 0" (click)="finalizarPedido()">
-                    <span style="color: white"> Finalizar Compra </span>
+                    <span style="color: white"> Continuar</span>
                 </button>
             </div>
         </div>

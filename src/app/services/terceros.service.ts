@@ -70,6 +70,10 @@ export class TercerosService {
     return this.http.post<Terceros>(`${environment.apiUrl}terceros/ModificarTerceros`, tercero);
   }
 
+  actualizarCliente(tercero: TercerosEntity): Observable<Terceros> {
+    return this.http.post<Terceros>(`${environment.apiUrl}terceros/ModificarCliente`, tercero);
+  }
+
   agregarCategoriaBDD=(tercero: TercerosEntity) =>{
     tercero.id=new Date().toISOString();
     this.db.get(tercero.id)

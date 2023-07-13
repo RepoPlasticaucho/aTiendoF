@@ -246,6 +246,7 @@ export class VerClienteComponent implements OnInit {
                 secuencial: '',
                 tercero_id: res3.lstTerceros[0].id!
               }
+              localStorage.setItem('idClVenta', res3.lstTerceros[0].id!);
               this.httpServiceMov.actualizarClientePedido(newMovimiento).subscribe(res2 => {
                 if (res2.codigoError != "OK") {
                   Swal.fire({
@@ -290,6 +291,7 @@ export class VerClienteComponent implements OnInit {
             secuencial: '',
             tercero_id: res1.lstTerceros[0].id!
           }
+          localStorage.setItem('idClVenta', res1.lstTerceros[0].id!);
           if (this.TercerosForm.value.ciudad_id == undefined) {
             const ciudadNew: CiudadesEntity = {
               idCiudad: '',

@@ -1,86 +1,90 @@
 <div style="max-width: 95%; margin: auto">
-    <div class="card">
-      <br />
-      <div class="card-header d-flex justify-content-between">
-        <div class="row mx-3">
-          <fa-icon [icon]="faFileInvoice" [size]="'3x'" style="color: #636363"></fa-icon>
-          <h1 class="mx-5" style="color: #636363">FACTURA</h1>
-        </div>
-        <select class="form-control small-select" style="margin-left: 150px;">
-          <option value="0" selected>Seleccionar método de pago</option>
-          <option>Tarjeta de Débito/Crédito</option>
-          <option>Efectivo</option>
-          <option>Tarjeta de Regalo</option>
-        </select>
+  <div class="card">
+    <br />
+    <div class="card-header d-flex justify-content-between">
+      <div class="row mx-3">
+        <fa-icon [icon]="faFileInvoice" [size]="'3x'" style="color: #636363"></fa-icon>
+        <h1 class="mx-5" style="color: #636363">FACTURA</h1>
       </div>
-      <div class="card-body">
-        <div class="invoice-header">
-          <h1>Factura Electrónica</h1>
-          <div class="company-info">
-            <div class="company-details">
-              <h3>{{ nombreGrupo }}</h3>
-              <p>RUC: {{ idFiscal }}</p>
-              <p>Dirección: Dirección de la empresa</p>
-              <p>Teléfono: +1234567890</p>
-            </div>
-          </div>
-          <div class="invoice-info">
-            <div class="info-item">
-              <h4>Número de factura: {{ numFactura }}</h4>
-            </div>
-            <div class="info-item">
-              <h4>Fecha de emisión: {{ fechaEmision | slice:0:10 }}</h4>
-            </div>
-            <div class="info-item">
-              <h4>Cédula/RUC: {{ idFiscalCliente }}</h4>
-            </div>
-            <div class="info-item">
-              <h4>Cliente: {{ cliente }}</h4>
-            </div>
-            <div class="info-item">
-              <h4>Telefono: {{ telefono }}</h4>
-            </div>
-            <div class="info-item">
-              <h4>Email: {{ email }}</h4>
-            </div>
+      <select class="form-control small-select" (change)="changePago($event)" style="margin-left: 150px;">
+        <option value="0" selected>Seleccionar método de pago</option>
+        <option *ngFor="let formasPago of lstFormasPago" [value]="formasPago.nombre">
+          {{formasPago.nombre}}
+        </option>
+      </select>
+      <input type="text" class="cool-input2" placeholder="Monto">
+      <button class="btn boton btn-success" (click)="abonar()">
+        <span style="color: white">ABONAR</span>
+      </button>
+    </div>
+    <div class="card-body">
+      <div class="invoice-header">
+        <h1>Factura Electrónica</h1>
+        <div class="company-info">
+          <div class="company-details">
+            <h3>{{ nombreGrupo }}</h3>
+            <p>RUC: {{ idFiscal }}</p>
+            <p>Dirección: Dirección de la empresa</p>
+            <p>Teléfono: +1234567890</p>
           </div>
         </div>
-        <div class="invoice-details">  
-          <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
-            <thead style="color: #636363;">
-              <tr>
-                <th style="width: 10%; ">Producto</th>
-                <th style="width: 10%; ">Cantidad</th>
-                <th style="width: 10%; ">Precio Uni.</th>
-                <th style="width: 10%; ">Precio</th>
-                <th style="width: 10%; ">Tamaño</th>
-                <th style="width: 10%; ">Color</th>
-              </tr>
-            </thead>
-            <tbody style="color: #767695;">
-              <tr *ngFor="let detalleMovimientos of lstDetalleMovimientos">
-                <td>{{detalleMovimientos.producto_nombre}}</td>
-                <td>{{detalleMovimientos.cantidad}}</td>
-                <td>{{detalleMovimientos.costo}}</td>
-                <td>{{detalleMovimientos.precio}}</td>
-                <td>{{detalleMovimientos.tamanio}}</td>
-                <td>{{detalleMovimientos.color}}</td>
-              </tr>
-            </tbody>
-          </table>
-          <br><br>
-          <div class="icon-container">
-            <label for="total" class="label-input">TOTAL:</label>
-            <input type="text" [(ngModel)]="sumaTotal" class="cool-input resultado-input" readonly>
+        <div class="invoice-info">
+          <div class="info-item">
+            <h4>Número de factura: {{ numFactura }}</h4>
           </div>
-          <br>
+          <div class="info-item">
+            <h4>Fecha de emisión: {{ fechaEmision | slice:0:10 }}</h4>
+          </div>
+          <div class="info-item">
+            <h4>Cédula/RUC: {{ idFiscalCliente }}</h4>
+          </div>
+          <div class="info-item">
+            <h4>Cliente: {{ cliente }}</h4>
+          </div>
+          <div class="info-item">
+            <h4>Telefono: {{ telefono }}</h4>
+          </div>
+          <div class="info-item">
+            <h4>Email: {{ email }}</h4>
+          </div>
         </div>
       </div>
-      <br>
-      <div class="button-container">
-        <button class="btn btn-primary" (click)="finalizarPedido()">
-          <span style="color: white"> FINALIZAR PEDIDO </span>
-        </button>
+      <div class="invoice-details">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+          <thead style="color: #636363;">
+            <tr>
+              <th style="width: 10%; ">Producto</th>
+              <th style="width: 10%; ">Cantidad</th>
+              <th style="width: 10%; ">Precio Uni.</th>
+              <th style="width: 10%; ">Precio</th>
+              <th style="width: 10%; ">Tamaño</th>
+              <th style="width: 10%; ">Color</th>
+            </tr>
+          </thead>
+          <tbody style="color: #767695;">
+            <tr *ngFor="let detalleMovimientos of lstDetalleMovimientos">
+              <td>{{detalleMovimientos.producto_nombre}}</td>
+              <td>{{detalleMovimientos.cantidad}}</td>
+              <td>{{detalleMovimientos.costo}}</td>
+              <td>{{detalleMovimientos.precio}}</td>
+              <td>{{detalleMovimientos.tamanio}}</td>
+              <td>{{detalleMovimientos.color}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <br><br>
+        <div class="icon-container">
+          <label for="total" class="label-input">TOTAL:</label>
+          <input type="text" [(ngModel)]="sumaTotal" class="cool-input resultado-input" readonly>
+        </div>
+        <br>
       </div>
     </div>
+    <br>
+    <div class="button-container">
+      <button class="btn btn-primary" (click)="finalizarPedido()">
+        <span style="color: white"> FINALIZAR PEDIDO </span>
+      </button>
+    </div>
   </div>
+</div>
