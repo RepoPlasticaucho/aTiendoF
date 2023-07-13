@@ -27,10 +27,10 @@ export class DashboardAdmComponent {
           { title: 'Modelo Producto', cols: 1, rows: 1, name: "los modelos productos", figure: "widgets" },
           { title: 'Productos', cols: 1, rows: 1, name: "los productos", figure: "widgets" },
           { title: 'Grupos', cols: 1, rows: 1, name: "los grupos", figure: "person", dir: "grupos" },
-          { title: 'Proveedores', cols: 1, rows: 1, name: "los proveedores", figure: "supervisor_account", dir: "proveedores" },
+        //  { title: 'Proveedores', cols: 1, rows: 1, name: "los proveedores", figure: "supervisor_account", dir: "proveedores" },
           { title: 'Sociedades', cols: 1, rows: 1, name: "las sociedades", figure: "supervisor_account", dir: "sociedades" },
           { title: 'Almacenes', cols: 1, rows: 1, name: "los almacenes", figure: "location_city" },
-          { title: 'Usuarios', cols: 1, rows: 1, name: "los usuarios", figure: "person", dir: "navegation-adm/(contentAdmin:terceros)" },
+        //  { title: 'Usuarios', cols: 1, rows: 1, name: "los usuarios", figure: "person", dir: "navegation-adm/(contentAdmin:terceros)" },
         ];
       }
 
@@ -45,10 +45,10 @@ export class DashboardAdmComponent {
         { title: 'Modelo Producto', cols: 1, rows: 1, name: "los modelos productos", figure: "widgets", dir: "navegation-adm/(contentAdmin:modeloProductos)" },
         { title: 'Productos', cols: 1, rows: 1, name: "los productos", figure: "widgets", dir: "navegation-adm/(contentAdmin:productos)" },
         { title: 'Grupos', cols: 1, rows: 1, name: "los grupos", figure: "person", dir: "navegation-adm/(contentAdmin:grupos)" },
-        { title: 'Proveedores', cols: 1, rows: 1, name: "los proveedores", figure: "supervisor_account", dir: "navegation-adm/(contentAdmin:proveedores)" },
+       // { title: 'Proveedores', cols: 1, rows: 1, name: "los proveedores", figure: "supervisor_account", dir: "navegation-adm/(contentAdmin:proveedores)" },
         { title: 'Sociedades', cols: 1, rows: 1, name: "las sociedades", figure: "supervisor_account", dir: "navegation-adm/(contentAdmin:sociedades)" },
         { title: 'Almacenes', cols: 1, rows: 1, name: "los almacenes", figure: "location_city", dir: "navegation-adm/(contentAdmin:almacenes)" },
-        { title: 'Usuarios', cols: 1, rows: 1, name: "los usuarios", figure: "person", dir: "navegation-adm/(contentAdmin:terceros)" },
+      //S  { title: 'Usuarios', cols: 1, rows: 1, name: "los usuarios", figure: "person", dir: "navegation-adm/(contentAdmin:terceros)" },
       //  { title: 'Roles', cols: 1, rows: 1, name: "los roles", figure: "lock_person" }
       ];
     })
