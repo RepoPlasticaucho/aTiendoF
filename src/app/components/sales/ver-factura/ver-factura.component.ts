@@ -13,6 +13,8 @@ import { TercerosService } from 'src/app/services/terceros.service';
 import { TercerosEntity } from 'src/app/models/terceros';
 import { FormasPagoService } from 'src/app/services/formas-pago.service';
 import { FormasPagoEntity } from 'src/app/models/formas-pago';
+import { DetallesPagoEntity } from 'src/app/models/detalles-pago';
+import { DetallesPagoService } from 'src/app/services/detalles-pago.service';
 
 @Component({
   selector: 'app-ver-factura',
@@ -29,6 +31,8 @@ export class VerFacturaComponent implements OnInit {
   lstFormasPago: FormasPagoEntity[] = [];
   lstFormasPago2: FormasPagoEntity[] = [];
   sumaTotal: any;
+  isBotonHabilitado = false;
+  resto: any;
   nombreGrupo: string = '';
   idFiscal: string = '';
   numFactura: string = '';
@@ -39,16 +43,18 @@ export class VerFacturaComponent implements OnInit {
   telefono: string = '';
   ultSecuencial: any = '';
   secuencial: any;
+  inputColor: string = '';
+  esRestoCero: boolean = false;
 
   constructor(private readonly httpService: DetallesmovimientoService,
     private readonly httpServiceMovimiento: MovimientosService,
     private readonly httpServiceSociedad: SociedadesService,
+    private readonly httpServiceDetallePago: DetallesPagoService,
     private readonly httpServiceTercero: TercerosService,
     private readonly httpServiceForma: FormasPagoService,
     private router: Router) { }
 
   ngOnInit(): void {
-
     this.dtOptions = {
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
@@ -61,7 +67,7 @@ export class VerFacturaComponent implements OnInit {
       responsive: true
     }
     this.httpServiceForma.obtenerFormasPago().subscribe(res => {
-      if(res.codigoError == 'OK'){
+      if (res.codigoError == 'OK') {
         this.lstFormasPago = res.lstFormasPago;
       } else {
         Swal.fire({
@@ -119,7 +125,7 @@ export class VerFacturaComponent implements OnInit {
         Swal.showLoading();
         this.httpServiceTercero.obtenerTerceroCedula(newTercero).subscribe(res1 => {
           console.log(localStorage.getItem('idfiscalCl'))
-          if(res1.codigoError != "OK"){
+          if (res1.codigoError != "OK") {
 
           } else {
             this.nombreGrupo = res1.lstTerceros[0].nombresociedad!;
@@ -132,7 +138,7 @@ export class VerFacturaComponent implements OnInit {
           }
         })
         this.httpServiceMovimiento.obtenerMovimientoID(newMovimiento).subscribe(res2 => {
-          if(res2.codigoError != "OK"){
+          if (res2.codigoError != "OK") {
 
           } else {
             this.fechaEmision = res2.lstMovimientos[0].fecha_emision!;
@@ -152,6 +158,8 @@ export class VerFacturaComponent implements OnInit {
             this.lstDetalleMovimientos = res.lstDetalleMovimientos;
             this.dtTrigger.next('');
             this.calcularSumaTotal();
+            this.resto = parseFloat(this.sumaTotal.replace(',', '.')).toFixed(2);
+            this.actualizarColor();
             Swal.close();
           }
         });
@@ -163,22 +171,22 @@ export class VerFacturaComponent implements OnInit {
       }
     });
   }
-
+  
   calcularSumaTotal() {
     const suma = this.lstDetalleMovimientos.reduce((total, detalleMovimientos) => {
       return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
     }, 0);
-  
     this.sumaTotal = suma.toLocaleString(undefined, { minimumFractionDigits: 2 }).replace('.', ',');
   }
 
-  finalizarPedido(){
+
+  finalizarPedido() {
     this.httpServiceMovimiento.obtenerUltimoSecuencial().subscribe(res1 => {
       if (res1.codigoError == 'OK') {
         this.ultSecuencial = res1.lstMovimientos[0].secuencial;
-        const numero = parseInt(this.ultSecuencial,10)
+        const numero = parseInt(this.ultSecuencial, 10)
         const num2 = numero + 1;
-        this.secuencial = num2.toString().padStart(9, '0')
+        this.secuencial = num2.toString().padStart(9, '0');
       }
       const newPedido: MovimientosEntity = {
         id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
@@ -192,7 +200,6 @@ export class VerFacturaComponent implements OnInit {
         estab: localStorage.getItem('estab')!,
         importe_total: this.sumaTotal
       }
-      console.log(newPedido)
       Swal.fire({
         title: '¿Estás seguro de finalizar el pedido?',
         showDenyButton: true,
@@ -229,7 +236,9 @@ export class VerFacturaComponent implements OnInit {
     });
   }
 
-  changePago(event: any): void{
+  changePago(event: any): void {
+    const seleccionado = event.target.value;
+    this.isBotonHabilitado = seleccionado !== "0";
     const newPago: FormasPagoEntity = {
       id: '',
       nombre: event.target.value,
@@ -241,22 +250,76 @@ export class VerFacturaComponent implements OnInit {
     }
 
     this.httpServiceForma.obtenerFormasPagoN(newPago).subscribe(res => {
-      if(res.codigoError != 'OK'){
-        Swal.fire({
-          icon: 'info',
-          title: 'Información',
-          text: 'Ha ocurrido un error',
-          showConfirmButton: true,
-        });
+      if (res.codigoError != 'OK') {
       } else {
         this.lstFormasPago2 = res.lstFormasPago;
       }
     })
   }
 
+  onInput(event: any) {
+    const inputElement = event.target as HTMLInputElement;
+    let inputValue = inputElement.value;
 
-  abonar(){
+    // Remover caracteres que no son números o puntos
+    inputValue = inputValue.replace(/[^0-9.]/g, '');
 
+    // Reemplazar 0 al inicio con un punto
+    if (inputValue.length > 0 && inputValue.charAt(0) === '0') {
+      inputValue = '.' + inputValue.substring(1);
+    }
+    inputElement.value = inputValue;
+  }
+
+
+
+  abonar() {
+    const monto = document.getElementById('monto') as HTMLInputElement;
+    if (parseFloat(monto.value) <= this.sumaTotal.replace(',', '.') && parseFloat(monto.value) <= this.resto) {
+      this.resto = (this.resto - parseFloat(monto.value)).toFixed(2);
+      this.actualizarColor();
+      const newDetallePago: DetallesPagoEntity = {
+        id: '',
+        movimiento_id: localStorage.getItem('movimiento_id')!,
+        forma_pago_id: this.lstFormasPago2[0].id,
+        descripcion: 'PAGO',
+        valor: monto.value,
+        fecha_recaudo: '',
+        created_at: '',
+        updated_at: ''
+      }
+      this.httpServiceDetallePago.agregarDetallePago(newDetallePago).subscribe(res => {
+        if (res.codigoError == 'OK') {
+          Swal.fire({
+            icon: 'success',
+            title: 'Abonado',
+            text: 'Has abonado' + ' ' + '$' + ' ' + monto.value,
+            showConfirmButton: false,
+          });
+        } else {
+          console.log('ERROR')
+        }
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Ha ocurrido un error.',
+        text: 'Estás abonando más del resto o has abonado el total',
+        showConfirmButton: false,
+      });
+    }
+  }
+
+  actualizarColor() {
+    const restoNumerico = parseFloat(this.resto); // Convertir a número
+
+    if (restoNumerico === 0.00) {
+      this.inputColor = '#9EF291';
+      this.esRestoCero = true;
+    } else {
+      this.inputColor = '#FF6262';
+      this.esRestoCero = false;
+    }
   }
 
 }

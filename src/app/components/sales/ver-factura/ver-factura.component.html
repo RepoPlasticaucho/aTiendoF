@@ -6,16 +6,6 @@
         <fa-icon [icon]="faFileInvoice" [size]="'3x'" style="color: #636363"></fa-icon>
         <h1 class="mx-5" style="color: #636363">FACTURA</h1>
       </div>
-      <select class="form-control small-select" (change)="changePago($event)" style="margin-left: 150px;">
-        <option value="0" selected>Seleccionar método de pago</option>
-        <option *ngFor="let formasPago of lstFormasPago" [value]="formasPago.nombre">
-          {{formasPago.nombre}}
-        </option>
-      </select>
-      <input type="text" class="cool-input2" placeholder="Monto">
-      <button class="btn boton btn-success" (click)="abonar()">
-        <span style="color: white">ABONAR</span>
-      </button>
     </div>
     <div class="card-body">
       <div class="invoice-header">
@@ -80,9 +70,24 @@
         <br>
       </div>
     </div>
+    <div class="d-flex">
+        <select class="form-control small-select" (change)="changePago($event)" style="margin-right: 5px; margin-left: 20px;">
+          <option value="0" selected>Seleccionar método de pago</option>
+          <option *ngFor="let formasPago of lstFormasPago" [value]="formasPago.nombre">
+            {{formasPago.nombre}}
+          </option>
+        </select>
+        <input type="text" class="cool-input2" placeholder="Monto" style="margin-right: 0px;" id="monto" (input)="onInput($event)">
+        <button class="btn boton btn-success" [disabled]="!isBotonHabilitado" style="margin-right: 10px;" (click)="abonar()">
+          <span style="color: white">ABONAR</span>
+        </button>
+        <label for="restante" style="margin-left: 100px;" class="cool-label">RESTANTE: </label>
+        <input type="text" class="cool-input3" placeholder="Resto" readonly [(ngModel)]="resto"
+        [ngStyle]="{'background-color': inputColor}" style="margin-right: 200px;" id="resto">
+    </div>
     <br>
     <div class="button-container">
-      <button class="btn btn-primary" (click)="finalizarPedido()">
+      <button class="btn btn-primary" [disabled]="!esRestoCero" (click)="finalizarPedido()">
         <span style="color: white"> FINALIZAR PEDIDO </span>
       </button>
     </div>
