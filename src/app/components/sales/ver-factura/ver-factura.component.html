@@ -64,6 +64,22 @@
         </table>
         <br><br>
         <div class="icon-container">
+          <label for="total" class="label-input">SUBTOTALES:</label>
+        </div>
+        <br><br>
+        <div class="icon-container">
+          <label for="total" class="label-input" style="font-size: 18px;">SUBTOTAL IVA 12% :</label>
+          <input type="text" [value]="calcularTotalTarifa12() | number:'1.2-2'" class="cool-input resultado-input"
+            readonly>
+        </div>
+        <br><br>
+        <div class="icon-container">
+          <label for="total" class="label-input" style="font-size: 18px;">SUBTOTAL IVA 0% :</label>
+          <input type="text" [value]="calcularTotalTarifa0() | number:'1.2-2'" class="cool-input resultado-input"
+            readonly>
+        </div>
+        <br><br>
+        <div class="icon-container">
           <label for="total" class="label-input">TOTAL:</label>
           <input type="text" [(ngModel)]="sumaTotal" class="cool-input resultado-input" readonly>
         </div>
@@ -71,18 +87,21 @@
       </div>
     </div>
     <div class="d-flex">
-        <select class="form-control small-select" (change)="changePago($event)" style="margin-right: 5px; margin-left: 20px;">
-          <option value="0" selected>Seleccionar método de pago</option>
-          <option *ngFor="let formasPago of lstFormasPago" [value]="formasPago.nombre">
-            {{formasPago.nombre}}
-          </option>
-        </select>
-        <input type="text" class="cool-input2" placeholder="Monto" style="margin-right: 0px;" id="monto" (input)="onInput($event)">
-        <button class="btn boton btn-success" [disabled]="!isBotonHabilitado" style="margin-right: 10px;" (click)="abonar()">
-          <span style="color: white">ABONAR</span>
-        </button>
-        <label for="restante" style="margin-left: 100px;" class="cool-label">RESTANTE: </label>
-        <input type="text" class="cool-input3" placeholder="Resto" readonly [(ngModel)]="resto"
+      <select class="form-control small-select" (change)="changePago($event)"
+        style="margin-right: 5px; margin-left: 20px;">
+        <option value="0" selected>Seleccionar método de pago</option>
+        <option *ngFor="let formasPago of lstFormasPago" [value]="formasPago.nombre">
+          {{formasPago.nombre}}
+        </option>
+      </select>
+      <input type="text" class="cool-input2" placeholder="Monto" style="margin-right: 0px;" id="monto"
+        (input)="onInput($event)">
+      <button class="btn boton btn-success" [disabled]="!isBotonHabilitado" style="margin-right: 10px;"
+        (click)="abonar()">
+        <span style="color: white">ABONAR</span>
+      </button>
+      <label for="restante" style="margin-left: 100px;" class="cool-label">RESTANTE: </label>
+      <input type="text" class="cool-input3" placeholder="Resto" readonly [(ngModel)]="resto"
         [ngStyle]="{'background-color': inputColor}" style="margin-right: 200px;" id="resto">
     </div>
     <br>

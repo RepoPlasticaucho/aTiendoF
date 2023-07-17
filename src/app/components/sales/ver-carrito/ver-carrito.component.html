@@ -30,7 +30,7 @@
                         </td>
                         <td>{{inventario.pvp2}}</td>
                         <td>{{inventario.tarifa_ice_iva}}</td>
-                        <td>{{ inventario.stock | number: '.0-0' }}</td>
+                        <td>{{ parseInt(inventario.stock! ) | number: '.0-0' }}</td>
                         <td style="text-align: center;">
                             <a class="btn button" (click)=" crearDetalle(inventario)"
                                 style="border-radius: 5px; 

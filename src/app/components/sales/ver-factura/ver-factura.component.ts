@@ -173,10 +173,34 @@ export class VerFacturaComponent implements OnInit {
   }
   
   calcularSumaTotal() {
-    const suma = this.lstDetalleMovimientos.reduce((total, detalleMovimientos) => {
-      return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
-    }, 0);
-    this.sumaTotal = suma.toLocaleString(undefined, { minimumFractionDigits: 2 }).replace('.', ',');
+    const totalTarifa12 = this.calcularTotalTarifa12();
+    const totalTarifa0 = this.calcularTotalTarifa0();
+
+    const suma = totalTarifa12 + totalTarifa0;
+
+    this.sumaTotal = suma
+      .toLocaleString(undefined, { minimumFractionDigits: 2 })
+      .replace('.', ',');
+  }
+
+  calcularTotalTarifa12(): number {
+    const totalTarifa12 = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
+      .reduce((total, detalleMovimientos) => {
+        return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
+      }, 0);
+
+    return totalTarifa12;
+  }
+
+  calcularTotalTarifa0(): number {
+    const totalTarifa12 = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '0%')
+      .reduce((total, detalleMovimientos) => {
+        return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
+      }, 0);
+
+    return totalTarifa12;
   }
 
 

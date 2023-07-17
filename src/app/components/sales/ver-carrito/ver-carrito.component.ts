@@ -68,6 +68,7 @@ searchText: string = '';
           pto_emision: '',
         };
         this.httpServiceInventarios.obtenerPortafolios(almacenNew).subscribe((res1) => {
+          console.log(res1)
           if (res1.codigoError != 'OK') {
             Swal.fire({
               icon: 'error',
@@ -91,6 +92,10 @@ searchText: string = '';
 
   cerrarDialog(): void {
     this.dialogRef.close();
+  }
+
+  parseInt(value: string): number {
+    return parseInt(value, 10);
   }
 
 

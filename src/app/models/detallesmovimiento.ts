@@ -11,6 +11,7 @@ export interface DetallesMovimientoEntity {
     modelo_producto_nombre?: string;
     tamanio?: string;
     color?: string;
+    tarifa?: string;
     pto_emision?: string;
     inventario_id: string;
     movimiento_id: string;

@@ -11,6 +11,7 @@ const initDetail: DetallesMovimientoEntity = {
   producto_nombre: '',
   inventario_id: '',
   pto_emision: '',
+  tarifa: '',
   movimiento_id: '',
   cantidad: '',
   costo: '',

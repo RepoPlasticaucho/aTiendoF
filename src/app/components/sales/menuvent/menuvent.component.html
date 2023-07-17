@@ -74,6 +74,7 @@
                         <th style="width: 10%; ">Cantidad</th>
                         <th style="width: 10%; ">Precio Uni.</th>
                         <th style="width: 10%; ">Precio</th>
+                        <th style="width: 10%; ">Tarifa</th>
                         <th style="width: 10%; ">Tamaño</th>
                         <th style="width: 10%; ">Color</th>
                         <th style="width: 20%; "></th>
@@ -99,6 +100,7 @@
                                 [(ngModel)]="detalleMovimientos.costo" (ngModelChange)="calcularPrecio(i)">
                         </td>
                         <td>{{detalleMovimientos.precio}}</td>
+                        <td>{{detalleMovimientos.tarifa}}</td>
                         <td>{{detalleMovimientos.tamanio}}</td>
                         <td>{{detalleMovimientos.color}}</td>
                         <td style="text-align: center;">
@@ -120,6 +122,20 @@
                 </tbody>
             </table>
             <br>
+            <div class="icon-container">
+                <label for="total" class="label-input">SUBTOTALES:</label>
+            </div>
+            <br><br>
+            <div class="icon-container">
+                <label for="total" class="label-input" style="font-size: 18px;">SUBTOTAL IVA 12% :</label>
+                <input type="text" [value]="calcularTotalTarifa12() | number:'1.2-2'" class="cool-input resultado-input" readonly>
+            </div>
+            <br><br>
+            <div class="icon-container">
+                <label for="total" class="label-input" style="font-size: 18px;">SUBTOTAL IVA 0%  :</label>
+                <input type="text" [value]="calcularTotalTarifa0() | number:'1.2-2'" class="cool-input resultado-input" readonly>
+            </div>
+            <br><br>
             <div class="icon-container">
                 <fa-icon [icon]="faMoneyBillAlt" [size]="'3x'" style="color: #6aaf42" class="icono-input"></fa-icon>
                 <label for="total" class="label-input">TOTAL:</label>
