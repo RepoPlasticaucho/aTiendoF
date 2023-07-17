@@ -45,6 +45,9 @@ export class VerFacturaComponent implements OnInit {
   secuencial: any;
   inputColor: string = '';
   esRestoCero: boolean = false;
+  descuentoN: number = 0;
+  descuentoP: number = 0;
+
 
   constructor(private readonly httpService: DetallesmovimientoService,
     private readonly httpServiceMovimiento: MovimientosService,
@@ -171,16 +174,44 @@ export class VerFacturaComponent implements OnInit {
       }
     });
   }
-  
+
   calcularSumaTotal() {
     const totalTarifa12 = this.calcularTotalTarifa12();
     const totalTarifa0 = this.calcularTotalTarifa0();
+    const desc = this.calcularDescuento();
 
-    const suma = totalTarifa12 + totalTarifa0;
+    const suma = totalTarifa12 + totalTarifa0 - desc - this.descuentoN;
 
     this.sumaTotal = suma
       .toLocaleString(undefined, { minimumFractionDigits: 2 })
       .replace('.', ',');
+  }
+
+  onInput2(event: any) {
+    const inputValue = event.target.value;
+    event.target.value = inputValue.replace(/[^0-9.]/g, ''); // Filtra solo números y punto
+  }
+
+  validarDescuento() {
+    if (this.descuentoP !== null) {
+      // Validar que el valor esté entre 1 y 100
+      if (this.descuentoP < 1) {
+        this.descuentoP = 1;
+      } else if (this.descuentoP > 100) {
+        this.descuentoP = 100;
+      }
+    }
+    let total = this.calcularSumaTotal();
+  }
+
+  calcularSubtotal(): number {
+    const subtotal = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa)
+      .reduce((total, detalleMovimientos) => {
+        return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
+      }, 0);
+
+    return subtotal;
   }
 
   calcularTotalTarifa12(): number {
@@ -189,22 +220,47 @@ export class VerFacturaComponent implements OnInit {
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
+    const porcen = totalTarifa12 * 0.12;
 
-    return totalTarifa12;
+    return totalTarifa12 + porcen;
+  }
+
+  calcularIva12(): number {
+    const totalTarifa12 = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
+      .reduce((total, detalleMovimientos) => {
+        return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
+      }, 0);
+    const porcen = totalTarifa12 * 0.12;
+
+    return porcen;
+  }
+
+  calcularDescuento(): number {
+    const descuento = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.desc_add)
+      .reduce((total, detalleMovimientos) => {
+        return total + parseFloat(detalleMovimientos.desc_add!.replace(',', '.'));
+      }, 0);
+
+    return descuento;
   }
 
   calcularTotalTarifa0(): number {
-    const totalTarifa12 = this.lstDetalleMovimientos
+    const totalTarifa0 = this.lstDetalleMovimientos
       .filter((detalleMovimientos) => detalleMovimientos.tarifa === '0%')
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
 
-    return totalTarifa12;
+    return totalTarifa0;
   }
 
 
   finalizarPedido() {
+    const total_si = this.calcularSubtotal();
+    const total_desc = this.calcularDescuento() + this.descuentoN;
+    const total_imp = this.calcularTotalTarifa12() + this.calcularTotalTarifa0();
     this.httpServiceMovimiento.obtenerUltimoSecuencial().subscribe(res1 => {
       if (res1.codigoError == 'OK') {
         this.ultSecuencial = res1.lstMovimientos[0].secuencial;
@@ -219,11 +275,15 @@ export class VerFacturaComponent implements OnInit {
         estado_fact_id: '1',
         tipo_comprb_id: '',
         almacen_id: '',
+        total_si: total_si.toString(),
+        total_imp: total_imp.toString(),
+        total_desc: total_desc.toString(),
         cod_doc: '',
         secuencial: this.secuencial,
         estab: localStorage.getItem('estab')!,
-        importe_total: this.sumaTotal
+        importe_total: this.sumaTotal.replace(',', '.')
       }
+      console.log(newPedido)
       Swal.fire({
         title: '¿Estás seguro de finalizar el pedido?',
         showDenyButton: true,

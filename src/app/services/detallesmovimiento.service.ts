@@ -14,6 +14,7 @@ const initDetail: DetallesMovimientoEntity = {
   tarifa: '',
   movimiento_id: '',
   cantidad: '',
+  desc_add: '',
   costo: '',
   precio: '',
   color: '',

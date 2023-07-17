@@ -47,6 +47,7 @@
               <th style="width: 10%; ">Cantidad</th>
               <th style="width: 10%; ">Precio Uni.</th>
               <th style="width: 10%; ">Precio</th>
+              <th style="width: 10%; ">Descuento</th>
               <th style="width: 10%; ">Tamaño</th>
               <th style="width: 10%; ">Color</th>
             </tr>
@@ -57,6 +58,7 @@
               <td>{{detalleMovimientos.cantidad}}</td>
               <td>{{detalleMovimientos.costo}}</td>
               <td>{{detalleMovimientos.precio}}</td>
+              <td>{{detalleMovimientos.desc_add}}</td>
               <td>{{detalleMovimientos.tamanio}}</td>
               <td>{{detalleMovimientos.color}}</td>
             </tr>
@@ -68,15 +70,40 @@
         </div>
         <br><br>
         <div class="icon-container">
-          <label for="total" class="label-input" style="font-size: 18px;">SUBTOTAL IVA 12% :</label>
+          <label for="total" class="label-input" style="font-size: 16px;">SUBTOTAL :</label>
+          <input type="text" [value]="calcularSubtotal() | number:'1.2-2'" class="cool-input resultado-input" readonly>
+        </div>
+        <br><br>
+        <div class="icon-container">
+          <label for="total" class="label-input" style="font-size: 14px;">SUBTOTAL IVA 12% :</label>
           <input type="text" [value]="calcularTotalTarifa12() | number:'1.2-2'" class="cool-input resultado-input"
             readonly>
         </div>
         <br><br>
         <div class="icon-container">
-          <label for="total" class="label-input" style="font-size: 18px;">SUBTOTAL IVA 0% :</label>
+          <label for="total" class="label-input" style="font-size: 14px;">SUBTOTAL IVA 0% :</label>
           <input type="text" [value]="calcularTotalTarifa0() | number:'1.2-2'" class="cool-input resultado-input"
             readonly>
+        </div>
+        <br><br>
+        <div class="icon-container">
+          <label for="total" class="label-input" style="font-size: 14px;">DESCUENTO DE PRODUCTOS :</label>
+          <input type="text" [value]="calcularDescuento() | number:'1.2-2'" class="cool-input resultado-input" readonly>
+        </div>
+        <br><br>
+        <div class="icon-container">
+          <label for="total" class="label-input" style="font-size: 14px;">DESCUENTO NOMINAL :</label>
+          <input type="text" [(ngModel)]="descuentoN" class="cool-input resultado-input" (input)="calcularSumaTotal()" (input)="onInput2($event)">
+        </div>
+        <br><br>
+        <div class="icon-container">
+          <label for="total" class="label-input" style="font-size: 14px;">DESCUENTO % :</label>
+          <input type="text" [(ngModel)]="descuentoP" class="cool-input resultado-input" (input)="validarDescuento()" (input)="calcularSumaTotal()" (input)="onInput2($event)">
+        </div>
+        <br><br>
+        <div class="icon-container">
+          <label for="total" class="label-input" style="font-size: 14px;">IVA 12% :</label>
+          <input type="text" [value]="calcularIva12() | number:'1.2-2'" class="cool-input resultado-input" readonly>
         </div>
         <br><br>
         <div class="icon-container">

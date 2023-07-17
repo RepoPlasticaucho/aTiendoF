@@ -104,6 +104,7 @@ export class MenuventComponent implements OnInit {
       }
     });
 
+    
     /*
     const terceroNew: TercerosEntity = {
       almacen_id: '',
@@ -353,12 +354,23 @@ export class MenuventComponent implements OnInit {
   calcularSumaTotal() {
     const totalTarifa12 = this.calcularTotalTarifa12();
     const totalTarifa0 = this.calcularTotalTarifa0();
+    const desc = this.calcularDescuento();
 
-    const suma = totalTarifa12 + totalTarifa0;
+    const suma = totalTarifa12 + totalTarifa0 - desc;
 
     this.sumaTotal = suma
       .toLocaleString(undefined, { minimumFractionDigits: 2 })
       .replace('.', ',');
+  }
+
+  calcularSubtotal(): number {
+    const subtotal = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa)
+      .reduce((total, detalleMovimientos) => {
+        return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
+      }, 0);
+
+    return subtotal;
   }
 
   calcularTotalTarifa12(): number {
@@ -367,18 +379,40 @@ export class MenuventComponent implements OnInit {
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
+      const porcen = totalTarifa12 * 0.12;
 
-    return totalTarifa12;
+    return totalTarifa12 + porcen;
+  }
+
+  calcularIva12(): number {
+    const totalTarifa12 = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
+      .reduce((total, detalleMovimientos) => {
+        return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
+      }, 0);
+      const porcen = totalTarifa12 * 0.12;
+
+    return porcen;
+  }
+
+  calcularDescuento(): number {
+    const descuento = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.desc_add)
+      .reduce((total, detalleMovimientos) => {
+        return total + parseFloat(detalleMovimientos.desc_add!.replace(',', '.'));
+      }, 0);
+
+    return descuento;
   }
 
   calcularTotalTarifa0(): number {
-    const totalTarifa12 = this.lstDetalleMovimientos
+    const totalTarifa0 = this.lstDetalleMovimientos
       .filter((detalleMovimientos) => detalleMovimientos.tarifa === '0%')
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
 
-    return totalTarifa12;
+    return totalTarifa0;
   }
 
   eliminarDetalle(detalle: DetallesMovimientoEntity): void {
@@ -439,6 +473,7 @@ export class MenuventComponent implements OnInit {
               showConfirmButton: true,
               confirmButtonText: 'Ok',
             }).then(() => {
+              this.cargarTablaMenuvent();
               this.editarDetalle = false;
               this.detalleEditIndex = -1;
               this.detalleEditBackup = null;
