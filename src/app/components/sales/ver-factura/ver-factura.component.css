@@ -138,5 +138,9 @@
     border-radius: 4px;
   }
 
-  /* Agrega tus estilos personalizados aquí */
+  .custom-input {
+    border: 2px solid rgb(61, 204, 214); /* Cambia el color del borde a rojo */
+  border-radius: 5px; /* Agrega bordes redondeados */
+  }
+
   

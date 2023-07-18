@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { DetallesMovimiento, DetallesMovimientoEntity } from '../models/detallesmovimiento';
 import { SociedadesEntity } from '../models/sociedades';
+import { AlmacenesEntity } from '../models/almacenes';
 
 const initDetail: DetallesMovimientoEntity = {
   id: '',
@@ -47,6 +48,10 @@ export class DetallesmovimientoService {
 
   obtenerDetalleMovimientoSociedad(sociedad: SociedadesEntity): Observable<DetallesMovimiento> {
     return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ObtenerDetalleMovimientoSociedad`, sociedad );
+  }
+
+  obtenerDetalleMovimientoAlm(almacen: AlmacenesEntity): Observable<DetallesMovimiento> {
+    return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ObtenerDetalleMovimientoAlm`, almacen );
   }
 
   agregarDetallePedido(detalle: DetallesMovimientoEntity): Observable<DetallesMovimiento> {

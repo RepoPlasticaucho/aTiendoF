@@ -1,10 +1,29 @@
-<br>
 <div class="card" style="max-width: 95%;margin: auto;">
     <div class="card-header">
         <div class="row mx-3">
             <fa-icon [icon]="faList" [size]="'3x'" style="color: #636363;"></fa-icon>
             <h1 class="mx-5 " style="color: #636363;">MOVIMIENTOS</h1>
         </div>
+    </div>
+    <div class="d-flex">
+        <form [formGroup]="filtroForm">
+            <div class="form-group">
+                <select class="form-control" (change)="changeGroup($event)" formControlName="almacen">
+                    <option [value]=" 0 " selected>Seleccione un almacen</option>
+                    <option *ngFor="let almacen of lstAlmacenes" [value]="almacen.nombre_almacen">
+                        {{almacen.nombre_almacen}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="fechaDesde">Fecha Desde:</label>
+                <input type="date" id="fechaDesde" class="form-control" formControlName="fechaDesde" (change)="filterByDate()">
+              </div>
+              <div class="form-group">
+                <label for="fechaHasta">Fecha Hasta:</label>
+                <input type="date" id="fechaHasta" class="form-control" formControlName="fechaHasta" (change)="filterByDate()">
+              </div>
+        </form>
     </div>
     <div class="card-body ">
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
@@ -15,6 +34,7 @@
                     <th style="width: 10%; ">FECHA</th>
                     <th style="width: 10%; ">TIPO</th>
                     <th style="width: 10%; ">CANTIDAD</th>
+                    <th style="width: 10%; ">VALOR TOTAL</th>
                 </tr>
             </thead>
             <tbody style="color: #767695;">
@@ -24,6 +44,7 @@
                     <td>{{detalle.created_at}}</td>
                     <td [ngClass]="{'text-success': detalle.tipo_movimiento === 'Ingreso', 'text-danger': detalle.tipo_movimiento === 'Egreso'}">{{detalle.tipo_movimiento}}</td>
                     <td [ngClass]="{'text-success': detalle.tipo_movimiento === 'Ingreso', 'text-danger': detalle.tipo_movimiento === 'Egreso'}">{{detalle.cantidad}}</td>
+                    <td [ngClass]="{'text-success': detalle.tipo_movimiento === 'Ingreso', 'text-danger': detalle.tipo_movimiento === 'Egreso'}">{{detalle.precio}}</td>
                 </tr>
             </tbody>
         </table>

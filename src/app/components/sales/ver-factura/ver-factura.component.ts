@@ -47,6 +47,7 @@ export class VerFacturaComponent implements OnInit {
   esRestoCero: boolean = false;
   descuentoN: number = 0;
   descuentoP: number = 0;
+  totalF: number = 0;
 
 
   constructor(private readonly httpService: DetallesmovimientoService,
@@ -179,8 +180,10 @@ export class VerFacturaComponent implements OnInit {
     const totalTarifa12 = this.calcularTotalTarifa12();
     const totalTarifa0 = this.calcularTotalTarifa0();
     const desc = this.calcularDescuento();
+    const descP = this.validarDescuento();
+    this.totalF = totalTarifa12 + totalTarifa0 - desc - this.descuentoN;
 
-    const suma = totalTarifa12 + totalTarifa0 - desc - this.descuentoN;
+    const suma = totalTarifa12 + totalTarifa0 - desc - this.descuentoN - descP;
 
     this.sumaTotal = suma
       .toLocaleString(undefined, { minimumFractionDigits: 2 })
@@ -188,20 +191,25 @@ export class VerFacturaComponent implements OnInit {
   }
 
   onInput2(event: any) {
-    const inputValue = event.target.value;
-    event.target.value = inputValue.replace(/[^0-9.]/g, ''); // Filtra solo números y punto
-  }
-
-  validarDescuento() {
-    if (this.descuentoP !== null) {
-      // Validar que el valor esté entre 1 y 100
-      if (this.descuentoP < 1) {
-        this.descuentoP = 1;
-      } else if (this.descuentoP > 100) {
-        this.descuentoP = 100;
-      }
+    let inputValue = event.target.value;
+    const filteredValue = inputValue.replace(/[^0-9.]/g, ''); // Filtra solo números y punto
+  
+    if (/^\d*\.?\d*$/.test(inputValue) && !filteredValue.startsWith('.')) {
+      this.calcularSumaTotal();
+    } else {
+      event.target.value = inputValue.length === 0 ? '0' : '';
     }
-    let total = this.calcularSumaTotal();
+  }
+  
+  
+
+  validarDescuento(): number {
+      if (this.sumaTotal) {
+        const descuento = (((this.descuentoP)*(this.totalF))/100);
+
+        return descuento;
+      }
+    return 0;
   }
 
   calcularSubtotal(): number {
@@ -259,7 +267,8 @@ export class VerFacturaComponent implements OnInit {
 
   finalizarPedido() {
     const total_si = this.calcularSubtotal();
-    const total_desc = this.calcularDescuento() + this.descuentoN;
+    const descuento = (((this.descuentoP)*(this.totalF))/100);
+    const total_desc = this.calcularDescuento() + this.descuentoN + descuento;
     const total_imp = this.calcularTotalTarifa12() + this.calcularTotalTarifa0();
     this.httpServiceMovimiento.obtenerUltimoSecuencial().subscribe(res1 => {
       if (res1.codigoError == 'OK') {
