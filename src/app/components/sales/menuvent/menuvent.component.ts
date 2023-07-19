@@ -76,7 +76,7 @@ export class MenuventComponent implements OnInit {
     private readonly httpServiceMov: MovimientosService,
     private readonly httpServiceTer: TercerosService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.dtOptions = {
@@ -103,39 +103,6 @@ export class MenuventComponent implements OnInit {
         this.lstCiudades = res.lstCiudades;
       }
     });
-
-    
-    /*
-    const terceroNew: TercerosEntity = {
-      almacen_id: '',
-      sociedad_id: '',
-      tipotercero_id: '',
-      tipousuario_id: '',
-      nombresociedad: '',
-      nombrealmacen: '',
-      nombretercero: '',
-      tipousuario: '',
-      nombre: '',
-      id_fiscal: localStorage.getItem('idfiscalCl')!,
-      direccion: '',
-      telefono: '',
-      correo: '',
-      fecha_nac: '',
-      ciudad: '',
-      provincia: '',
-      ciudadid: ''
-    }
-    this.httpServiceTer.obtenerTerceroCedula(terceroNew).subscribe(res => {
-      if (res.codigoError == "OK") {
-        this.nombre = res.lstTerceros[0].nombre;
-        this.identificacion = res.lstTerceros[0].id_fiscal;
-        this.correo = res.lstTerceros[0].correo;
-        this.telefono = res.lstTerceros[0].telefono;
-        this.direccion = res.lstTerceros[0].direccion;
-        this.ciudad = res.lstTerceros[0].ciudad;
-      }
-    });
-    */
 
     this.cargarTablaMenuvent();
   }
@@ -294,6 +261,7 @@ export class MenuventComponent implements OnInit {
       ciudadid: '',
     };
     this.httpServiceTer.obtenerTerceroCedula(terceroNew).subscribe((res) => {
+      console.log(res)
       if (res.codigoError == 'OK') {
         this.nombre = res.lstTerceros[0].nombre;
         this.identificacion = res.lstTerceros[0].id_fiscal;
@@ -379,7 +347,7 @@ export class MenuventComponent implements OnInit {
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
-      const porcen = totalTarifa12 * 0.12;
+    const porcen = totalTarifa12 * 0.12;
 
     return totalTarifa12 + porcen;
   }
@@ -390,7 +358,7 @@ export class MenuventComponent implements OnInit {
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
-      const porcen = totalTarifa12 * 0.12;
+    const porcen = totalTarifa12 * 0.12;
 
     return porcen;
   }

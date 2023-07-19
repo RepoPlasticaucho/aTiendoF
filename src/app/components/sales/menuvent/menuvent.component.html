@@ -37,7 +37,8 @@
                                 CLIENTE
                             </option>
                         </select>
-                        <button class="btn btn-primary ml-2" (click)="realizarAccion()" [disabled]="identificacion !== '' || nombre !== '' || correo !== '' || ciudad !== '' || direccion !== '' || telefono !== '' || lstDetalleMovimientos.length > 0">ELEGIR</button>
+                        <button class="btn btn-primary ml-2" (click)="realizarAccion()"
+                            [disabled]="identificacion !== '' || nombre !== '' || correo !== '' || ciudad !== '' || direccion !== '' || telefono !== '' || lstDetalleMovimientos.length > 0">ELEGIR</button>
                         <button class="btn btn-primary ml-5" (click)="verDatos()">VER DATOS</button>
                     </div>
                     <small *ngIf="selectTipo">
@@ -48,129 +49,171 @@
                 </div>
             </form>
             <br>
-            <div class="form-group">
-                <div class="d-flex">
-                    <input type="text" [disabled]="true" [(ngModel)]="identificacion" class="form-control input-1" placeholder="Cédula/RUC">
-                    <input type="text" [disabled]="nombre == ''" [(ngModel)]="nombre" class="form-control input-1" placeholder="Nombre">
-                    <input type="text" [disabled]="correo == ''" [(ngModel)]="correo" class="form-control input-1" placeholder="Correo">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="cedula">Cédula/RUC:</label>
+                        <input type="text" [disabled]="true" [(ngModel)]="identificacion" class="form-control input-1"
+                            placeholder="Cédula/RUC">
+                    </div>
                 </div>
-                <div class="d-flex">
-                    <select class="form-control" id="ciudad" [disabled]="ciudad == ''">
-                        <option *ngIf="ciudad == ''" value="0" selected>Ciudad</option>
-                        <option *ngFor="let ciudad of lstCiudades" [value]="ciudad.ciudad">
-                            {{ciudad.ciudad}}
-                        </option>
-                    </select>
-                    <input type="text" [disabled]="direccion == ''" [(ngModel)]="direccion" class="form-control input-1" placeholder="Dirección">
-                    <input type="text" [disabled]="telefono == ''" [(ngModel)]="telefono" class="form-control input-1" placeholder="Teléfono">
-                    <button class="btn btn-primary ml-2" [disabled]="identificacion == '' || nombre == '' || correo == '' || ciudad == '' || direccion == '' || telefono == ''" (click)="actualizar()">Actualizar</button>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" [disabled]="nombre == ''" [(ngModel)]="nombre" class="form-control input-1"
+                            placeholder="Nombre">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="correo">Correo:</label>
+                        <input type="text" [disabled]="correo == ''" [(ngModel)]="correo" class="form-control input-1"
+                            placeholder="Correo">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="ciudad">Ciudad:</label>
+                        <select class="form-control" [(ngModel)]="ciudad" id="ciudad" [disabled]="ciudad == ''">
+                            <option *ngIf="ciudad == ''" value="0" selected>Ciudad</option>
+                            <option *ngFor="let ciudad of lstCiudades" [value]="ciudad.ciudad">
+                                {{ciudad.ciudad}}
+                            </option>
+                        </select>
+                    </div>
                 </div>
             </div>
-            <br><br>
-            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
-                <thead style="color: #636363;">
-                    <tr>
-                        <th style="width: 10%; ">Producto</th>
-                        <th style="width: 10%; ">Cantidad</th>
-                        <th style="width: 10%; ">Precio Uni.</th>
-                        <th style="width: 10%; ">Precio</th>
-                        <th style="width: 10%; ">Descuento</th>
-                        <th style="width: 10%; ">Tarifa</th>
-                        <th style="width: 10%; ">Tamaño</th>
-                        <th style="width: 10%; ">Color</th>
-                        <th style="width: 20%; "></th>
-                    </tr>
-                </thead>
-                <tbody style="color: #767695;">
-                    <tr *ngFor="let detalleMovimientos of lstDetalleMovimientos; let i = index">
-                        <td>{{detalleMovimientos.producto_nombre}}</td>
-                        <td>
-                            <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
-                                {{detalleMovimientos.cantidad}}
-                            </ng-container>
-                            <input class="small-input" (input)="onInput($event)"
-                                *ngIf="editarDetalle && i === detalleEditIndex" type="text"
-                                [(ngModel)]="detalleMovimientos.cantidad" (ngModelChange)="calcularPrecio(i)">
-                        </td>
-                        <td>
-                            <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
-                                {{detalleMovimientos.costo}}
-                            </ng-container>
-                            <input class="small-input" (input)="onInput2($event)"
-                                *ngIf="editarDetalle && i === detalleEditIndex" type="text"
-                                [(ngModel)]="detalleMovimientos.costo" (ngModelChange)="calcularPrecio(i)">
-                        </td>
-                        <td>{{detalleMovimientos.precio}}</td>
-                        <td>
-                            <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
-                                {{detalleMovimientos.desc_add}}
-                            </ng-container>
-                            <input class="small-input" (input)="onInput2($event)"
-                                *ngIf="editarDetalle && i === detalleEditIndex" type="text"
-                                [(ngModel)]="detalleMovimientos.desc_add">
-                        </td>
-                        <td>{{detalleMovimientos.tarifa}}</td>
-                        <td>{{detalleMovimientos.tamanio}}</td>
-                        <td>{{detalleMovimientos.color}}</td>
-                        <td style="text-align: center;">
-                            <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
-                                <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'lg'" style="margin-right: 5px;"
-                                    data-placement="bottom" (click)="editarDetalleMovimiento(i)"
-                                    title="Editar Detalle"></fa-icon>
-                            </ng-container>
-                            <ng-container *ngIf="editarDetalle && i === detalleEditIndex">
-                                <fa-icon [icon]="faCheck" class="btn btn-success" [size]="'lg'"
-                                    style="margin-right: 5px;" data-placement="bottom"
-                                    (click)="aplicarCambiosDetalle(i)" title="Aplicar"></fa-icon>
-                            </ng-container>
-                            <fa-icon [icon]="faTrashAlt" class="btn btn-danger" [size]=" 'lg' " data-placement="bottom"
-                                (click)=" eliminarDetalle(detalleMovimientos)"
-                                title="Eliminar Modelo Producto"></fa-icon>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <br>
-            <div class="icon-container">
-                <label for="total" class="label-input" style="font-size: 16px;">SUBTOTALES:</label>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="direccion">Dirección:</label>
+                        <input type="text" [disabled]="direccion == ''" [(ngModel)]="direccion"
+                            class="form-control input-1" placeholder="Dirección">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="telefono">Teléfono:</label>
+                        <input type="text" [disabled]="telefono == ''" [(ngModel)]="telefono"
+                            class="form-control input-1" placeholder="Teléfono">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <br>
+                        <button class="btn btn-primary" style="margin-left: 50px; margin-top: 7px;"
+                            [disabled]="identificacion == '' || nombre == '' || correo == '' || ciudad == '' || direccion == '' || telefono == ''"
+                            (click)="actualizar()">Actualizar</button>
+                    </div>
+                </div>
             </div>
-            <br><br>
-            <div class="icon-container">
-                <label for="total" class="label-input" style="font-size: 14px;">SUBTOTAL :</label>
-                <input type="text" [value]="calcularSubtotal() | number:'1.2-2'" class="cool-input resultado-input" readonly>
-            </div>
-            <br><br>
-            <div class="icon-container">
-                <label for="total" class="label-input" style="font-size: 14px;">SUBTOTAL IVA 12% :</label>
-                <input type="text" [value]="calcularTotalTarifa12() | number:'1.2-2'" class="cool-input resultado-input" readonly>
-            </div>
-            <br><br>
-            <div class="icon-container">
-                <label for="total" class="label-input" style="font-size: 14px;">SUBTOTAL IVA 0%  :</label>
-                <input type="text" [value]="calcularTotalTarifa0() | number:'1.2-2'" class="cool-input resultado-input" readonly>
-            </div>
-            <br><br>
-            <div class="icon-container">
-                <label for="total" class="label-input" style="font-size: 14px;">DESCUENTO  :</label>
-                <input type="text" [value]="calcularDescuento() | number:'1.2-2'" class="cool-input resultado-input" readonly>
-            </div>
-            <br><br>
-            <div class="icon-container">
-                <label for="total" class="label-input" style="font-size: 14px;">IVA 12%  :</label>
-                <input type="text" [value]="calcularIva12() | number:'1.2-2'" class="cool-input resultado-input" readonly>
-            </div>
-            <br><br>
-            <div class="icon-container">
-                <fa-icon [icon]="faMoneyBillAlt" [size]="'3x'" style="color: #6aaf42" class="icono-input"></fa-icon>
-                <label for="total" class="label-input">TOTAL:</label>
-                <input type="text" [(ngModel)]="sumaTotal" class="cool-input resultado-input" readonly>
-            </div>
-            <br><br><br>
-            <div class="button-container">
-                <button class="btn btn-primary" [disabled]="lstDetalleMovimientos.length == 0" (click)="finalizarPedido()">
-                    <span style="color: white"> Continuar</span>
-                </button>
-            </div>
+        <br><br>
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+            <thead style="color: #636363;">
+                <tr>
+                    <th style="width: 10%; ">Producto</th>
+                    <th style="width: 10%; ">Cantidad</th>
+                    <th style="width: 10%; ">Precio Uni.</th>
+                    <th style="width: 10%; ">Precio</th>
+                    <th style="width: 10%; ">Descuento</th>
+                    <th style="width: 10%; ">Tarifa</th>
+                    <th style="width: 10%; ">Tamaño</th>
+                    <th style="width: 10%; ">Color</th>
+                    <th style="width: 20%; "></th>
+                </tr>
+            </thead>
+            <tbody style="color: #767695;">
+                <tr *ngFor="let detalleMovimientos of lstDetalleMovimientos; let i = index">
+                    <td>{{detalleMovimientos.producto_nombre}}</td>
+                    <td>
+                        <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
+                            {{detalleMovimientos.cantidad}}
+                        </ng-container>
+                        <input class="small-input" (input)="onInput($event)"
+                            *ngIf="editarDetalle && i === detalleEditIndex" type="text"
+                            [(ngModel)]="detalleMovimientos.cantidad" (ngModelChange)="calcularPrecio(i)">
+                    </td>
+                    <td>
+                        <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
+                            {{detalleMovimientos.costo}}
+                        </ng-container>
+                        <input class="small-input" (input)="onInput2($event)"
+                            *ngIf="editarDetalle && i === detalleEditIndex" type="text"
+                            [(ngModel)]="detalleMovimientos.costo" (ngModelChange)="calcularPrecio(i)">
+                    </td>
+                    <td>{{detalleMovimientos.precio}}</td>
+                    <td>
+                        <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
+                            {{detalleMovimientos.desc_add}}
+                        </ng-container>
+                        <input class="small-input" (input)="onInput2($event)"
+                            *ngIf="editarDetalle && i === detalleEditIndex" type="text"
+                            [(ngModel)]="detalleMovimientos.desc_add">
+                    </td>
+                    <td>{{detalleMovimientos.tarifa}}</td>
+                    <td>{{detalleMovimientos.tamanio}}</td>
+                    <td>{{detalleMovimientos.color}}</td>
+                    <td style="text-align: center;">
+                        <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
+                            <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'lg'" style="margin-right: 5px;"
+                                data-placement="bottom" (click)="editarDetalleMovimiento(i)"
+                                title="Editar Detalle"></fa-icon>
+                        </ng-container>
+                        <ng-container *ngIf="editarDetalle && i === detalleEditIndex">
+                            <fa-icon [icon]="faCheck" class="btn btn-success" [size]="'lg'" style="margin-right: 5px;"
+                                data-placement="bottom" (click)="aplicarCambiosDetalle(i)" title="Aplicar"></fa-icon>
+                        </ng-container>
+                        <fa-icon [icon]="faTrashAlt" class="btn btn-danger" [size]=" 'lg' " data-placement="bottom"
+                            (click)=" eliminarDetalle(detalleMovimientos)" title="Eliminar Modelo Producto"></fa-icon>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <div class="icon-container">
+            <label for="total" class="label-input" style="font-size: 16px;">SUBTOTALES:</label>
+        </div>
+        <br><br>
+        <div class="icon-container">
+            <label for="total" class="label-input" style="font-size: 14px;">SUBTOTAL :</label>
+            <input type="text" [value]="calcularSubtotal() | number:'1.2-2'" class="cool-input resultado-input"
+                readonly>
+        </div>
+        <br><br>
+        <div class="icon-container">
+            <label for="total" class="label-input" style="font-size: 14px;">SUBTOTAL IVA 12% :</label>
+            <input type="text" [value]="calcularTotalTarifa12() | number:'1.2-2'" class="cool-input resultado-input"
+                readonly>
+        </div>
+        <br><br>
+        <div class="icon-container">
+            <label for="total" class="label-input" style="font-size: 14px;">SUBTOTAL IVA 0% :</label>
+            <input type="text" [value]="calcularTotalTarifa0() | number:'1.2-2'" class="cool-input resultado-input"
+                readonly>
+        </div>
+        <br><br>
+        <div class="icon-container">
+            <label for="total" class="label-input" style="font-size: 14px;">DESCUENTO :</label>
+            <input type="text" [value]="calcularDescuento() | number:'1.2-2'" class="cool-input resultado-input"
+                readonly>
+        </div>
+        <br><br>
+        <div class="icon-container">
+            <label for="total" class="label-input" style="font-size: 14px;">IVA 12% :</label>
+            <input type="text" [value]="calcularIva12() | number:'1.2-2'" class="cool-input resultado-input" readonly>
+        </div>
+        <br><br>
+        <div class="icon-container">
+            <fa-icon [icon]="faMoneyBillAlt" [size]="'3x'" style="color: #6aaf42" class="icono-input"></fa-icon>
+            <label for="total" class="label-input">TOTAL:</label>
+            <input type="text" [(ngModel)]="sumaTotal" class="cool-input resultado-input" readonly>
+        </div>
+        <br><br><br>
+        <div class="button-container">
+            <button class="btn btn-primary" [disabled]="lstDetalleMovimientos.length == 0" (click)="finalizarPedido()">
+                <span style="color: white"> Continuar</span>
+            </button>
         </div>
     </div>
+</div>
 </div>

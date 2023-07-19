@@ -7,22 +7,52 @@
     </div>
     <div class="d-flex">
         <form [formGroup]="filtroForm">
-            <div class="form-group">
-                <select class="form-control" (change)="changeGroup($event)" formControlName="almacen">
-                    <option [value]=" 0 " selected>Seleccione un almacen</option>
-                    <option *ngFor="let almacen of lstAlmacenes" [value]="almacen.nombre_almacen">
-                        {{almacen.nombre_almacen}}
-                    </option>
-                </select>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="fechaDesde">Almacén:</label>
+                        <select class="form-control" style="width: 210px;" (change)="changeGroup($event)" formControlName="almacen">
+                            <option [value]=" 0 " selected>Seleccione un almacen</option>
+                            <option *ngFor="let almacen of lstAlmacenes" [value]="almacen.nombre_almacen">
+                                {{almacen.nombre_almacen}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="fechaDesde">Fecha Desde:</label>
+                        <input type="date" id="fechaDesde" style="width: 210px;" class="form-control" formControlName="fechaDesde"
+                            (change)="filterByDate()">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="fechaHasta">Fecha Hasta:</label>
+                        <input type="date" id="fechaHasta" style="width: 210px;" class="form-control" formControlName="fechaHasta"
+                            (change)="filterByDate()">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="tipo">Tipo:</label>
+                        <select class="form-control" style="width: 210px;" (change)="changeGroup2()" formControlName="tipo">
+                            <option [value]=" 0 " selected>Seleccione un tipo</option>
+                            <option>
+                                Ingreso
+                            </option>
+                            <option>
+                                Egreso
+                            </option>
+                        </select>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="fechaDesde">Fecha Desde:</label>
-                <input type="date" id="fechaDesde" class="form-control" formControlName="fechaDesde" (change)="filterByDate()">
-              </div>
-              <div class="form-group">
-                <label for="fechaHasta">Fecha Hasta:</label>
-                <input type="date" id="fechaHasta" class="form-control" formControlName="fechaHasta" (change)="filterByDate()">
-              </div>
+            <div class="button-container">
+                <button class="btn btn-primary" (click)="reiniciarFiltros()">
+                    <span style="color: white"> Reiniciar Filtros</span>
+                </button>
+            </div>
         </form>
     </div>
     <div class="card-body ">
@@ -42,9 +72,15 @@
                     <td>{{detalle.producto_nombre}}</td>
                     <td>{{detalle.pto_emision}}</td>
                     <td>{{detalle.created_at}}</td>
-                    <td [ngClass]="{'text-success': detalle.tipo_movimiento === 'Ingreso', 'text-danger': detalle.tipo_movimiento === 'Egreso'}">{{detalle.tipo_movimiento}}</td>
-                    <td [ngClass]="{'text-success': detalle.tipo_movimiento === 'Ingreso', 'text-danger': detalle.tipo_movimiento === 'Egreso'}">{{detalle.cantidad}}</td>
-                    <td [ngClass]="{'text-success': detalle.tipo_movimiento === 'Ingreso', 'text-danger': detalle.tipo_movimiento === 'Egreso'}">{{detalle.precio}}</td>
+                    <td
+                        [ngClass]="{'text-success': detalle.tipo_movimiento === 'Ingreso', 'text-danger': detalle.tipo_movimiento === 'Egreso'}">
+                        {{detalle.tipo_movimiento}}</td>
+                    <td
+                        [ngClass]="{'text-success': detalle.tipo_movimiento === 'Ingreso', 'text-danger': detalle.tipo_movimiento === 'Egreso'}">
+                        {{detalle.cantidad}}</td>
+                    <td
+                        [ngClass]="{'text-success': detalle.tipo_movimiento === 'Ingreso', 'text-danger': detalle.tipo_movimiento === 'Egreso'}">
+                        {{detalle.precio}}</td>
                 </tr>
             </tbody>
         </table>
