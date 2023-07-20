@@ -167,8 +167,8 @@ export class ProveedoresEditComponent implements OnInit {
 
   visualizarProveedores() {
     this.router.navigate([
-      '/navegation-adm',
-      { outlets: { contentAdmin: ['proveedores'] } },
+      '/navegation-cl',
+      { outlets: { contentClient: ['proveedores'] } },
     ]);
   }
 

@@ -41,5 +41,7 @@ export interface InventariosEntity {
     pvp2? : string;
     pvp_sugerido? : string;
     cod_principal? : string;
-    cod_secundario? : string;    
+    cod_secundario? : string;  
+    unidad_medidad? : string;
+    talla? : string;  
 }
