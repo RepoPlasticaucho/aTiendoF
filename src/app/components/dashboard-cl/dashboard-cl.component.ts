@@ -21,7 +21,7 @@ export class DashboardClComponent {
         return [
           { title: 'Compras', cols: 1, rows: 1, name: "las compras", figure: "book" , dir: "navegation-cl/(contentClient:almacenesshooping)"},
           { title: 'Ventas', cols: 1, rows: 1, name: "las ventas", figure: "payment" ,  dir: "navegation-cl/(contentClient:almacenegresos)"},
-          { title: 'Cuadre de Caja', cols: 1, rows: 1, name: "las cuentas", figure: "monetization_on" },
+          { title: 'Cuadre de Caja', cols: 1, rows: 1, name: "las cuentas", figure: "monetization_on" , dir: "navegation-cl/(contentClient:cuadre-caja)"},
           { title: 'Productos', cols: 1, rows: 1, name: "los productos", figure: "apps" , dir: "navegation-cl/(contentClient:inventarios-productos)"},
           { title: 'Inventarios', cols: 1, rows: 1, name: "los inventarios", figure: "apps" , dir: "navegation-cl/(contentClient:inventarios-almacen)"},
           { title: 'Pedido Sugerido', cols: 1, rows: 1, name: "los pedidos sugeridos a Platicaucho", figure: "widgets", dir: "navegation-cl/(contentClient:pedido-sugeridos)"},
@@ -37,7 +37,7 @@ export class DashboardClComponent {
       return [
         { title: 'Compras', cols: 1, rows: 1, name: "las compras", figure: "book" , dir: "navegation-cl/(contentClient:almacenesshooping)"},
         { title: 'Ventas', cols: 1, rows: 1, name: "las ventas", figure: "payment" ,  dir: "navegation-cl/(contentClient:almacenegresos)"},
-        { title: 'Cuadre de Caja', cols: 1, rows: 1, name: "las cuentas", figure: "monetization_on" },
+        { title: 'Cuadre de Caja', cols: 1, rows: 1, name: "las cuentas", figure: "monetization_on" , dir: "navegation-cl/(contentClient:cuadre-caja)"},
         { title: 'Productos', cols: 1, rows: 1, name: "los productos", figure: "apps" , dir: "navegation-cl/(contentClient:inventarios-productos)"},
         { title: 'Inventarios', cols: 1, rows: 1, name: "los inventarios", figure: "apps" , dir: "navegation-cl/(contentClient:inventarios-almacen)"},
         { title: 'Pedido Sugerido', cols: 1, rows: 1, name: "los pedidos sugeridos a Platicaucho", figure: "widgets", dir: "navegation-cl/(contentClient:pedido-sugeridos)"},

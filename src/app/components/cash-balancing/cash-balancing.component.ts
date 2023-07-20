@@ -11,13 +11,12 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { AlmacenesService } from 'src/app/services/almacenes.service';
 import { AlmacenesEntity } from 'src/app/models/almacenes';
 
-
 @Component({
-  selector: 'app-movimientos',
-  templateUrl: './movimientos.component.html',
-  styleUrls: ['./movimientos.component.css']
+  selector: 'app-cash-balancing',
+  templateUrl: './cash-balancing.component.html',
+  styleUrls: ['./cash-balancing.component.css']
 })
-export class MovimientosComponent implements OnInit {
+export class CashBalancingComponent implements OnInit {
   @ViewChild(DataTableDirective, { static: false })
   private datatableElement!: DataTableDirective;
   faList = faList;
@@ -340,4 +339,3 @@ export class MovimientosComponent implements OnInit {
   }
 
 }
-

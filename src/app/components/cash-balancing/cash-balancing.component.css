@@ -1,0 +1,9 @@
+.d-flex {
+    display: flex;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+.card-body {
+    overflow-x: auto
+}
