@@ -15,6 +15,8 @@ import { CategoriasEntity } from 'src/app/models/categorias';
 import { CategoriasService } from 'src/app/services/categorias.service';
 import { MarcasService } from 'src/app/services/marcas.service';
 import { MarcasEntity } from 'src/app/models/marcas';
+import { TarifasEntity } from 'src/app/models/tarifas';
+import { TarifasService } from 'src/app/services/tarifas.service';
 
 @Component({
   selector: 'app-productos-create',
@@ -40,7 +42,11 @@ export class ProductosCreateComponent implements OnInit {
     producto: new FormControl('', [Validators.required]),
     etiquetas: new FormControl('', [Validators.required]),
     tamanio: new FormControl('', [Validators.required]),
-    codigoSAP: new FormControl('', [Validators.required])
+    codigoSAP: new FormControl('', [Validators.required]),
+    tarifa: new FormControl('0', [Validators.required]),
+    precio: new FormControl('', [Validators.required]),
+    medida: new FormControl('0', [Validators.required])
+
   });
   //Variables para listas desplegables
   lstModeloProductos: ModeloProductosEntity[] = [];
@@ -57,7 +63,10 @@ export class ProductosCreateComponent implements OnInit {
   selectModelo: boolean = false;
   // lstModelos: ModelosEntity[] = [];
   // lstLineas: LineasEntity[] = [];
-  
+
+  lstTarifas: TarifasEntity[] = [];
+  lstTarifas2: TarifasEntity[] = [];
+  selectTarifa: boolean = false;
   //Variables para validar selección
   selectModeloProducto: boolean = false;
   selectedModeloProducto: string | undefined = '' ;
@@ -76,6 +85,7 @@ export class ProductosCreateComponent implements OnInit {
     private readonly httpServiceMarcas: MarcasService,
     //private readonly httpServiceModelos: ModelosService,
     //private readonly httpServiceLineas: LineasService,
+    private readonly httpServiceTarifas: TarifasService,
     private readonly httpServiceModelos: ModelosService,
     private readonly httpService: ProductosAdminService,
     private readonly httpServiceCategorias: CategoriasService,
@@ -98,7 +108,19 @@ export class ProductosCreateComponent implements OnInit {
         this.lstCategorias = res.lstCategorias;
       }
     });
-
+    // Obtener Tarifas
+    this.httpServiceTarifas.obtenerTarifas().subscribe(res => {
+      if (res.codigoError != "OK") {
+        Swal.fire({
+          icon: 'error',
+          title: 'No se pudo obtener la Sociedad.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      } else {
+        this.lstTarifas = res.lstTarifas;
+      }
+    });
     //Obtenemos Marcas
     this.httpServiceMarcas.obtenerMarcas().subscribe((res) => {
       if (res.codigoError != 'OK') {
@@ -149,7 +171,10 @@ export class ProductosCreateComponent implements OnInit {
           modelo_nombre: '',
           modelo_producto: '',
           categoria: '',
-          linea: ''
+          linea: '',
+          tarifa_ice_iva_id : this.lstTarifas2[0].id,
+          unidad_medida: this.modelProductForm.value!.medida ?? "",
+          pvp: this.modelProductForm.value!.precio ?? "",
         };
         console.log(productEntity);
         this.httpService.agregarProducto(productEntity).subscribe(res => {
@@ -196,45 +221,6 @@ export class ProductosCreateComponent implements OnInit {
     this.selectModeloProducto = false;
     this.selectedModeloProducto = item.modelo_producto;
     this.modelProductForm.controls['modeloproducto_id'].setValue(item.id!);
-    // this.modelo = item.modelo!;
-    /*
-    const modelonew: ModelosEntity = {
-      id: '',
-      linea_id: '',
-      almacen_id: '',
-      linea_nombre: '',      
-      modelo: this.modelo,
-      etiquetas: '',
-      cod_sap: ''
-    }
-    this.httpServiceModelos.obtenerLineaModelo(modelonew).subscribe(res => {
-      if (res.codigoError != "OK") {
-        console.log("ERROR");
-      } else {
-        this.lstModelos = res.lstModelos;
-        this.linea = this.lstModelos[0].linea_nombre ?? ''
-
-        const linea: LineasEntity = {
-          id: '',
-          categoria_id: '',
-          categoria_nombre: '',
-          linea: this.linea,
-          etiquetas: '',
-          cod_sap: '',
-          almacen_id: ''
-        }
-        this.httpServiceLineas.obtenerCategoriaLinea(linea).subscribe(res => {
-          if (res.codigoError != "OK") {
-            console.log("ERROR");
-          } else {
-            this.lstLineas = res.lstLineas;
-            this.categoria = this.lstLineas[0].categoria_nombre ?? ''
-          }
-        })
-      }
-    })
-    */
-
   }
 
   //Evento para cuando se limpia los cuadros de texto
@@ -367,7 +353,40 @@ export class ProductosCreateComponent implements OnInit {
       //this.warehousesForm.get("sociedad")?.setValue(sociedad.target.value);
     }
   }
+  changeGroup4(event: any): void {
+    if (event.target.value == 0) {
+      this.selectTarifa = true;
+    } else {
+      this.selectTarifa = false;
 
+      // Obtener ID del modelo
+      const tarifanew: TarifasEntity = {
+        id: '',
+        impuesto_id: '',
+        codigo: '',
+        porcentaje: '',
+        descripcion: event.target.value,
+        tarifa_ad_valorem_e_d_2020: '',
+        tarifa_esp_e_d_2020: '',
+        tarifa_esp_9_mayo_diciembre_2020: '',
+        created_at: '',
+        updated_at: ''
+      }
+      this.httpServiceTarifas.obtenerTarifasN(tarifanew).subscribe((res) => {
+        console.log(res);
+        if (res.codigoError != 'OK') {
+          Swal.fire({
+            icon: 'error',
+            title: 'No se pudo obtener Tarifas.',
+            text: res.descripcionError,
+            showConfirmButton: false,
+          });
+        } else {
+          this.lstTarifas2 = res.lstTarifas;
+        }
+      });
+    }
+  }
   changeMark(marca: any): void {
     if (marca.target.value == 0) {
       this.selectMarca = true;

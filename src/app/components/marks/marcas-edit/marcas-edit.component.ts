@@ -23,7 +23,6 @@ export class MarcasEditComponent implements OnInit {
   faSave = faSave;
   //Creación de la variable para formulario
   markForm = new FormGroup({
-    proveedor: new FormControl('', Validators.required),
     marca: new FormControl('', Validators.required),
     etiquetas: new FormControl(''),
     urlImagen: new FormControl(''),
@@ -42,7 +41,6 @@ export class MarcasEditComponent implements OnInit {
   private codigo: string = "";
   codigo2: any;
   codigo3: any;
-  lstProveedores: ProveedoresEntity[] = [];
 
   constructor(private httpService: MarcasService,
     private httpServiceImage: ImagenesService,
@@ -50,19 +48,7 @@ export class MarcasEditComponent implements OnInit {
     private httpServiceProv: ProveedoresService) { }
 
   ngOnInit(): void {
-    //Obtenemos Proveedores
-    this.httpServiceProv.obtenerProveedores().subscribe(res => {
-      if (res.codigoError != "OK") {
-        Swal.fire({
-          icon: 'error',
-          title: 'No se pudo obtener proveedores.',
-          text: res.descripcionError,
-          showConfirmButton: false,
-        });
-      } else {
-        this.lstProveedores = res.lstProveedores;
-      }
-    });
+    
 
     this.httpService.obtenermarca$.subscribe(res => {
       if (res.id == "") {
@@ -77,42 +63,11 @@ export class MarcasEditComponent implements OnInit {
         this.codigo2 = res.proveedor_id;
         this.markForm.get("marca")?.setValue(res.marca);
         this.markForm.get("etiquetas")?.setValue(res.etiquetas);
-        this.markForm.get("proveedor")?.setValue(res.proveedor!);
         this.imageUrl = res.url_image;
         this.imageName = this.imageNameOriginal;
         this.imageNameOriginal = res.url_image.split('/')[5];
       }
     });
-  }
-
-  changeGroup(tipoC: any): void {
-    if (tipoC.target.value == 0) {
-      this.selectProveedor = true;
-    } else {
-      this.selectProveedor = false;
-    }
-    const proveedores: ProveedoresEntity = {
-      id: '',
-      id_fiscal: '',
-      ciudadid: '',
-      correo: '',
-      direccionprov: '',
-      nombre: tipoC.target.value,
-      telefono: ''
-    }
-
-    this.httpServiceProv.obtenerProveedoresN(proveedores).subscribe(res => {
-      if (res.codigoError != "OK") {
-        Swal.fire({
-          icon: 'error',
-          title: 'No se pudo obtener la Sociedad.',
-          text: res.descripcionError,
-          showConfirmButton: false,
-        });
-      } else {
-        this.codigo2 = res.lstProveedores[0].id;
-      }
-    })
   }
 
   onSubmit(): void {
@@ -134,7 +89,6 @@ export class MarcasEditComponent implements OnInit {
               id: this.codigo,
               marca: this.markForm.value!.marca ?? "",
               etiquetas: this.markForm.value!.etiquetas ?? "",
-              proveedor_id: this.codigo2,
               url_image: this.imageName == "" ? this.imageUrl : this.imageName
             }
             this.httpService.actualizarMarca(markEntity).subscribe(res => {
@@ -170,7 +124,6 @@ export class MarcasEditComponent implements OnInit {
         const markEntity: MarcasEntity = {
           id: this.codigo,
           marca: this.markForm.value!.marca ?? "",
-          proveedor_id: this.codigo2,
           etiquetas: this.markForm.value!.etiquetas ?? "",
           url_image: this.imageName == "" ? this.imageUrl : this.imageName
         }

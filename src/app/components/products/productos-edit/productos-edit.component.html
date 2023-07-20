@@ -93,6 +93,16 @@
                     </small>
                 </div>
                 
+               
+                <div class="form-group">
+                    <label for="tamanio">Talla</label>
+                    <input type="text" class="form-control" id="tamanio" placeholder="Ingrese el código SAP" formControlName="tamanio">
+                    <small *ngIf="modelProductForm.controls['tamanio'].invalid && (modelProductForm.controls['tamanio'].dirty || modelProductForm.controls['tamanio'].touched)">
+                        <small *ngIf="modelProductForm.controls['tamanio'].errors?.['required']" style="color: red;">
+                            Debe ingresar la descripción del Producto
+                        </small>
+                    </small>
+                </div>
                 <div class="form-group ">
                     <label for="producto " style="margin: 0;">Nombre</label>
                     <input type="text " [(ngModel)]="selectedModeloProducto" class="form-control " id="producto" placeholder="Ingrese la descripción del Modelo Producto." formControlName="producto">
@@ -111,12 +121,36 @@
                         </small>
                     </small>
                 </div>
+                <div class="form-group ">
+                    <label for="medida" style="margin: 0;">Unidad de Medida</label>
+                    <select class="form-control" id="medida" formControlName="medida">
+                        <option [value]=" 0 " selected>Seleccione una unidad de medida</option>
+                        <option>par</option>
+                        <option>ml.</option>
+                        <option>l.</option>
+                        <option>cm.</option>
+                        <option>plg.</option>
+                        <option>kg.</option>
+                        <option>g.</option>
+                    </select>
+                    <small
+                        *ngIf="modelProductForm.controls['medida'].invalid && (modelProductForm.controls['medida'].dirty || modelProductForm.controls['medida'].touched)">
+                        <small *ngIf="modelProductForm.controls['medida'].errors?.['required']" style="color: red;">
+                            Debe ingresar la unidad de medida.
+                        </small>
+                    </small>
+                </div>
                 <div class="form-group">
-                    <label for="tamanio">Talla</label>
-                    <input type="text" class="form-control" id="tamanio" placeholder="Ingrese el código SAP" formControlName="tamanio">
-                    <small *ngIf="modelProductForm.controls['tamanio'].invalid && (modelProductForm.controls['tamanio'].dirty || modelProductForm.controls['tamanio'].touched)">
-                        <small *ngIf="modelProductForm.controls['tamanio'].errors?.['required']" style="color: red;">
-                            Debe ingresar la descripción del Producto
+                    <label for="tarifa_id">Tarifa</label>
+                    <select class="form-control" formControlName="tarifa" (change)="changeGroup4($event)">
+                        <option [value]=" 0 " selected>Seleccione una tarifa</option>
+                        <option *ngFor="let tarifa of lstTarifas" [value]="tarifa.id">
+                            {{tarifa.descripcion}}
+                        </option>
+                    </select>
+                    <small *ngIf="selectTarifa">
+                        <small *ngIf="selectTarifa" style="color: red; ">
+                            Debe seleccionar una tarifa.
                         </small>
                     </small>
                 </div>

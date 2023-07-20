@@ -73,19 +73,6 @@ export class MarcasCreateComponent implements OnInit {
       nombre: tipoC.target.value,
       telefono: ''
     }
-
-    this.httpServiceProv.obtenerProveedoresN(proveedores).subscribe(res => {
-      if (res.codigoError != "OK") {
-        Swal.fire({
-          icon: 'error',
-          title: 'No se pudo obtener la Sociedad.',
-          text: res.descripcionError,
-          showConfirmButton: false,
-        });
-      } else {
-        this.codigo = res.lstProveedores[0].id;
-      }
-    })
   }
 
   onSubmit(): void {
@@ -107,8 +94,6 @@ export class MarcasCreateComponent implements OnInit {
             const markEntity: MarcasEntity = {
               id: "",
               marca: this.markForm.value!.marca ?? "",
-              proveedor: this.markForm.value!.proveedor ?? "",
-              proveedor_id: this.codigo,
               etiquetas: this.markForm.value!.etiquetas ?? "",
               url_image: this.imageName == "" ? this.imageUrl : this.imageName
             }
@@ -145,8 +130,6 @@ export class MarcasCreateComponent implements OnInit {
         const markEntity: MarcasEntity = {
           id: "",
           marca: this.markForm.value!.marca ?? "",
-          proveedor: this.markForm.value!.proveedor ?? "",
-          proveedor_id: this.codigo,
           etiquetas: this.markForm.value!.etiquetas ?? "",
           url_image: this.imageName == "" ? this.imageUrl : this.imageName
         }

@@ -3,9 +3,11 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { ProveedoresEntity, Proveedores } from '../models/proveedores';
+import { SociedadesEntity } from '../models/sociedades';
 
 const initProv: ProveedoresEntity = {
   id: '',
+  sociedad_id :'',
   id_fiscal: '',
   ciudadid: '',
   correo: '',
@@ -37,10 +39,12 @@ export class ProveedoresService {
     return this.http.get<Proveedores>(`${environment.apiUrl}proveedores/ObtenerProveedores`);
   }
 
-  obtenerProveedoresAll(): Observable<Proveedores> {
-    return this.http.get<Proveedores>(`${environment.apiUrl}proveedores/ObtenerProveedoresAll`);
+  obtenerProveedoresAll(sociedad: SociedadesEntity): Observable<Proveedores> {
+    return this.http.post<Proveedores>(`${environment.apiUrl}proveedores/ObtenerProveedoresAll`,sociedad);
   }
-
+  obtenerProveedoresS(sociedad: SociedadesEntity): Observable<Proveedores> {
+    return this.http.post<Proveedores>(`${environment.apiUrl}proveedores/ObtenerProveedoresS`,sociedad);
+  }
   obtenerProveedoresN(proveedor: ProveedoresEntity): Observable<Proveedores> {
     return this.http.post<Proveedores>(`${environment.apiUrl}proveedores/ObtenerProveedoresN`, proveedor);
   }

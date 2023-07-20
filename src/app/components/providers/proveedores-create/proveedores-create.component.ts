@@ -65,6 +65,7 @@ export class ProveedoresCreateComponent implements OnInit {
         direccionprov: this.proveedoresForm.value!.direccion ?? "",
         nombre: this.proveedoresForm.value!.nombre ?? "",
         telefono: this.proveedoresForm.value!.telefono ?? "",
+        sociedad_id : JSON.parse(localStorage.getItem('sociedadid') || "[]")
       }
       this.httpService.agregarProveedores(proveedorDatos).subscribe(res => {
         if (res.codigoError == "OK") {

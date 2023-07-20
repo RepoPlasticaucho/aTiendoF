@@ -15,6 +15,8 @@ import { CategoriasEntity } from 'src/app/models/categorias';
 import { CategoriasService } from 'src/app/services/categorias.service';
 import { MarcasService } from 'src/app/services/marcas.service';
 import { MarcasEntity } from 'src/app/models/marcas';
+import { TarifasEntity } from 'src/app/models/tarifas';
+import { TarifasService } from 'src/app/services/tarifas.service';
 
 @Component({
   selector: 'app-productos-edit',
@@ -30,7 +32,9 @@ export class ProductosEditComponent implements OnInit {
   //Creación de la variable para formulario
   modelProductForm = new FormGroup({
     modeloproducto_id: new FormControl('0', Validators.required),
+    tarifa_id: new FormControl('0', Validators.required),
     modeloproducto: new FormControl('0', Validators.required),
+    tarifa: new FormControl('0', Validators.required),
     marca: new FormControl('',),
     categoria: new FormControl('',Validators.required),
     linea: new FormControl('',Validators.required),
@@ -40,6 +44,8 @@ export class ProductosEditComponent implements OnInit {
     etiqueta: new FormControl('', [Validators.required]),
     tamanio: new FormControl('', [Validators.required]),
     codigoSAP: new FormControl('', [Validators.required]),
+    medida: new FormControl('0', [Validators.required]),
+
   });
   //Variables para listas desplegables
   lstModeloProductos: ModeloProductosEntity[] = [];
@@ -57,8 +63,13 @@ export class ProductosEditComponent implements OnInit {
   lstMarcas: MarcasEntity[] = [];
   selectMarca: boolean = false;
 
+  lstTarifas: TarifasEntity[] = [];
+  lstTarifas2: TarifasEntity[] = [];
+  selectedTarifa: string | undefined = '' ;
+  
   //Variables para validar selección
   selectModeloProductos: boolean = false;
+  selectTarifa: boolean = false ;
 
 
   //Variables para Autocomplete
@@ -75,6 +86,7 @@ export class ProductosEditComponent implements OnInit {
     private readonly httpServiceMarcas: MarcasService,
     private readonly httpService: ProductosAdminService,
     private readonly httpServiceModelos: ModelosService,
+    private readonly httpServiceTarifas: TarifasService,
     private readonly httpServiceCategorias: CategoriasService,
     private readonly httpServiceLineas: LineasService,
     private router: Router
@@ -107,7 +119,19 @@ export class ProductosEditComponent implements OnInit {
         this.lstMarcas = res.lstMarcas;
       }
     });
-
+// Obtener Tarifas
+    this.httpServiceTarifas.obtenerTarifas().subscribe(res => {
+      if (res.codigoError != "OK") {
+        Swal.fire({
+          icon: 'error',
+          title: 'No se pudo obtener la Sociedad.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      } else {
+        this.lstTarifas = res.lstTarifas;
+      }
+    });
 
     //Cargar los datos Lineas Modificar
     this.httpService.obtenerproducto$.subscribe((res) => {
@@ -137,6 +161,8 @@ export class ProductosEditComponent implements OnInit {
         this.modelProductForm.get('etiqueta')?.setValue(res.etiquetas);
         this.modelProductForm.get('modelo')?.setValue(res.modelo_nombre);
         this.modelProductForm.get('modeloproducto_id')?.setValue(res.modelo_producto_id);
+        this.modelProductForm.get('tarifa')?.setValue(res.tarifa_ice_iva_id!);
+        this.modelProductForm.get('medida')?.setValue(res.unidad_medida!)
         this.initialModelProduct = res.modelo_producto!;
       }
     });
@@ -236,62 +262,71 @@ export class ProductosEditComponent implements OnInit {
       if (this.modelProductForm.get('modeloproducto_id')?.value == '0' || undefined) {
         this.selectModeloProductos = true;
       }
-      Swal.fire({
-        icon: 'error',
-        title: 'Ha ocurrido un error.',
-        text: "Debe seleccionar el modelo producto",
-        showConfirmButton: false,
-      });
+        Swal.fire({
+          icon: 'error',
+          title: 'Ha ocurrido un error.',
+          text: "Debe seleccionar el modelo producto",
+          showConfirmButton: false,
+        });
     } else {
+      
       if (this.modelProductForm.get('modeloproducto_id')?.value == '0' || undefined) {
         this.selectModeloProductos = true;
       } else {
-        const productEntity: ProducAdmEntity = {
-          id: this.codigo,
-          modelo_producto_id: this.modelProductForm.value!.modeloproducto_id ?? '',
-          nombre: this.modelProductForm.value!.producto ?? '',
-          cod_sap: this.modelProductForm.value!.codigoSAP ?? '',
-          tamanio: this.modelProductForm.value!.tamanio ?? '',
-          etiquetas: this.modelProductForm.value!.etiqueta ?? '',
-          es_plasticaucho: '1',
-          es_sincronizado: '1',
-          modelo_producto: '',
-          impuesto_id: '',
-          impuesto_nombre: '',
-          marca_nombre: '',
-          color_nombre: '',
-          atributo_nombre: '',
-          genero_nombre: '',
-          modelo_nombre: '',
-          categoria: '',
-          linea: ''
-        };
-        console.log(productEntity.modelo_producto_id);
-        console.log(productEntity);
-
-        this.httpService.actualizarProducto(productEntity).subscribe((res) => {
-          if (res.codigoError == 'OK') {
-            Swal.fire({
+        if (this.modelProductForm.get('tarifa')?.value == '0' || undefined) {
+          this.selectTarifa = true;
+        } else {
+          const productEntity: ProducAdmEntity = {
+            id: this.codigo,
+            modelo_producto_id: this.modelProductForm.value!.modeloproducto_id ?? '',
+            nombre: this.modelProductForm.value!.producto ?? '',
+            cod_sap: this.modelProductForm.value!.codigoSAP ?? '',
+            tamanio: this.modelProductForm.value!.tamanio ?? '',
+            etiquetas: this.modelProductForm.value!.etiqueta ?? '',
+            es_plasticaucho: '1',
+            es_sincronizado: '1',
+            modelo_producto: '',
+            impuesto_id: '',
+            impuesto_nombre: '',
+            marca_nombre: '',
+            color_nombre: '',
+            atributo_nombre: '',
+            genero_nombre: '',
+            modelo_nombre: '',
+            categoria: '',
+            linea: '',
+            tarifa_ice_iva_id : this.modelProductForm.value!.tarifa ?? '',
+            unidad_medida: this.modelProductForm.value!.medida?? ''
+          };
+        
+          console.log(productEntity.modelo_producto_id);
+          console.log(productEntity.tarifa_ice_iva_id);
+          console.log(productEntity);
+        
+          this.httpService.actualizarProducto(productEntity).subscribe((res) => {
+            if (res.codigoError == 'OK') {
+              Swal.fire({
               icon: 'success',
               title: 'Modificado Exitosamente.',
               text: `Se ha modificado el Modelo Producto ${this.modelProductForm.value.producto}`,
               showConfirmButton: true,
               confirmButtonText: 'Ok',
-            }).finally(() => {
-              this.router.navigate([
-                '/navegation-adm',
+             }).finally(() => {
+                this.router.navigate([
+                  '/navegation-adm',
                 { outlets: { contentAdmin: ['productos'] } },
-              ]);
-            });
-          } else {
+                ]);
+              });
+            } else {
             Swal.fire({
               icon: 'error',
               title: 'Ha ocurrido un error.',
               text: res.descripcionError,
               showConfirmButton: false,
-            });
-          }
-        });
+              });
+            }
+          });
+        }
       }
     }
   }
@@ -329,12 +364,17 @@ export class ProductosEditComponent implements OnInit {
   //Modelo
   selectEventModel(item: ModeloProductosEntity) {
     this.selectModeloProductos = false;
-    //this.selectedModeloProducto = item.etiquetas;
     this.selectedModeloProducto = item.modelo_producto;
     this.modelProductForm.controls['modeloproducto'].setValue(item.modelo_producto);
     this.modelProductForm.controls['modeloproducto_id'].setValue(item.id!);
   }
 
+  selectEventTarifa(item: TarifasEntity) {
+    this.selectModeloProductos = false;
+    this.selectedTarifa = item.descripcion;
+    this.modelProductForm.controls['tarifa'].setValue(item.descripcion);
+    this.modelProductForm.controls['tarifa_id'].setValue(item.id!);
+  }
   //Disparador cuando se escribe algún item de los combos
 
   onChangeSearchModel(val: string) {
@@ -349,6 +389,7 @@ export class ProductosEditComponent implements OnInit {
   onInputClearedModel() {
     this.selectModeloProductos = true;
     this.modelProductForm.controls['modeloproducto_id'].setValue('0');
+
   }
 
   changeGroup1(e: any) {
@@ -470,6 +511,14 @@ export class ProductosEditComponent implements OnInit {
       //this.warehousesForm.get("sociedad")?.setValue(sociedad.target.value);
     }
   }
-}
 
-  //// REVISAR ESTA CON ERROR AL ACTUALIZAR.
+  changeGroup4(tarifa: any): void {
+    if (tarifa.target.value == 0) {
+      this.selectTarifa = true;
+    } else {
+      this.selectTarifa = false;
+      this.modelProductForm.get("tarifa_id")?.setValue(tarifa.target.value);
+
+    }
+  }
+}

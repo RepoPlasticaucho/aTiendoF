@@ -81,17 +81,17 @@ export class CatalogosComponent implements OnInit {
         this.catalogoColores = [...new Set(res.lstCatalogos.map(item => item.color))];
 
         //CARGA DE CAMPOS
-        this.Categorias();
+        /*this.Categorias();
         this.Atributos();
         this.Generos();
         this.Marcas();
         this.Colores();
         this.Lineas();
         this.Modelos();
-        this.ModelosProductos()
+        this.ModelosProductos()*/
         this.Productos()
 
-        Swal.fire({
+        /*Swal.fire({
           icon: 'info',
           title: 'Carga Masiva realizada con EXITO.',
           text: `Se ha creado los Productos`,
@@ -100,7 +100,7 @@ export class CatalogosComponent implements OnInit {
         }).finally(() => {
           this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['productos'] } }]);
         })
- 
+        */
       } 
 
     })
@@ -583,8 +583,9 @@ export class CatalogosComponent implements OnInit {
                 precio_prom : valor.pvp,
                 pvp : valor.pvp
               }
-             // console.log(productonew);
-              this.httpService.agregarProducto(productonew).subscribe(res =>{
+              console.log(productonew);
+              
+              /*this.httpService.agregarProducto(productonew).subscribe(res =>{
                 if (res.codigoError != "OK") {
                   Swal.fire({
                     icon: 'error',
@@ -676,7 +677,7 @@ export class CatalogosComponent implements OnInit {
                     }
                   })
                 }
-              });
+              });*/
             }
           })
         });  

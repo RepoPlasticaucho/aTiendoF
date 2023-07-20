@@ -5,6 +5,8 @@ import { Subject } from 'rxjs';
 import { ProveedoresEntity } from 'src/app/models/proveedores';
 import { ProveedoresService } from 'src/app/services/proveedores.service';
 import Swal from 'sweetalert2';
+import { SociedadesComponent } from '../../all_components';
+import { SociedadesEntity } from 'src/app/models/sociedades';
 
 @Component({
   selector: 'app-proveedores',
@@ -45,8 +47,18 @@ export class ProveedoresComponent implements OnInit {
       timer: 30000,
       didOpen: () => {
         Swal.showLoading();
-        this.httpService.obtenerProveedoresAll().subscribe(res => {
-    
+        const sociedad : SociedadesEntity ={
+          idGrupo: '',
+          idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
+          razon_social: '',
+          nombre_comercial: '',
+          id_fiscal: '',
+          email: '',
+          telefono: '',
+          password: '',
+          funcion: ''
+        }
+        this.httpService.obtenerProveedoresS(sociedad).subscribe(res => {
           if (res.codigoError != "OK") {
             Swal.fire({
               icon: 'error',
@@ -72,7 +84,7 @@ export class ProveedoresComponent implements OnInit {
   editarProveedor(proveedor: ProveedoresEntity): void {
     this.httpService.asignarProveedor(proveedor);
     // console.log(producto);
-    this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['proveedores-edit'] } }]);
+    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['proveedores-edit'] } }]);
   }
 
   eliminarProveedor(proveedor: ProveedoresEntity): void {

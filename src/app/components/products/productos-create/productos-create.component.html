@@ -14,28 +14,7 @@
 
         <div class="card-body ">
             <form [formGroup]="modelProductForm" (ngSubmit)="onSubmit()">
-                <!--
-            <table style="width: 90%">
-                <tr>
-                    <td style="width: 30%; text-align: center">
-                        <label for="producto">Categoría</label>
-                    <input [ngModel]="categoria" type="text " style="text-align: center" class="form-control " id="categoria" readonly placeholder="Categoría" formControlName="categoria">
-                    </td>
-                    <td style="width: 5%"></td>
-                    <td style="width: 30%; text-align: center">
-                        <label for="producto">Línea</label>
-                    <input [ngModel]="linea" type="text " style="text-align: center" class="form-control " id="linea" readonly placeholder="Línea" formControlName="linea">
-                    </td>
-                    <td style="width: 5%"></td>
-                    <td style="width: 30%; text-align: center">
-                        <label for="producto">Modelo</label>
-                    <input [ngModel]="modelo" type="text " style="text-align: center" class="form-control " id="modelo" readonly placeholder="Modelo" formControlName="modelo">
-                    </td>
-                    <td style="width: 5%"></td>
-                </tr>
-            </table>
-            <br>
-            -->
+
                 <div class="form-group">
                     <label for="grupo">Categoria</label>
                     <select class="form-control" (change)="changeGroup1($event)" formControlName="categoria">
@@ -138,7 +117,26 @@
                     </small>
                 </div>
                 <div class="form-group ">
-                    <label for="tamanio" style="margin: 0;">Talla</label>
+                    <label for="medida" style="margin: 0;">Unidad de Medida</label>
+                    <select class="form-control" id="medida" formControlName="medida">
+                        <option [value]=" 0 " selected>Seleccione una unidad de medida</option>
+                        <option>par</option>
+                        <option>ml.</option>
+                        <option>l.</option>
+                        <option>cm.</option>
+                        <option>plg.</option>
+                        <option>kg.</option>
+                        <option>g.</option>
+                    </select>
+                    <small
+                        *ngIf="modelProductForm.controls['medida'].invalid && (modelProductForm.controls['medida'].dirty || modelProductForm.controls['medida'].touched)">
+                        <small *ngIf="modelProductForm.controls['medida'].errors?.['required']" style="color: red;">
+                            Debe ingresar la unidad de medida.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group ">
+                    <label for="tamanio" style="margin: 0;">Tamaño</label>
                     <input type="text " class="form-control " id="tamanio" placeholder="Ingrese la talla del Producto."
                         formControlName="tamanio">
                     <small
@@ -148,6 +146,32 @@
                         </small>
                     </small>
                 </div>
+                <div class="form-group ">
+                    <label for="precio" style="margin: 0;">Precio unitario</label>
+                    <input type="text " class="form-control " id="precio"
+                        placeholder="Ingrese el precio del Producto." formControlName="precio">
+                    <small
+                        *ngIf="modelProductForm.controls['precio'].invalid && (modelProductForm.controls['precio'].dirty || modelProductForm.controls['precio'].touched)">
+                        <small *ngIf="modelProductForm.controls['precio'].errors?.['required']" style="color: red;">
+                            Debe ingresar el precio del Producto.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="tarifa">Tarifa</label>
+                    <select class="form-control" formControlName="tarifa" (change)="changeGroup4($event)">
+                        <option [value]=" 0 " selected>Seleccione una tarifa</option>
+                        <option *ngFor="let tarifa of lstTarifas" [value]="tarifa.descripcion">
+                            {{tarifa.descripcion}}
+                        </option>
+                    </select>
+                    <small *ngIf="selectTarifa">
+                        <small *ngIf="selectTarifa" style="color: red; ">
+                            Debe seleccionar una tarifa.
+                        </small>
+                    </small>
+                </div>
+        
                 <div class="form-group">
                     <label for="codigoSAP">Código SAP</label>
                     <input type="text" class="form-control" id="codigoSAP" placeholder="Ingrese el código SAP"

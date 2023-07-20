@@ -16,7 +16,6 @@
                         <th style="width: 20%; "></th>
                         <th style="width: 30%; ">Marca</th>
                         <th style="width: 30%; ">Etiquetas</th>
-                        <th style="width: 30%; ">Proveedor</th>
                         <th style="width: 20%; "></th>
                     </tr>
                 </thead>
@@ -27,7 +26,6 @@
                         </td>
                         <td>{{marca.marca}}</td>
                         <td>{{marca.etiquetas}}</td>
-                        <td>{{marca.proveedor}}</td>
                         <td style="text-align: center;">
                             <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'lg'" style="margin-right: 5px;" data-placement="bottom" title="Editar marca" (click)="editarMarcas(marca)"></fa-icon>
                             <fa-icon [icon]="faTrashAlt" class="btn btn-danger" [size]="'lg'" data-placement="bottom" title="Eliminar marca" (click)="eliminarMarcas(marca)"></fa-icon>

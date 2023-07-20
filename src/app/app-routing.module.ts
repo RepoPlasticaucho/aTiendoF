@@ -57,6 +57,9 @@ const routes: Routes = [
       { path: "almacenesshooping", component: AlmacenesshoopingComponent , outlet:"contentClient"},
       { path: "compraprov", component: CompraprovComponent , outlet:"contentClient"},
       { path: "movimientos", component: MovimientosComponent , outlet:"contentClient"},
+      { path: "proveedores", component: ProveedoresComponent, outlet: "contentClient" },
+      { path: "proveedores-create", component: ProveedoresCreateComponent, outlet: "contentClient" },
+      { path: "proveedores-edit", component: ProveedoresEditComponent, outlet: "contentClient" },
     ]
   },
   {
