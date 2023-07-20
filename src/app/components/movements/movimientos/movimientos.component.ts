@@ -28,10 +28,8 @@ export class MovimientosComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
   lstDetalleMovimientos: DetallesMovimientoEntity[] = [];
-  lstDetalleMovimientos2: DetallesMovimientoEntity[] = [];
-  lstDetalleMovimientos3: DetallesMovimientoEntity[] = [];
-  lstDetalleMovimientos4: DetallesMovimientoEntity[] = [];
   lstAlmacenes: AlmacenesEntity[] = [];
+  fechaActual: string = '';
 
   constructor(private readonly httpService: DetallesmovimientoService,
     private readonly httpServiceAlm: AlmacenesService,
@@ -46,6 +44,7 @@ export class MovimientosComponent implements OnInit {
 
 
   ngOnInit(): void {
+    
     this.dtOptions = {
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
@@ -97,7 +96,6 @@ export class MovimientosComponent implements OnInit {
             });
           } else {
             this.lstDetalleMovimientos = res.lstDetalleMovimientos;
-            this.lstDetalleMovimientos3 = res.lstDetalleMovimientos;
             this.dtTrigger.next('');
             Swal.close();
           }
@@ -109,17 +107,14 @@ export class MovimientosComponent implements OnInit {
         console.log('I was closed by the timer');
       }
     });
+    this.fechaActual = new Date().toISOString().split('T')[0];
   }
 
   changeGroup(tipoC: any): void {
     this.filtroForm.get('fechaDesde')?.setValue(null);
-    this.filtroForm.get('fechaHasta')?.setValue(null);
     this.filtroForm.get('tipo')?.setValue('0');
     this.filtroForm.get('fechaHasta')?.enable();
     this.filtroForm.get('fechaDesde')?.enable();
-    this.lstDetalleMovimientos2.length = 0;
-    this.lstDetalleMovimientos3.length = 0;
-    this.lstDetalleMovimientos4.length = 0;
     const almacen: AlmacenesEntity = {
       idAlmacen: '',
       sociedad_id: '',
@@ -152,7 +147,6 @@ export class MovimientosComponent implements OnInit {
           });
         } else {
           this.lstDetalleMovimientos = res.lstDetalleMovimientos;
-          this.lstDetalleMovimientos4 = res.lstDetalleMovimientos;
           this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
             // Destruye la tabla existente y elimina los datos
             dtInstance.destroy();
@@ -178,7 +172,6 @@ export class MovimientosComponent implements OnInit {
         } else {
           this.filtroForm.get('almacen')?.disable();
           this.lstDetalleMovimientos = res.lstDetalleMovimientos;
-          this.lstDetalleMovimientos4 = res.lstDetalleMovimientos;
 
           this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
             // Destruye la tabla existente y elimina los datos
@@ -196,149 +189,114 @@ export class MovimientosComponent implements OnInit {
   }
 
   filterByDate(): void {
+    this.filtroForm.get('tipo')?.setValue('0');
     const fechaDesdeControl = this.filtroForm.get('fechaDesde');
     const fechaHastaControl = this.filtroForm.get('fechaHasta');
     const fechaDesde = fechaDesdeControl?.value;
     const fechaHasta = fechaHastaControl?.value;
+    const almacen = this.filtroForm.get('almacen')?.value!;
+    console.log(almacen)
+    console.log(fechaDesde)
+    console.log(fechaHasta)
+    this.httpService.obtenerDetalleMovimientoAlmF(almacen, fechaDesde, fechaHasta).subscribe(res => {
+      console.log(res)
+      if (res.codigoError != "OK") {
+        this.filtroForm.get('almacen')?.enable();
+        Swal.fire({
+          icon: 'error',
+          title: 'No se pudo obtener movimientos.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      } else {
+        this.filtroForm.get('almacen')?.disable();
+        this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+        this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+          // Destruye la tabla existente y elimina los datos
+          dtInstance.destroy();
 
-    let movimientosFiltrados: DetallesMovimientoEntity[];
+          // Renderiza la tabla con los nuevos datos
+          this.dtTrigger.next('');
 
-    if (fechaDesde && fechaHasta) {
-      movimientosFiltrados = this.lstDetalleMovimientos.filter(
-        detalle => {
-          const fechaMovimiento = this.formatDate(detalle.created_at!);
-
-          return fechaMovimiento >= fechaDesde && fechaMovimiento <= fechaHasta;
-        }
-      );
-    } else {
-      movimientosFiltrados = this.lstDetalleMovimientos;
-    }
-    if (movimientosFiltrados.length > 0) {
-
-      this.lstDetalleMovimientos = movimientosFiltrados;
-      this.lstDetalleMovimientos2 = movimientosFiltrados;
-      this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
-        dtInstance.destroy();
-        this.dtTrigger.next('');
-        dtInstance.page('first').draw('page');
-      });
-      if (fechaDesde) {
-        fechaDesdeControl?.disable();
+          // Opcional: Reinicia la página a la primera página
+          dtInstance.page('first').draw('page');
+        });
       }
-      if (fechaHasta) {
-        fechaHastaControl?.disable();
-      }
-    } else {
-      this.filtroForm.get('fechaHasta')?.enable();
-      this.filtroForm.get('fechaDesde')?.enable();
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'No se pudo obtener movimientos con las fechas especificadas.',
-        showConfirmButton: false,
-      });
-    }
+    });
 
-  }
-
-  formatDate(dateString: string): string {
-    const parts = dateString.split(' ');
-    const fechaParts = parts[0].split('/');
-    const year = fechaParts[2];
-    const month = fechaParts[1].padStart(2, '0');
-    const day = fechaParts[0].padStart(2, '0');
-    const formattedDate = `${year}-${month}-${day}`;
-    return formattedDate;
   }
 
   changeGroup2(): void {
-    if (this.lstDetalleMovimientos2.length > 0) {
-      const tipo = this.filtroForm.get('tipo')?.value;
-      if (tipo !== '0') {
-        const movimientosFiltrados = this.lstDetalleMovimientos2.filter(
-          detalle => detalle.tipo_movimiento === tipo
-        );
-        if (movimientosFiltrados.length > 0) {
-          this.lstDetalleMovimientos = movimientosFiltrados;
-          this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
-            dtInstance.destroy();
-            this.dtTrigger.next('');
-            dtInstance.page('first').draw('page');
-          });
-        } else {
-          this.filtroForm.get('tipo')?.enable();
+    const fechaDesdeControl = this.filtroForm.get('fechaDesde');
+    const fechaHastaControl = this.filtroForm.get('fechaHasta');
+    const fechaDesde = fechaDesdeControl?.value;
+    const fechaHasta = fechaHastaControl?.value;
+    const almacen = this.filtroForm.get('almacen')?.value!;
+    const tipo = this.filtroForm.get('tipo')?.value!;
+    if(fechaDesde == null || almacen == null){
+      this.httpService.obtenerDetalleMovimientoAlmTipo(almacen,tipo).subscribe(res => {
+        if (res.codigoError != "OK") {
           Swal.fire({
             icon: 'error',
-            title: 'Error',
-            text: 'No se pudo obtener movimientos con las fechas especificadas.',
+            title: 'Ha ocurrido un error.',
+            text: res.descripcionError,
             showConfirmButton: false,
-          });
-        }
-      }
-    } else if (this.lstDetalleMovimientos3.length > 0){
-      const tipo = this.filtroForm.get('tipo')?.value;
-      if (tipo !== '0') {
-        const movimientosFiltrados = this.lstDetalleMovimientos3.filter(
-          detalle => detalle.tipo_movimiento === tipo
-        );
-        if (movimientosFiltrados.length > 0) {
-          this.lstDetalleMovimientos = movimientosFiltrados;
-          this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
-            dtInstance.destroy();
-            this.dtTrigger.next('');
-            dtInstance.page('first').draw('page');
           });
         } else {
-          this.filtroForm.get('tipo')?.enable();
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'No se pudo obtener movimientos con las fechas especificadas.',
-            showConfirmButton: false,
-          });
-        }
-
-      }
-    } else if(this.lstDetalleMovimientos4.length > 0) {
-      const tipo = this.filtroForm.get('tipo')?.value;
-      if (tipo !== '0') {
-        const movimientosFiltrados = this.lstDetalleMovimientos4.filter(
-          detalle => detalle.tipo_movimiento === tipo
-        );
-        if (movimientosFiltrados.length > 0) {
-          this.lstDetalleMovimientos = movimientosFiltrados;
+          this.lstDetalleMovimientos = res.lstDetalleMovimientos;
           this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            // Destruye la tabla existente y elimina los datos
             dtInstance.destroy();
+  
+            // Renderiza la tabla con los nuevos datos
             this.dtTrigger.next('');
+  
+            // Opcional: Reinicia la página a la primera página
             dtInstance.page('first').draw('page');
           });
-        } else {
-          this.filtroForm.get('tipo')?.enable();
+        }
+      });
+    } else if (fechaDesde != null || almacen == null){
+      this.httpService.obtenerDetalleMovimientoAlmFTipo(almacen,fechaDesde, fechaHasta, tipo).subscribe(res => {
+        if (res.codigoError != "OK") {
           Swal.fire({
             icon: 'error',
-            title: 'Error',
-            text: 'No se pudo obtener movimientos con las fechas especificadas.',
+            title: 'Ha ocurrido un error.',
+            text: res.descripcionError,
             showConfirmButton: false,
           });
+        } else {
+          this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+          this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            // Destruye la tabla existente y elimina los datos
+            dtInstance.destroy();
+  
+            // Renderiza la tabla con los nuevos datos
+            this.dtTrigger.next('');
+  
+            // Opcional: Reinicia la página a la primera página
+            dtInstance.page('first').draw('page');
+          });
         }
-      }
+      });
+    } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Ha ocurrido un error.',
+          text: 'Seleccione un almacén',
+          showConfirmButton: false,
+        });
     }
 
   }
 
   reiniciarFiltros() {
     this.filtroForm.get('fechaDesde')?.setValue(null);
-    this.filtroForm.get('fechaHasta')?.setValue(null);
     this.filtroForm.get('almacen')?.setValue('0');
     this.filtroForm.get('tipo')?.setValue('0');
-    this.filtroForm.get('fechaHasta')?.enable();
     this.filtroForm.get('fechaDesde')?.enable();
     this.filtroForm.get('almacen')?.enable();
     this.filtroForm.get('tipo')?.enable();
-    this.lstDetalleMovimientos2.length = 0;
-    this.lstDetalleMovimientos3.length = 0;
-    this.lstDetalleMovimientos4.length = 0;
     const sociedadNew: SociedadesEntity = {
       idGrupo: '',
       idSociedad: localStorage.getItem('sociedadid')!,

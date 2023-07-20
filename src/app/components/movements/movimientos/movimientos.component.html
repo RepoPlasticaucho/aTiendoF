@@ -29,7 +29,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="fechaHasta">Fecha Hasta:</label>
-                        <input type="date" id="fechaHasta" style="width: 210px;" class="form-control" formControlName="fechaHasta"
+                        <input type="date" id="fechaHasta" [value]="fechaActual" [ngModel]="fechaActual" style="width: 210px;" class="form-control" formControlName="fechaHasta"
                             (change)="filterByDate()">
                     </div>
                 </div>

@@ -54,6 +54,18 @@ export class DetallesmovimientoService {
     return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ObtenerDetalleMovimientoAlm`, almacen );
   }
 
+  obtenerDetalleMovimientoAlmF(almacen: string, fechadesde: string, fechahasta: string): Observable<DetallesMovimiento> {
+    return this.http.get<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ObtenerDetalleMovimientoAlmF?almacen=`+almacen+`&fechadesde=`+fechadesde+`&fechahasta=`+fechahasta);
+  }
+
+  obtenerDetalleMovimientoAlmFTipo(almacen: string, fechadesde: string, fechahasta: string, tipo: string): Observable<DetallesMovimiento> {
+    return this.http.get<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ObtenerDetalleMovimientoAlmFTipo?almacen=`+almacen+`&fechadesde=`+fechadesde+`&fechahasta=`+fechahasta+`&tipo=`+tipo);
+  }
+
+  obtenerDetalleMovimientoAlmTipo(almacen: string, tipo: string): Observable<DetallesMovimiento> {
+    return this.http.get<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ObtenerDetalleMovimientoAlmTipo?almacen=`+almacen+`&tipo=`+tipo);
+  }
+
   agregarDetallePedido(detalle: DetallesMovimientoEntity): Observable<DetallesMovimiento> {
     return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/InsertarDetallePedido`, detalle);
   }
