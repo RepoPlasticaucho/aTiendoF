@@ -299,9 +299,9 @@ export class ProductosEditComponent implements OnInit {
             unidad_medida: this.modelProductForm.value!.medida?? ''
           };
         
-          console.log(productEntity.modelo_producto_id);
-          console.log(productEntity.tarifa_ice_iva_id);
-          console.log(productEntity);
+         // console.log(productEntity.modelo_producto_id);
+         // console.log(productEntity.tarifa_ice_iva_id);
+         // console.log(productEntity);
         
           this.httpService.actualizarProducto(productEntity).subscribe((res) => {
             if (res.codigoError == 'OK') {

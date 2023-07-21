@@ -34,4 +34,6 @@ export interface CatalogosEntity {
     linea_producto_id : string;
     costo? : string;
     pvp? : string
+    unidad_medidad? : string;
+    tarifa_ice_iva_id?: string
 }

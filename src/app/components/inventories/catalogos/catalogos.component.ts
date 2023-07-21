@@ -22,6 +22,7 @@ import Swal from 'sweetalert2';
 import { ModeloproductosComponent } from '../../all_components';
 import { Validators } from '@angular/forms';
 import { ContentObserver } from '@angular/cdk/observers';
+import { ProductosAdminService } from 'src/app/services/productos-admin.service';
 
 @Component({
   selector: 'app-catalogos',
@@ -81,26 +82,26 @@ export class CatalogosComponent implements OnInit {
         this.catalogoColores = [...new Set(res.lstCatalogos.map(item => item.color))];
 
         //CARGA DE CAMPOS
-        /*this.Categorias();
+        this.Categorias();
         this.Atributos();
         this.Generos();
         this.Marcas();
         this.Colores();
         this.Lineas();
         this.Modelos();
-        this.ModelosProductos()*/
+        this.ModelosProductos()
         this.Productos()
 
-        /*Swal.fire({
+        Swal.fire({
           icon: 'info',
           title: 'Carga Masiva realizada con EXITO.',
-          text: `Se ha creado los Productos`,
+          text: `Carga masiva realizada `,
           showConfirmButton: true,
           confirmButtonText: "Ok"
         }).finally(() => {
           this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['productos'] } }]);
         })
-        */
+        
       } 
 
     })
@@ -538,6 +539,7 @@ export class CatalogosComponent implements OnInit {
       } else {
         this.lstCatalogos = res.lstCatalogos
         const productos = this.lstCatalogos
+        //console.log(productos);
         productos.forEach((valor) => {
           const productonew : ProducAdmEntity={
             id: '',
@@ -557,9 +559,12 @@ export class CatalogosComponent implements OnInit {
             genero_nombre: '',
             modelo_nombre: '',
             precio_prom : '',
-            costo :''
+            pvp :valor.pvp,
+            unidad_medida :valor.unidad_medidad,
+            tarifa_ice_iva_id : valor.tarifa_ice_iva_id
           }
-          
+          //console.log(productonew);
+
           this.httpService.obtenerCatalogoProducto(productonew).subscribe(res =>{
             if (res.codigoError != "OK") {
               const productonew : ProducAdmEntity={
@@ -579,105 +584,76 @@ export class CatalogosComponent implements OnInit {
                 atributo_nombre: '',
                 genero_nombre: '',
                 modelo_nombre: '',
-                costo : valor.costo,
                 precio_prom : valor.pvp,
-                pvp : valor.pvp
+                pvp : valor.pvp,
+                unidad_medida : valor.unidad_medidad,
+                tarifa_ice_iva_id : valor.tarifa_ice_iva_id
               }
-              console.log(productonew);
-              
-              /*this.httpService.agregarProducto(productonew).subscribe(res =>{
+
+              this.httpService.agregarProducto(productonew).subscribe(res =>{
                 if (res.codigoError != "OK") {
                   Swal.fire({
                     icon: 'error',
                     title: 'Ha ocurrido un error.',
                     text: res.descripcionError,
                     showConfirmButton: false,
-                  }); 
+                  });
                 } else {
-                  Swal.fire({
+                  /*Swal.fire({
                     icon: 'success',
                     title: 'Guardado Exitosamente.',
                     text: `Se ha creado los Productos`,
                     showConfirmButton: true,
                     confirmButtonText: "Ok"
-                  });
+                  });*/
                   console.log("Productos nuevos cargados")
                 }
               })
             }else{
-              //Actualizacion de precios
-              const productos = res.lstProductos
-              productos.forEach((value) => {
-                if (value.pvp == "" || value.pvp == null || value.pvp == "0") {
-                  const productonew : ProducAdmEntity={
-                    id: value.id,
-                    tamanio: value.tamanio,
-                    nombre: value.nombre,
-                    cod_sap: value.cod_sap,
-                    etiquetas: value.nombre,
-                    es_plasticaucho: '1',
-                    es_sincronizado: '1',
-                    modelo_producto_id: value.modelo_producto_id,
-                    modelo_producto: '',
-                    impuesto_id: '',
-                    impuesto_nombre: '',
-                    marca_nombre: '',
-                    color_nombre: '',
-                    atributo_nombre: '',
-                    genero_nombre: '',
-                    modelo_nombre: '',
-                    costo : valor.costo,
-                    precio_prom : valor.pvp,
-                    pvp : valor.pvp
-                  }
-                  this.httpService.actualizarProducto(productonew).subscribe(res => {
-                    if (res.codigoError != "OK") {
-                      Swal.fire({
-                        icon: 'error',
-                        title: 'Ha ocurrido un error.',
-                        text: res.descripcionError,
-                        showConfirmButton: false,
-                      }); 
-                    } else {
-                      console.log("Productos actualizados")
-                    }
-                  })
-                } else {
-                  const productonew : ProducAdmEntity={
-                    id: value.id,
-                    tamanio: value.tamanio,
-                    nombre: value.nombre,
-                    cod_sap: value.cod_sap,
-                    etiquetas: value.nombre,
-                    es_plasticaucho: '1',
-                    es_sincronizado: '1',
-                    modelo_producto_id: value.modelo_producto_id,
-                    modelo_producto: '',
-                    impuesto_id: '',
-                    impuesto_nombre: '',
-                    marca_nombre: '',
-                    color_nombre: '',
-                    atributo_nombre: '',
-                    genero_nombre: '',
-                    modelo_nombre: '',
-                    costo : valor.costo,
-                    precio_prom : ((parseInt (value.pvp!) + parseInt (valor.pvp!))/2).toString(),
-                    pvp : valor.pvp
-                  }
-                  this.httpService.actualizarProducto(productonew).subscribe(res => {
-                    if (res.codigoError != "OK") {
-                      Swal.fire({
-                        icon: 'error',
-                        title: 'Ha ocurrido un error.',
-                        text: res.descripcionError,
-                        showConfirmButton: false,
-                      }); 
-                    } else {
-                      console.log("Productos actualizados")
-                    }
-                  })
+              const productosobt = res.lstProductos;
+              productosobt.forEach((value) => {
+                const productadmnew : ProducAdmEntity ={
+                  id: value.id,
+                  tamanio: valor.talla,
+                  nombre: valor.material,
+                  cod_sap: valor.codigo,
+                  etiquetas: valor.material,
+                  es_plasticaucho: '',
+                  es_sincronizado: '',
+                  modelo_producto_id: value.modelo_producto_id,
+                  modelo_producto: '',
+                  impuesto_id: '',
+                  impuesto_nombre: '',
+                  marca_nombre: '',
+                  color_nombre: '',
+                  atributo_nombre: '',
+                  genero_nombre: '',
+                  modelo_nombre: '',
+                  pvp : valor.pvp,
+                  unidad_medida: valor.unidad_medidad,
+                  tarifa_ice_iva_id : valor.tarifa_ice_iva_id,
                 }
-              });*/
+                console.log(productadmnew);
+                this.httpService.actualizarProducto(productadmnew).subscribe(res=>{
+                  if (res.codigoError != "OK") {
+                    Swal.fire({
+                      icon: 'error',
+                      title: 'Ha ocurrido un error.',
+                      text: res.descripcionError,
+                      showConfirmButton: false,
+                    }); 
+                  } else {
+                    /*Swal.fire({
+                      icon: 'success',
+                      title: 'Guardado Exitosamente.',
+                      text: `Se ha creado los Productos`,
+                      showConfirmButton: true,
+                      confirmButtonText: "Ok"
+                    });*/
+                    console.log("Productos actualizados")
+                  }
+                });
+              });  
             }
           })
         });  
