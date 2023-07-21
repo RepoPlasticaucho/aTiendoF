@@ -33,16 +33,20 @@
             <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                 <thead style="color: #636363;">
                     <tr>
-                        <th style="width: 10%; ">CATEGORIA</th>
-                        <th style="width: 10%; ">TIPO</th>
-                        <th style="width: 10%; ">MARCA</th>
-                        <th style="width: 35%; ">PRODUCTO</th>
-                        <th style="width: 10%; ">ETIQUETAS</th>
-                        <th style="width: 5%; ">FAV</th>
-                        <th style="width: 8%; ">OPTIMO</th>
-                        <th style="width: 8%; ">PRECIO</th>
+                        <th style="width: 8%; ">CATEGORIA</th>
+                        <th style="width: 8%; ">TIPO</th>
+                        <th style="width: 8%; ">MARCA</th>
+                        <th style="width: 15%; ">PRODUCTO</th>
+                        <th style="width: 12%; ">ETIQUETAS</th>
                         <th style="width: 8%; ">STOCK</th>
-                        <th style="width: 20%; "></th>
+                        <th style="width: 2%; ">FAV</th>
+                        <th style="width: 8%; ">PRE. UNI.</th>
+                        <th style="width: 8%; ">COSTO</th>
+                        <th style="width: 8%; ">TAMAÑO</th>
+                        <th style="width: 8%; ">UNI. MEDIDA</th>
+                        <th style="width: 8%; ">IMPUESTO</th>
+
+                        <th style="width: 18%; "></th>
                     </tr>
                 </thead>
                 <tbody style="color: #767695;">
@@ -52,11 +56,13 @@
                         <td>{{inventario.marca}}</td>
                         <td>{{inventario.Producto}}</td>
                         <td>{{inventario.etiquetas}}</td>
-                        <td></td>
-                        <td>{{inventario.stock_optimo}}</td>
-                        <td>{{inventario.pvp2}}</td>
                         <td>{{inventario.stock}}</td>
-
+                        <td></td>
+                        <td>{{inventario.pvp2}}</td>
+                        <td>{{inventario.costo}}</td>
+                        <td>{{inventario.talla}}</td>
+                        <td>{{inventario.unidad_medidad}}</td>
+                        <td>{{inventario.tarifa_ice_iva}}</td>
                         <td>
                            <!-- <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'sm'"  style="margin-right: 5px;" data-placement="bottom" title="Editar Almacen" (click)="editarInventarios(inventario)"></fa-icon> -->
                             <fa-icon [icon]="faTrashAlt" class="btn btn-danger" [size]="'lg'" data-placement="bottom" title="Eliminar Almacen" (click)="deshabilitarInventarios(inventario)"></fa-icon>

@@ -66,6 +66,7 @@ export class InventariosComponent implements OnInit {
             });
           } else {
             this.lstInventarios = res.lstInventarios;
+            console.log(this.lstInventarios);
             this.dtTrigger.next('');
             Swal.close();
           }
