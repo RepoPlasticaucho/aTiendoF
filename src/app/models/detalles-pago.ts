@@ -1,7 +1,7 @@
 export interface DetallesPago {
     codigoError: string;
     descripcionError: string;
-    lstDetallesPago: DetallesPagoEntity[];
+    lstDetallePagos: DetallesPagoEntity[];
 }
 
 export interface DetallesPagoEntity {
@@ -10,6 +10,9 @@ export interface DetallesPagoEntity {
     forma_pago_id: string;
     descripcion: string;
     valor: string;
+    valorE?: string;
+    valorTD?: string;
+    valorTC?: string;
     fecha_recaudo: string;
     created_at: string;
     updated_at: string;

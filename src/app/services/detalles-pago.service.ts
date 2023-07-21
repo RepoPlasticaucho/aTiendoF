@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { DetallesPago, DetallesPagoEntity } from '../models/detalles-pago';
+import { AlmacenesEntity } from '../models/almacenes';
+import { FormasPagoEntity } from '../models/formas-pago';
 
 const initDetail: DetallesPagoEntity = {
   id: '',
@@ -12,7 +14,10 @@ const initDetail: DetallesPagoEntity = {
   valor: '',
   fecha_recaudo: '',
   created_at: '',
-  updated_at: ''
+  updated_at: '',
+  valorE: '',
+  valorTC: '',
+  valorTD: ''
 }
 
 @Injectable({
@@ -33,6 +38,28 @@ export class DetallesPagoService {
 
   agregarDetallePago(detalle: DetallesPagoEntity): Observable<DetallesPago> {
     return this.http.post<DetallesPago>(`${environment.apiUrl}detallespago/InsertarDetallePago`, detalle);
+  }
+
+  obtenerDetallePagoE(almacen: AlmacenesEntity): Observable<DetallesPago> {
+    return this.http.post<DetallesPago>(`${environment.apiUrl}detallespago/ObtenerDetallePagoE`, almacen);
+  }
+  obtenerDetallePagoTD(almacen: AlmacenesEntity): Observable<DetallesPago> {
+    return this.http.post<DetallesPago>(`${environment.apiUrl}detallespago/ObtenerDetallePagoTD`, almacen);
+  }
+  obtenerDetallePagoTC(almacen: AlmacenesEntity): Observable<DetallesPago> {
+    return this.http.post<DetallesPago>(`${environment.apiUrl}detallespago/ObtenerDetallePagoTC`, almacen);
+  }
+
+  obtenerDetallePagoAlm(almacen: AlmacenesEntity, forma: FormasPagoEntity): Observable<DetallesPago> {
+    return this.http.get<DetallesPago>(`${environment.apiUrl}detallespago/ObtenerDetallePagoAlm?almacen=`+almacen.nombre_almacen+`&forma=`+forma.id);
+  }
+
+  obtenerDetallePagoAlmF(almacen: string, forma: string, fechadesde: string, fechahasta: string): Observable<DetallesPago> {
+    return this.http.get<DetallesPago>(`${environment.apiUrl}detallespago/ObtenerDetallePagoAlmF?almacen=`+almacen+`&forma=`+forma+`&fechadesde=`+fechadesde+`&fechahasta=`+fechahasta);
+  }
+
+  obtenerDetallePagoF(sociedad: string, forma: string, fechadesde: string, fechahasta: string): Observable<DetallesPago> {
+    return this.http.get<DetallesPago>(`${environment.apiUrl}detallespago/ObtenerDetallePagoF?sociedad=`+sociedad+`&forma=`+forma+`&fechadesde=`+fechadesde+`&fechahasta=`+fechahasta);
   }
 
 }

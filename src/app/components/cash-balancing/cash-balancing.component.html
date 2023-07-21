@@ -41,22 +41,28 @@
             </div>
         </form>
     </div>
-    <div class="card-body ">
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
-            <thead style="color: #636363;">
+    <div class="card-body">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered table-striped vertical-table">
+            <tbody style="color: #000000;">
                 <tr>
-                    <th style="width: 10%; ">EFECTIVO</th>
-                    <th style="width: 10%; ">TARJETA DE DÉBITO</th>
-                    <th style="width: 10%; ">TARJETA DE CRÉDITO</th>
+                    <th style="width: 33%; background-color: rgb(205, 205, 223);">EFECTIVO</th>
+                    <td>$ {{efectivo}}</td>
                 </tr>
-            </thead>
-            <tbody style="color: #767695;">
-                <tr *ngFor="let detalle of lstDetalleMovimientos">
-                    <td>{{detalle.producto_nombre}}</td>
-                    <td>{{detalle.pto_emision}}</td>
-                    <td>{{detalle.created_at}}</td>
+                <tr>
+                    <th style="width: 33%; background-color: rgb(205, 205, 223);">TARJETA DE DÉBITO</th>
+                    <td>$ {{tar_deb}}</td>
+                </tr>
+                <tr>
+                    <th style="width: 34%; background-color: rgb(205, 205, 223);">TARJETA DE CRÉDITO</th>
+                    <td>$ {{tar_cre}}</td>
                 </tr>
             </tbody>
         </table>
+    </div>
+    
+    <div class="icon-container">
+        <fa-icon [icon]="faMoneyBillAlt" [size]="'3x'" style="color: #6aaf42" class="icono-input"></fa-icon>
+        <label for="total" class="label-input">TOTAL VENTAS:</label>
+        <input type="text" [(ngModel)]="sumaTotal" class="cool-input resultado-input" readonly>
     </div>
 </div>

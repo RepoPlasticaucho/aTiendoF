@@ -29,12 +29,12 @@ export class FormasPagoService {
   asignarForma(formaPago: FormasPagoEntity) {
     this.form$.next(formaPago);
   }
-  
+
   obtenerFormasPago(): Observable<FormasPago> {
     return this.http.get<FormasPago>(`${environment.apiUrl}formaspago/ObtenerFormasPago`);
   }
 
   obtenerFormasPagoN(forma: FormasPagoEntity): Observable<FormasPago> {
     return this.http.post<FormasPago>(`${environment.apiUrl}formaspago/ObtenerFormasPagoN`, forma);
-}
+  }
 }
