@@ -30,6 +30,7 @@ const initMovement: MovimientosEntity = {
   valor_rete_renta: '',
   camp_ad1: '',
   camp_ad2: '',
+  updated_at: ''
 }
 
 @Injectable({
@@ -66,6 +67,22 @@ export class MovimientosService {
 
   obtenerMovimientosAlmacen(movimiento: MovimientosEntity): Observable<Movimientos> {
     return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientosAlmacen`, movimiento );
+  }
+
+  obtenerMovimientosAlmacenFecha(almacen: string, fechadesde: string, fechahasta: string): Observable<Movimientos> {
+    return this.http.get<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientosAlmacenFecha?almacen=`+almacen+`&fechadesde=`+fechadesde+`&fechahasta=`+fechahasta);
+  }
+
+  obtenerMovimientosAlmacenNombre(almacen: string): Observable<Movimientos> {
+    return this.http.get<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientosAlmacenNombre?almacen=`+almacen);
+  }
+
+  obtenerMovimientosFechas(sociedad: string, fechadesde: string, fechahasta: string): Observable<Movimientos> {
+    return this.http.get<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientosFechas?sociedad=`+sociedad+`&fechadesde=`+fechadesde+`&fechahasta=`+fechahasta);
+  }
+
+  obtenerMovimientosTodos(sociedad: string): Observable<Movimientos> {
+    return this.http.get<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientosTodos?sociedad=`+sociedad);
   }
 
   obtenerMovimientosAlmacenv(movimiento: MovimientosEntity): Observable<Movimientos> {

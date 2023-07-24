@@ -47,3 +47,12 @@
     width: 100px; /* Ajusta el tamaño de los inputs según tus necesidades */
   }
   
+  /* Clase para cambiar el cursor a un pointer */
+.custom-table {
+  cursor: pointer;
+}
+
+/* Clase para cambiar el color de fondo cuando el cursor pasa por encima */
+.custom-table:hover {
+  background-color: rgb(204, 238, 241);
+}

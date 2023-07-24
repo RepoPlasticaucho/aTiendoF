@@ -30,4 +30,5 @@ export interface MovimientosEntity {
     valor_rete_renta?: string;
     camp_ad1?: string;
     camp_ad2?: string;
+    updated_at?: string;
 }

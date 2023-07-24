@@ -42,7 +42,7 @@
         </form>
     </div>
     <div class="card-body">
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered table-striped vertical-table">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered custom-table table-striped vertical-table" (click)="verDetalleMovimiento()">
             <tbody style="color: #000000;">
                 <tr>
                     <th style="width: 33%; background-color: rgb(205, 205, 223);">EFECTIVO</th>

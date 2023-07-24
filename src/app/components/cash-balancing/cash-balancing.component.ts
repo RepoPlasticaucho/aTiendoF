@@ -10,6 +10,8 @@ import { AlmacenesEntity } from 'src/app/models/almacenes';
 import { SociedadesEntity } from 'src/app/models/sociedades';
 import { DetallesPagoService } from 'src/app/services/detalles-pago.service';
 import { FormasPagoEntity } from 'src/app/models/formas-pago';
+import { MatDialog } from '@angular/material/dialog';
+import { CuadreMovComponent } from './cuadre-mov/cuadre-mov.component';
 
 @Component({
   selector: 'app-cash-balancing',
@@ -35,6 +37,7 @@ export class CashBalancingComponent implements OnInit {
   sumaTotal: any;
 
   constructor(private readonly httpServiceAlm: AlmacenesService,
+    private dialog: MatDialog,
     private readonly httpService: DetallesPagoService,
     private router: Router) { }
 
@@ -46,7 +49,9 @@ export class CashBalancingComponent implements OnInit {
 
 
   ngOnInit(): void {
-
+    localStorage.setItem('nombrealmacen','')
+    localStorage.setItem('fechadesde','')
+    localStorage.setItem('fechahasta','')
     this.dtOptions = {
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
@@ -168,6 +173,17 @@ export class CashBalancingComponent implements OnInit {
       .replace('.', ',');
   }
 
+  verDetalleMovimiento() {
+    const dialogRef = this.dialog.open(CuadreMovComponent, {
+      width: '900px',
+      height: '600px',
+      // Agrega cualquier configuración adicional del modal aquí
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      // Lógica para manejar el resultado después de cerrar el modal
+    });
+  }
+
   changeGroup(tipoC: any): void {
     this.filtroForm.get('fechaDesde')?.setValue(null);
     this.filtroForm.get('fechaHasta')?.enable();
@@ -182,6 +198,7 @@ export class CashBalancingComponent implements OnInit {
       codigo: '',
       pto_emision: ''
     }
+    localStorage.setItem('nombrealmacen', tipoC.target.value);
     const forma1: FormasPagoEntity = {
       id: '1',
       nombre: '',
@@ -311,6 +328,8 @@ export class CashBalancingComponent implements OnInit {
     const fechaHastaControl = this.filtroForm.get('fechaHasta');
     const fechaDesde = fechaDesdeControl?.value;
     const fechaHasta = fechaHastaControl?.value;
+    localStorage.setItem('fechadesde', fechaDesde);
+    localStorage.setItem('fechahasta', fechaHasta);
     const almacen = this.filtroForm.get('almacen')?.value!;
     const forma1 = '1';
     const forma2 = '2';
@@ -409,6 +428,9 @@ export class CashBalancingComponent implements OnInit {
     this.filtroForm.get('fechaDesde')?.enable();
     this.filtroForm.get('fechaHasta')?.enable();
     this.filtroForm.get('almacen')?.enable();
+    localStorage.setItem('nombrealmacen','')
+    localStorage.setItem('fechadesde','')
+    localStorage.setItem('fechahasta','')
     const almacen: AlmacenesEntity = {
       idAlmacen: '',
       sociedad_id: localStorage.getItem('sociedadid')!,
