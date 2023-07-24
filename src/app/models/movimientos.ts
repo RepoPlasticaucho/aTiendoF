@@ -19,6 +19,7 @@ export interface MovimientosEntity {
     total_si?: string;
     total_desc?: string;
     total_imp?: string;
+    detalle_pago?: string;
     propina?: string;
     proveedor_id?: string;
     comp_venta?: string;

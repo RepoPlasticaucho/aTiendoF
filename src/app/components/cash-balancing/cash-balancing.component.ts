@@ -173,10 +173,11 @@ export class CashBalancingComponent implements OnInit {
       .replace('.', ',');
   }
 
-  verDetalleMovimiento() {
+  verDetalleMovimiento(tipoPago: string) {
     const dialogRef = this.dialog.open(CuadreMovComponent, {
       width: '900px',
       height: '600px',
+      data: { tipoPago }
       // Agrega cualquier configuración adicional del modal aquí
     });
     dialogRef.afterClosed().subscribe((result) => {

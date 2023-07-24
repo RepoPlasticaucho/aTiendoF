@@ -8,19 +8,24 @@
     </div>
     <br>
             <br/><br/>
+            <div class="label-container">
+                <label class="cool-label">{{metodoPago}}</label>
+            </div>
             <div class="table-container">
             <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                 <thead style="color: #636363;">
                     <tr>
                         <th style="width: 20%; ">ID</th>
                         <th style="width: 20%; ">FECHA</th>
-                        <th style="width: 20%; ">TOTAL</th>
+                        <th style="width: 20%; " *ngIf="showValorAgregado">VALOR ABONADO</th>
+                        <th style="width: 20%; ">TOTAL FACTURA</th>
                     </tr>
                 </thead>
                 <tbody style="color: #767695;">
                     <tr *ngFor="let movimientos of lstMovimientos" class="table-row">
                         <td>{{movimientos.id}}</td>
                         <td>{{movimientos.updated_at}}</td>
+                        <td *ngIf="showValorAgregado">{{movimientos.detalle_pago}}</td>
                         <td>{{movimientos.total_imp}}</td>
                     </tr>
                 </tbody>

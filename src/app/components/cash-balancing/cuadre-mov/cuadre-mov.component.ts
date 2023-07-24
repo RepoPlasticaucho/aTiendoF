@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { faShoppingBag, faTimes, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import Swal from 'sweetalert2';
 import { MovimientosEntity } from 'src/app/models/movimientos';
-import { MatDialogRef } from '@angular/material/dialog';
 import { MenuventComponent } from '../../all_components';
 import { MovimientosService } from 'src/app/services/movimientos.service';
 
@@ -15,7 +15,8 @@ import { MovimientosService } from 'src/app/services/movimientos.service';
   styleUrls: ['./cuadre-mov.component.css']
 })
 export class CuadreMovComponent implements OnInit {
-
+  tipoPago: string = '';
+  showValorAgregado: boolean = true;
   faShoppingBag = faShoppingBag;
   faShoppingCart = faShoppingCart;
   faTimes = faTimes;
@@ -23,10 +24,14 @@ export class CuadreMovComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
   lstMovimientos: MovimientosEntity[] = [];
-  
-  constructor(private dialogRef: MatDialogRef<MenuventComponent>,
+  metodoPago: string = '';
+
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
+    private dialogRef: MatDialogRef<MenuventComponent>,
     private router: Router,
-    private httpsMovimientosService: MovimientosService) { }
+    private httpsMovimientosService: MovimientosService) {
+    this.tipoPago = data.tipoPago;
+  }
 
   ngOnInit(): void {
     this.dtOptions = {
@@ -50,74 +55,157 @@ export class CuadreMovComponent implements OnInit {
         const fechadesde = localStorage.getItem('fechadesde')!;
         const fechahasta = localStorage.getItem('fechahasta')!;
         const sociedadid = localStorage.getItem('sociedadid')!;
-        if(almacen != '' && fechadesde != '' && fechahasta != ''){
-          this.httpsMovimientosService.obtenerMovimientosAlmacenFecha(almacen, fechadesde, fechahasta).subscribe((res1) => {
-            if (res1.codigoError != 'OK') {
-              Swal.fire({
-                icon: 'error',
-                title: 'No se pudo obtener movimientos.',
-                text: res1.descripcionError,
-                showConfirmButton: false,
-              });
-            } else {
-              this.lstMovimientos = res1.lstMovimientos;
-              this.dtTrigger.next('');
-              Swal.close();
-            }
-          });
-        } else if (almacen != '' && fechadesde == '' && fechahasta == '') {
-          this.httpsMovimientosService.obtenerMovimientosAlmacenNombre(almacen).subscribe((res1) => {
-            if (res1.codigoError != 'OK') {
-              Swal.fire({
-                icon: 'error',
-                title: 'No se pudo obtener movimientos.',
-                text: res1.descripcionError,
-                showConfirmButton: false,
-              });
-            } else {
-              this.lstMovimientos = res1.lstMovimientos;
-              this.dtTrigger.next('');
-              Swal.close();
-            }
-          });
-        } else if (almacen == '' && fechadesde != ''&& fechahasta != ''){
-          this.httpsMovimientosService.obtenerMovimientosFechas(sociedadid, fechadesde, fechahasta).subscribe((res1) => {
-            if (res1.codigoError != 'OK') {
-              Swal.fire({
-                icon: 'error',
-                title: 'No se pudo obtener movimientos.',
-                text: res1.descripcionError,
-                showConfirmButton: false,
-              });
-            } else {
-              this.lstMovimientos = res1.lstMovimientos;
-              this.dtTrigger.next('');
-              Swal.close();
-            }
-          });
-        } else if (almacen == '' && fechadesde == ''&& fechahasta == ''){
-          this.httpsMovimientosService.obtenerMovimientosTodos(sociedadid).subscribe((res1) => {
-            if (res1.codigoError != 'OK') {
-              Swal.fire({
-                icon: 'error',
-                title: 'No se pudo obtener movimientos.',
-                text: res1.descripcionError,
-                showConfirmButton: false,
-              });
-            } else {
-              this.lstMovimientos = res1.lstMovimientos;
-              this.dtTrigger.next('');
-              Swal.close();
-            }
-          });
+        if (this.tipoPago == '1' || this.tipoPago == '2' || this.tipoPago == '3') {
+          if (this.tipoPago == '1'){
+            this.metodoPago = 'PAGO EN EFECTIVO';
+          } else if (this.tipoPago == '2'){
+            this.metodoPago = 'PAGO POR TARJETA DE DÉBITO';
+          } else if (this.tipoPago == '3'){
+            this.metodoPago = 'PAGO POR TARJETA DE CRÉDITO';
+          }
+          if (almacen != '' && fechadesde != '' && fechahasta != '') {
+            this.httpsMovimientosService.obtenerMovimientosAlmacenFechaPAGO(almacen, fechadesde, fechahasta, this.tipoPago).subscribe((res1) => {
+              if (res1.codigoError != 'OK') {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'No se pudo obtener movimientos.',
+                  text: res1.descripcionError,
+                  showConfirmButton: false,
+                });
+              } else {
+                this.lstMovimientos = res1.lstMovimientos;
+                this.dtTrigger.next('');
+                Swal.close();
+              }
+            });
+          } else if (almacen != '' && fechadesde == '' && fechahasta == '') {
+            this.httpsMovimientosService.obtenerMovimientosAlmacenNombrePAGO(almacen, this.tipoPago).subscribe((res1) => {
+              if (res1.codigoError != 'OK') {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'No se pudo obtener movimientos.',
+                  text: res1.descripcionError,
+                  showConfirmButton: false,
+                });
+              } else {
+                this.lstMovimientos = res1.lstMovimientos;
+                this.dtTrigger.next('');
+                Swal.close();
+              }
+            });
+          } else if (almacen == '' && fechadesde != '' && fechahasta != '') {
+            this.httpsMovimientosService.obtenerMovimientosFechasPAGO(sociedadid, fechadesde, fechahasta, this.tipoPago).subscribe((res1) => {
+              if (res1.codigoError != 'OK') {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'No se pudo obtener movimientos.',
+                  text: res1.descripcionError,
+                  showConfirmButton: false,
+                });
+              } else {
+                this.lstMovimientos = res1.lstMovimientos;
+                this.dtTrigger.next('');
+                Swal.close();
+              }
+            });
+          } else if (almacen == '' && fechadesde == '' && fechahasta == '') {
+            this.httpsMovimientosService.obtenerMovimientosTodosPAGO(sociedadid, this.tipoPago).subscribe((res1) => {
+              if (res1.codigoError != 'OK') {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'No se pudo obtener movimientos.',
+                  text: res1.descripcionError,
+                  showConfirmButton: false,
+                });
+              } else {
+                this.lstMovimientos = res1.lstMovimientos;
+                this.dtTrigger.next('');
+                Swal.close();
+              }
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'No se pudo obtener movimientos.',
+              text: '',
+              showConfirmButton: false,
+            });
+            this.cerrarDialog();
+          }
+        } else if (this.tipoPago == '4') {
+          this.showValorAgregado = false;
+          this.metodoPago = 'PAGOS GENERALES'
+          if (almacen != '' && fechadesde != '' && fechahasta != '') {
+            this.httpsMovimientosService.obtenerMovimientosAlmacenFecha(almacen, fechadesde, fechahasta).subscribe((res1) => {
+              if (res1.codigoError != 'OK') {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'No se pudo obtener movimientos.',
+                  text: res1.descripcionError,
+                  showConfirmButton: false,
+                });
+              } else {
+                this.lstMovimientos = res1.lstMovimientos;
+                this.dtTrigger.next('');
+                Swal.close();
+              }
+            });
+          } else if (almacen != '' && fechadesde == '' && fechahasta == '') {
+            this.httpsMovimientosService.obtenerMovimientosAlmacenNombre(almacen).subscribe((res1) => {
+              if (res1.codigoError != 'OK') {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'No se pudo obtener movimientos.',
+                  text: res1.descripcionError,
+                  showConfirmButton: false,
+                });
+              } else {
+                this.lstMovimientos = res1.lstMovimientos;
+                this.dtTrigger.next('');
+                Swal.close();
+              }
+            });
+          } else if (almacen == '' && fechadesde != '' && fechahasta != '') {
+            this.httpsMovimientosService.obtenerMovimientosFechas(sociedadid, fechadesde, fechahasta).subscribe((res1) => {
+              if (res1.codigoError != 'OK') {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'No se pudo obtener movimientos.',
+                  text: res1.descripcionError,
+                  showConfirmButton: false,
+                });
+              } else {
+                this.lstMovimientos = res1.lstMovimientos;
+                this.dtTrigger.next('');
+                Swal.close();
+              }
+            });
+          } else if (almacen == '' && fechadesde == '' && fechahasta == '') {
+            this.httpsMovimientosService.obtenerMovimientosTodos(sociedadid).subscribe((res1) => {
+              if (res1.codigoError != 'OK') {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'No se pudo obtener movimientos.',
+                  text: res1.descripcionError,
+                  showConfirmButton: false,
+                });
+              } else {
+                this.lstMovimientos = res1.lstMovimientos;
+                this.dtTrigger.next('');
+                Swal.close();
+              }
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'No se pudo obtener movimientos.',
+              text: '',
+              showConfirmButton: false,
+            });
+            this.cerrarDialog();
+          }
         } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'No se pudo obtener movimientos.',
-            text: '',
-            showConfirmButton: false,
-          });
-          this.cerrarDialog();
+          console.log('ERROR')
         }
       },
     }).then((result) => {

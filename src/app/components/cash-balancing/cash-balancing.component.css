@@ -48,11 +48,21 @@
   }
   
   /* Clase para cambiar el cursor a un pointer */
+.custom-icon {
+  cursor: pointer;
+  color: #6aaf42;
+}
+
+/* Clase para cambiar el color de fondo cuando el cursor pasa por encima */
+.custom-icon:hover {
+  color: rgb(111, 212, 221);
+}
+
 .custom-table {
   cursor: pointer;
 }
 
 /* Clase para cambiar el color de fondo cuando el cursor pasa por encima */
 .custom-table:hover {
-  background-color: rgb(204, 238, 241);
+  background-color: rgb(174, 241, 247);
 }

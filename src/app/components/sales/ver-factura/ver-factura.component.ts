@@ -48,6 +48,7 @@ export class VerFacturaComponent implements OnInit {
   descuentoN: number = 0;
   descuentoP: number = 0;
   totalF: number = 0;
+  deshabilitarIn = false;
 
 
   constructor(private readonly httpService: DetallesmovimientoService,
@@ -188,6 +189,8 @@ export class VerFacturaComponent implements OnInit {
     this.sumaTotal = suma
       .toLocaleString(undefined, { minimumFractionDigits: 2 })
       .replace('.', ',');
+
+    this.resto = this.sumaTotal.replace(',', '.');
   }
 
   onInput2(event: any) {
@@ -311,7 +314,7 @@ export class VerFacturaComponent implements OnInit {
                 confirmButtonText: "Ok"
               }).finally(() => {
                 // this.groupForm.reset();
-                this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['almacenegresos'] } }]);
+                this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ventaprov'] } }]);
               });
             } else {
               Swal.fire({
@@ -368,6 +371,9 @@ export class VerFacturaComponent implements OnInit {
 
   abonar() {
     const monto = document.getElementById('monto') as HTMLInputElement;
+    console.log(monto.value)
+    console.log(this.sumaTotal.replace(',', '.'))
+    console.log(this.resto)
     if (parseFloat(monto.value) <= this.sumaTotal.replace(',', '.') && parseFloat(monto.value) <= this.resto) {
       this.resto = (this.resto - parseFloat(monto.value)).toFixed(2);
       this.actualizarColor();
@@ -389,6 +395,7 @@ export class VerFacturaComponent implements OnInit {
             text: 'Has abonado' + ' ' + '$' + ' ' + monto.value,
             showConfirmButton: false,
           });
+          this.deshabilitarIn = true;
         } else {
           console.log('ERROR')
         }

@@ -30,6 +30,7 @@ const initMovement: MovimientosEntity = {
   valor_rete_renta: '',
   camp_ad1: '',
   camp_ad2: '',
+  detalle_pago: '',
   updated_at: ''
 }
 
@@ -83,6 +84,22 @@ export class MovimientosService {
 
   obtenerMovimientosTodos(sociedad: string): Observable<Movimientos> {
     return this.http.get<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientosTodos?sociedad=`+sociedad);
+  }
+
+  obtenerMovimientosAlmacenFechaPAGO(almacen: string, fechadesde: string, fechahasta: string, pago: string): Observable<Movimientos> {
+    return this.http.get<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientosAlmacenFechaPAGO?almacen=`+almacen+`&fechadesde=`+fechadesde+`&fechahasta=`+fechahasta+`&pago=`+pago);
+  }
+
+  obtenerMovimientosAlmacenNombrePAGO(almacen: string, pago: string): Observable<Movimientos> {
+    return this.http.get<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientosAlmacenNombrePAGO?almacen=`+almacen+`&pago=`+pago);
+  }
+
+  obtenerMovimientosFechasPAGO(sociedad: string, fechadesde: string, fechahasta: string, pago: string): Observable<Movimientos> {
+    return this.http.get<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientosFechasPAGO?sociedad=`+sociedad+`&fechadesde=`+fechadesde+`&fechahasta=`+fechahasta+`&pago=`+pago);
+  }
+
+  obtenerMovimientosTodosPAGO(sociedad: string, pago: string): Observable<Movimientos> {
+    return this.http.get<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientosTodosPAGO?sociedad=`+sociedad+`&pago=`+pago);
   }
 
   obtenerMovimientosAlmacenv(movimiento: MovimientosEntity): Observable<Movimientos> {

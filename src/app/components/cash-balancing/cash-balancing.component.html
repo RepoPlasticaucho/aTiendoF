@@ -2,7 +2,7 @@
     <div class="card-header">
         <div class="row mx-3">
             <fa-icon [icon]="faList" [size]="'3x'" style="color: #636363;"></fa-icon>
-            <h1 class="mx-5 " style="color: #636363;">MOVIMIENTOS</h1>
+            <h1 class="mx-5 " style="color: #636363;">CUADRE DE CAJA</h1>
         </div>
     </div>
     <div class="d-flex">
@@ -42,17 +42,17 @@
         </form>
     </div>
     <div class="card-body">
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered custom-table table-striped vertical-table" (click)="verDetalleMovimiento()">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered table-striped vertical-table">
             <tbody style="color: #000000;">
-                <tr>
+                <tr class="custom-table" (click)="verDetalleMovimiento('1')">
                     <th style="width: 33%; background-color: rgb(205, 205, 223);">EFECTIVO</th>
                     <td>$ {{efectivo}}</td>
                 </tr>
-                <tr>
+                <tr class="custom-table" (click)="verDetalleMovimiento('2')">
                     <th style="width: 33%; background-color: rgb(205, 205, 223);">TARJETA DE DÉBITO</th>
                     <td>$ {{tar_deb}}</td>
                 </tr>
-                <tr>
+                <tr class="custom-table" (click)="verDetalleMovimiento('3')">
                     <th style="width: 34%; background-color: rgb(205, 205, 223);">TARJETA DE CRÉDITO</th>
                     <td>$ {{tar_cre}}</td>
                 </tr>
@@ -61,7 +61,7 @@
     </div>
     
     <div class="icon-container">
-        <fa-icon [icon]="faMoneyBillAlt" [size]="'3x'" style="color: #6aaf42" class="icono-input"></fa-icon>
+        <fa-icon [icon]="faMoneyBillAlt" [size]="'3x'" class="icono-input custom-icon" (click)="verDetalleMovimiento('4')"></fa-icon>
         <label for="total" class="label-input">TOTAL VENTAS:</label>
         <input type="text" [(ngModel)]="sumaTotal" class="cool-input resultado-input" readonly>
     </div>

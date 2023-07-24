@@ -131,3 +131,15 @@ border-radius: 5px; /* Borde redondeado del thumb del scrollbar */
 .table-container::-webkit-scrollbar-thumb:hover {
 background-color: #555; /* Color del thumb del scrollbar al pasar el cursor por encima */
 }
+
+.cool-label {
+  font-size: 24px;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.label-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px; /* Ajusta este valor según necesites */
+}
