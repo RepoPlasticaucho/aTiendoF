@@ -29,43 +29,72 @@
                     - AÑADIR
                 </button>
             </div>
-                <div class="form-group">
-                    <div class="d-flex">
-                        <select class="form-control small-select" (change)="changeGroup($event)" [disabled]="disableProveedor">
-                            <option value="0" selected>Seleccione un proveedor</option>
-                            <option *ngFor="let proveedor of lstProveedores" [value]="proveedor.nombre">
-                                {{proveedor.nombre}}
-                            </option>
-                        </select>
-                        <select class="form-control small-select" (change)="changeGroup2($event)" [disabled]="disableProveedor">
-                            <option value="0" selected>Seleccione un sustento</option>
-                            <option *ngFor="let sustento of lstSustentos" [value]="sustento.sustento">
-                                {{sustento.sustento}}
-                            </option>
-                        </select>
-                        <input type="text" [disabled]="disableProveedor" (keypress)="keyPressNumbers($event)" [(ngModel)]="comprobante" class="form-control input-1" placeholder="Comprobante de venta" (input)="onInputComprobante($event)">
+            <div class="form-group" style="margin-top: 20px;">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="cedula">Proveedor:</label>
+                            <select class="form-control small-select" (change)="changeGroup($event)"
+                                [disabled]="disableProveedor">
+                                <option value="0" selected>Seleccione un proveedor</option>
+                                <option *ngFor="let proveedor of lstProveedores" [value]="proveedor.nombre">
+                                    {{proveedor.nombre}}
+                                </option>
+                            </select>
+                            <small *ngIf="selectTipo">
+                                <small *ngIf="selectTipo" style="color: red; ">
+                                    Debe seleccionar un proveedor.
+                                </small>
+                            </small>
+                        </div>
                     </div>
-                    <small *ngIf="selectTipo">
-                        <small *ngIf="selectTipo" style="color: red; ">
-                            Debe seleccionar un proveedor.
-                        </small>
-                    </small>
-                    <div class="d-flex">
-                        <input type="text" [disabled]="disableProveedor" (keypress)="keyPressNumbers($event)" [(ngModel)]="autorizacion" class="form-control input-1" placeholder="Autorización de venta" (input)="onInputAutorizacion($event)">
-                        
-                        <mat-form-field appearance="fill" class="custom-datepicker" >
-                            <mat-label>FECHA DE EMISIÓN</mat-label>
-                            <input id="fecha_nac"
-                                matInput [matDatepicker]="picker" 
-                                [(ngModel)]="fechaSeleccionada" [disabled]="true">
-    
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="cedula">Sustento:</label>
+                            <select class="form-control small-select" (change)="changeGroup2($event)"
+                                [disabled]="disableProveedor">
+                                <option value="0" selected>Seleccione un sustento</option>
+                                <option *ngFor="let sustento of lstSustentos" [value]="sustento.sustento">
+                                    {{sustento.sustento}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="cedula">Comprobante de venta:</label>
+                            <input type="text" [disabled]="disableProveedor" (keypress)="keyPressNumbers($event)"
+                                [(ngModel)]="comprobante" class="form-control input-1"
+                                placeholder="Comprobante de venta" (input)="onInputComprobante($event)">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="cedula">Autorización de venta:</label>
+                            <input type="text" [disabled]="disableProveedor" (keypress)="keyPressNumbers($event)"
+                                [(ngModel)]="autorizacion" class="form-control input-1"
+                                placeholder="Autorización de venta" (input)="onInputAutorizacion($event)">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="cedula">Fecha de Emisión:</label>
+                            <mat-form-field appearance="fill" class="custom-datepicker">
+                                <mat-label>FECHA DE EMISIÓN</mat-label>
+                                <input id="fecha_nac" matInput [matDatepicker]="picker" [(ngModel)]="fechaSeleccionada"
+                                    [disabled]="true">
+
                                 <mat-datepicker-toggle matSuffix [for]="picker">
                                 </mat-datepicker-toggle>
                                 <mat-datepicker #picker [disabled]="disableProveedor">
                                 </mat-datepicker>
-                        </mat-form-field>
+                            </mat-form-field>
+                        </div>
                     </div>
                 </div>
+            </div>
             <br><br>
             <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                 <thead style="color: #636363;">
@@ -127,7 +156,8 @@
             </div>
             <br><br><br>
             <div class="button-container">
-                <button class="btn btn-primary" [disabled]="lstDetalleMovimientos.length == 0" (click)="finalizarPedido()">
+                <button class="btn btn-primary" [disabled]="lstDetalleMovimientos.length == 0"
+                    (click)="finalizarPedido()">
                     <span style="color: white"> Finalizar Compra </span>
                 </button>
             </div>

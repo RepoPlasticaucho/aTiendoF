@@ -17,6 +17,8 @@ import { SustentosTributariosService } from 'src/app/services/sustentos-tributar
 import { SustentosTributariosEntity } from 'src/app/models/sustentos_tributarios';
 import { DatePipe } from '@angular/common';
 import { NuevoProductoComponent } from '../nuevo-producto/nuevo-producto.component';
+import { AlmacenesEntity } from 'src/app/models/almacenes';
+import { SociedadesEntity } from 'src/app/models/sociedades';
 
 @Component({
   selector: 'app-menucompr',
@@ -88,8 +90,18 @@ export class MenucomprComponent implements OnInit {
       info: false,
       responsive: true,
     }
-
-    this.httpServiceProv.obtenerProveedores().subscribe(res => {
+    const sociedad: SociedadesEntity = {
+      idGrupo: '',
+      idSociedad: localStorage.getItem('sociedadid')!,
+      razon_social: '',
+      nombre_comercial: '',
+      id_fiscal: '',
+      email: '',
+      telefono: '',
+      password: '',
+      funcion: ''
+    }
+    this.httpServiceProv.obtenerProveedoresS(sociedad).subscribe(res => {
       if (res.codigoError != "OK") {
         Swal.fire({
           icon: 'error',

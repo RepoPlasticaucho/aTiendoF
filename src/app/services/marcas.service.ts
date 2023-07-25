@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment.prod';
 import { Marcas, MarcasEntity } from '../models/marcas';
 import { CategoriasEntity } from '../models/categorias';
 import { Proveedores, ProveedoresEntity } from '../models/proveedores';
+import { ModelosEntity } from '../models/modelos';
 
 const initMark: MarcasEntity = {
   id: "",
@@ -37,6 +38,9 @@ export class MarcasService {
   }
   obtenerMarcaCategoria(categoria: CategoriasEntity): Observable<Marcas> {
     return this.http.post<Marcas>(`${environment.apiUrl}marcas/ObtenerMarcaCategoria`, categoria);
+  }
+  obtenerMarcaModelo(modelo: ModelosEntity): Observable<Marcas> {
+    return this.http.post<Marcas>(`${environment.apiUrl}marcas/ObtenerMarcaModelo`, modelo);
   }
   obtenerMarcasProveedor(proveedor: ProveedoresEntity): Observable<Marcas> {
     return this.http.post<Marcas>(`${environment.apiUrl}marcas/ObtenerMarcasProveedor`, proveedor);

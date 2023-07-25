@@ -104,13 +104,28 @@ export class NuevoProductoComponent implements OnInit {
   ngOnInit(): void {
     
     // Obtener Categorías
-    this.httpServiceCategorias.obtenerCategorias().subscribe(res => {
+    const newProveedor: ProveedoresEntity = {
+      id: '',
+      id_fiscal: '',
+      ciudadid: '',
+      correo: '',
+      direccionprov: '',
+      nombre: this.proveedor!,
+      telefono: ''
+    }
+    this.httpServiceCategorias.obtenerCategoriasPro(newProveedor).subscribe(res => {
       if (res.codigoError != "OK") {
-        Swal.fire({
-          icon: 'error',
-          title: 'No se pudo obtener la Sociedad.',
-          text: res.descripcionError,
-          showConfirmButton: false,
+        this.httpServiceCategorias.obtenerCategorias().subscribe(res => {
+          if (res.codigoError != "OK") {
+            Swal.fire({
+              icon: 'error',
+              title: 'No se pudo obtener la Sociedad.',
+              text: res.descripcionError,
+              showConfirmButton: false,
+            });
+          } else {
+            this.lstCategorias = res.lstCategorias;
+          }
         });
       } else {
         this.lstCategorias = res.lstCategorias;
@@ -145,15 +160,7 @@ export class NuevoProductoComponent implements OnInit {
       }
     });
 
-    const newProveedor: ProveedoresEntity = {
-      id: '',
-      id_fiscal: '',
-      ciudadid: '',
-      correo: '',
-      direccionprov: '',
-      nombre: this.proveedor!,
-      telefono: ''
-    }
+    /*
     this.httpServiceMarcas.obtenerMarcasProveedor(newProveedor).subscribe(res => {
       if (res.codigoError != "OK") {
         Swal.fire({
@@ -166,6 +173,7 @@ export class NuevoProductoComponent implements OnInit {
         this.lstMarcas = res.lstMarcas;
       }
     })
+    */
     
   }
 
@@ -270,7 +278,13 @@ export class NuevoProductoComponent implements OnInit {
       this.lstLineas = [];
       this.lstModelos = [];
     } else {
-      this.httpServiceLineas.obtenerLineasCategoriaMarca(this.modelProductForm.value.categoria!, this.modelProductForm.value.marca!).subscribe(res => {
+      const newCategoria: CategoriasEntity = {
+        cod_sap: '',
+        categoria: this.modelProductForm.value.categoria!,
+        etiquetas: '',
+        almacen_id: ''
+      }
+      this.httpServiceLineas.obtenerLineasCategoriaAdm(newCategoria).subscribe(res => {
         if (res.codigoError != "OK") {
           Swal.fire({
             icon: 'error',
@@ -309,7 +323,7 @@ export class NuevoProductoComponent implements OnInit {
         cod_sap: '',
         almacen_id: ''
       }
-      this.httpServiceModelos.obtenerModelosLineasMarcas(this.modelProductForm.value!.linea ?? '', this.modelProductForm.value!.marca ?? '').subscribe((res) => {
+      this.httpServiceModelos.obtenerModelosLineasAdm(linea).subscribe((res) => {
         if (res.codigoError != 'OK') {
           Swal.fire({
             icon: 'error',
@@ -334,27 +348,28 @@ export class NuevoProductoComponent implements OnInit {
 
       // Obtener ID del modelo
       this.selectedModeloProducto = modelo.target.value;
-      const modelonew: ModeloProductosEntity = {
+      const modelonew: ModelosEntity = {
         id: '',
         marca_id: '',
-        marca: '',
-        modelo_id: '',
+        linea_id: '',
         modelo: modelo.target.value,
-        categoria: '',
-        linea: '',
-        color_id: '',
-        color: '',
-        atributo_id: '',
-        atributo: '',
-        genero_id: '',
-        genero: '',
-        modelo_producto: '',
-        cod_sap: '',
-        cod_familia: '',
         etiquetas: '',
-        url_image: ''      
+        cod_sap: ''
       }
-      console.log(modelonew);
+      this.httpServiceMarcas.obtenerMarcaModelo(modelonew).subscribe((res) => {
+        console.log(res);
+        if (res.codigoError != 'OK') {
+          Swal.fire({
+            icon: 'error',
+            title: 'No se pudo obtener Modelos Productos.',
+            text: res.descripcionError,
+            showConfirmButton: false,
+          });
+        } else {
+          this.lstMarcas = res.lstMarcas;
+        }
+      });
+      /*
       this.httpServiceModelosProductos.obtenerModeloProductosModelosAdm(modelonew).subscribe((res) => {
         console.log(res);
         if (res.codigoError != 'OK') {
@@ -369,6 +384,7 @@ export class NuevoProductoComponent implements OnInit {
           console.log(this.lstModeloProductos)
         }
       });
+      */
     }
   }
 
