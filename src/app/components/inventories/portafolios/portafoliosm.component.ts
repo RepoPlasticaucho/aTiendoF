@@ -49,8 +49,10 @@ export class PortafoliosComponentM implements OnInit {
       } else {
         this.lstPortafoliosm = res.lstPortafolios;
         this.dtTrigger.next('');
+        console.log(res);
         this.Portafolios()
       }
+      /*
       Swal.fire({
         icon: 'info',
         title: 'Carga Masiva realizada con EXITO.',
@@ -59,7 +61,7 @@ export class PortafoliosComponentM implements OnInit {
         confirmButtonText: "Ok"
       }).finally(() => {
         this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['productos'] } }]);
-      })   
+      })*/   
     });
   }
 
@@ -87,7 +89,7 @@ export class PortafoliosComponentM implements OnInit {
         color: '',
         etiquetas : valor.materialnombre
       }
-      
+      console.log(valor);
       this.httpService.obtenerPortafoliosInventarios(inventario).subscribe(res => {
         if (res.codigoError != "OK") {
           const inventarionew : InventariosEntity={
@@ -111,6 +113,7 @@ export class PortafoliosComponentM implements OnInit {
             color: '',
             costo: valor.costo,
             pvp1 : valor.pvp1,
+            pvp2 : valor.pvp1,
             pvp_sugerido: valor.pvp_sugerido,
             cod_principal : '',
             cod_secundario : '',
@@ -148,12 +151,12 @@ export class PortafoliosComponentM implements OnInit {
               producto_id: valor.materialid,
               almacen_id: valor.almacenid,
               almacen: '',
-              stock: (parseInt (value.stock!) + parseInt (value.stock!)).toString(),
+              stock: (parseInt (value.stock!) + parseInt (valor.stock!)).toString(),
               stock_optimo: '',
               fav: '',
               color: '',
               costo: valor.costo,
-              pvp1 : valor.pvp1,
+              pvp2 : valor.pvp1,
               pvp_sugerido: valor.pvp_sugerido,
               cod_principal : '',
               cod_secundario : '',
