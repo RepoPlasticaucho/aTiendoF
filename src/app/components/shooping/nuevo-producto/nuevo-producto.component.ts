@@ -21,6 +21,8 @@ import { ProveedoresEntity } from 'src/app/models/proveedores';
 import { ProveedoresService } from 'src/app/services/proveedores.service';
 import { TarifasEntity } from 'src/app/models/tarifas';
 import { TarifasService } from 'src/app/services/tarifas.service';
+import { ProveedoresProductosEntity } from 'src/app/models/proveedoresproductos';
+import { ProveedoresproductosService } from 'src/app/services/proveedoresproductos.service';
 
 
 @Component({
@@ -76,6 +78,7 @@ export class NuevoProductoComponent implements OnInit {
   //Variables para validar selección
   selectModeloProducto: boolean = false;
   selectedModeloProducto: string | undefined = '' ;
+  selectedModeloProducto2: string | undefined = '' ;
  
   //Variables para Autocomplete
   keywordModelProduct = 'modelo_producto';
@@ -94,6 +97,7 @@ export class NuevoProductoComponent implements OnInit {
     private readonly httpServiceCategorias: CategoriasService,
     private readonly httpServiceLineas: LineasService,
     private readonly httpServiceTarifas: TarifasService,
+    private readonly httpServiceProveedoresProd: ProveedoresproductosService,
     private readonly httpServiceProv: ProveedoresService,
     private dialogRef: MatDialogRef<MenucomprComponent>,
     private router: Router
@@ -218,7 +222,49 @@ export class NuevoProductoComponent implements OnInit {
           categoria: '',
           linea: ''
         };
-        console.log(productEntity);
+        this.httpService.obtenerProductosNomEti(productEntity).subscribe(res => {
+          if (res.codigoError == "OK") {
+            const newProdProv: ProveedoresProductosEntity = {
+              id: '',
+              provedor_id: localStorage.getItem('proveedorid')!,
+              producto_id: res.lstProductos[0].id,
+              nombre_producto: this.modelProductForm.value!.producto ?? "",
+              precio: this.modelProductForm.value!.precio ?? "",
+              created_at: '',
+              updated_at: ''
+            }
+            this.httpServiceProveedoresProd.agregarProductosProv(newProdProv).subscribe(res1 => {
+              if (res.codigoError == "OK") {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Guardado Exitosamente.',
+                  text: `Se ha creado el Producto ${this.modelProductForm.value.producto}`,
+                  showConfirmButton: true,
+                  confirmButtonText: "Ok"
+                })
+                this.cerrarDialog();
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Ha ocurrido un error.',
+                  text: res.descripcionError,
+                  showConfirmButton: false,
+                });
+              }
+            });
+            
+          } else if (res.codigoError == 'NEXISTE'){
+            
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Ha ocurrido un error.',
+              text: res.descripcionError,
+              showConfirmButton: false,
+            });
+          }
+        })
+        /*
         this.httpService.agregarProducto(productEntity).subscribe(res => {
           if (res.codigoError == "OK") {
             Swal.fire({
@@ -238,6 +284,7 @@ export class NuevoProductoComponent implements OnInit {
             });
           }
         })
+        */
       }
     }
   }
@@ -254,6 +301,7 @@ export class NuevoProductoComponent implements OnInit {
   selectEventModel(item: ModeloProductosEntity) {
     this.selectModeloProducto = false;
     this.selectedModeloProducto = item.modelo_producto;
+    this.selectedModeloProducto2 = item.modelo_producto;
     this.modelProductForm.controls['modeloproducto_id'].setValue(item.id!);
 
   }
@@ -323,6 +371,20 @@ export class NuevoProductoComponent implements OnInit {
         cod_sap: '',
         almacen_id: ''
       }
+      this.httpServiceMarcas.obtenerMarcaLinea(linea).subscribe((res) => {
+        if (res.codigoError != 'OK') {
+          Swal.fire({
+            icon: 'error',
+            title: 'No se pudo obtener los Modelos.',
+            text: res.descripcionError,
+            showConfirmButton: false,
+          });
+          this.lstMarcas = [];
+        } else {
+          this.lstMarcas = res.lstMarcas;
+        }
+      });
+      /*
       this.httpServiceModelos.obtenerModelosLineasAdm(linea).subscribe((res) => {
         if (res.codigoError != 'OK') {
           Swal.fire({
@@ -336,6 +398,7 @@ export class NuevoProductoComponent implements OnInit {
           this.lstModelos = res.lstModelos;
         }
       });
+      */
     }
   }
 
@@ -348,6 +411,7 @@ export class NuevoProductoComponent implements OnInit {
 
       // Obtener ID del modelo
       this.selectedModeloProducto = modelo.target.value;
+      this.selectedModeloProducto2 = modelo.target.value;
       const modelonew: ModelosEntity = {
         id: '',
         marca_id: '',
@@ -356,8 +420,7 @@ export class NuevoProductoComponent implements OnInit {
         etiquetas: '',
         cod_sap: ''
       }
-      this.httpServiceMarcas.obtenerMarcaModelo(modelonew).subscribe((res) => {
-        console.log(res);
+      this.httpServiceModelosProductos.obtenerModeloProductosModelosAdm2(modelonew).subscribe((res) => {
         if (res.codigoError != 'OK') {
           Swal.fire({
             icon: 'error',
@@ -366,7 +429,7 @@ export class NuevoProductoComponent implements OnInit {
             showConfirmButton: false,
           });
         } else {
-          this.lstMarcas = res.lstMarcas;
+          this.lstModeloProductos = res.lstModelo_Productos;
         }
       });
       /*
@@ -428,13 +491,8 @@ export class NuevoProductoComponent implements OnInit {
       this.selectMarca = true;
     } else {
       this.selectMarca = false;
-      const marcaNew: MarcasEntity = {
-        id: '',
-        marca: marca.target.value,
-        etiquetas: '',
-        url_image: ''
-      }
-      this.httpServiceCategorias.obtenerCategoriaMarca(marcaNew).subscribe((res1) => {
+
+      this.httpServiceModelos.obtenerModelosLineasMarcas(this.modelProductForm.value.linea!, marca.target.value).subscribe((res1) => {
         if (res1.codigoError != 'OK') {
           Swal.fire({
             icon: 'error',
@@ -442,9 +500,9 @@ export class NuevoProductoComponent implements OnInit {
             text: res1.descripcionError,
             showConfirmButton: false,
           });
-          this.lstCategorias = [];
+          this.lstModelos = [];
         } else {
-          this.lstCategorias = res1.lstCategorias;
+          this.lstModelos = res1.lstModelos;
         }
       });
       
