@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { ProveedoresEntity, Proveedores } from '../models/proveedores';
 import { SociedadesEntity } from '../models/sociedades';
+import { AlmacenesEntity } from '../models/almacenes';
 
 const initProv: ProveedoresEntity = {
   id: '',
