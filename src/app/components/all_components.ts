@@ -93,4 +93,5 @@ export { ProveedoresComponent } from './providers/proveedores/proveedores.compon
 export { ProveedoresCreateComponent } from './providers/proveedores-create/proveedores-create.component';
 export { ProveedoresEditComponent } from './providers/proveedores-edit/proveedores-edit.component';
 export { MovimientosComponent } from './movements/movimientos/movimientos.component';
-export { CashBalancingComponent } from './cash-balancing/cash-balancing.component'
+export { CashBalancingComponent } from './cash-balancing/cash-balancing.component';
+export { VerCompraComponent } from './shooping/ver-compra/ver-compra.component';

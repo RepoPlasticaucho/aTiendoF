@@ -1,0 +1,146 @@
+/* Estilos generales */
+.invoice-header {
+    background-color: #f1f1f1;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .invoice-info {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .info-item {
+    width: 33%;
+    padding: 10px;
+  }
+  
+  .invoice-details {
+    border: 1px solid #ccc;
+    padding: 40px;
+    margin-bottom: 20px;
+    overflow-x: auto
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  th, td {
+    padding: 8px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .invoice-total {
+    text-align: right;
+    margin-top: 20px;
+  }
+  
+  /* Estilos específicos de la factura electrónica en Ecuador */
+  .company-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .company-details {
+    margin-left: 20px;
+  }
+  
+  h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
+  
+  p {
+    margin: 5px 0;
+  }
+  
+  img {
+    max-width: 100px;
+    max-height: 100px;
+  }
+  
+  /* Otros estilos personalizados */
+  
+.card-body {
+  overflow-x: auto
+}
+
+.icon-container {
+    position: relative;
+  }
+  
+  .icono-input {
+    position: absolute;
+    top: 0;
+    right: 250px;
+  }
+  
+  .label-input {
+    position: absolute;
+    top: 10px;
+    right: 170px;
+    font-size: 20px;
+  }
+  
+  .resultado-input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 150px;
+    height: 35px;
+    text-align: center;
+    /* Estilos adicionales para el input del resultado */
+  }
+
+  .cool-input {
+    width: 100px; /* Ajusta el tamaño de los inputs según tus necesidades */
+  }
+
+  .cool-input2 {
+    width: 100px;
+    height: 40px;
+    margin-left: 20px;
+  }
+
+  .cool-input3 {
+    width: 60px;
+    height: 40px;
+    margin-left: 20px;
+  }
+
+  .boton {
+    width: 100px;
+    height: 40px;
+    margin-left: 20px;
+  }
+
+  .button-container button {
+    margin-bottom: 50px; /* Margen inferior entre los botones */
+  }
+  
+  .button-container {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .cool-label {
+    font-size: 18px;
+    padding: 8px;
+    border-radius: 4px;
+  }
+
+  .custom-input {
+    border: 2px solid rgb(61, 204, 214); /* Cambia el color del borde a rojo */
+  border-radius: 5px; /* Agrega bordes redondeados */
+  }
+
+  

@@ -18,6 +18,7 @@ export interface DetallesMovimientoEntity {
     desc_add?: string;
     cantidad: string;
     costo: string;
+    unidad_medida?: string;
     precio: string;
     url_image?: string;
     created_at?: string;

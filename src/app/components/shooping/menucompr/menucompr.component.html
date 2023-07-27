@@ -104,6 +104,7 @@
                         <th style="width: 10%; ">Precio Uni.</th>
                         <th style="width: 10%; ">Precio</th>
                         <th style="width: 10%; ">Tamaño</th>
+                        <th style="width: 10%; ">Unidad de Medida</th>
                         <th style="width: 10%; ">Color</th>
                         <th style="width: 20%; "></th>
                     </tr>
@@ -129,6 +130,7 @@
                         </td>
                         <td>{{detalleMovimientos.precio}}</td>
                         <td>{{detalleMovimientos.tamanio}}</td>
+                        <td>{{detalleMovimientos.unidad_medida}}</td>
                         <td>{{detalleMovimientos.color}}</td>
                         <td style="text-align: center;">
                             <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
@@ -150,15 +152,43 @@
             </table>
             <br>
             <div class="icon-container">
+                <label for="total" class="label-input" style="font-size: 16px;">SUBTOTALES:</label>
+            </div>
+            <br><br>
+            <div class="icon-container">
+                <label for="total" class="label-input" style="font-size: 14px;">SUBTOTAL :</label>
+                <input type="text" [value]="calcularSubtotal() | number:'1.2-2'" class="cool-input resultado-input"
+                    readonly>
+            </div>
+            <br><br>
+            <div class="icon-container">
+                <label for="total" class="label-input" style="font-size: 14px;">SUBTOTAL IVA 12% :</label>
+                <input type="text" [value]="calcularTotalTarifa12() | number:'1.2-2'" class="cool-input resultado-input"
+                    readonly>
+            </div>
+            <br><br>
+            <div class="icon-container">
+                <label for="total" class="label-input" style="font-size: 14px;">SUBTOTAL IVA 0% :</label>
+                <input type="text" [value]="calcularTotalTarifa0() | number:'1.2-2'" class="cool-input resultado-input"
+                    readonly>
+            </div>
+            <br><br>
+            <div class="icon-container">
+                <label for="total" class="label-input" style="font-size: 14px;">IVA 12% :</label>
+                <input type="text" [value]="calcularIva12() | number:'1.2-2'" class="cool-input resultado-input" readonly>
+            </div>
+            <br><br>
+            <div class="icon-container">
                 <fa-icon [icon]="faMoneyBillAlt" [size]="'3x'" style="color: #6aaf42" class="icono-input"></fa-icon>
                 <label for="total" class="label-input">TOTAL:</label>
                 <input type="text" [(ngModel)]="sumaTotal" class="cool-input resultado-input" readonly>
             </div>
             <br><br><br>
+            <br><br><br>
             <div class="button-container">
                 <button class="btn btn-primary" [disabled]="lstDetalleMovimientos.length == 0"
                     (click)="finalizarPedido()">
-                    <span style="color: white"> Finalizar Compra </span>
+                    <span style="color: white"> Continuar </span>
                 </button>
             </div>
         </div>

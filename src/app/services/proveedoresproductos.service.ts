@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
-import { ProveedoresProductosEntity } from '../models/proveedoresproductos';
+import { ProveedoresProductos, ProveedoresProductosEntity } from '../models/proveedoresproductos';
 
 const initProvProd: ProveedoresProductosEntity = {
   id: '',
@@ -11,7 +11,13 @@ const initProvProd: ProveedoresProductosEntity = {
   nombre_producto: '',
   precio: '',
   created_at: '',
-  updated_at: ''
+  updated_at: '',
+  descripcion_uni: '',
+  tamanio: '',
+  unidad_medida: '',
+  marca: '',
+  etiquetas: '',
+  cantidad: ''
 }
 
 @Injectable({
@@ -30,7 +36,10 @@ export class ProveedoresproductosService {
     this.proveedorProducto$ = new BehaviorSubject<ProveedoresProductosEntity>(initProvProd);
     this.proveedorProducto$.next(proveedorProducto);
   }
-  agregarProductosProv(proveedorProducto: ProveedoresProductosEntity): Observable<ProveedoresProductosEntity> {
-    return this.http.post<ProveedoresProductosEntity>(`${environment.apiUrl}proveedoresproductos/AgregarProductosProv`, proveedorProducto);
+  agregarProductosProv(proveedorProducto: ProveedoresProductosEntity): Observable<ProveedoresProductos> {
+    return this.http.post<ProveedoresProductos>(`${environment.apiUrl}proveedoresproductos/AgregarProductosProv`, proveedorProducto);
+  }
+  obtenerProveedoresProductosProv(proveedorProducto: ProveedoresProductosEntity): Observable<ProveedoresProductos> {
+    return this.http.post<ProveedoresProductos>(`${environment.apiUrl}proveedoresproductos/ObtenerProveedoresProductosProv`,proveedorProducto);
   }
 }

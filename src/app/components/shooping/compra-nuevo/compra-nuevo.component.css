@@ -28,7 +28,7 @@
   }
 
   .cool-input {
-    width: 100px; /* Ajusta el tamaño de los inputs según tus necesidades */
+    width: 50px; /* Ajusta el tamaño de los inputs según tus necesidades */
   }
 
   .dialog-content {
@@ -43,7 +43,7 @@
 
   .table-container {
     max-height: 400px; /* Ajusta este valor según tus necesidades */
-    max-width: 750px;
+    max-width: 4000px;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -107,9 +107,10 @@ font-size: 14px;
 }
 
 .table-container {
-  max-height: 500px; /* Ajusta este valor según tus necesidades */
-  max-width: 900px;
+  max-height: 450px; /* Ajusta este valor según tus necesidades */
+  max-width: 4000px;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* Estilos personalizados para el scrollbar */

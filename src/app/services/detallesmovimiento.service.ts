@@ -21,6 +21,7 @@ const initDetail: DetallesMovimientoEntity = {
   color: '',
   modelo_producto_nombre: '',
   tamanio: '',
+  unidad_medida: '',
   url_image: '',
   created_at: '',
   tipo_movimiento: ''

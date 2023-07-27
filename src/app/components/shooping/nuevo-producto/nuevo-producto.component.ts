@@ -23,6 +23,7 @@ import { TarifasEntity } from 'src/app/models/tarifas';
 import { TarifasService } from 'src/app/services/tarifas.service';
 import { ProveedoresProductosEntity } from 'src/app/models/proveedoresproductos';
 import { ProveedoresproductosService } from 'src/app/services/proveedoresproductos.service';
+import { finalize } from 'rxjs';
 
 
 @Component({
@@ -79,10 +80,10 @@ export class NuevoProductoComponent implements OnInit {
   selectModeloProducto: boolean = false;
   selectedModeloProducto: string | undefined = '' ;
   selectedModeloProducto2: string | undefined = '' ;
+  tamanio: string | undefined = '' ;
  
   //Variables para Autocomplete
   keywordModelProduct = 'modelo_producto';
-
 
   // modelo: string = '';
   // linea: string = '';
@@ -102,8 +103,6 @@ export class NuevoProductoComponent implements OnInit {
     private dialogRef: MatDialogRef<MenucomprComponent>,
     private router: Router
   ) {}
-
- 
 
   ngOnInit(): void {
     
@@ -234,11 +233,11 @@ export class NuevoProductoComponent implements OnInit {
               updated_at: ''
             }
             this.httpServiceProveedoresProd.agregarProductosProv(newProdProv).subscribe(res1 => {
-              if (res.codigoError == "OK") {
+              if (res1.codigoError == "OK") {
                 Swal.fire({
-                  icon: 'success',
-                  title: 'Guardado Exitosamente.',
-                  text: `Se ha creado el Producto ${this.modelProductForm.value.producto}`,
+                  icon: 'info',
+                  title: 'Información.',
+                  text: `El Producto ${this.modelProductForm.value.producto} existe`,
                   showConfirmButton: true,
                   confirmButtonText: "Ok"
                 })
@@ -254,7 +253,58 @@ export class NuevoProductoComponent implements OnInit {
             });
             
           } else if (res.codigoError == 'NEXISTE'){
-            
+            this.httpService.agregarProducto(productEntity).pipe(finalize(() => {
+              this.httpService.obtenerProductosNomEti(productEntity).subscribe(res2 => {
+                if(res2.codigoError == "OK"){
+                  const newProdProv: ProveedoresProductosEntity = {
+                    id: '',
+                    provedor_id: localStorage.getItem('proveedorid')!,
+                    producto_id: res2.lstProductos[0].id,
+                    nombre_producto: this.modelProductForm.value!.producto ?? "",
+                    precio: this.modelProductForm.value!.precio ?? "",
+                    created_at: '',
+                    updated_at: ''
+                  }
+                  this.httpServiceProveedoresProd.agregarProductosProv(newProdProv).subscribe(res3 => {
+                    if (res3.codigoError == "OK") {
+                      Swal.fire({
+                        icon: 'success',
+                        title: 'Guardado Exitosamente.',
+                        text: `Se ha creado el Producto ${this.modelProductForm.value.producto}`,
+                        showConfirmButton: true,
+                        confirmButtonText: "Ok"
+                      })
+                      this.cerrarDialog();
+                    } else {
+                      Swal.fire({
+                        icon: 'error',
+                        title: 'Ha ocurrido un error.',
+                        text: res.descripcionError,
+                        showConfirmButton: false,
+                      });
+                    }
+                  });
+                }else{
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Ha ocurrido un error.',
+                    text: res.descripcionError,
+                    showConfirmButton: false,
+                  });
+                }
+              });
+            })
+            ).subscribe(res4 => {
+              if (res4.codigoError != 'OK') {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Ha ocurrido un error.',
+                  text: res4.descripcionError,
+                  showConfirmButton: false
+                });
+              } else {
+              }
+            });
           } else {
             Swal.fire({
               icon: 'error',
@@ -484,6 +534,10 @@ export class NuevoProductoComponent implements OnInit {
         }
       });
     }
+  }
+
+  tamanioInp(){
+    this.selectedModeloProducto2 = this.selectedModeloProducto?.concat(' ' + this.tamanio!);
   }
 
   changeMark(marca: any): void {

@@ -203,12 +203,12 @@ export class MenucomprComponent implements OnInit {
 
   verCarrito() {
     const dialogRef = this.dialog.open(CompraNuevoComponent, {
-      width: '900px',
-      height: '725px'
+      width: '3500px',
+      height: '600px'
       // Agrega cualquier configuración adicional del modal aquí
     });
 
-    dialogRef.componentInstance.productoAgregado.subscribe((producto: any) => {
+    dialogRef.componentInstance.productoAgregado.subscribe((proveedorProducto: any) => {
       // Actualizar la tabla
       this.cargarTablaMenucompr();
       this.checkRegistros();
@@ -265,11 +265,56 @@ export class MenucomprComponent implements OnInit {
 
 
   calcularSumaTotal() {
-    const suma = this.lstDetalleMovimientos.reduce((total, detalleMovimientos) => {
-      return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
-    }, 0);
+    const totalTarifa12 = this.calcularTotalTarifa12();
+    const totalTarifa0 = this.calcularTotalTarifa0();
 
-    this.sumaTotal = suma.toLocaleString(undefined, { minimumFractionDigits: 2 }).replace('.', ',');
+    const suma = totalTarifa12 + totalTarifa0;
+
+    this.sumaTotal = suma
+      .toLocaleString(undefined, { minimumFractionDigits: 2 })
+      .replace('.', ',');
+  }
+  
+  calcularTotalTarifa0(): number {
+    const totalTarifa0 = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '0%')
+      .reduce((total, detalleMovimientos) => {
+        return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
+      }, 0);
+
+    return totalTarifa0;
+  }
+
+  calcularSubtotal(): number {
+    const subtotal = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa)
+      .reduce((total, detalleMovimientos) => {
+        return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
+      }, 0);
+
+    return subtotal;
+  }
+
+  calcularTotalTarifa12(): number {
+    const totalTarifa12 = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
+      .reduce((total, detalleMovimientos) => {
+        return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
+      }, 0);
+    const porcen = totalTarifa12 * 0.12;
+
+    return totalTarifa12 + porcen;
+  }
+
+  calcularIva12(): number {
+    const totalTarifa12 = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
+      .reduce((total, detalleMovimientos) => {
+        return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
+      }, 0);
+    const porcen = totalTarifa12 * 0.12;
+
+    return porcen;
   }
 
   eliminarDetalle(detalle: DetallesMovimientoEntity): void {
@@ -400,6 +445,7 @@ export class MenucomprComponent implements OnInit {
 
   finalizarPedido() {
     this.fechaFormateada = this.datePipe.transform(this.fechaSeleccionada, 'yyyy-MM-dd');
+    localStorage.setItem('compventa', this.comprobante);
     Swal.fire({
       title: '¿Estás seguro de terminar la compra?',
       showDenyButton: true,
@@ -431,7 +477,7 @@ export class MenucomprComponent implements OnInit {
             confirmButtonText: "Ok"
           }).finally(() => {
             // this.groupForm.reset();
-            this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ver-factura'] } }]);
+            this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ver-compra'] } }]);
           });
         });
       } else if (result.isDenied) {

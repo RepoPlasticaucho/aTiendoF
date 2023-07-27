@@ -12,4 +12,10 @@ export interface ProveedoresProductosEntity {
     precio: string;
     created_at: string;
     updated_at: string;
+    tamanio?: string;
+    unidad_medida?: string;
+    descripcion_uni?: string;
+    marca?: string;
+    cantidad?: string;
+    etiquetas?: string;
 }

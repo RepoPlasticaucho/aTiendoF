@@ -1,4 +1,4 @@
-<div style="max-width: 95%; margin: auto">
+<div style="max-width: 100%; margin: auto;">
     <div class="dialog-content">
         <div class="btn-cerrar">
             <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip"
@@ -12,23 +12,31 @@
             <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                 <thead style="color: #636363;">
                     <tr>
-                        <th style="width: 20%; ">PRODUCTO</th>
-                        <th style="width: 20%; ">NOMBRE</th>
-                        <th style="width: 20%; ">CANTIDAD</th>
-                        <th style="width: 20%; ">PVP</th>
-                        <th style="width: 20%; "></th>
+                        <th style="width: 10%; ">CÓDIGO</th>
+                        <th style="width: 10%; ">PRODUCTO</th>
+                        <th style="width: 10%; ">ETIQUETAS</th>
+                        <th style="width: 10%; ">TAMAÑO</th>
+                        <th style="width: 10%; ">U. MEDIDA</th>
+                        <th style="width: 10%; ">TARIFA</th>
+                        <th style="width: 10%; ">CANTIDAD</th>
+                        <th style="width: 10%; ">PRECIO</th>
+                        <th style="width: 40%; "></th>
                     </tr>
                 </thead>
                 <tbody style="color: #767695;">
-                    <tr *ngFor="let producto of lstProductos" class="table-row">
-                        <td>{{producto.id}}</td>
-                        <td>{{producto.nombre}}</td>
+                    <tr *ngFor="let proveedorProducto of lstProveedoresProductos" class="table-row">
+                        <td>{{proveedorProducto.producto_id}}</td>
+                        <td>{{proveedorProducto.nombre_producto}}</td>
+                        <td>{{proveedorProducto.etiquetas}}</td>
+                        <td>{{proveedorProducto.tamanio}}</td>
+                        <td>{{proveedorProducto.unidad_medida}}</td>
+                        <td>{{proveedorProducto.descripcion_uni}}</td>
                         <td>
-                            <input class="cool-input" (input)="onInput($event)" *ngIf="true" type="text" [(ngModel)]="producto.cantidad" />
+                            <input class="cool-input" (input)="onInput($event)" *ngIf="true" type="text" [(ngModel)]="proveedorProducto.cantidad" />
                         </td>
-                        <td>{{producto.pvp}}</td>
+                        <td>{{proveedorProducto.precio}}</td>
                         <td style="text-align: center;">
-                            <a class="btn button" (click)=" crearDetalle(producto)"
+                            <a class="btn button" (click)=" crearDetalle(proveedorProducto)"
                                 style="border-radius: 5px; 
                                        background: rgb(49,99,173,0.8); 
                                        font-size: 15px; width:120px; 

@@ -12,6 +12,8 @@ import { ProducAdmEntity } from 'src/app/models/productadm';
 import { ProveedoresEntity } from 'src/app/models/proveedores';
 import { InventariosEntity } from 'src/app/models/inventarios';
 import { InventariosService } from 'src/app/services/inventarios.service';
+import { ProveedoresproductosService } from 'src/app/services/proveedoresproductos.service';
+import { ProveedoresProductosEntity } from 'src/app/models/proveedoresproductos';
 
 @Component({
   selector: 'app-compra-nuevo',
@@ -27,7 +29,7 @@ export class CompraNuevoComponent implements OnInit {
   // Nueva propiedad para las tarjetas de la página actual
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
-  lstProductos: ProducAdmEntity[] = [];
+  lstProveedoresProductos: ProveedoresProductosEntity[] = [];
 
   costo: any;
   precio: any;
@@ -36,6 +38,7 @@ export class CompraNuevoComponent implements OnInit {
 
   constructor(
     private readonly httpServiceProductos: ProductosAdminService,
+    private readonly httpServiceProvProd: ProveedoresproductosService,
     private readonly httpServiceDetalle: DetallesmovimientoService,
     private readonly httpServiceInventario: InventariosService,
     private router: Router,
@@ -55,14 +58,14 @@ export class CompraNuevoComponent implements OnInit {
       responsive: true
     }
 
-    const newProveedor: ProveedoresEntity = {
-      id: localStorage.getItem('proveedorid')!,
-      id_fiscal: '',
-      ciudadid: '',
-      correo: '',
-      direccionprov: '',
-      nombre: '',
-      telefono: ''
+    const newProveedor: ProveedoresProductosEntity = {
+      id: '',
+      provedor_id: localStorage.getItem('proveedorid')!,
+      producto_id: '',
+      nombre_producto: '',
+      precio: '',
+      created_at: '',
+      updated_at: ''
     }
 
     Swal.fire({
@@ -71,7 +74,7 @@ export class CompraNuevoComponent implements OnInit {
       timer: 30000,
       didOpen: () => {
         Swal.showLoading();
-        this.httpServiceProductos.obtenerProductosProveedor(newProveedor).subscribe((res1) => {
+        this.httpServiceProvProd.obtenerProveedoresProductosProv(newProveedor).subscribe((res1) => {
           if (res1.codigoError != 'OK') {
             Swal.fire({
               icon: 'error',
@@ -80,7 +83,7 @@ export class CompraNuevoComponent implements OnInit {
               showConfirmButton: false,
             });
           } else {
-            this.lstProductos = res1.lstProductos;
+            this.lstProveedoresProductos = res1.lstProveedoresProductos;
             this.dtTrigger.next('');
             Swal.close();
           }
@@ -98,10 +101,11 @@ export class CompraNuevoComponent implements OnInit {
   }
 
 
-  crearDetalle(producto: ProducAdmEntity): void {
-    this.httpServiceProductos.asignarProducto(producto);
-    this.httpServiceProductos.obtenerproducto$.pipe(take(1)).subscribe((res) => {
-      if (res.id == '') {
+  crearDetalle(proveedorProducto: ProveedoresProductosEntity): void {
+    this.httpServiceProvProd.asignarProveedorProducto(proveedorProducto);
+    this.httpServiceProvProd.obtenerProveedorProducto$.pipe(take(1)).subscribe((res) => {
+      console.log(res)
+      if (res.producto_id == '') {
         Swal.fire({
           icon: 'error',
           title: 'Ha ocurrido un error.',
@@ -115,8 +119,8 @@ export class CompraNuevoComponent implements OnInit {
         });
       } else {
         //Asignamos los valores a los campos
-        this.costo = res.pvp;
-        this.precio = parseFloat(res.pvp!) * parseFloat(producto.cantidad!);
+        this.costo = res.precio;
+        this.precio = parseFloat(res.precio!) * parseFloat(proveedorProducto.cantidad!);
 
         const newInventario: InventariosEntity = {
           categoria_id: '',
@@ -129,14 +133,15 @@ export class CompraNuevoComponent implements OnInit {
           idProducto: '',
           Producto: '',
           id: '',
+          etiquetas: res.etiquetas,
           dInventario: '',
-          producto_id: res.id,
+          producto_id: res.producto_id,
           almacen_id: localStorage.getItem('almacenid')!,
           almacen: '',
           stock_optimo: '',
           fav: '0',
           color: '',
-          stock: producto.cantidad!,
+          stock: proveedorProducto.cantidad!,
           pvp2: this.costo
         }
         this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res1 => {
@@ -148,9 +153,9 @@ export class CompraNuevoComponent implements OnInit {
                     id: '',
                     producto_nombre: '',
                     inventario_id: res5.lstInventarios[0].id,
-                    producto_id: res.id,
+                    producto_id: res.producto_id,
                     movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
-                    cantidad: producto.cantidad!,
+                    cantidad: proveedorProducto.cantidad!,
                     costo: this.costo,
                     precio: this.precio
                   }
@@ -170,7 +175,7 @@ export class CompraNuevoComponent implements OnInit {
                         showConfirmButton: true,
                         confirmButtonText: 'Ok',
                       });
-                      this.productoAgregado.emit(producto);
+                      this.productoAgregado.emit(proveedorProducto);
                     }
                   });
                 });
@@ -192,9 +197,9 @@ export class CompraNuevoComponent implements OnInit {
               id: '',
               producto_nombre: '',
               inventario_id: res1.lstInventarios[0].id,
-              producto_id: res.id,
+              producto_id: res.producto_id,
               movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
-              cantidad: producto.cantidad!,
+              cantidad: proveedorProducto.cantidad!,
               costo: this.costo,
               precio: this.precio
             }
@@ -214,7 +219,7 @@ export class CompraNuevoComponent implements OnInit {
                   showConfirmButton: true,
                   confirmButtonText: 'Ok',
                 });
-                this.productoAgregado.emit(producto);
+                this.productoAgregado.emit(proveedorProducto);
               }
             });
           }
