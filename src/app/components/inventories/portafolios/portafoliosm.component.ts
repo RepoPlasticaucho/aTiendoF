@@ -52,7 +52,7 @@ export class PortafoliosComponentM implements OnInit {
         console.log(res);
         this.Portafolios()
       }
-      /*
+      
       Swal.fire({
         icon: 'info',
         title: 'Carga Masiva realizada con EXITO.',
@@ -61,7 +61,7 @@ export class PortafoliosComponentM implements OnInit {
         confirmButtonText: "Ok"
       }).finally(() => {
         this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['productos'] } }]);
-      })*/   
+      })   
     });
   }
 

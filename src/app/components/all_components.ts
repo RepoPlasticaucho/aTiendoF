@@ -95,3 +95,4 @@ export { ProveedoresEditComponent } from './providers/proveedores-edit/proveedor
 export { MovimientosComponent } from './movements/movimientos/movimientos.component';
 export { CashBalancingComponent } from './cash-balancing/cash-balancing.component';
 export { VerCompraComponent } from './shooping/ver-compra/ver-compra.component';
+export { ProductocompraComponent} from './inventories/productocompra/productocompra.component';

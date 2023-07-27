@@ -140,6 +140,7 @@ import { ProveedoresEditComponent } from './components/providers/proveedores-edi
 import { MovimientosComponent } from './components/movements/movimientos/movimientos.component';
 import { CashBalancingComponent } from './components/cash-balancing/cash-balancing.component';
 import { CuadreMovComponent } from './components/cash-balancing/cuadre-mov/cuadre-mov.component';
+import { ProductocompraComponent } from './components/inventories/productocompra/productocompra.component';
 
 @NgModule({
   declarations: [
@@ -256,7 +257,8 @@ import { CuadreMovComponent } from './components/cash-balancing/cuadre-mov/cuadr
     ProveedoresEditComponent,
     MovimientosComponent,
     CashBalancingComponent,
-    CuadreMovComponent
+    CuadreMovComponent,
+    ProductocompraComponent
   ],
   imports: [
     BrowserModule,
