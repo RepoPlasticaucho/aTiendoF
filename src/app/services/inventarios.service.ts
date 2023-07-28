@@ -39,6 +39,7 @@ const initGruop: InventariosEntity = {
   pvp1 : '',
   pvp2 : '',
   pvp_sugerido : '',
+  url_image: '',
   cod_principal : '',
   cod_secundario : ''
 }
