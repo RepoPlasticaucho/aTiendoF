@@ -274,8 +274,8 @@ export class MenuventComponent implements OnInit {
   }
   verCarrito() {
     const dialogRef = this.dialog.open(VerCarritoComponent, {
-      width: '900px',
-      height: '700px',
+      width: '1200px',
+      height: '620px',
       // Agrega cualquier configuración adicional del modal aquí
     });
 

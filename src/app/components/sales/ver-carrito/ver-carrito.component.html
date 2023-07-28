@@ -1,4 +1,4 @@
-<div style="max-width: 95%; margin: auto">
+<div style="max-width: 100%; margin: auto">
     <div class="dialog-content">
         <div class="btn-cerrar">
             <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip"
@@ -12,6 +12,7 @@
             <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                 <thead style="color: #636363;">
                     <tr>
+                        <th style="width: 20%; ">IMAGEN</th>
                         <th style="width: 20%; ">PRODUCTO</th>
                         <th style="width: 20%; ">NOMBRE</th>
                         <th style="width: 20%; ">CANTIDAD</th>
@@ -23,6 +24,9 @@
                 </thead>
                 <tbody style="color: #767695;">
                     <tr *ngFor="let inventario of lstInventarios" class="table-row">
+                        <td style="text-align: center;">
+                            <img src={{inventario.url_image}} alt={{inventario.marca}} class="img-thumbnail" height="100px" width="100px" data-toggle="modal" data-target="#exampleModal">
+                        </td>
                         <td>{{inventario.Producto}}</td>
                         <td>{{inventario.producto_nombre}}</td>
                         <td>

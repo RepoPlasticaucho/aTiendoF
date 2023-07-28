@@ -43,5 +43,6 @@ export interface InventariosEntity {
     cod_principal? : string;
     cod_secundario? : string;  
     unidad_medidad? : string;
+    url_image?: string;
     talla? : string;  
 }

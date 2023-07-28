@@ -42,8 +42,8 @@
   }
 
   .table-container {
-    max-height: 400px; /* Ajusta este valor según tus necesidades */
-    max-width: 750px;
+    max-height: 500px; /* Ajusta este valor según tus necesidades */
+    max-width: 800px;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -107,8 +107,8 @@ font-size: 14px;
 }
 
 .table-container {
-  max-height: 500px; /* Ajusta este valor según tus necesidades */
-  max-width: 900px;
+  max-height: 1200px; /* Ajusta este valor según tus necesidades */
+  max-width: 1200px;
   overflow-y: auto;
   overflow-x: hidden;
 }
