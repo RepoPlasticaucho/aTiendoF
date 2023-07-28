@@ -3,6 +3,7 @@ import { ProductosCompra, ProductosCompraEntity } from "../models/productocompra
 import { BehaviorSubject, Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment.prod";
+import { ProveedoresProductos, ProveedoresProductosEntity } from "../models/proveedoresproductos";
 
 const initGruop: ProductosCompraEntity = {
     id: "",
@@ -38,5 +39,14 @@ const initGruop: ProductosCompraEntity = {
     
     ObtenerProductosCompras(): Observable<ProductosCompra> {
         return this.http.get<ProductosCompra>(`${environment.apiUrl}productocompra/ObtenerProducto_Compra`);
+    }
+    obtenerProductosProveedor(proveedorProducto: ProveedoresProductosEntity): Observable<ProveedoresProductos> {
+      return this.http.post<ProveedoresProductos>(`${environment.apiUrl}proveedoresproductos/ObtenerProductosProveedores`,proveedorProducto);
+    }
+    agregarProductosProveedor(proveedorProducto: ProveedoresProductosEntity): Observable<ProveedoresProductos> {
+      return this.http.post<ProveedoresProductos>(`${environment.apiUrl}proveedoresproductos/AgregarProductosProv`, proveedorProducto);
+    }
+    actualizarProductosProveedor(proveedorProducto: ProveedoresProductosEntity): Observable<ProveedoresProductos> {
+      return this.http.post<ProveedoresProductos>(`${environment.apiUrl}proveedoresproductos/ActualizarProductosProveedores`, proveedorProducto);
     }
 }
