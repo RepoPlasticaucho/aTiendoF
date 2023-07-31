@@ -164,7 +164,7 @@ export class CompraNuevoComponent implements OnInit {
                       Swal.fire({
                         icon: 'error',
                         title: 'Ha ocurrido un error.',
-                        text: res4.descripcionError,
+                        text: 'La cantidad no puede ser vacía',
                         showConfirmButton: false
                       });
                     } else {

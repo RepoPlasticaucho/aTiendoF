@@ -18,9 +18,10 @@
                         <th style="width: 10%; ">TAMAÑO</th>
                         <th style="width: 10%; ">U. MEDIDA</th>
                         <th style="width: 10%; ">TARIFA</th>
+                        <th style="width: 10%; ">COSTO</th>
                         <th style="width: 10%; ">CANTIDAD</th>
                         <th style="width: 10%; ">PRECIO</th>
-                        <th style="width: 40%; "></th>
+                        <th style="width: 10%; "></th>
                     </tr>
                 </thead>
                 <tbody style="color: #767695;">
@@ -31,6 +32,7 @@
                         <td>{{proveedorProducto.tamanio}}</td>
                         <td>{{proveedorProducto.unidad_medida}}</td>
                         <td>{{proveedorProducto.descripcion_uni}}</td>
+                        <td>{{proveedorProducto.costo}}</td>
                         <td>
                             <input class="cool-input" (input)="onInput($event)" *ngIf="true" type="text" [(ngModel)]="proveedorProducto.cantidad" />
                         </td>
@@ -39,9 +41,9 @@
                             <a class="btn button" (click)=" crearDetalle(proveedorProducto)"
                                 style="border-radius: 5px; 
                                        background: rgb(49,99,173,0.8); 
-                                       font-size: 15px; width:120px; 
+                                       font-size: 14px; width:70px; 
                                        height:35px;
-                                       text-align:center; 
+                                       text-align:left; 
                                        margin-top: 10px;
                                        ">
                                 <span style="color:white;">

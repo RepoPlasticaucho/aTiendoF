@@ -10,6 +10,7 @@ export interface ProveedoresProductosEntity {
     producto_id: string;
     nombre_producto: string;
     precio: string;
+    costo?: string;
     created_at: string;
     updated_at: string;
     tamanio?: string;

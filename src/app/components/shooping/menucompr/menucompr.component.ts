@@ -203,7 +203,7 @@ export class MenucomprComponent implements OnInit {
 
   verCarrito() {
     const dialogRef = this.dialog.open(CompraNuevoComponent, {
-      width: '3500px',
+      width: '4000px',
       height: '600px'
       // Agrega cualquier configuración adicional del modal aquí
     });

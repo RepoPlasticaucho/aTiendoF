@@ -16,6 +16,7 @@ const initProvProd: ProveedoresProductosEntity = {
   tamanio: '',
   unidad_medida: '',
   marca: '',
+  costo: '',
   etiquetas: '',
   cantidad: ''
 }

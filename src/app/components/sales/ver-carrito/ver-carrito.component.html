@@ -1,56 +1,57 @@
 <div style="max-width: 100%; margin: auto">
     <div class="dialog-content">
         <div class="btn-cerrar">
-            <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip"
-                data-placement="bottom" title="Regresar a pedidos" (click)="cerrarDialog()">
+            <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip" data-placement="bottom"
+                title="Regresar a pedidos" (click)="cerrarDialog()">
             </fa-icon>
         </div>
     </div>
     <br>
-            <br/><br/>
-            <div class="table-container">
-            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
-                <thead style="color: #636363;">
-                    <tr>
-                        <th style="width: 20%; ">IMAGEN</th>
-                        <th style="width: 20%; ">PRODUCTO</th>
-                        <th style="width: 20%; ">NOMBRE</th>
-                        <th style="width: 20%; ">CANTIDAD</th>
-                        <th style="width: 20%; ">PVP</th>
-                        <th style="width: 20%; ">TARIFA</th>
-                        <th style="width: 20%; ">STOCK ACTUAL</th>
-                        <th style="width: 20%; "></th>
-                    </tr>
-                </thead>
-                <tbody style="color: #767695;">
-                    <tr *ngFor="let inventario of lstInventarios" class="table-row">
-                        <td style="text-align: center;">
-                            <img src={{inventario.url_image}} alt={{inventario.marca}} class="img-thumbnail" height="100px" width="100px" data-toggle="modal" data-target="#exampleModal">
-                        </td>
-                        <td>{{inventario.Producto}}</td>
-                        <td>{{inventario.producto_nombre}}</td>
-                        <td>
-                            <input class="cool-input" (input)="onInput($event)" *ngIf="true" type="text" [(ngModel)]="inventario.cantidad" />
-                        </td>
-                        <td>{{inventario.pvp2}}</td>
-                        <td>{{inventario.tarifa_ice_iva}}</td>
-                        <td>{{ parseInt(inventario.stock! ) | number: '.0-0' }}</td>
-                        <td style="text-align: center;">
-                            <a class="btn button" (click)=" crearDetalle(inventario)"
-                                style="border-radius: 5px; 
+    <br /><br />
+    <div class="table-container">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+            <thead style="color: #636363;">
+                <tr>
+                    <th style="width: 20%; ">IMAGEN</th>
+                    <th style="width: 20%; ">PRODUCTO</th>
+                    <th style="width: 20%; ">NOMBRE</th>
+                    <th style="width: 20%; ">CANTIDAD</th>
+                    <th style="width: 20%; ">PVP</th>
+                    <th style="width: 20%; ">TARIFA</th>
+                    <th style="width: 20%; ">STOCK ACTUAL</th>
+                    <th style="width: 20%; "></th>
+                </tr>
+            </thead>
+            <tbody style="color: #767695;">
+                <tr *ngFor="let inventario of lstInventarios" class="table-row">
+                    <td style="text-align: center;">
+                        <img src={{inventario.url_image}} alt={{inventario.marca}} class="img-thumbnail" height="100px"
+                            width="100px" data-toggle="modal" data-target="#exampleModal">
+                    </td>
+                    <td>{{inventario.Producto}}</td>
+                    <td>{{inventario.producto_nombre}}</td>
+                    <td>
+                        <input class="cool-input" (input)="onInput($event)" *ngIf="true" type="text"
+                            [(ngModel)]="inventario.cantidad" />
+                    </td>
+                    <td>{{inventario.pvp2}}</td>
+                    <td>{{inventario.tarifa_ice_iva}}</td>
+                    <td>{{ parseInt(inventario.stock! ) | number: '.0-0' }}</td>
+                    <td style="text-align: center;">
+                        <a class="btn button" (click)=" crearDetalle(inventario)" style="border-radius: 5px; 
                                        background: rgb(49,99,173,0.8); 
                                        font-size: 15px; width:120px; 
                                        height:35px;
                                        text-align:center; 
                                        margin-top: 10px;
                                        ">
-                                <span style="color:white;">
-                                        AÑADIR
-                                </span>
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+                            <span style="color:white;">
+                                AÑADIR
+                            </span>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
