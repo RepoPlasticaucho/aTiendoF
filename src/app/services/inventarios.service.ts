@@ -134,6 +134,9 @@ export class InventariosService {
   actualizarInventario(inventario: InventariosEntity): Observable<Inventarios> {
     return this.http.post<Inventarios>(`${environment.apiUrl}inventarios/ModificarInventarios`, inventario);
   }
+  actualizarCosto(inventario: InventariosEntity): Observable<Inventarios> {
+    return this.http.post<Inventarios>(`${environment.apiUrl}inventarios/ActualizarCosto`, inventario);
+  }
   eliminarInventarios(inventario: InventariosEntity): Observable<Inventarios> {
     return this.http.post<Inventarios>(`${environment.apiUrl}inventarios/EliminarInventarios`, inventario);
   }

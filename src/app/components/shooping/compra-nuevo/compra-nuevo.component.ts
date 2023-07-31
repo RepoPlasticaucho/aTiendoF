@@ -32,6 +32,9 @@ export class CompraNuevoComponent implements OnInit {
   lstProveedoresProductos: ProveedoresProductosEntity[] = [];
 
   costo: any;
+  costoStatic: any;
+  stockStatic: any;
+  costo2: any;
   precio: any;
 
   productoAgregado: EventEmitter<any> = new EventEmitter<any>();
@@ -55,7 +58,7 @@ export class CompraNuevoComponent implements OnInit {
       searching: true,
       ordering: true,
       info: true,
-      responsive: true
+      responsive: false
     }
 
     const newProveedor: ProveedoresProductosEntity = {
@@ -120,6 +123,7 @@ export class CompraNuevoComponent implements OnInit {
       } else {
         //Asignamos los valores a los campos
         this.costo = res.precio;
+        this.costo2 = res.costo;
         this.precio = parseFloat(res.precio!) * parseFloat(proveedorProducto.cantidad!);
 
         const newInventario: InventariosEntity = {
@@ -140,6 +144,7 @@ export class CompraNuevoComponent implements OnInit {
           almacen: '',
           stock_optimo: '',
           fav: '0',
+          costo: this.costo2,
           color: '',
           stock: proveedorProducto.cantidad!,
           pvp2: this.costo
@@ -193,6 +198,43 @@ export class CompraNuevoComponent implements OnInit {
             });
 
           } else if (res1.codigoError == 'OK') {
+            this.costoStatic = res1.lstInventarios[0].costo;
+            this.stockStatic = res1.lstInventarios[0].stock;
+            const oper1 = parseFloat(res1.lstInventarios[0].costo!) * parseFloat(res1.lstInventarios[0].stock!);
+            const oper2 = parseFloat(proveedorProducto.cantidad!) * parseFloat(proveedorProducto.costo!);
+            const nuevoCosto = (oper1+oper2)/(parseFloat(res1.lstInventarios[0].stock!)+parseFloat(proveedorProducto.cantidad!));
+            const inventarioCosto: InventariosEntity = {
+              categoria_id: '',
+              categoria: '',
+              linea: '',
+              modelo: '',
+              marca_id: '',
+              marca: '',
+              modelo_producto_id: '',
+              idProducto: '',
+              Producto: '',
+              costo: nuevoCosto.toString(),
+              id: res1.lstInventarios[0].id,
+              dInventario: '',
+              producto_id: '',
+              almacen_id: '',
+              almacen: '',
+              stock_optimo: '',
+              fav: '',
+              color: ''
+            }
+            this.httpServiceInventario.actualizarCosto(inventarioCosto).subscribe(resC => {
+              if (resC.codigoError != 'OK') {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Ha ocurrido un error.',
+                  text: resC.descripcionError,
+                  showConfirmButton: false
+                });
+              } else {
+                
+              }
+            });
             const newDetalle: DetallesMovimientoEntity = {
               id: '',
               producto_nombre: '',
@@ -208,7 +250,7 @@ export class CompraNuevoComponent implements OnInit {
                 Swal.fire({
                   icon: 'error',
                   title: 'Ha ocurrido un error.',
-                  text: res3.descripcionError,
+                  text: 'La cantidad no puede ser vacía',
                   showConfirmButton: false
                 });
               } else {

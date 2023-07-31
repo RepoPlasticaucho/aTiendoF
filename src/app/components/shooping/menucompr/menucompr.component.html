@@ -99,6 +99,7 @@
             <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                 <thead style="color: #636363;">
                     <tr>
+                        <th style="width: 10%; ">ID Producto</th>
                         <th style="width: 10%; ">Producto</th>
                         <th style="width: 10%; ">Cantidad</th>
                         <th style="width: 10%; ">Precio Uni.</th>
@@ -111,6 +112,7 @@
                 </thead>
                 <tbody style="color: #767695;">
                     <tr *ngFor="let detalleMovimientos of lstDetalleMovimientos; let i = index">
+                        <td>{{detalleMovimientos.producto_id}}</td>
                         <td>{{detalleMovimientos.producto_nombre}}</td>
                         <td>
                             <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">

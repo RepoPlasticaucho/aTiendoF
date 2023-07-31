@@ -19,6 +19,8 @@ import { DatePipe } from '@angular/common';
 import { NuevoProductoComponent } from '../nuevo-producto/nuevo-producto.component';
 import { AlmacenesEntity } from 'src/app/models/almacenes';
 import { SociedadesEntity } from 'src/app/models/sociedades';
+import { InventariosService } from 'src/app/services/inventarios.service';
+import { InventariosEntity } from 'src/app/models/inventarios';
 
 @Component({
   selector: 'app-menucompr',
@@ -75,6 +77,7 @@ export class MenucomprComponent implements OnInit {
     private readonly httpServiceProv: ProveedoresService,
     private readonly httpServiceMov: MovimientosService,
     private readonly httpServiceSus: SustentosTributariosService,
+    private readonly httpServiceInv: InventariosService,
     private datePipe: DatePipe,
     private router: Router) { }
 
@@ -326,6 +329,40 @@ export class MenucomprComponent implements OnInit {
       denyButtonText: 'No',
     }).then((result) => {
       if (result.isConfirmed) {
+        /*
+        const newInventarioCos: InventariosEntity = {
+          categoria_id: '',
+          categoria: '',
+          linea: '',
+          modelo: '',
+          marca_id: '',
+          marca: '',
+          modelo_producto_id: '',
+          idProducto: '',
+          costo: '',
+          Producto: '',
+          id: '',
+          dInventario: '',
+          producto_id: '',
+          almacen_id: '',
+          almacen: '',
+          stock_optimo: '',
+          fav: '',
+          color: ''
+        }
+        this.httpServiceInv.actualizarCosto(newInventarioCos).subscribe(res2 => {
+          if (res2.codigoError == 'OK') {
+            
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Ha ocurrido un error.',
+              text: res2.descripcionError,
+              showConfirmButton: false,
+            });
+          }
+        });
+        */
         this.httpService.eliminarDetalleCompra(detalle).subscribe(res => {
           if (res.codigoError == 'OK') {
             Swal.fire({
@@ -360,8 +397,7 @@ export class MenucomprComponent implements OnInit {
   aplicarCambiosDetalle(index: number): void {
     //this.guardarDetalleMovimiento();
     if (this.detalleEditIndex >= 0 && this.detalleEditBackup) {
-      // Realizar lógica de guardado o actualización del detalle en tu servicio
-      // Por ejemplo:
+      // Realizar lógica de guardado o actualización del detalle en el servicio
       this.httpService.modificarDetalleCompra(this.lstDetalleMovimientos[this.detalleEditIndex]).subscribe(res => {
         if (res.codigoError == 'OK') {
           Swal.fire({

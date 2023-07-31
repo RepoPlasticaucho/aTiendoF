@@ -17,6 +17,7 @@
                     <th style="width: 20%; ">NOMBRE</th>
                     <th style="width: 20%; ">CANTIDAD</th>
                     <th style="width: 20%; ">PVP</th>
+                    <th style="width: 20%; ">COSTO</th>
                     <th style="width: 20%; ">TARIFA</th>
                     <th style="width: 20%; ">STOCK ACTUAL</th>
                     <th style="width: 20%; "></th>
@@ -35,6 +36,7 @@
                             [(ngModel)]="inventario.cantidad" />
                     </td>
                     <td>{{inventario.pvp2}}</td>
+                    <td>{{inventario.costo}}</td>
                     <td>{{inventario.tarifa_ice_iva}}</td>
                     <td>{{ parseInt(inventario.stock! ) | number: '.0-0' }}</td>
                     <td style="text-align: center;">
