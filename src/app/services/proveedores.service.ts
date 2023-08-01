@@ -14,7 +14,8 @@ const initProv: ProveedoresEntity = {
   correo: '',
   direccionprov: '',
   nombre: '',
-  telefono: ''
+  telefono: '',
+  nombre_sociedad: ''
 }
 
 @Injectable({
@@ -48,6 +49,9 @@ export class ProveedoresService {
   }
   obtenerProveedoresN(proveedor: ProveedoresEntity): Observable<Proveedores> {
     return this.http.post<Proveedores>(`${environment.apiUrl}proveedores/ObtenerProveedoresN`, proveedor);
+  }
+  obtenerProveedoresID(proveedor: ProveedoresEntity): Observable<Proveedores> {
+    return this.http.post<Proveedores>(`${environment.apiUrl}proveedores/ObtenerProveedoresID`, proveedor);
   }
   agregarProveedores(proveedor: ProveedoresEntity): Observable<Proveedores> {
     return this.http.post<Proveedores>(`${environment.apiUrl}proveedores/InsertarProveedores`, proveedor);

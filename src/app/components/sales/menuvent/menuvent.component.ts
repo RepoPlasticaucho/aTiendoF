@@ -202,7 +202,7 @@ export class MenuventComponent implements OnInit {
       this.correo = 'CONSUMIDOR FINAL';
       this.telefono = 'CONSUMIDOR FINAL';
       this.direccion = 'CONSUMIDOR FINAL';
-      this.ciudad = 'CONSUMIDOR FINAL';
+      this.ciudad = 'Ambato';
       this.httpServiceMov
         .actualizarTerceroPedido(newMovimiento)
         .subscribe((res) => {

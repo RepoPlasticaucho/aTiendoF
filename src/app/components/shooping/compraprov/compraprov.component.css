@@ -2,3 +2,7 @@
     background-color: #def8fa; /* Color de fondo cuando se pasa el mouse por encima */
     cursor: pointer;
 }
+
+.card-body {
+    overflow-x: auto
+}

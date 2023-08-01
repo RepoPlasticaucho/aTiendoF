@@ -34,6 +34,7 @@
                     <tr>
                         <th style="width: 20%; ">CÓDIGO</th>
                         <th style="width: 20%; ">FECHA</th>
+                        <th style="width: 20%; ">TOTAL FACTURA</th>
                         <th style="width: 20%; "></th>
                     </tr>
                 </thead>
@@ -42,6 +43,7 @@
                         class="table-row">
                         <td (click)="openModalDetalle(movimiento)">{{movimiento.id}}</td>
                         <td (click)="openModalDetalle(movimiento)">{{movimiento.fecha_emision | slice:0:10}}</td>
+                        <td (click)="openModalDetalle(movimiento)">{{movimiento.importe_total}}</td>
                         <td>
                             <a class="btn btn-success" (click)="openModal()" 
                             >GENERAR

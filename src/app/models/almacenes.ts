@@ -8,6 +8,7 @@ export interface AlmacenesEntity {
     idAlmacen : string;
     sociedad_id : string;
     nombresociedad: string;
+    idfiscal_sociedad?: string;
     direccion : string;
     telefono : string;
     nombre_almacen?: string;

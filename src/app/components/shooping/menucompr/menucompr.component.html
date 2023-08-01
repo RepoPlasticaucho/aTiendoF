@@ -84,7 +84,7 @@
                             <mat-form-field appearance="fill" class="custom-datepicker">
                                 <mat-label>FECHA DE EMISIÓN</mat-label>
                                 <input id="fecha_nac" matInput [matDatepicker]="picker" [(ngModel)]="fechaSeleccionada"
-                                    [disabled]="true">
+                                    [disabled]="true" [value]="fechaSeleccionada">
 
                                 <mat-datepicker-toggle matSuffix [for]="picker">
                                 </mat-datepicker-toggle>
@@ -177,7 +177,8 @@
             <br><br>
             <div class="icon-container">
                 <label for="total" class="label-input" style="font-size: 14px;">IVA 12% :</label>
-                <input type="text" [value]="calcularIva12() | number:'1.2-2'" class="cool-input resultado-input" readonly>
+                <input type="text" [value]="calcularIva12() | number:'1.2-2'" class="cool-input resultado-input"
+                    readonly>
             </div>
             <br><br>
             <div class="icon-container">

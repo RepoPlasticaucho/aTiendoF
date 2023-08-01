@@ -15,6 +15,8 @@ import { FormasPagoService } from 'src/app/services/formas-pago.service';
 import { FormasPagoEntity } from 'src/app/models/formas-pago';
 import { DetallesPagoEntity } from 'src/app/models/detalles-pago';
 import { DetallesPagoService } from 'src/app/services/detalles-pago.service';
+import { ProveedoresEntity } from 'src/app/models/proveedores';
+import { ProveedoresService } from 'src/app/services/proveedores.service';
 
 
 @Component({
@@ -30,14 +32,14 @@ export class VerCompraComponent implements OnInit {
   dtTrigger: Subject<any> = new Subject<any>();
   lstDetalleMovimientos: DetallesMovimientoEntity[] = [];
   sumaTotal: any;
-  nombreGrupo: string = '';
-  idFiscal: string = '';
-  numFactura: string = '';
+  nombreSoc: string = '';
+  nombreProv: string = '';
+  idFiscalProv: string = '';
+  direccionProv: string = '';
+  compVenta: string = '';
+  autVenta: string = '';
   fechaEmision: string = '';
-  cliente: string = '';
-  idFiscalCliente: string = '';
-  email: string = '';
-  telefono: string = '';
+  telefonoProv: string = '';
   ultSecuencial: any = '';
   secuencial: any;
   inputColor: string = '';
@@ -48,6 +50,7 @@ export class VerCompraComponent implements OnInit {
     private readonly httpServiceMovimiento: MovimientosService,
     private readonly httpServiceDetallePago: DetallesPagoService,
     private readonly httpServiceTercero: TercerosService,
+    private readonly httpServiceProveedor: ProveedoresService,
     private readonly httpServiceForma: FormasPagoService,
     private router: Router) { }
 
@@ -73,24 +76,15 @@ export class VerCompraComponent implements OnInit {
       costo: '',
       precio: ''
     }
-    const newTercero: TercerosEntity = {
-      almacen_id: '',
-      sociedad_id: '',
-      tipotercero_id: '',
-      tipousuario_id: '',
-      nombresociedad: '',
-      nombrealmacen: '',
-      nombretercero: '',
-      tipousuario: '',
-      nombre: '',
-      id_fiscal: localStorage.getItem('idfiscalCl')!,
-      direccion: '',
-      telefono: '',
+    const newProveedor: ProveedoresEntity = {
+      id: localStorage.getItem('proveedorid')!,
+      id_fiscal: '',
+      ciudadid: '',
+      sociedad_id: localStorage.getItem('sociedadid')!,
       correo: '',
-      fecha_nac: '',
-      ciudad: '',
-      provincia: '',
-      ciudadid: ''
+      direccionprov: '',
+      nombre: '',
+      telefono: ''
     }
     const newMovimiento: MovimientosEntity = {
       id: localStorage.getItem('movimiento_id')!,
@@ -108,18 +102,18 @@ export class VerCompraComponent implements OnInit {
       timer: 30000,
       didOpen: () => {
         Swal.showLoading();
-        this.httpServiceTercero.obtenerTerceroCedula(newTercero).subscribe(res1 => {
-          console.log(localStorage.getItem('idfiscalCl'))
+        this.httpServiceProveedor.obtenerProveedoresID(newProveedor).subscribe(res1 => {
           if (res1.codigoError != "OK") {
 
           } else {
-            this.nombreGrupo = res1.lstTerceros[0].nombresociedad!;
-            this.idFiscal = res1.lstTerceros[0].id_fiscal!;
-            this.numFactura = localStorage.getItem('compvent')!;
-            this.cliente = res1.lstTerceros[0].nombre;
-            this.telefono = res1.lstTerceros[0].telefono;
-            this.email = res1.lstTerceros[0].correo;
-            this.idFiscalCliente = res1.lstTerceros[0].id_fiscal;
+            
+            this.nombreSoc = res1.lstProveedores[0].nombre_sociedad!;
+            this.nombreProv = res1.lstProveedores[0].nombre!;
+            this.idFiscalProv = res1.lstProveedores[0].id_fiscal!;
+            this.direccionProv = res1.lstProveedores[0].direccionprov!;
+            this.telefonoProv = res1.lstProveedores[0].telefono!;
+            this.compVenta = localStorage.getItem('compventa')!;
+            this.autVenta = localStorage.getItem('autorizacion')!;
           }
         })
         this.httpServiceMovimiento.obtenerMovimientoID(newMovimiento).subscribe(res2 => {

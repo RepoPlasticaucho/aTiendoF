@@ -12,30 +12,22 @@
                 <h1>Detalle de la Compra</h1>
                 <div class="company-info">
                     <div class="company-details">
-                        <h3>{{ nombreGrupo }}</h3>
-                        <p>RUC: {{ idFiscal }}</p>
-                        <p>Dirección: Dirección de la empresa</p>
-                        <p>Teléfono: +1234567890</p>
+                        <h3>{{ nombreSoc }}</h3>
+                        <h3>Proveedor: {{ nombreProv }}</h3>
+                        <p>RUC: {{ idFiscalProv }}</p>
+                        <p>Dirección: {{ direccionProv }}</p>
+                        <p>Teléfono: {{ telefonoProv }}</p>
                     </div>
                 </div>
                 <div class="invoice-info">
                     <div class="info-item">
-                        <h4>Número de factura: {{ numFactura }}</h4>
+                        <h4>Comprobante de venta: {{ compVenta }}</h4>
                     </div>
                     <div class="info-item">
                         <h4>Fecha de emisión: {{ fechaEmision | slice:0:10 }}</h4>
                     </div>
                     <div class="info-item">
-                        <h4>Cédula/RUC: {{ idFiscalCliente }}</h4>
-                    </div>
-                    <div class="info-item">
-                        <h4>Cliente: {{ cliente }}</h4>
-                    </div>
-                    <div class="info-item">
-                        <h4>Telefono: {{ telefono }}</h4>
-                    </div>
-                    <div class="info-item">
-                        <h4>Email: {{ email }}</h4>
+                        <h4>Autorización de venta: {{ autVenta }}</h4>
                     </div>
                 </div>
             </div>

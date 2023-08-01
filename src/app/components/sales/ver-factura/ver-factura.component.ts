@@ -15,6 +15,8 @@ import { FormasPagoService } from 'src/app/services/formas-pago.service';
 import { FormasPagoEntity } from 'src/app/models/formas-pago';
 import { DetallesPagoEntity } from 'src/app/models/detalles-pago';
 import { DetallesPagoService } from 'src/app/services/detalles-pago.service';
+import { AlmacenesEntity } from 'src/app/models/almacenes';
+import { AlmacenesService } from 'src/app/services/almacenes.service';
 
 @Component({
   selector: 'app-ver-factura',
@@ -33,10 +35,12 @@ export class VerFacturaComponent implements OnInit {
   sumaTotal: any;
   isBotonHabilitado = false;
   resto: any;
-  nombreGrupo: string = '';
-  idFiscal: string = '';
+  nombreSoc: string = '';
+  idFiscalSoc: string = '';
   numFactura: string = '';
   fechaEmision: string = '';
+  direccionAlm: string = '';
+  telefonoAlm: string = '';
   cliente: string = '';
   idFiscalCliente: string = '';
   email: string = '';
@@ -55,6 +59,7 @@ export class VerFacturaComponent implements OnInit {
     private readonly httpServiceMovimiento: MovimientosService,
     private readonly httpServiceSociedad: SociedadesService,
     private readonly httpServiceDetallePago: DetallesPagoService,
+    private readonly httpServiceAlmacen: AlmacenesService,
     private readonly httpServiceTercero: TercerosService,
     private readonly httpServiceForma: FormasPagoService,
     private router: Router) { }
@@ -93,6 +98,15 @@ export class VerFacturaComponent implements OnInit {
       costo: '',
       precio: ''
     }
+    const newAlmacen: AlmacenesEntity = {
+      idAlmacen: localStorage.getItem('almacenid')!,
+      sociedad_id: '',
+      nombresociedad: '',
+      direccion: '',
+      telefono: '',
+      codigo: '',
+      pto_emision: ''
+    }
     const newTercero: TercerosEntity = {
       almacen_id: '',
       sociedad_id: '',
@@ -129,19 +143,26 @@ export class VerFacturaComponent implements OnInit {
       didOpen: () => {
         Swal.showLoading();
         this.httpServiceTercero.obtenerTerceroCedula(newTercero).subscribe(res1 => {
-          console.log(localStorage.getItem('idfiscalCl'))
           if (res1.codigoError != "OK") {
 
           } else {
-            this.nombreGrupo = res1.lstTerceros[0].nombresociedad!;
-            this.idFiscal = res1.lstTerceros[0].id_fiscal!;
             this.numFactura = localStorage.getItem('movimiento_id')!;
             this.cliente = res1.lstTerceros[0].nombre;
             this.telefono = res1.lstTerceros[0].telefono;
             this.email = res1.lstTerceros[0].correo;
             this.idFiscalCliente = res1.lstTerceros[0].id_fiscal;
           }
-        })
+        });
+        this.httpServiceAlmacen.obtenerAlmacenID(newAlmacen).subscribe(res1 => {
+          if (res1.codigoError != "OK") {
+
+          } else {
+            this.nombreSoc = res1.lstAlmacenes[0].nombresociedad!;
+            this.idFiscalSoc = res1.lstAlmacenes[0].idfiscal_sociedad!;
+            this.direccionAlm = res1.lstAlmacenes[0].direccion!;
+            this.telefonoAlm = res1.lstAlmacenes[0].telefono!;
+          }
+        });
         this.httpServiceMovimiento.obtenerMovimientoID(newMovimiento).subscribe(res2 => {
           if (res2.codigoError != "OK") {
 

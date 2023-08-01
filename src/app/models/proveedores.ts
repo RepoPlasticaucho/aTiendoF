@@ -7,6 +7,7 @@ export interface Proveedores {
 export interface ProveedoresEntity {
     id: string;
     sociedad_id?:string;
+    nombre_sociedad?: string;
     id_fiscal: string;
     ciudadid: string;
     ciudad?: string;

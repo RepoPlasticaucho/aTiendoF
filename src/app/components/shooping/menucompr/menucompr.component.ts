@@ -93,6 +93,7 @@ export class MenucomprComponent implements OnInit {
       info: false,
       responsive: true,
     }
+    this.fechaSeleccionada = new Date();
     const sociedad: SociedadesEntity = {
       idGrupo: '',
       idSociedad: localStorage.getItem('sociedadid')!,
@@ -482,6 +483,7 @@ export class MenucomprComponent implements OnInit {
   finalizarPedido() {
     this.fechaFormateada = this.datePipe.transform(this.fechaSeleccionada, 'yyyy-MM-dd');
     localStorage.setItem('compventa', this.comprobante);
+    localStorage.setItem('autorizacion', this.autorizacion);
     Swal.fire({
       title: '¿Estás seguro de terminar la compra?',
       showDenyButton: true,

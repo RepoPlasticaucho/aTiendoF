@@ -11,6 +11,7 @@ const initGruop: AlmacenesEntity = {
   nombre_almacen: "",
   nombresociedad: "",
   direccion : "",
+  idfiscal_sociedad: '',
   telefono : "",
   codigo : "",
   pto_emision : "",
@@ -39,6 +40,9 @@ export class AlmacenesService {
 
   obtenerAlmacenesSociedad(almacen: SociedadesEntity): Observable<Almacenes> {
     return this.http.post<Almacenes>(`${environment.apiUrl}almacenes/ObtenerAlmacenesSociedad`, almacen );
+  }
+  obtenerAlmacenID(almacen: AlmacenesEntity): Observable<Almacenes> {
+    return this.http.post<Almacenes>(`${environment.apiUrl}almacenes/ObtenerAlmacenID`, almacen );
   }
   agregarAlmacen(almacen: AlmacenesEntity): Observable<Almacenes> {
     return this.http.post<Almacenes>(`${environment.apiUrl}almacenes/InsertarAlmacen`, almacen);

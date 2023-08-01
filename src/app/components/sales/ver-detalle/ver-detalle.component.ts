@@ -59,6 +59,7 @@ export class VerDetalleComponent implements OnInit {
         })
         this.dialogRef.close();
       } else {
+        this.sumaTotal = res.importe_total
         const newDetalle: DetallesMovimientoEntity = {
           id: '',
           producto_nombre: '',
@@ -83,12 +84,9 @@ export class VerDetalleComponent implements OnInit {
               } else {
                 this.lstDetalleMovimientos = res.lstDetalleMovimientos;
                 this.dtTrigger.next('');
-                this.calcularSumaTotal();
                 Swal.close();
               }
             });
-          
-        
       }
     });
     
@@ -98,12 +96,5 @@ export class VerDetalleComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  calcularSumaTotal() {
-    const suma = this.lstDetalleMovimientos.reduce((total, detalleMovimientos) => {
-      return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
-    }, 0);
-  
-    this.sumaTotal = suma.toLocaleString(undefined, { minimumFractionDigits: 2 }).replace('.', ',');
-  }
 
 }
