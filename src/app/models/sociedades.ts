@@ -16,4 +16,5 @@ export interface SociedadesEntity {
     telefono: string;
     password: string;
     funcion : string;
+    tipo_ambienteid: string;
 }

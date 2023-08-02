@@ -35,6 +35,7 @@ export class UsuarioPassComponent implements OnInit {
       nombre_comercial: '',
       id_fiscal: '',
       email: '',
+      tipo_ambienteid: '',
       telefono: '',
       password: '',
       funcion: '',
@@ -106,6 +107,7 @@ export class UsuarioPassComponent implements OnInit {
           const userEntity: SociedadesEntity = {
             idGrupo: '',
             nombre_comercial: '',
+            tipo_ambienteid: '',
             id_fiscal: '',
             email: '',
             telefono: '',

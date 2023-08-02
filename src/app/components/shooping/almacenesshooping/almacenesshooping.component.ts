@@ -47,6 +47,7 @@ export class AlmacenesshoopingComponent implements OnInit {
       id_fiscal: '',
       email: '',
       telefono: '',
+      tipo_ambienteid: '',
       password: '',
       funcion: '',
       razon_social: ''

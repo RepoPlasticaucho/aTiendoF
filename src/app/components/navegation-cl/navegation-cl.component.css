@@ -8,6 +8,11 @@
   
 }
 
+.disabled-link {
+  pointer-events: none;
+  background-color: rgba(80, 101, 224, 1);
+}
+
 .sidenav .mat-toolbar {
   display: block;
   text-align: right;

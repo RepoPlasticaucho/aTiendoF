@@ -45,6 +45,7 @@ export class AlmacenesegresosComponent implements OnInit {
       idGrupo: '',
       nombre_comercial: '',
       id_fiscal: '',
+      tipo_ambienteid: '',
       email: '',
       telefono: '',
       password: '',

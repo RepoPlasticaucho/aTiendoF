@@ -27,14 +27,18 @@ export class SociedadesEditComponent implements OnInit {
     nombreComercial: new FormControl('', Validators.required),
     correoElectronico: new FormControl('', [Validators.required, Validators.email]),
     telefono: new FormControl('', [Validators.required, Validators.minLength(9)]),
+    tipoamb: new FormControl('0', Validators.required)
   });
   //Variables para listas desplegables
   lstGrupos: GruposEntity[] = [];
   selectGrupo: boolean = false;
   selectRol: boolean = false;
+  selectTipoAmb: boolean = false;
   //Declaracion de variables
   private codigo: string = "";
   admin: string = 'admin';
+  pruebas: string = '1';
+  produccion: string = '2';
   client: string = 'client';
   bo: string = 'bo';
 
@@ -68,11 +72,13 @@ export class SociedadesEditComponent implements OnInit {
       } else {
         this.codigo = res.idSociedad ?? "";
         this.corporationForm.get("grupo")?.setValue(res.idGrupo);
-        if(res.funcion == ""){
+        if (res.funcion == "") {
           this.corporationForm.get("rol")?.setValue("0");
         } else {
           this.corporationForm.get("rol")?.setValue(res.funcion);
         }
+        console.log(res)
+        this.corporationForm.get("tipoamb")?.setValue(res.tipo_ambienteid!);
         this.corporationForm.get("idFiscal")?.setValue(res.id_fiscal);
         this.corporationForm.get("nombreComercial")?.setValue(res.nombre_comercial);
         this.corporationForm.get("correoElectronico")?.setValue(res.email);
@@ -106,6 +112,7 @@ export class SociedadesEditComponent implements OnInit {
           email: this.corporationForm.value!.correoElectronico ?? "",
           telefono: this.corporationForm.value!.telefono ?? "",
           password: '',
+          tipo_ambienteid: this.corporationForm.value!.tipoamb ?? "",
           funcion: this.corporationForm.value!.rol ?? "",
           razon_social: ''
         };
@@ -159,6 +166,15 @@ export class SociedadesEditComponent implements OnInit {
     } else {
       this.selectRol = false;
       this.corporationForm.get("rol")?.setValue(rol.target.value);
+    }
+  }
+
+  changeGroup3(tipoamb: any): void {
+    if (tipoamb.target.value == 0) {
+      this.selectTipoAmb = true;
+    } else {
+      this.selectTipoAmb = false;
+      this.corporationForm.get("tipoamb")?.setValue(tipoamb.target.value);
     }
   }
 

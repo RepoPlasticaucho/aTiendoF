@@ -49,6 +49,7 @@ export class AlmacenessociedadComponent implements OnInit {
       telefono: '',
       password: '',
       funcion: '',
+      tipo_ambienteid: '',
       razon_social: ''
     }
     console.log(almacen);

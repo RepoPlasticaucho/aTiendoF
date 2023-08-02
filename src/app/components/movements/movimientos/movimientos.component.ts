@@ -65,6 +65,7 @@ export class MovimientosComponent implements OnInit {
       id_fiscal: '',
       email: '',
       telefono: '',
+      tipo_ambienteid: '',
       password: '',
       funcion: ''
     }
@@ -132,6 +133,7 @@ export class MovimientosComponent implements OnInit {
         razon_social: '',
         nombre_comercial: '',
         id_fiscal: '',
+        tipo_ambienteid: '',
         email: '',
         telefono: '',
         password: '',
@@ -305,6 +307,7 @@ export class MovimientosComponent implements OnInit {
       razon_social: '',
       nombre_comercial: '',
       id_fiscal: '',
+      tipo_ambienteid: '',
       email: '',
       telefono: '',
       password: '',

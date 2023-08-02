@@ -15,6 +15,7 @@ const initCorporation: SociedadesEntity = {
   funcion: '',
   idSociedad: '',
   razon_social: '',
+  tipo_ambienteid: '',
   nombreGrupo: ''
 }
 

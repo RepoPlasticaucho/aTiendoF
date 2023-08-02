@@ -44,7 +44,7 @@ export class VentaprovComponent implements OnInit {
   openModalDetalle(movimiento: MovimientosEntity): void {
     this.httpService.asignarMovimiento(movimiento);
     const dialogRef = this.dialog.open(VerDetalleComponent, {
-      width: '750px',
+      width: '900px',
       // Agrega cualquier configuración adicional del modal aquí
     });
 

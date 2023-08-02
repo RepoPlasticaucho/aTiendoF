@@ -51,6 +51,7 @@ export class LoginComponent {
       const userEntity: SociedadesEntity = {
         idGrupo: '',
         nombre_comercial: '',
+        tipo_ambienteid: '',
         id_fiscal: '',
         email: this.categoryForm.value!.categoria ?? "",
         telefono: '',
@@ -86,6 +87,7 @@ export class LoginComponent {
             id_fiscal: '',
             email: this.categoryForm.value!.categoria ?? "",
             funcion: '',
+            tipo_ambienteid: '',
             telefono: '',
             password: this.encPass,
             idSociedad: '',
@@ -213,6 +215,7 @@ export class LoginComponent {
             idGrupo: '',
             nombre_comercial: '',
             id_fiscal: '',
+            tipo_ambienteid: '',
             email: '',
             telefono: '',
             password: this.encPass2,

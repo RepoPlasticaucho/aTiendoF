@@ -196,6 +196,7 @@ export class TercerosEditComponent implements OnInit {
       razon_social: '',
       id_fiscal: '',
       email: '',
+      tipo_ambienteid: '',
       telefono: '',
       password: '',
       funcion: '',
@@ -226,7 +227,8 @@ export class TercerosEditComponent implements OnInit {
       email: '',
       telefono: '',
       password: '',
-      funcion: ''
+      funcion: '',
+      tipo_ambienteid: ''
     }
 
     this.httpServiceSociedades.obtenerSociedadesN(sociedad).subscribe(res => {
@@ -618,6 +620,7 @@ export class TercerosEditComponent implements OnInit {
         nombre_comercial: e.target.value,
         idSociedad: '',
         nombreGrupo: '',
+        tipo_ambienteid: '',
         razon_social: '',
         id_fiscal: '',
         email: '',

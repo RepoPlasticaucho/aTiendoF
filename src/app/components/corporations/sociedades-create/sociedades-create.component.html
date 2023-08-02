@@ -89,6 +89,23 @@
                     </small>
                 </div>
                 <div class="form-group">
+                    <label for="tipoamb">Tipo de Ambiente</label>
+                    <select class="form-control" (change)="changeGroup3($event)" formControlName="tipoamb">
+                        <option [value]=" 0 " selected>Seleccione un tipo de ambiente</option>
+                        <option [value]="pruebas">
+                            PRUEBAS
+                        </option>
+                        <option [value]="produccion">
+                            PRODUCCIÓN
+                        </option>
+                    </select>
+                    <small *ngIf="selectTipoAmb">
+                        <small *ngIf="selectTipoAmb" style="color: red; ">
+                            Debe seleccionar un tipo de ambiente.
+                        </small>
+                    </small>
+                </div>
+                <div class="form-group">
                     <label for="grupo">Rol</label>
                     <select class="form-control" (change)="changeGroup2($event)" formControlName="rol">
                         <option [value]=" 0 " selected>Seleccione un rol</option>

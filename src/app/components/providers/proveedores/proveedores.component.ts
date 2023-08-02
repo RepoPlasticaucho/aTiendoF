@@ -55,6 +55,7 @@ export class ProveedoresComponent implements OnInit {
           id_fiscal: '',
           email: '',
           telefono: '',
+          tipo_ambienteid: '',
           password: '',
           funcion: ''
         }
@@ -127,7 +128,7 @@ export class ProveedoresComponent implements OnInit {
   }
 
   agregarProveedor() {
-    this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['proveedores-create'] } }]);
+    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['proveedores-create'] } }]);
   }
 
 }

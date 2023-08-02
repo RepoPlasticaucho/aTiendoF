@@ -112,8 +112,8 @@ const routes: Routes = [
       { path: "terceros-edit", component: TercerosEditComponent, outlet: "contentAdmin" },
       { path: "portafoliosmigracion", component: PortafoliosComponentM, outlet: "contentAdmin" },
       { path: "proveedores", component: ProveedoresComponent, outlet: "contentAdmin" },
-      { path: "proveedores-create", component: ProveedoresCreateComponent, outlet: "contentAdmin" },
-      { path: "proveedores-edit", component: ProveedoresEditComponent, outlet: "contentAdmin" },
+      //{ path: "proveedores-create", component: ProveedoresCreateComponent, outlet: "contentAdmin" },
+      //{ path: "proveedores-edit", component: ProveedoresEditComponent, outlet: "contentAdmin" },
       { path: "producto-proveedores-migracion", component: ProductocompraComponent, outlet: "contentAdmin" },
 
     ]

@@ -43,7 +43,7 @@
 
   .table-container {
     max-height: 400px; /* Ajusta este valor según tus necesidades */
-    max-width: 750px;
+    max-width: 900px;
     overflow-y: auto;
     overflow-x: hidden;
 }

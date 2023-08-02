@@ -47,6 +47,7 @@ constructor(private readonly httpService: AlmacenesService,
       email: '',
       telefono: '',
       password: '',
+      tipo_ambienteid: '',
       funcion: '',
       razon_social: ''
     }

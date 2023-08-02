@@ -70,6 +70,7 @@ export class VistafacturaComponent implements OnInit {
       nombre_comercial: '',
       id_fiscal: '',
       email: '',
+      tipo_ambienteid: '',
       telefono: '',
       password: '',
       funcion: ''

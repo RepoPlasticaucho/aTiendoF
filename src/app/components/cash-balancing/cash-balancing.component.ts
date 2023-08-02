@@ -72,6 +72,7 @@ export class CashBalancingComponent implements OnInit {
       id_fiscal: '',
       email: '',
       telefono: '',
+      tipo_ambienteid: '',
       password: '',
       funcion: ''
     }
@@ -233,6 +234,7 @@ export class CashBalancingComponent implements OnInit {
         idSociedad: localStorage.getItem('sociedadid')!,
         razon_social: '',
         nombre_comercial: '',
+        tipo_ambienteid: '',
         id_fiscal: '',
         email: '',
         telefono: '',

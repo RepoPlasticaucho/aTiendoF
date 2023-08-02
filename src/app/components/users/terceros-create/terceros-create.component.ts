@@ -375,6 +375,7 @@ export class TercerosCreateComponent implements OnInit {
         id_fiscal: '',
         email: '',
         telefono: '',
+        tipo_ambienteid: '',
         password: '',
         funcion: ''
       }

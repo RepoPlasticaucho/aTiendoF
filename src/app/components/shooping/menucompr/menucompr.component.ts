@@ -99,6 +99,7 @@ export class MenucomprComponent implements OnInit {
       idSociedad: localStorage.getItem('sociedadid')!,
       razon_social: '',
       nombre_comercial: '',
+      tipo_ambienteid: '',
       id_fiscal: '',
       email: '',
       telefono: '',

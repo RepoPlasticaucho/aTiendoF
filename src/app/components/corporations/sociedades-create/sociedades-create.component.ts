@@ -27,13 +27,17 @@ export class SociedadesCreateComponent implements OnInit {
     nombreComercial: new FormControl('', Validators.required),
     correoElectronico: new FormControl('', [Validators.required, Validators.email]),
     telefono: new FormControl('', [Validators.required, Validators.minLength(9)]),
+    tipoamb: new FormControl('0', Validators.required)
   });
   //Variables para listas desplegables
   lstGrupos: GruposEntity[] = [];
   selectGrupo: boolean = false;
   selectRol: boolean = false;
+  selectTipoAmb: boolean = false;
 
   admin: string = 'admin';
+  pruebas: string = '1';
+  produccion: string = '2';
   client: string = 'client';
   bo: string = 'bo';
 
@@ -79,6 +83,7 @@ export class SociedadesCreateComponent implements OnInit {
           password: '',
           funcion: this.corporationForm.value!.rol ?? "",
           idSociedad: '',
+          tipo_ambienteid: this.corporationForm.value!.tipoamb ?? "",
           razon_social: ''
         };
         this.httpService.agregarSociedad(sociedadEntity).subscribe(res => {
@@ -131,6 +136,15 @@ export class SociedadesCreateComponent implements OnInit {
     } else {
       this.selectRol = false;
       this.corporationForm.get("rol")?.setValue(rol.target.value);
+    }
+  }
+
+  changeGroup3(tipoamb: any): void {
+    if (tipoamb.target.value == 0) {
+      this.selectTipoAmb = true;
+    } else {
+      this.selectTipoAmb = false;
+      this.corporationForm.get("tipoamb")?.setValue(tipoamb.target.value);
     }
   }
 
