@@ -15,6 +15,7 @@ export interface DetallesMovimientoEntity {
     pto_emision?: string;
     inventario_id: string;
     movimiento_id: string;
+    cod_tarifa?: string;
     desc_add?: string;
     cantidad: string;
     costo: string;

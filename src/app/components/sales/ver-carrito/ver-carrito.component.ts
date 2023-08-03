@@ -10,6 +10,9 @@ import Swal from 'sweetalert2';
 import { AlmacenesEntity } from 'src/app/models/almacenes';
 import { InventariosEntity } from 'src/app/models/inventarios';
 import { InventariosService } from 'src/app/services/inventarios.service';
+import { DetalleImpuestosEntity } from 'src/app/models/detalle-impuestos';
+import { finalize } from 'rxjs';
+import { DetalleImpuestosService } from 'src/app/services/detalle-impuestos.service';
 
 @Component({
   selector: 'app-ver-carrito',
@@ -37,7 +40,8 @@ searchText: string = '';
     private readonly httpServiceInventarios: InventariosService,
     private readonly httpServiceDetalle: DetallesmovimientoService,
     private router: Router,
-    private dialogRef: MatDialogRef<MenuventComponent>,
+    private readonly httpServiceDetalleImp: DetalleImpuestosService,
+    private dialogRef: MatDialogRef<MenuventComponent>
   ) { }
 
   ngOnInit(): void {
@@ -129,7 +133,33 @@ searchText: string = '';
           costo: this.costo,
           precio: this.precio
         }
-        this.httpServiceDetalle.agregarDetallePedido(newDetalle).subscribe(res => {
+        this.httpServiceDetalle.agregarDetallePedido(newDetalle).pipe(finalize(() => {
+          this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
+            if (res1.codigoError == 'OK') {
+              const newDetalleImp: DetalleImpuestosEntity = {
+                id: '',
+                detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
+                cod_impuesto: res1.lstDetalleMovimientos[0].cod_tarifa!,
+                porcentaje: res1.lstDetalleMovimientos[0].tarifa!,
+                base_imponible: '',
+                valor: res1.lstDetalleMovimientos[0].costo!,
+                created_at: '',
+                updated_at: ''
+              }
+              this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
+                if (res2.codigoError != 'OK') {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Ha ocurrido un error.',
+                    text: res2.descripcionError,
+                    showConfirmButton: false
+                  });
+                }
+              });
+            }
+          });
+        })
+        ).subscribe(res => {
           if (res.codigoError != 'OK') {
             Swal.fire({
               icon: 'error',

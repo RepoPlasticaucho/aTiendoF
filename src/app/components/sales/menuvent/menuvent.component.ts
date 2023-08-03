@@ -26,6 +26,8 @@ import { TercerosService } from 'src/app/services/terceros.service';
 import { TercerosEntity } from 'src/app/models/terceros';
 import { CiudadesService } from 'src/app/services/ciudades.service';
 import { CiudadesEntity } from 'src/app/models/ciudades';
+import { DetalleImpuestosService } from 'src/app/services/detalle-impuestos.service';
+import { DetalleImpuestosEntity } from 'src/app/models/detalle-impuestos';
 
 @Component({
   selector: 'app-menuvent',
@@ -75,10 +77,12 @@ export class MenuventComponent implements OnInit {
     private readonly httpService: DetallesmovimientoService,
     private readonly httpServiceMov: MovimientosService,
     private readonly httpServiceTer: TercerosService,
+    private readonly httpServiceDet: DetalleImpuestosService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
+    
     this.dtOptions = {
       language: {
         url: '//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json',
@@ -241,6 +245,7 @@ export class MenuventComponent implements OnInit {
   }
 
   verDatos() {
+    console.log(this.lstDetalleMovimientos.length);
     const terceroNew: TercerosEntity = {
       almacen_id: '',
       sociedad_id: '',
@@ -491,6 +496,24 @@ export class MenuventComponent implements OnInit {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
+
+        // PENDIENTEEEEEEE
+        for(let i = 0; i = this.lstDetalleMovimientos.length; i++){
+          const newDetalleImp: DetalleImpuestosEntity = {
+            id: '',
+            detalle_movimiento_id: this.lstDetalleMovimientos[i].id,
+            cod_impuesto: '',
+            porcentaje: this.lstDetalleMovimientos[i].tarifa!,
+            base_imponible: '',
+            valor: '',
+            movimiento_id: this.lstDetalleMovimientos[i].movimiento_id,
+            created_at: '',
+            updated_at: ''
+          }
+
+        }
+        
+
         Swal.fire({
           icon: 'success',
           title: 'Finalizado Correctamente.',

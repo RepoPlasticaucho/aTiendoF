@@ -24,6 +24,7 @@ const initDetail: DetallesMovimientoEntity = {
   unidad_medida: '',
   url_image: '',
   created_at: '',
+  cod_tarifa: '',
   tipo_movimiento: ''
 }
 
@@ -45,6 +46,10 @@ export class DetallesmovimientoService {
   
   obtenerDetalleMovimiento(detalle: DetallesMovimientoEntity): Observable<DetallesMovimiento> {
     return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ObtenerDetalleMovimiento`, detalle );
+  }
+
+  obtenerUltDetalleMovimiento(detalle: DetallesMovimientoEntity): Observable<DetallesMovimiento> {
+    return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ObtenerUltDetalleMovimiento`, detalle );
   }
 
   obtenerDetalleMovimientoSociedad(sociedad: SociedadesEntity): Observable<DetallesMovimiento> {
