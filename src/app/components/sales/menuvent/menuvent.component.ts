@@ -498,22 +498,30 @@ export class MenuventComponent implements OnInit {
       if (result.isConfirmed) {
 
         // PENDIENTEEEEEEE
-        for(let i = 0; i = this.lstDetalleMovimientos.length; i++){
-          const newDetalleImp: DetalleImpuestosEntity = {
-            id: '',
-            detalle_movimiento_id: this.lstDetalleMovimientos[i].id,
-            cod_impuesto: '',
-            porcentaje: this.lstDetalleMovimientos[i].tarifa!,
-            base_imponible: '',
-            valor: '',
-            movimiento_id: this.lstDetalleMovimientos[i].movimiento_id,
-            created_at: '',
-            updated_at: ''
+        console.log(this.lstDetalleMovimientos[0].id)
+        for (let i = 0; i < this.lstDetalleMovimientos.length; i++) {
+          const detalleMovimiento = this.lstDetalleMovimientos[i];
+          if (detalleMovimiento) {
+            const newDetalleImp: DetalleImpuestosEntity = {
+              id: '',
+              detalle_movimiento_id: detalleMovimiento.id ?? '',
+              cod_impuesto: '',
+              porcentaje: detalleMovimiento.tarifa ?? '',
+              base_imponible: '',
+              valor: '',
+              movimiento_id: detalleMovimiento.movimiento_id ?? '',
+              created_at: '',
+              updated_at: ''
+            };
+            this.httpServiceDet.modificarDetalleImpuestosBP(newDetalleImp).subscribe(res => {
+              if(res.codigoError == 'OK'){
+                console.log('ACTUALIZADO')
+              } else {
+                console.log('ERROR')
+              }
+            });
           }
-
         }
-        
-
         Swal.fire({
           icon: 'success',
           title: 'Finalizado Correctamente.',
