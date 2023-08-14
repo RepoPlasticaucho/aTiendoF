@@ -2,18 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { Subject } from 'rxjs';
-import {
-  faShoppingBag,
-  faSave,
-  faList,
-  faTimes,
-  faShoppingCart,
-  faEdit,
-  faTrashAlt,
-  faMoneyBillAlt,
-  faCheck,
-} from '@fortawesome/free-solid-svg-icons';
+import { Subject, finalize } from 'rxjs';
+import { faShoppingBag, faSave, faList, faTimes, faShoppingCart, faEdit, faTrashAlt, faMoneyBillAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
 import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service';
 import { VerCarritoComponent } from '../ver-carrito/ver-carrito.component';
@@ -82,7 +72,7 @@ export class MenuventComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    
+
     this.dtOptions = {
       language: {
         url: '//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json',
@@ -497,7 +487,7 @@ export class MenuventComponent implements OnInit {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
 
-        // PENDIENTEEEEEEE
+        //
         console.log(this.lstDetalleMovimientos[0].id)
         for (let i = 0; i < this.lstDetalleMovimientos.length; i++) {
           const detalleMovimiento = this.lstDetalleMovimientos[i];
@@ -513,9 +503,105 @@ export class MenuventComponent implements OnInit {
               created_at: '',
               updated_at: ''
             };
-            this.httpServiceDet.modificarDetalleImpuestosBP(newDetalleImp).subscribe(res => {
-              if(res.codigoError == 'OK'){
-                console.log('ACTUALIZADO')
+            this.httpServiceDet.obtenerDetalleImpuesto(newDetalleImp).subscribe(res => {
+              if (res.codigoError == 'OK') {
+                if (res.lstDetalleImpuestos[0].porcentaje == '12%') {
+                  const newDetalleImp2: DetalleImpuestosEntity = {
+                    id: '',
+                    detalle_movimiento_id: detalleMovimiento.id ?? '',
+                    cod_impuesto: '',
+                    porcentaje: detalleMovimiento.tarifa ?? '',
+                    base_imponible: '',
+                    valor: (parseFloat(res.lstDetalleImpuestos[0].base_imponible) * 0.12).toString(),
+                    movimiento_id: detalleMovimiento.movimiento_id ?? '',
+                    created_at: '',
+                    updated_at: ''
+                  };
+                  this.httpServiceDet.modificarMovimientoBP(newDetalleImp).subscribe(resp => {
+                    if (resp.codigoError == 'OK') {
+                      console.log('Actualizado BP GENERAL')
+                    } else {
+                      console.log('ERROR')
+                    }
+                  });
+                  this.httpServiceDet.modificarDetalleImpuestosBP(newDetalleImp2).pipe(
+                    finalize(() => {
+                      this.httpServiceDet.obtenerDetalleImpuesto(newDetalleImp).subscribe(res3 => {
+                        if (res3.codigoError == 'OK') {
+                          const newDetalleImp3: DetalleImpuestosEntity = {
+                            id: '',
+                            detalle_movimiento_id: detalleMovimiento.id ?? '',
+                            cod_impuesto: '',
+                            porcentaje: detalleMovimiento.tarifa ?? '',
+                            base_imponible: '',
+                            valor: (parseFloat(res3.lstDetalleImpuestos[0].base_imponible) * 0.12).toString(),
+                            movimiento_id: detalleMovimiento.movimiento_id ?? '',
+                            created_at: '',
+                            updated_at: ''
+                          };
+                          this.httpServiceDet.modificarDetalleImpuestosVal(newDetalleImp3).subscribe(res2 => {
+                            if (res2.codigoError == 'OK') {
+                              console.log('Actualizado')
+                            } else {
+                              console.log('ERROR')
+                            }
+                          });
+                        }
+                      })
+                    })
+                  ).subscribe(res1 => {
+                    if (res1.codigoError == 'OK') {
+
+                    } else {
+                      console.log('ERROR')
+                    }
+                  });
+                } else {
+                  const newDetalleImp2: DetalleImpuestosEntity = {
+                    id: '',
+                    detalle_movimiento_id: detalleMovimiento.id ?? '',
+                    cod_impuesto: '',
+                    porcentaje: detalleMovimiento.tarifa ?? '',
+                    base_imponible: '',
+                    valor: (parseFloat(res.lstDetalleImpuestos[0].base_imponible) * 0).toString(),
+                    movimiento_id: detalleMovimiento.movimiento_id ?? '',
+                    created_at: '',
+                    updated_at: ''
+                  };
+
+                  this.httpServiceDet.modificarDetalleImpuestosBP(newDetalleImp2).pipe(
+                    finalize(() => {
+                      this.httpServiceDet.obtenerDetalleImpuesto(newDetalleImp).subscribe(res3 => {
+                        if (res3.codigoError == 'OK') {
+                          const newDetalleImp3: DetalleImpuestosEntity = {
+                            id: '',
+                            detalle_movimiento_id: detalleMovimiento.id ?? '',
+                            cod_impuesto: '',
+                            porcentaje: detalleMovimiento.tarifa ?? '',
+                            base_imponible: '',
+                            valor: (parseFloat(res3.lstDetalleImpuestos[0].base_imponible) * 0.12).toString(),
+                            movimiento_id: detalleMovimiento.movimiento_id ?? '',
+                            created_at: '',
+                            updated_at: ''
+                          };
+                          this.httpServiceDet.modificarDetalleImpuestosVal(newDetalleImp3).subscribe(res2 => {
+                            if (res2.codigoError == 'OK') {
+                              console.log('Actualizado')
+                            } else {
+                              console.log('ERROR')
+                            }
+                          });
+                        }
+                      })
+                    })
+                  ).subscribe(res1 => {
+                    if (res1.codigoError == 'OK') {
+
+                    } else {
+                      console.log('ERROR')
+                    }
+                  });
+                }
               } else {
                 console.log('ERROR')
               }

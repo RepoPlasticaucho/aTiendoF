@@ -28,6 +28,10 @@ export class DetalleImpuestosService {
     return this.detail$.asObservable();
   }
 
+  obtenerDetalleImpuesto(detalle: DetalleImpuestosEntity): Observable<DetalleImpuestos> {
+    return this.http.post<DetalleImpuestos>(`${environment.apiUrl}detalleimpuestos/ObtenerDetalleImpuesto`, detalle );
+  }
+
   asignarDetalleImpuesto(detalle: DetalleImpuestosEntity) {
     this.detail$.next(detalle);
   }
@@ -36,7 +40,15 @@ export class DetalleImpuestosService {
     return this.http.post<DetalleImpuestos>(`${environment.apiUrl}detalleimpuestos/InsertarDetalleImpuestos`, detalle);
   }
 
+  modificarMovimientoBP(detalle: DetalleImpuestosEntity): Observable<DetalleImpuestos> {
+    return this.http.post<DetalleImpuestos>(`${environment.apiUrl}detalleimpuestos/ModificarMovimientoBP`, detalle);
+  }
+
   modificarDetalleImpuestosBP(detalle: DetalleImpuestosEntity): Observable<DetalleImpuestos> {
     return this.http.post<DetalleImpuestos>(`${environment.apiUrl}detalleimpuestos/ModificarDetalleImpuestosBP`, detalle);
+  }
+
+  modificarDetalleImpuestosVal(detalle: DetalleImpuestosEntity): Observable<DetalleImpuestos> {
+    return this.http.post<DetalleImpuestos>(`${environment.apiUrl}detalleimpuestos/ModificarDetalleImpuestosVal`, detalle);
   }
 }
