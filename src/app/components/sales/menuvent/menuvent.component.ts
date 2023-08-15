@@ -568,7 +568,13 @@ export class MenuventComponent implements OnInit {
                     created_at: '',
                     updated_at: ''
                   };
-
+                  this.httpServiceDet.modificarMovimientoBP(newDetalleImp).subscribe(resp => {
+                    if (resp.codigoError == 'OK') {
+                      console.log('Actualizado BP GENERAL')
+                    } else {
+                      console.log('ERROR')
+                    }
+                  });
                   this.httpServiceDet.modificarDetalleImpuestosBP(newDetalleImp2).pipe(
                     finalize(() => {
                       this.httpServiceDet.obtenerDetalleImpuesto(newDetalleImp).subscribe(res3 => {
