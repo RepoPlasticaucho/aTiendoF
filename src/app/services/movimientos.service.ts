@@ -21,8 +21,12 @@ const initMovement: MovimientosEntity = {
   total_desc: '',
   proveedor_id: '',
   autorizacion_venta: '',
+  tercero: '',
   comp_venta: '',
   sustento_id: '',
+  proveedor: '',
+  sustento: '',
+  tipo_comprb: '',
   total_imp: '',
   propina: '',
   importe_total: '',
@@ -72,6 +76,14 @@ export class MovimientosService {
 
   obtenerMovimientosAlmacenFecha(almacen: string, fechadesde: string, fechahasta: string): Observable<Movimientos> {
     return this.http.get<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientosAlmacenFecha?almacen=`+almacen+`&fechadesde=`+fechadesde+`&fechahasta=`+fechahasta);
+  }
+
+  obtenerMovimientosCompF(almacen: string, fechadesde: string, fechahasta: string): Observable<Movimientos> {
+    return this.http.get<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientosCompF?almacen=`+almacen+`&fechadesde=`+fechadesde+`&fechahasta=`+fechahasta);
+  }
+
+  obtenerMovimientosVentF(almacen: string, fechadesde: string, fechahasta: string): Observable<Movimientos> {
+    return this.http.get<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientosVentF?almacen=`+almacen+`&fechadesde=`+fechadesde+`&fechahasta=`+fechahasta);
   }
 
   obtenerMovimientosAlmacenNombre(almacen: string): Observable<Movimientos> {

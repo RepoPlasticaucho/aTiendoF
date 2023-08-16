@@ -11,6 +11,7 @@ export interface MovimientosEntity {
     tipo_emision_cod: string;
     estado_fact_id: string;
     tipo_comprb_id: string;
+    tipo_comprb?: string;
     almacen_id: string;
     estab?: string;
     cod_doc: string;
@@ -22,8 +23,10 @@ export interface MovimientosEntity {
     detalle_pago?: string;
     propina?: string;
     proveedor_id?: string;
+    proveedor?: string;
     comp_venta?: string;
     sustento_id?: string;
+    sustento?: string;
     autorizacion_venta?: string;
     fecha_emision?: string;
     importe_total?: string;
@@ -32,4 +35,5 @@ export interface MovimientosEntity {
     camp_ad1?: string;
     camp_ad2?: string;
     updated_at?: string;
+    tercero?: string;
 }

@@ -197,9 +197,6 @@ export class MovimientosComponent implements OnInit {
     const fechaDesde = fechaDesdeControl?.value;
     const fechaHasta = fechaHastaControl?.value;
     const almacen = this.filtroForm.get('almacen')?.value!;
-    console.log(almacen)
-    console.log(fechaDesde)
-    console.log(fechaHasta)
     this.httpService.obtenerDetalleMovimientoAlmF(almacen, fechaDesde, fechaHasta).subscribe(res => {
       console.log(res)
       if (res.codigoError != "OK") {

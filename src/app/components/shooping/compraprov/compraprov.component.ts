@@ -8,6 +8,8 @@ import { MovimientosService } from 'src/app/services/movimientos.service';
 import { VentaCreateComponent } from '../../outcome/venta-create/venta-create.component';
 //import { VerDetalleComponent } from '../ver-detalle/ver-detalle.component';
 import Swal from 'sweetalert2';
+import { FormControl, FormGroup } from '@angular/forms';
+import { DataTableDirective } from 'angular-datatables';
 
 @Component({
   selector: 'app-compraprov',
@@ -23,8 +25,16 @@ export class CompraprovComponent implements OnInit {
   faPlus = faPlus;
   //Declaración de variables
   dtOptions: DataTables.Settings = {};
+  private datatableElement!: DataTableDirective;
   dtTrigger: Subject<any> = new Subject<any>();
   lstMovimientos: MovimientosEntity[] = [];
+
+  filtroForm = new FormGroup({
+    fechaDesde: new FormControl(),
+    fechaHasta: new FormControl()
+  });
+
+  fechaActual: string = '';
 
   constructor(private readonly httpService: MovimientosService,
     private router: Router,
@@ -83,6 +93,7 @@ export class CompraprovComponent implements OnInit {
               // timer: 3000
             });
           } else {
+            console.log(res.lstMovimientos)
             this.lstMovimientos = res.lstMovimientos;
             this.dtTrigger.next('');
             Swal.close();
@@ -95,10 +106,44 @@ export class CompraprovComponent implements OnInit {
         console.log('I was closed by the timer');
       }
     });
+    this.fechaActual = new Date().toISOString().split('T')[0];
   }
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
+  }
+
+  filterByDate(): void {
+    const fechaDesdeControl = this.filtroForm.get('fechaDesde');
+    const fechaHastaControl = this.filtroForm.get('fechaHasta');
+    const fechaDesde = fechaDesdeControl?.value;
+    const fechaHasta = fechaHastaControl?.value;
+    const almacen = localStorage.getItem('almacenid')!;
+    this.httpService.obtenerMovimientosCompF(almacen,fechaDesde, fechaHasta).subscribe(res => {
+      console.log(res)
+      if (res.codigoError != "OK") {
+        this.filtroForm.get('almacen')?.enable();
+        Swal.fire({
+          icon: 'error',
+          title: 'No se pudo obtener movimientos.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      } else {
+        this.lstMovimientos = res.lstMovimientos;
+        this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+          // Destruye la tabla existente y elimina los datos
+          dtInstance.destroy();
+
+          // Renderiza la tabla con los nuevos datos
+          this.dtTrigger.next('');
+
+          // Opcional: Reinicia la página a la primera página
+          dtInstance.page('first').draw('page');
+        });
+      }
+    });
+
   }
 
   crearCompra() {
@@ -136,4 +181,43 @@ export class CompraprovComponent implements OnInit {
     })
   }
 
+  reiniciarFiltros() {
+    this.filtroForm.get('fechaDesde')?.setValue(null);
+    this.filtroForm.get('fechaHasta')?.setValue(null);
+    this.filtroForm.get('fechaDesde')?.enable();
+    this.filtroForm.get('fechaHasta')?.enable();
+    const newMovimiento: MovimientosEntity = {
+      id: '',
+      tipo_id: '',
+      tipo_emision_cod: '',
+      estado_fact_id: '',
+      tipo_comprb_id: '',
+      almacen_id: localStorage.getItem('almacenid')!,
+      cod_doc: '',
+      secuencial: ''
+    }
+    this.httpService.obtenerMovimientosAlmacenc(newMovimiento).subscribe(res => {
+      if (res.codigoError != "OK") {
+        Swal.fire({
+          icon: 'error',
+          title: 'Ha ocurrido un error.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+          // timer: 3000
+        });
+      } else {
+        this.lstMovimientos = res.lstMovimientos;
+        this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+          // Destruye la tabla existente y elimina los datos
+          dtInstance.destroy();
+
+          // Renderiza la tabla con los nuevos datos
+          this.dtTrigger.next('');
+
+          // Opcional: Reinicia la página a la primera página
+          dtInstance.page('first').draw('page');
+        });
+      }
+    });
+  }
 }

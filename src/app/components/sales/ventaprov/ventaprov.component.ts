@@ -8,6 +8,8 @@ import { MovimientosService } from 'src/app/services/movimientos.service';
 import { VentaCreateComponent } from '../../outcome/venta-create/venta-create.component';
 import { VerDetalleComponent } from '../ver-detalle/ver-detalle.component';
 import Swal from 'sweetalert2';
+import { DataTableDirective } from 'angular-datatables';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-ventaprov',
@@ -24,12 +26,21 @@ export class VentaprovComponent implements OnInit {
   //Declaración de variables
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
+  private datatableElement!: DataTableDirective;
   lstMovimientos: MovimientosEntity[] = [];
+
+  filtroForm = new FormGroup({
+    fechaDesde: new FormControl(),
+    fechaHasta: new FormControl()
+  });
+
+  fechaActual: string = '';
 
   constructor(private readonly httpService: MovimientosService,
     private router: Router,
     private dialog: MatDialog) { }
-
+    
+    
   openModal(): void {
     const dialogRef = this.dialog.open(VentaCreateComponent, {
       width: '500px',
@@ -103,6 +114,7 @@ export class VentaprovComponent implements OnInit {
         console.log('I was closed by the timer');
       }
     });
+    this.fechaActual = new Date().toISOString().split('T')[0];
   }
 
   ngOnDestroy(): void {
@@ -143,6 +155,78 @@ export class VentaprovComponent implements OnInit {
         }
       })
     })
+  }
+
+  filterByDate(): void {
+    const fechaDesdeControl = this.filtroForm.get('fechaDesde');
+    const fechaHastaControl = this.filtroForm.get('fechaHasta');
+    const fechaDesde = fechaDesdeControl?.value;
+    const fechaHasta = fechaHastaControl?.value;
+    const almacen = localStorage.getItem('almacenid')!;
+    this.httpService.obtenerMovimientosVentF(almacen,fechaDesde, fechaHasta).subscribe(res => {
+      console.log(res)
+      if (res.codigoError != "OK") {
+        this.filtroForm.get('almacen')?.enable();
+        Swal.fire({
+          icon: 'error',
+          title: 'No se pudo obtener movimientos.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      } else {
+        this.lstMovimientos = res.lstMovimientos;
+        this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+          // Destruye la tabla existente y elimina los datos
+          dtInstance.destroy();
+
+          // Renderiza la tabla con los nuevos datos
+          this.dtTrigger.next('');
+
+          // Opcional: Reinicia la página a la primera página
+          dtInstance.page('first').draw('page');
+        });
+      }
+    });
+  }
+
+  reiniciarFiltros() {
+    this.filtroForm.get('fechaDesde')?.setValue(null);
+    this.filtroForm.get('fechaHasta')?.setValue(null);
+    this.filtroForm.get('fechaDesde')?.enable();
+    this.filtroForm.get('fechaHasta')?.enable();
+    const newMovimiento: MovimientosEntity = {
+      id: '',
+      tipo_id: '',
+      tipo_emision_cod: '',
+      estado_fact_id: '',
+      tipo_comprb_id: '',
+      almacen_id: localStorage.getItem('almacenid')!,
+      cod_doc: '',
+      secuencial: ''
+    }
+    this.httpService.obtenerMovimientosAlmacenv(newMovimiento).subscribe(res => {
+      if (res.codigoError != "OK") {
+        Swal.fire({
+          icon: 'error',
+          title: 'Ha ocurrido un error.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+          // timer: 3000
+        });
+      } else {
+        this.lstMovimientos = res.lstMovimientos;
+        this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+          // Destruye la tabla existente y elimina los datos
+          dtInstance.destroy();
+
+          // Renderiza la tabla con los nuevos datos
+          this.dtTrigger.next('');
+
+          // Opcional: Reinicia la página a la primera página
+          dtInstance.page('first').draw('page');
+        });
+      }
+    });
   }
 
 }

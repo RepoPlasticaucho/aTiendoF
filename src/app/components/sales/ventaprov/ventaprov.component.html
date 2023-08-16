@@ -28,11 +28,35 @@
                     </span>
                 </a>
             </div>
-            <br><br><br>
+            <br><br>
+            <form [formGroup]="filtroForm">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="fechaDesde">Fecha Desde:</label>
+                            <input type="date" id="fechaDesde" style="width: 210px;" class="form-control" formControlName="fechaDesde"
+                                (change)="filterByDate()">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="fechaHasta">Fecha Hasta:</label>
+                            <input type="date" id="fechaHasta" [value]="fechaActual" [ngModel]="fechaActual" style="width: 210px;" class="form-control" formControlName="fechaHasta"
+                                (change)="filterByDate()">
+                        </div>
+                    </div>
+                    <div class="button-container">
+                        <button class="btn btn-primary" style="margin-top: 26px;" (click)="reiniciarFiltros()">
+                            <span style="color: white"> Reiniciar Filtros</span>
+                        </button>
+                    </div>
+                </div>
+            </form><br>
             <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                 <thead style="color: #636363;">
                     <tr>
                         <th style="width: 20%; ">CÓDIGO</th>
+                        <th style="width: 20%; ">TERCERO</th>
                         <th style="width: 20%; ">FECHA</th>
                         <th style="width: 20%; ">TOTAL FACTURA</th>
                         <th style="width: 20%; "></th>
@@ -42,7 +66,8 @@
                     <tr *ngFor="let movimiento of lstMovimientos" class="table-row"
                         class="table-row">
                         <td (click)="openModalDetalle(movimiento)">{{movimiento.id}}</td>
-                        <td (click)="openModalDetalle(movimiento)">{{movimiento.fecha_emision | slice:0:10}}</td>
+                        <td (click)="openModalDetalle(movimiento)">{{movimiento.tercero}}</td>
+                        <td (click)="openModalDetalle(movimiento)">{{movimiento.fecha_emision}}</td>
                         <td (click)="openModalDetalle(movimiento)">{{movimiento.importe_total}}</td>
                         <td>
                             <a class="btn btn-success" (click)="openModal()" 
