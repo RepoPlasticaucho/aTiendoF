@@ -273,8 +273,11 @@ export class NuevoProductoComponent implements OnInit {
                         text: `Se ha creado el Producto ${this.modelProductForm.value.producto}`,
                         showConfirmButton: true,
                         confirmButtonText: "Ok"
-                      })
-                      this.cerrarDialog();
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                          this.cerrarDialog();
+                        }
+                      });
                     } else {
                       Swal.fire({
                         icon: 'error',

@@ -9,6 +9,7 @@
     top: 0;
     right: 250px;
   }
+
   
   .label-input {
     position: absolute;
@@ -42,16 +43,18 @@
   }
 
   .table-container {
-    max-height: 400px; /* Ajusta este valor según tus necesidades */
-    max-width: 4000px;
+    max-height: 1200px; /* Ajusta este valor según tus necesidades */
+    max-width: 5000px;
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: auto;
 }
 
 /* Estilos personalizados para el scrollbar */
 .table-container::-webkit-scrollbar {
-  width: 5px; /* Ancho del scrollbar */
+  width: 10px; /* Ancho del scrollbar */
   right: 10px; /* Ajusta esta distancia según tus necesidades */
+  margin-right: 20px; /* Agrega margen derecho */
+  margin-bottom: 20px; /* Agrega margen inferior */
 }
 
 .table-container::-webkit-scrollbar-track {
@@ -106,28 +109,17 @@ font-size: 14px;
 /* Otros estilos personalizados */
 }
 
-.table-container {
-  max-height: 450px; /* Ajusta este valor según tus necesidades */
-  max-width: 4000px;
-  overflow-x: hidden;
-  overflow-y: auto;
+
+.boton-adicional {
+  background: #319ed1;
+  color: white;
+  font-size: 15px;
+  width: 200px;
+  height: 35px;
+  text-align: center;
 }
 
-/* Estilos personalizados para el scrollbar */
-.table-container::-webkit-scrollbar {
-width: 5px; /* Ancho del scrollbar */
-right: 10px; /* Ajusta esta distancia según tus necesidades */
-}
-
-.table-container::-webkit-scrollbar-track {
-background-color: #f1f1f1; /* Color de fondo del track del scrollbar */
-}
-
-.table-container::-webkit-scrollbar-thumb {
-background-color: #888; /* Color del thumb del scrollbar */
-border-radius: 5px; /* Borde redondeado del thumb del scrollbar */
-}
-
-.table-container::-webkit-scrollbar-thumb:hover {
-background-color: #555; /* Color del thumb del scrollbar al pasar el cursor por encima */
+.producto-existente {
+  background-color: green; /* Cambia el fondo a verde */
+  /* Agrega cualquier otro estilo deseado para resaltar */
 }

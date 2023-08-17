@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
-import { faShoppingBag, faTimes, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
-import { MatDialogRef } from '@angular/material/dialog';
+import { faShoppingBag, faTimes, faShoppingCart, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MenucomprComponent } from '../menucompr/menucompr.component';
 import { DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
 import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service';
@@ -14,6 +14,7 @@ import { InventariosEntity } from 'src/app/models/inventarios';
 import { InventariosService } from 'src/app/services/inventarios.service';
 import { ProveedoresproductosService } from 'src/app/services/proveedoresproductos.service';
 import { ProveedoresProductosEntity } from 'src/app/models/proveedoresproductos';
+import { NuevoProductoComponent } from '../nuevo-producto/nuevo-producto.component';
 
 @Component({
   selector: 'app-compra-nuevo',
@@ -26,6 +27,7 @@ export class CompraNuevoComponent implements OnInit {
   faShoppingBag = faShoppingBag;
   faShoppingCart = faShoppingCart;
   faTimes = faTimes;
+  faPlus = faPlus;
   // Nueva propiedad para las tarjetas de la página actual
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
@@ -41,6 +43,7 @@ export class CompraNuevoComponent implements OnInit {
 
   constructor(
     private readonly httpServiceProductos: ProductosAdminService,
+    private dialog: MatDialog,
     private readonly httpServiceProvProd: ProveedoresproductosService,
     private readonly httpServiceDetalle: DetallesmovimientoService,
     private readonly httpServiceInventario: InventariosService,
@@ -88,6 +91,27 @@ export class CompraNuevoComponent implements OnInit {
           } else {
             this.lstProveedoresProductos = res1.lstProveedoresProductos;
             this.dtTrigger.next('');
+            for(let i = 0; i < this.lstProveedoresProductos.length; i++){
+              const newDetalle: DetallesMovimientoEntity = {
+                id: '',
+                producto_id: this.lstProveedoresProductos[i].producto_id,
+                producto_nombre: '',
+                inventario_id: '',
+                movimiento_id: localStorage.getItem('movimiento_id')!,
+                cantidad: '',
+                costo: '',
+                precio: ''
+              }
+              console.log(newDetalle)
+              this.httpServiceDetalle.obtenerDetalleMovimientoEx(newDetalle).subscribe(res2 => {
+                if (res2.codigoError == 'OK'){
+                  this.lstProveedoresProductos[i].productoExistente = true; // El producto ya existe en detalle_movimientos
+                  this.lstProveedoresProductos[i].cantidad = res2.lstDetalleMovimientos[0].cantidad;
+                } else {
+                  this.lstProveedoresProductos[i].productoExistente = false; // El producto no existe en detalle_movimientos
+                }
+              });
+            }
             Swal.close();
           }
         });
@@ -179,8 +203,12 @@ export class CompraNuevoComponent implements OnInit {
                         text: `Se ha guardado con éxito el producto`,
                         showConfirmButton: true,
                         confirmButtonText: 'Ok',
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                          this.productoAgregado.emit(proveedorProducto);
+                          this.cerrarDialog();
+                        }
                       });
-                      this.productoAgregado.emit(proveedorProducto);
                     }
                   });
                 });
@@ -260,8 +288,12 @@ export class CompraNuevoComponent implements OnInit {
                   text: `Se ha guardado con éxito el producto`,
                   showConfirmButton: true,
                   confirmButtonText: 'Ok',
-                });
-                this.productoAgregado.emit(proveedorProducto);
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    this.productoAgregado.emit(proveedorProducto);
+                    this.cerrarDialog();
+                  }
+                }); 
               }
             });
           }
@@ -275,6 +307,18 @@ export class CompraNuevoComponent implements OnInit {
     event.target.value = inputValue.replace(/[^0-9]/g, ''); // Filtra solo números
   }
 
+  nuevoProducto() {
+    const dialogRef = this.dialog.open(NuevoProductoComponent, {
+      width: '900px',
+      height: '600px'
+      // Agrega cualquier configuración adicional del modal aquí
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      // Lógica para manejar el resultado después de cerrar el modal
+      this.ngOnInit();
+    });
+  }
 
 }
 

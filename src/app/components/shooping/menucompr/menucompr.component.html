@@ -20,10 +20,6 @@
                 </a>
             </div>
             <div class="d-flex justify-content-end">
-                <button class="btn button boton-adicional" (click)="nuevoProducto()" [disabled]="buttonsDisabled">
-                    <fa-icon [icon]="faPlus" [size]="'lg'" style="color: #ffffff"></fa-icon>
-                    CREAR
-                </button>
                 <button class="btn button carrito-button" (click)="verCarrito()" [disabled]="buttonsDisabled">
                     <fa-icon [icon]="faShoppingCart" [size]="'lg'" style="color: #ffffff"></fa-icon>
                     - AÑADIR
@@ -187,6 +183,7 @@
                 <input type="text" [(ngModel)]="sumaTotal" class="cool-input resultado-input" readonly>
             </div>
             <br><br><br>
+            
             <br><br><br>
             <div class="button-container">
                 <button class="btn btn-primary" [disabled]="lstDetalleMovimientos.length == 0"

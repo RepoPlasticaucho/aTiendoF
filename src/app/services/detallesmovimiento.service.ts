@@ -48,6 +48,10 @@ export class DetallesmovimientoService {
     return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ObtenerDetalleMovimiento`, detalle );
   }
 
+  obtenerDetalleMovimientoEx(detalle: DetallesMovimientoEntity): Observable<DetallesMovimiento> {
+    return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ObtenerDetalleMovimientoEx`, detalle );
+  }
+
   obtenerUltDetalleMovimiento(detalle: DetallesMovimientoEntity): Observable<DetallesMovimiento> {
     return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ObtenerUltDetalleMovimiento`, detalle );
   }

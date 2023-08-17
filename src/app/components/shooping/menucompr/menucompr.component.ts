@@ -21,6 +21,7 @@ import { AlmacenesEntity } from 'src/app/models/almacenes';
 import { SociedadesEntity } from 'src/app/models/sociedades';
 import { InventariosService } from 'src/app/services/inventarios.service';
 import { InventariosEntity } from 'src/app/models/inventarios';
+import { DataTableDirective } from 'angular-datatables';
 
 @Component({
   selector: 'app-menucompr',
@@ -54,6 +55,7 @@ export class MenucomprComponent implements OnInit {
 
   //Declaración de variables
   dtOptions: DataTables.Settings = {};
+  private datatableElement!: DataTableDirective;
   dtTrigger: Subject<any> = new Subject<any>();
   lstDetalleMovimientos: DetallesMovimientoEntity[] = [];
   sumaTotal: any;
@@ -208,7 +210,7 @@ export class MenucomprComponent implements OnInit {
 
   verCarrito() {
     const dialogRef = this.dialog.open(CompraNuevoComponent, {
-      width: '4000px',
+      width: '1900px',
       height: '600px'
       // Agrega cualquier configuración adicional del modal aquí
     });
@@ -279,7 +281,7 @@ export class MenucomprComponent implements OnInit {
       .toLocaleString(undefined, { minimumFractionDigits: 2 })
       .replace('.', ',');
   }
-  
+
   calcularTotalTarifa0(): number {
     const totalTarifa0 = this.lstDetalleMovimientos
       .filter((detalleMovimientos) => detalleMovimientos.tarifa === '0%')
@@ -374,8 +376,43 @@ export class MenucomprComponent implements OnInit {
               showConfirmButton: true,
               confirmButtonText: "Ok"
             }).then(() => {
-              // this.groupForm.reset();
-              window.location.reload();
+              const newDetalle: DetallesMovimientoEntity = {
+                id: '',
+                producto_nombre: '',
+                inventario_id: '',
+                producto_id: '',
+                movimiento_id: localStorage.getItem('movimiento_id')!,
+                cantidad: '',
+                costo: '',
+                precio: ''
+              }
+              this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe(res => {
+                if (res.codigoError != "OK") {
+                  window.location.reload();
+                  Swal.fire({
+                    icon: 'info',
+                    title: 'Información',
+                    text: 'Empieza tu pedido en "AÑADIR".',
+                    showConfirmButton: true,
+                    // timer: 3000
+                  });
+                } else {
+                  this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+                  this.disableProveedor = this.lstDetalleMovimientos.length > 0;
+                  // this.groupForm.reset();
+                  this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+                    // Destruye la tabla existente y elimina los datos
+                    dtInstance.destroy();
+
+                    // Renderiza la tabla con los nuevos datos
+                    this.dtTrigger.next('');
+
+                    // Opcional: Reinicia la página a la primera página
+                    dtInstance.page('first').draw('page');
+                  });
+                  this.calcularSumaTotal();
+                }
+              });
             });
           } else {
             Swal.fire({
