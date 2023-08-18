@@ -20,6 +20,7 @@
                     <th style="width: 20%; ">COSTO</th>
                     <th style="width: 20%; ">TARIFA</th>
                     <th style="width: 20%; ">STOCK ACTUAL</th>
+                    <th style="width: 1%; "></th>
                     <th style="width: 20%; "></th>
                 </tr>
             </thead>
@@ -39,16 +40,16 @@
                     <td>{{inventario.costo}}</td>
                     <td>{{inventario.tarifa_ice_iva}}</td>
                     <td>{{ parseInt(inventario.stock! ) | number: '.0-0' }}</td>
+                    <td>
+                        <i *ngIf="inventario.productoExistente" class="fas fa-check-circle"
+                                style="color: green; margin-right: 5px;"></i>
+                    </td>
                     <td style="text-align: center;">
-                        <a class="btn button" (click)=" crearDetalle(inventario)" style="border-radius: 5px; 
-                                       background: rgb(49,99,173,0.8); 
-                                       font-size: 15px; width:120px; 
-                                       height:35px;
-                                       text-align:center; 
-                                       margin-top: 10px;
-                                       ">
+                        <a class="btn button" (click)="crearDetalle(inventario)" 
+                            [ngClass]="{'btn-success': inventario.productoExistente, 'btn-primary': !inventario.productoExistente}"
+                            style="border-radius: 5px; font-size: 15px; width:120px; height:35px; text-align:center; margin-top: 10px;">
                             <span style="color:white;">
-                                AÑADIR
+                                {{ inventario.productoExistente ? 'ACTUALIZAR' : 'AÑADIR' }}
                             </span>
                         </a>
                     </td>

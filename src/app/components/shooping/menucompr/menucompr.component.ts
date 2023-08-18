@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { Subject } from 'rxjs';
-import { faShoppingBag, faSave, faList, faTimes, faShoppingCart, faEdit, faTrashAlt, faMoneyBillAlt, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faShoppingBag, faSave, faList, faTimes, faCartPlus, faEdit, faTrashAlt, faMoneyBillAlt, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
 import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service';
 import { CompraNuevoComponent } from '../compra-nuevo/compra-nuevo.component';
@@ -41,7 +41,7 @@ export class MenucomprComponent implements OnInit {
   faCheck = faCheck;
   faSave = faSave;
   faPlus = faPlus;
-  faShoppingCart = faShoppingCart;
+  faCartPlus = faCartPlus;
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;
   faMoneyBillAlt = faMoneyBillAlt;
@@ -333,40 +333,6 @@ export class MenucomprComponent implements OnInit {
       denyButtonText: 'No',
     }).then((result) => {
       if (result.isConfirmed) {
-        /*
-        const newInventarioCos: InventariosEntity = {
-          categoria_id: '',
-          categoria: '',
-          linea: '',
-          modelo: '',
-          marca_id: '',
-          marca: '',
-          modelo_producto_id: '',
-          idProducto: '',
-          costo: '',
-          Producto: '',
-          id: '',
-          dInventario: '',
-          producto_id: '',
-          almacen_id: '',
-          almacen: '',
-          stock_optimo: '',
-          fav: '',
-          color: ''
-        }
-        this.httpServiceInv.actualizarCosto(newInventarioCos).subscribe(res2 => {
-          if (res2.codigoError == 'OK') {
-            
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Ha ocurrido un error.',
-              text: res2.descripcionError,
-              showConfirmButton: false,
-            });
-          }
-        });
-        */
         this.httpService.eliminarDetalleCompra(detalle).subscribe(res => {
           if (res.codigoError == 'OK') {
             Swal.fire({

@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
-import { faShoppingBag, faTimes, faShoppingCart, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faShoppingBag, faTimes, faShoppingCart, faFolderPlus } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MenucomprComponent } from '../menucompr/menucompr.component';
 import { DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
@@ -27,7 +27,7 @@ export class CompraNuevoComponent implements OnInit {
   faShoppingBag = faShoppingBag;
   faShoppingCart = faShoppingCart;
   faTimes = faTimes;
-  faPlus = faPlus;
+  faFolderPlus = faFolderPlus;
   // Nueva propiedad para las tarjetas de la página actual
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();

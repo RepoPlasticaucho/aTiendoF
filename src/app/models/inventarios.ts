@@ -22,6 +22,7 @@ export interface InventariosEntity {
     modelo_producto? : string;
     idProducto : string;
     Producto : string;
+    productoExistente?: boolean;
     id : string;
     dInventario : string;
     producto_id : string;

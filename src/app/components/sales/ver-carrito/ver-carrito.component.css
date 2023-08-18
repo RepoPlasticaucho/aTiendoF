@@ -131,3 +131,8 @@ border-radius: 5px; /* Borde redondeado del thumb del scrollbar */
 .table-container::-webkit-scrollbar-thumb:hover {
 background-color: #555; /* Color del thumb del scrollbar al pasar el cursor por encima */
 }
+
+.producto-existente {
+  background-color: green; /* Cambia el fondo a verde */
+  /* Agrega cualquier otro estilo deseado para resaltar */
+}

@@ -83,6 +83,27 @@ searchText: string = '';
           } else {
             this.lstInventarios = res1.lstInventarios;
             this.dtTrigger.next('');
+            for(let i = 0; i < this.lstInventarios.length; i++){
+              const newDetalle: DetallesMovimientoEntity = {
+                id: '',
+                producto_id: this.lstInventarios[i].producto_id,
+                producto_nombre: '',
+                inventario_id: '',
+                movimiento_id: localStorage.getItem('movimiento_id')!,
+                cantidad: '',
+                costo: '',
+                precio: ''
+              }
+              console.log(newDetalle)
+              this.httpServiceDetalle.obtenerDetalleMovimientoEx(newDetalle).subscribe(res2 => {
+                if (res2.codigoError == 'OK'){
+                  this.lstInventarios[i].productoExistente = true; // El producto ya existe en detalle_movimientos
+                  this.lstInventarios[i].cantidad = res2.lstDetalleMovimientos[0].cantidad;
+                } else {
+                  this.lstInventarios[i].productoExistente = false; // El producto no existe en detalle_movimientos
+                }
+              });
+            }
             Swal.close();
           }
         });
@@ -123,61 +144,97 @@ searchText: string = '';
         this.costo = res.pvp2;
         this.precio = parseFloat(res.pvp2!) * parseFloat(inventario.cantidad!);
         this.codigo = res.id!;
-        const newDetalle: DetallesMovimientoEntity = {
-          id: '',
-          producto_nombre: '',
-          inventario_id: this.codigo,
-          producto_id: res.producto_id,
-          movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
-          cantidad: inventario.cantidad!,
-          costo: this.costo,
-          precio: this.precio
-        }
-        this.httpServiceDetalle.agregarDetallePedido(newDetalle).pipe(finalize(() => {
-          this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
-            if (res1.codigoError == 'OK') {
-              const newDetalleImp: DetalleImpuestosEntity = {
-                id: '',
-                detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
-                cod_impuesto: res1.lstDetalleMovimientos[0].cod_tarifa!,
-                porcentaje: res1.lstDetalleMovimientos[0].tarifa!,
-                base_imponible: '',
-                valor: res1.lstDetalleMovimientos[0].costo!,
-                created_at: '',
-                updated_at: ''
+        console.log(inventario.productoExistente)
+        if (inventario.productoExistente) {
+          const newDetalle: DetallesMovimientoEntity = {
+            id: '',
+            producto_nombre: '',
+            inventario_id: this.codigo,
+            producto_id: res.producto_id,
+            movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
+            cantidad: inventario.cantidad!,
+            costo: '',
+            precio: ''
+          }
+          if(inventario.cantidad! != '0'){
+            this.httpServiceDetalle.modificarDetallePedidoVenta(newDetalle).subscribe(res => {
+              console.log(res.codigoError)
+              if(res.codigoError == 'OK'){
+                console.log("Actualizado")
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Ha ocurrido un error.',
+                  text: 'No existe suficiente stock.',
+                  showConfirmButton: false
+                });
               }
-              this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
-                if (res2.codigoError != 'OK') {
-                  Swal.fire({
-                    icon: 'error',
-                    title: 'Ha ocurrido un error.',
-                    text: res2.descripcionError,
-                    showConfirmButton: false
-                  });
-                }
-              });
-            }
-          });
-        })
-        ).subscribe(res => {
-          if (res.codigoError != 'OK') {
-            Swal.fire({
-              icon: 'error',
-              title: 'Ha ocurrido un error.',
-              text: 'No existe suficiente stock.',
-              showConfirmButton: false
             });
           } else {
-            Swal.fire({
-              icon: 'success',
-              title: 'Se ha agregado al carrito',
-              text: `Se ha guardado con éxito el producto`,
-              showConfirmButton: true,
-              confirmButtonText: 'Ok',
+            this.httpServiceDetalle.eliminarDetallePedidoVenta(newDetalle).subscribe(res => {
+              console.log(res)
+              if(res.codigoError == 'OK'){
+                console.log("Eliminado")
+              }
             });
-            this.productoAgregado.emit(inventario);
           }
-        });
+        } else {
+          const newDetalle: DetallesMovimientoEntity = {
+            id: '',
+            producto_nombre: '',
+            inventario_id: this.codigo,
+            producto_id: res.producto_id,
+            movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
+            cantidad: inventario.cantidad!,
+            costo: this.costo,
+            precio: this.precio
+          }
+          this.httpServiceDetalle.agregarDetallePedido(newDetalle).pipe(finalize(() => {
+            this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
+              if (res1.codigoError == 'OK') {
+                const newDetalleImp: DetalleImpuestosEntity = {
+                  id: '',
+                  detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
+                  cod_impuesto: res1.lstDetalleMovimientos[0].cod_tarifa!,
+                  porcentaje: res1.lstDetalleMovimientos[0].tarifa!,
+                  base_imponible: '',
+                  valor: res1.lstDetalleMovimientos[0].costo!,
+                  created_at: '',
+                  updated_at: ''
+                }
+                this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
+                  if (res2.codigoError != 'OK') {
+                    Swal.fire({
+                      icon: 'error',
+                      title: 'Ha ocurrido un error.',
+                      text: res2.descripcionError,
+                      showConfirmButton: false
+                    });
+                  }
+                });
+              }
+            });
+          })
+          ).subscribe(res => {
+            if (res.codigoError != 'OK') {
+              Swal.fire({
+                icon: 'error',
+                title: 'Ha ocurrido un error.',
+                text: 'No existe suficiente stock.',
+                showConfirmButton: false
+              });
+            } else {
+              Swal.fire({
+                icon: 'success',
+                title: 'Se ha agregado al carrito',
+                text: `Se ha guardado con éxito el producto`,
+                showConfirmButton: true,
+                confirmButtonText: 'Ok',
+              });
+              this.productoAgregado.emit(inventario);
+            }
+          });
+        }
       }
     })
   }

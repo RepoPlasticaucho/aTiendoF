@@ -18,6 +18,7 @@ import { CiudadesService } from 'src/app/services/ciudades.service';
 import { CiudadesEntity } from 'src/app/models/ciudades';
 import { DetalleImpuestosService } from 'src/app/services/detalle-impuestos.service';
 import { DetalleImpuestosEntity } from 'src/app/models/detalle-impuestos';
+import { DataTableDirective } from 'angular-datatables';
 
 @Component({
   selector: 'app-menuvent',
@@ -50,6 +51,7 @@ export class MenuventComponent implements OnInit {
   lstCiudades: CiudadesEntity[] = [];
   lstCiudades2: CiudadesEntity[] = [];
   sumaTotal: any;
+  private datatableElement!: DataTableDirective;
   detalleEditIndex: number = -1;
   detalleEditBackup: DetallesMovimientoEntity | null = null;
   formGroup: any;
@@ -396,8 +398,43 @@ export class MenuventComponent implements OnInit {
               showConfirmButton: true,
               confirmButtonText: 'Ok',
             }).then(() => {
-              // this.groupForm.reset();
-              window.location.reload();
+              const newDetalle: DetallesMovimientoEntity = {
+                id: '',
+                producto_nombre: '',
+                inventario_id: '',
+                producto_id: '',
+                movimiento_id: localStorage.getItem('movimiento_id')!,
+                cantidad: '',
+                costo: '',
+                precio: ''
+              }
+              this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe(res => {
+                if (res.codigoError != "OK") {
+                  window.location.reload();
+                  Swal.fire({
+                    icon: 'info',
+                    title: 'Información',
+                    text: 'Empieza tu pedido en "AÑADIR".',
+                    showConfirmButton: true,
+                    // timer: 3000
+                  });
+                } else {
+                  this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+                  // this.disableProveedor = this.lstDetalleMovimientos.length > 0;
+                  // this.groupForm.reset();
+                  this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+                    // Destruye la tabla existente y elimina los datos
+                    dtInstance.destroy();
+
+                    // Renderiza la tabla con los nuevos datos
+                    this.dtTrigger.next('');
+
+                    // Opcional: Reinicia la página a la primera página
+                    dtInstance.page('first').draw('page');
+                  });
+                  this.calcularSumaTotal();
+                }
+              });
             });
           } else {
             Swal.fire({
