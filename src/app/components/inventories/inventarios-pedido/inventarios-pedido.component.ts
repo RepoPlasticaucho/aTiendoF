@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faEdit, faPlus, faTrashAlt, faUserFriends } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrashAlt, faUserFriends, faMoneyBillAlt, faBoxes } from '@fortawesome/free-solid-svg-icons';
 import { Subject, subscribeOn } from 'rxjs';
 import { InventariosEntity } from 'src/app/models/inventarios';
 import { AlmacenesEntity } from 'src/app/models/almacenes';
@@ -20,13 +20,18 @@ export class InventariosPedidoComponent implements OnInit {
   faUserFriends = faUserFriends;
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;
+  faMoneyBillAlt = faMoneyBillAlt;
   faPlus = faPlus;
+  faBoxes = faBoxes;
   //Declaración de variables
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
   lstInventarios: InventariosEntity[] = [];
   lstCategorias: CategoriasEntity[] = [];
   cat: string | undefined;
+  sumaTotal: any;
+  totalRegistros: number = 0;
+
   constructor(private readonly httpService: InventariosService,
     private router: Router) { }
 
@@ -81,6 +86,7 @@ export class InventariosPedidoComponent implements OnInit {
                 });
               } else {
                 this.lstInventarios = res.lstInventarios;
+                this.calculateTotalSum();
                 this.dtTrigger.next('');
                 Swal.close();
               }
@@ -95,6 +101,21 @@ export class InventariosPedidoComponent implements OnInit {
       }
 
     })
+
+  }
+
+  isStockBelowOptimal(stock: string, stockOptimo: string): boolean {
+    const stock1: number = parseFloat(stock);
+    const stockOptimo1: number = parseFloat(stockOptimo);
+    return stock1 < stockOptimo1;
+  }
+
+  calculateTotalSum(): void {
+    this.sumaTotal = this.lstInventarios.reduce((total, inventario) => {
+      return total + parseFloat(inventario.pvp2!);
+    }, 0).toFixed(2);
+
+    this.totalRegistros = this.lstInventarios.length;
 
   }
 
@@ -208,6 +229,7 @@ export class InventariosPedidoComponent implements OnInit {
   }*/
 
 }
+
 function obtenerCategorias() {
   throw new Error('Function not implemented.');
 }

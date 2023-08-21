@@ -160,7 +160,15 @@ searchText: string = '';
             this.httpServiceDetalle.modificarDetallePedidoVenta(newDetalle).subscribe(res => {
               console.log(res.codigoError)
               if(res.codigoError == 'OK'){
-                console.log("Actualizado")
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Actualizado',
+                  text: `Se ha cambiado la cantidad`,
+                  showConfirmButton: true,
+                  confirmButtonText: 'Ok',
+                }).then(() => {
+                  this.cerrarDialog();
+                });
               } else {
                 Swal.fire({
                   icon: 'error',
@@ -173,9 +181,15 @@ searchText: string = '';
           } else {
             this.httpServiceDetalle.eliminarDetallePedidoVenta(newDetalle).subscribe(res => {
               console.log(res)
-              if(res.codigoError == 'OK'){
-                console.log("Eliminado")
-              }
+              Swal.fire({
+                icon: 'success',
+                  title: 'Eliminado',
+                  text: `Se ha eliminado el producto del detalle`,
+                  showConfirmButton: true,
+                  confirmButtonText: 'Ok',
+              }).then(() => {
+                this.cerrarDialog();
+              });
             });
           }
         } else {
@@ -230,6 +244,8 @@ searchText: string = '';
                 text: `Se ha guardado con éxito el producto`,
                 showConfirmButton: true,
                 confirmButtonText: 'Ok',
+              }).then(() => {
+                this.cerrarDialog();
               });
               this.productoAgregado.emit(inventario);
             }

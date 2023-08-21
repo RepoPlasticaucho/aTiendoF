@@ -1,0 +1,43 @@
+.icon-container {
+    position: relative;
+  }
+  
+  .icono-input {
+    position: absolute;
+    top: 0;
+    right: 250px;
+  }
+  
+  .label-input {
+    position: absolute;
+    top: 10px;
+    right: 170px;
+    font-size: 20px;
+  }
+
+  .icono-input2 {
+    position: absolute;
+    top: 0;
+    right: 400px;
+  }
+  
+  .label-input2 {
+    position: absolute;
+    top: 10px;
+    right: 170px;
+    font-size: 20px;
+  }
+
+  .cool-input {
+    width: 100px; /* Ajusta el tamaño de los inputs según tus necesidades */
+  }
+
+  .resultado-input {
+    position: absolute;
+    top: 0;
+    right: 35px;
+    width: 100px;
+    height: 35px;
+    text-align: center;
+    /* Estilos adicionales para el input del resultado */
+  }

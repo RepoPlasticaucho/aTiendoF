@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faEdit, faPlus, faTrashAlt, faUserFriends } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrashAlt, faUserFriends, faMoneyBillAlt, faBoxes } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs/internal/Subject';
 import { InventariosEntity } from 'src/app/models/inventarios';
 import { InventariosService } from 'src/app/services/inventarios.service';
@@ -22,11 +22,15 @@ export class InventariosPedidoColoresComponent implements OnInit {
   faUserFriends = faUserFriends;
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;
+  faBoxes = faBoxes;
   faPlus = faPlus;
+  faMoneyBillAlt = faMoneyBillAlt;
   //Declaración de variables
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
   lstInventarios: InventariosEntity[] = [];
+  sumaTotal: any;
+  totalRegistros: number = 0;
 
   color_name: string | undefined;
   categoria_name: string | undefined;
@@ -99,6 +103,7 @@ export class InventariosPedidoColoresComponent implements OnInit {
                 });*/
               } else {
                 this.lstInventarios = res.lstInventarios;
+                this.calculateTotalSum();
                 this.dtTrigger.next('');
                 this.categoria_name = this.lstInventarios[0].categoria;
                 this.linea_name = this.lstInventarios[0].linea;
@@ -122,8 +127,22 @@ export class InventariosPedidoColoresComponent implements OnInit {
     });
 
   }
-  returncategoria() {
 
+  isStockBelowOptimal(stock: string, stockOptimo: string): boolean {
+    const stock1: number = parseFloat(stock);
+    const stockOptimo1: number = parseFloat(stockOptimo);
+    return stock1 < stockOptimo1;
+  }
+
+  calculateTotalSum(): void {
+    this.sumaTotal = this.lstInventarios.reduce((total, inventario) => {
+      return total + parseFloat(inventario.pvp2!);
+    }, 0).toFixed(2);
+
+    this.totalRegistros = this.lstInventarios.length;
+  }
+
+  returncategoria() {
     const inventario: InventariosEntity = {
       categoria_id: this.codigocategoria,
       categoria: '',
@@ -152,7 +171,6 @@ export class InventariosPedidoColoresComponent implements OnInit {
   }
 
   returnLinea() {
-
     const inventario: InventariosEntity = {
       categoria_id: this.codigocategoria,
       categoria: '',

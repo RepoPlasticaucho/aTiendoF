@@ -95,16 +95,27 @@
                         <th style="width: 55%; ">PRODUCTO</th>
                         <th style="width: 15%; ">CANTIDAD OPTIMO</th>
                         <th style="width: 15%; ">STOCK</th>
+                        <th style="width: 15%; ">PRECIO</th>
                     </tr>
                 </thead>
                 <tbody style="color: #767695;">
                     <tr *ngFor="let inventario of lstInventarios">
                         <td>{{inventario.Producto}}</td>
                         <td>{{inventario.stock_optimo}}</td>
-                        <td>{{inventario.stock}}</td>
+                        <td [class.text-danger]="isStockBelowOptimal(inventario.stock!, inventario.stock_optimo)">
+                            {{ inventario.stock }}
+                        </td>
+                        <td>{{inventario.pvp2}}</td>
                     </tr>
                 </tbody>
             </table>
+            <br><br>
+            <div class="icon-container">
+                <fa-icon [icon]="faMoneyBillAlt" [size]="'3x'" style="color: #6aaf42" class="icono-input"></fa-icon>
+                <label for="total" class="label-input">TOTAL:</label>
+                <input type="text" [(ngModel)]="sumaTotal" class="cool-input resultado-input" readonly>
+            </div>
+            <br><br>
         </div>
     </div>
 </div>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faEdit, faPlus, faTrashAlt, faUserFriends } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrashAlt, faUserFriends, faMoneyBillAlt } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs/internal/Subject';
 import { InventariosEntity } from 'src/app/models/inventarios';
 import { ModeloProductosEntity } from 'src/app/models/modeloproductos';
@@ -24,10 +24,12 @@ export class InventariosPedidoModelosComponent implements OnInit {
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;
   faPlus = faPlus;
+  faMoneyBillAlt = faMoneyBillAlt;
   //Declaración de variables
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
   lstInventarios: InventariosEntity[] = [];
+  sumaTotal: any;
   lstModeloProducto: ModeloProductosEntity[] = [];
 
   color_name: string | undefined;
@@ -114,6 +116,7 @@ export class InventariosPedidoModelosComponent implements OnInit {
                 }); */
               } else {
                 this.lstInventarios = res.lstInventarios;
+                this.calculateTotalSum();
                 this.dtTrigger.next('');
                 this.color_name = this.lstInventarios[0].color;
                 this.categoria_name = this.lstInventarios[0].categoria;
@@ -154,6 +157,18 @@ export class InventariosPedidoModelosComponent implements OnInit {
 
       }
     })
+  }
+
+  isStockBelowOptimal(stock: string, stockOptimo: string): boolean {
+    const stock1: number = parseFloat(stock);
+    const stockOptimo1: number = parseFloat(stockOptimo);
+    return stock1 < stockOptimo1;
+  }
+
+  calculateTotalSum(): void {
+    this.sumaTotal = this.lstInventarios.reduce((total, inventario) => {
+      return total + parseFloat(inventario.pvp2!);
+    }, 0).toFixed(2);
   }
 
   buscarPortafolioModeloColor(card: ModeloProductosEntity) {

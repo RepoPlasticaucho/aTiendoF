@@ -282,7 +282,42 @@ export class MenuventComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      // Lógica para manejar el resultado después de cerrar el modal
+      const newDetalle: DetallesMovimientoEntity = {
+        id: '',
+        producto_nombre: '',
+        inventario_id: '',
+        producto_id: '',
+        movimiento_id: localStorage.getItem('movimiento_id')!,
+        cantidad: '',
+        costo: '',
+        precio: '',
+      };
+  
+      this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe((res) => {
+        if (res.codigoError != 'OK') {
+          Swal.fire({
+            icon: 'info',
+            title: 'Información',
+            text: 'Empieza tu pedido en "AÑADIR".',
+            showConfirmButton: true,
+            // timer: 3000
+          });
+        } else {
+          this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+          this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            // Destruye la tabla existente y elimina los datos
+            dtInstance.destroy();
+
+            // Renderiza la tabla con los nuevos datos
+            this.dtTrigger.next('');
+
+            // Opcional: Reinicia la página a la primera página
+            dtInstance.page('first').draw('page');
+          });
+          this.calcularSumaTotal();
+          Swal.close();
+        }
+      });
     });
   }
 

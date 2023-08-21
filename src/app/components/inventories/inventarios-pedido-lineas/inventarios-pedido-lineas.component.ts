@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faEdit, faPlus, faTrashAlt, faUserFriends } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrashAlt, faUserFriends, faMoneyBillAlt, faBoxes } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs/internal/Subject';
 import { CategoriasEntity } from 'src/app/models/categorias';
 import { InventariosEntity } from 'src/app/models/inventarios';
@@ -23,11 +23,15 @@ export class InventariosPedidoLineasComponent implements OnInit {
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;
   faPlus = faPlus;
+  faMoneyBillAlt = faMoneyBillAlt;
+  faBoxes = faBoxes;
 
   //Declaración de variables
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
   lstInventarios: InventariosEntity[] = [];
+  sumaTotal: any;
+  totalRegistros: number = 0;
   lstModelos: ModelosEntity[] = [];
   codigomodel: string | undefined;
   linea_name: string | undefined;
@@ -109,6 +113,7 @@ export class InventariosPedidoLineasComponent implements OnInit {
                 //console.log(res)*/
               } else {
                 this.lstInventarios = res.lstInventarios;
+                this.calculateTotalSum();
                 this.dtTrigger.next('');
                 Swal.close();
 
@@ -180,6 +185,20 @@ export class InventariosPedidoLineasComponent implements OnInit {
     console.log(inventario);
     this.httpService.asignarModelo(inventario);
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido-modelos'] } }]);
+  }
+
+  isStockBelowOptimal(stock: string, stockOptimo: string): boolean {
+    const stock1: number = parseFloat(stock);
+    const stockOptimo1: number = parseFloat(stockOptimo);
+    return stock1 < stockOptimo1;
+  }
+
+  calculateTotalSum(): void {
+    this.sumaTotal = this.lstInventarios.reduce((total, inventario) => {
+      return total + parseFloat(inventario.pvp2!);
+    }, 0).toFixed(2);
+
+    this.totalRegistros = this.lstInventarios.length;
   }
 
   returnLinea() {
