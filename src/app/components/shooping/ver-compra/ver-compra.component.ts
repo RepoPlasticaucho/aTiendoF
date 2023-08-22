@@ -157,7 +157,7 @@ export class VerCompraComponent implements OnInit {
     const suma = totalTarifa12 + totalTarifa0;
 
     this.sumaTotal = suma
-      .toLocaleString(undefined, { minimumFractionDigits: 2 })
+      .toLocaleString(undefined, { maximumFractionDigits: 2 })
       .replace('.', ',');
   }
 

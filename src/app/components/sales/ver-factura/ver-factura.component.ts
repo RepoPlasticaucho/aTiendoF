@@ -208,7 +208,7 @@ export class VerFacturaComponent implements OnInit {
     const suma = totalTarifa12 + totalTarifa0 - desc - this.descuentoN - descP;
 
     this.sumaTotal = suma
-      .toLocaleString(undefined, { minimumFractionDigits: 2 })
+      .toLocaleString(undefined, { maximumFractionDigits: 2 })
       .replace('.', ',');
 
     this.resto = this.sumaTotal.replace(',', '.');

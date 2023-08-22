@@ -38,7 +38,7 @@
                             </option>
                         </select>
                         <button class="btn btn-primary ml-2" (click)="realizarAccion()"
-                            [disabled]="identificacion !== '' || nombre !== '' || correo !== '' || ciudad !== '' || direccion !== '' || telefono !== '' || lstDetalleMovimientos.length > 0">ELEGIR</button>
+                            [disabled]="identificacion !== '' || nombre !== '' || correo !== '' || ciudad !== '' || direccion !== '' || telefono !== '' && lstDetalleMovimientos.length > 0">ELEGIR</button>
                         <button class="btn btn-primary ml-5" (click)="verDatos()">VER DATOS</button>
                     </div>
                     <small *ngIf="selectTipo">
@@ -210,7 +210,7 @@
         </div>
         <br><br><br>
         <div class="button-container">
-            <button class="btn btn-primary" [disabled]="!clienteDatosCompletos || lstDetalleMovimientos.length == 0" (click)="finalizarPedido()">
+            <button class="btn btn-primary" [disabled]="identificacion == '' || nombre == '' || correo == '' || ciudad == '' || direccion == '' || telefono == '' || lstDetalleMovimientos.length == 0" (click)="finalizarPedido()">
                 <span style="color: white"> Continuar</span>
             </button>
         </div>
