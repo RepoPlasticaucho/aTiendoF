@@ -51,6 +51,7 @@ export class MenuventComponent implements OnInit {
   lstCiudades: CiudadesEntity[] = [];
   lstCiudades2: CiudadesEntity[] = [];
   sumaTotal: any;
+  clienteDatosCompletos: boolean = false;
   private datatableElement!: DataTableDirective;
   detalleEditIndex: number = -1;
   detalleEditBackup: DetallesMovimientoEntity | null = null;
@@ -174,6 +175,14 @@ export class MenuventComponent implements OnInit {
             });
           }
         });
+        this.clienteDatosCompletos = (
+          this.identificacion !== '' &&
+          this.nombre !== '' &&
+          this.correo !== '' &&
+          this.ciudad !== '' &&
+          this.direccion !== '' &&
+          this.telefono !== ''
+      );
       }
     });
   }
@@ -220,6 +229,14 @@ export class MenuventComponent implements OnInit {
             });
           }
         });
+        this.clienteDatosCompletos = (
+          this.identificacion !== '' &&
+          this.nombre !== '' &&
+          this.correo !== '' &&
+          this.ciudad !== '' &&
+          this.direccion !== '' &&
+          this.telefono !== ''
+      );
     } else if (selectedOption === 'CLIENTE') {
       const dialogRef = this.dialog.open(VerClienteComponent, {
         width: '900px',
@@ -231,6 +248,15 @@ export class MenuventComponent implements OnInit {
       dialogRef.afterClosed().subscribe((result) => {
         // Lógica para manejar el resultado después de cerrar el modal
       });
+      // Verificar si los campos del cliente están completos
+      this.clienteDatosCompletos = (
+        this.identificacion !== '' &&
+        this.nombre !== '' &&
+        this.correo !== '' &&
+        this.ciudad !== '' &&
+        this.direccion !== '' &&
+        this.telefono !== ''
+      );
     } else {
       console.log('ERROR');
     }
@@ -268,6 +294,14 @@ export class MenuventComponent implements OnInit {
         this.ciudad = res.lstTerceros[0].ciudad;
       }
     });
+    this.clienteDatosCompletos = (
+      this.identificacion !== '' &&
+      this.nombre !== '' &&
+      this.correo !== '' &&
+      this.ciudad !== '' &&
+      this.direccion !== '' &&
+      this.telefono !== ''
+  );
   }
   verCarrito() {
     const dialogRef = this.dialog.open(VerCarritoComponent, {
