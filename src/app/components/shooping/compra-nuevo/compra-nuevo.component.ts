@@ -60,6 +60,7 @@ export class CompraNuevoComponent implements OnInit {
       search: false,
       searching: true,
       ordering: true,
+      pageLength: 100,
       info: true,
       responsive: false
     }

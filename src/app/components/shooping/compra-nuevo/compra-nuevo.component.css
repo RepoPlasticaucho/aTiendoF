@@ -43,8 +43,8 @@
   }
 
   .table-container {
-    max-height: 1200px; /* Ajusta este valor según tus necesidades */
-    max-width: 5000px;
+    max-height: 410px; /* Ajusta este valor según tus necesidades */
+    max-width: 1800px;
     overflow-y: auto;
     overflow-x: auto;
 }

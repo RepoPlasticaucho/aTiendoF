@@ -19,12 +19,7 @@
                     </span>
                 </a>
             </div>
-            <div class="d-flex justify-content-end">
-                <button class="btn button carrito-button" (click)="verCarrito()">
-                    <fa-icon [icon]="faShoppingCart" [size]="'lg'" style="color: #ffffff"></fa-icon>
-                    - AÑADIR
-                </button>
-            </div>
+            <br><br>
             <form [formGroup]="clienteForm">
                 <div class="form-group">
                     <div class="d-flex">
@@ -107,6 +102,13 @@
                     </div>
                 </div>
             </div>
+        <br><br>
+        <div class="d-flex justify-content-left">
+            <button class="btn button carrito-button" (click)="verCarrito()">
+                <fa-icon [icon]="faShoppingCart" [size]="'lg'" style="color: #ffffff"></fa-icon>
+                - AÑADIR
+            </button>
+        </div>
         <br><br>
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
             <thead style="color: #636363;">
