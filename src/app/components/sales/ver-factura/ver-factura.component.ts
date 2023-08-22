@@ -318,7 +318,7 @@ export class VerFacturaComponent implements OnInit {
       }
       console.log(newPedido)
       Swal.fire({
-        title: '¿Estás seguro de finalizar el pedido?',
+        title: '¿Estás seguro de finalizar la VENTA?',
         showDenyButton: true,
         confirmButtonText: 'SÍ',
         denyButtonText: `NO`,
@@ -330,7 +330,7 @@ export class VerFacturaComponent implements OnInit {
               Swal.fire({
                 icon: 'success',
                 title: 'Finalizado Correctamente.',
-                text: `Se ha finalizado el pedido`,
+                text: `Se ha finalizado la venta`,
                 showConfirmButton: true,
                 confirmButtonText: "Ok"
               }).finally(() => {
@@ -347,7 +347,7 @@ export class VerFacturaComponent implements OnInit {
             }
           })
         } else if (result.isDenied) {
-          Swal.fire('No se finalizó el pedido', '', 'info')
+          Swal.fire('No se finalizó la venta', '', 'info')
         }
       });
     });

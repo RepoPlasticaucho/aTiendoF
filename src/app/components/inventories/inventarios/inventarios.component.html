@@ -33,10 +33,15 @@
             <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                 <thead style="color: #636363;">
                     <tr>
+                        <th style="width: 8%; ">IMAGEN</th>
+                        <th style="width: 15%; ">PRODUCTO</th>
                         <th style="width: 8%; ">CATEGORIA</th>
                         <th style="width: 8%; ">TIPO</th>
                         <th style="width: 8%; ">MARCA</th>
-                        <th style="width: 15%; ">PRODUCTO</th>
+                        <th style="width: 8%; ">MODELO</th>
+                        <th style="width: 8%; ">COLOR</th>
+                        <th style="width: 8%; ">CARACTERISTICA</th>
+                        <th style="width: 8%; ">GENERO</th>
                         <th style="width: 12%; ">ETIQUETAS</th>
                         <th style="width: 8%; ">STOCK</th>
                         <th style="width: 2%; ">FAV</th>
@@ -44,17 +49,25 @@
                         <th style="width: 8%; ">COSTO</th>
                         <th style="width: 8%; ">TAMAÑO</th>
                         <th style="width: 8%; ">UNI. MEDIDA</th>
-                        <th style="width: 8%; ">IMPUESTO</th>
-
+                        <th style="width: 8%; ">IVA</th>
+                        <th style="width: 8%; ">ICE</th>
                         <th style="width: 18%; "></th>
                     </tr>
                 </thead>
                 <tbody style="color: #767695;">
-                    <tr *ngFor="let inventario of lstInventarios">
+                    <tr *ngFor="let inventario of lstInventarios" class="table-row">
+                        <td style="text-align: center;">
+                            <img src={{inventario.url_image}} alt={{inventario.marca}} class="img-thumbnail" height="60px"
+                                width="100px" data-toggle="modal" data-target="#exampleModal">
+                        </td>
+                        <td>{{inventario.Producto}}</td>
                         <td>{{inventario.categoria}}</td>
                         <td>{{inventario.linea}}</td>
                         <td>{{inventario.marca}}</td>
-                        <td>{{inventario.Producto}}</td>
+                        <td>{{inventario.modelo}}</td>
+                        <td>{{inventario.color}}</td>
+                        <td>{{inventario.atributo}}</td>
+                        <td>{{inventario.genero}}</td>
                         <td>{{inventario.etiquetas}}</td>
                         <td>{{inventario.stock}}</td>
                         <td></td>
@@ -63,6 +76,8 @@
                         <td>{{inventario.talla}}</td>
                         <td>{{inventario.unidad_medidad}}</td>
                         <td>{{inventario.tarifa_ice_iva}}</td>
+                        <td>{{inventario.tarifa_ice_iva1}}</td>
+
                         <td>
                            <!-- <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'sm'"  style="margin-right: 5px;" data-placement="bottom" title="Editar Almacen" (click)="editarInventarios(inventario)"></fa-icon> -->
                             <fa-icon [icon]="faTrashAlt" class="btn btn-danger" [size]="'lg'" data-placement="bottom" title="Eliminar Almacen" (click)="deshabilitarInventarios(inventario)"></fa-icon>

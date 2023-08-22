@@ -46,4 +46,8 @@ export interface InventariosEntity {
     unidad_medidad? : string;
     url_image?: string;
     talla? : string;  
+    tarifa_ice_iva1?: string;
+    tarifa_ice_iva_id1?: string;
+    genero?: string;
+    atributo?: string;
 }
