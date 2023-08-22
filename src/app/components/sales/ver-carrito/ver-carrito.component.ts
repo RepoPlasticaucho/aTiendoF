@@ -54,7 +54,7 @@ searchText: string = '';
       searching: true,
       ordering: true,
       info: true,
-      responsive: true
+      responsive: false
     }
     Swal.fire({
       title: 'CARGANDO...',
