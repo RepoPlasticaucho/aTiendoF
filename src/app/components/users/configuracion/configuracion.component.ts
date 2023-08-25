@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { faCopy, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { ImagenesEntity } from 'src/app/models/imagenes';
 import { SociedadesEntity } from 'src/app/models/sociedades';
+import { ImagenesService } from 'src/app/services/imagenes.service';
 import { SociedadesService } from 'src/app/services/sociedades.service';
 import Swal from 'sweetalert2';
 
@@ -19,7 +21,7 @@ export class ConfiguracionComponent implements OnInit {
   corporationForm = new FormGroup({
     nombreComercial2: new FormControl('', Validators.required),
     razonSocial: new FormControl('', Validators.required),
-    urlImagen: new FormControl(''),
+    urlCertificado: new FormControl(''),
 
   });
 
@@ -28,11 +30,12 @@ export class ConfiguracionComponent implements OnInit {
   fun: any;
   //Variables para imágen
   fileToUpload: any;
-  imageUrl: any = "https://calidad.atiendo.ec/eojgprlg/Marcas/producto.png";
-  imageBase64: string = "";
-  imageName: string = "";
+  certificadoUrl: any = "https://calidad.atiendo.ec/eojgprlg/Certificados/certificate.pfx";
+  certificadoBase64: string = "";
+  certificadoName: string = "";
 
-  constructor( private readonly httpService: SociedadesService, private router: Router) { }
+  constructor( private readonly httpService: SociedadesService,
+    private httpServiceImage: ImagenesService, private router: Router) { }
 
   ngOnInit(): void {
 
@@ -87,6 +90,7 @@ export class ConfiguracionComponent implements OnInit {
     const passnuevo = this.corporationForm.value!.nombreComercial2 ?? "";
     const passactual = this.corporationForm.value!.razonSocial ?? "";
 
+
     if (!this.corporationForm.valid) {
       this.corporationForm.markAllAsTouched();
     } else {
@@ -110,52 +114,65 @@ export class ConfiguracionComponent implements OnInit {
           }
         });
       } else {
-        const userEntity: SociedadesEntity = {
-          idGrupo: '',
-          nombre_comercial: '',
-          tipo_ambienteid: '',
-          id_fiscal: '',
-          email: '',
-          telefono: '',
-          password: '',
-          funcion: '',
-          idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
-          razon_social: '',
-          url_certificado: '',
-          clave_certificado: passnuevo
-        }
-  
-        this.httpService.actualizarCertificado(userEntity).subscribe(res => {
-          if (res.codigoError == "OK") {
-            Swal.fire({
-              icon: 'success',
-              title: 'Actualizado Correctamente.',
-              text: `Se ha actualizado la información`,
-              showConfirmButton: true,
-              confirmButtonText: "Ok"
-            }).finally(() => {
-              localStorage.setItem('passwa',passnuevo);
-              switch (this.fun) {
-                case "admin":
-                  this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['usuario'] } }]);
-                break;
-                case "client":
-                   this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['usuario'] } }]);
-                break;
+        const imageEntity: ImagenesEntity = {
+          imageBase64: this.certificadoBase64,
+          nombreArchivo: this.certificadoName,
+          codigoError: '',
+          descripcionError: '',
+          nombreArchivoEliminar: '',
+        };
+        this.httpServiceImage
+          .agregarCertificado(imageEntity).subscribe(res1 => {
+            if(res1.codigoError == 'OK'){
+              const userEntity: SociedadesEntity = {
+                idGrupo: '',
+                nombre_comercial: '',
+                tipo_ambienteid: '',
+                id_fiscal: '',
+                email: '',
+                telefono: '',
+                password: '',
+                funcion: '',
+                idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
+                razon_social: '',
+                url_certificado: this.certificadoName == '' ? this.certificadoUrl : this.certificadoName,
+                clave_certificado: passnuevo
+              }
+              this.httpService.actualizarCertificado(userEntity).subscribe(res => {
+                if (res.codigoError == "OK") {
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Actualizado Correctamente.',
+                    text: `Se ha actualizado la información`,
+                    showConfirmButton: true,
+                    confirmButtonText: "Ok"
+                  }).finally(() => {
+                    localStorage.setItem('passwa',passnuevo);
+                    switch (this.fun) {
+                      case "admin":
+                        this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['usuario'] } }]);
+                      break;
+                      case "client":
+                         this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['usuario'] } }]);
+                      break;
+                  }
+                  
+                  });
+        
+                  
+                } else {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Ha ocurrido un error.',
+                    text: res.descripcionError,
+                    showConfirmButton: false,
+                  });
+                }
+              });
             }
-            
-            });
+          })
   
-            
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Ha ocurrido un error.',
-              text: res.descripcionError,
-              showConfirmButton: false,
-            });
-          }
-        });
+        
       }
     } 
   }    
@@ -165,9 +182,9 @@ export class ConfiguracionComponent implements OnInit {
       this.fileToUpload = target.files[0];
       let reader = new FileReader();
       reader.onload = (event: any) => {
-        this.imageUrl = event.target.result;
-        this.imageBase64 = this.imageUrl.split(',')[1];
-        this.imageName = this.fileToUpload.name;
+        this.certificadoUrl = event.target.result;
+        this.certificadoBase64 = this.certificadoUrl.split(',')[1];
+        this.certificadoName = this.fileToUpload.name;
       }
       reader.readAsDataURL(this.fileToUpload);
     }

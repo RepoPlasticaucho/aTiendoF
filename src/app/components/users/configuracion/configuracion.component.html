@@ -56,19 +56,19 @@
                                         </small>
                                     </small>
                                 </div>
-                                <!--<div class="form-group">
-                                    <label for="etiquetas">Imagen Marca</label>
+                                <div class="form-group">
+                                    <label for="etiquetas">Certificado</label>
+                                    <label for=""></label>
                                     <br>
-                                     <input type="text" class="form-control" id="etiquetas" placeholder="Ingrese las etiquetas" formControlName="etiquetas"> 
-                                    <input type="file" accept="image/*" (change)="onChangeFile($event.target)"
-                                        class="form-control" style="padding: 0px;" formControlName="urlImagen">
+                                    <input type="file" accept=".pfx, .p12" (change)="onChangeFile($event.target)"
+                                        class="form-control" style="padding: 0px;" formControlName="urlCertificado">
                                     <small
-                                        *ngIf="corporationForm.controls['urlImagen'].invalid && (corporationForm.controls['urlImagen'].dirty || corporationForm.controls['urlImagen'].touched)">
-                                        <small *ngIf="corporationForm.controls['urlImagen'].errors" style="color: red;">
-                                            Debe seleccionar imágen
+                                        *ngIf="corporationForm.controls['urlCertificado'].invalid && (corporationForm.controls['urlCertificado'].dirty || corporationForm.controls['urlCertificado'].touched)">
+                                        <small *ngIf="corporationForm.controls['urlCertificado'].errors" style="color: red;">
+                                            Debe seleccionar su certificado
                                         </small>
                                     </small>
-                                </div>-->
+                                </div>
                               <div align="center">
                                 <button type="submit" class="btn btn-primary">
                                     <!--[disabled]="!this.corporationForm.valid"-->

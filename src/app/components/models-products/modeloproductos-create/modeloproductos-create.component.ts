@@ -94,7 +94,7 @@ export class ModeloproductosCreateComponent implements OnInit {
     private readonly httpServiceLineas: LineasService,
     private httpServiceImage: ImagenesService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Obtener Categorías
@@ -464,18 +464,18 @@ export class ModeloproductosCreateComponent implements OnInit {
       this.selectMarca = false;
 
       this.httpServiceModelos.obtenerModelosLineasMarcas(this.modelProductForm.value!.linea ?? '', marca.target.value).subscribe((res) => {
-          if (res.codigoError != 'OK') {
-            Swal.fire({
-              icon: 'error',
-              title: 'No se pudo obtener las líneas.',
-              text: res.descripcionError,
-              showConfirmButton: false,
-            });
-            this.lstModelos = [];
-          } else {
-            this.lstModelos = res.lstModelos;
-          }
-        });
+        if (res.codigoError != 'OK') {
+          Swal.fire({
+            icon: 'error',
+            title: 'No se pudo obtener las líneas.',
+            text: res.descripcionError,
+            showConfirmButton: false,
+          });
+          this.lstModelos = [];
+        } else {
+          this.lstModelos = res.lstModelos;
+        }
+      });
     }
   }
 

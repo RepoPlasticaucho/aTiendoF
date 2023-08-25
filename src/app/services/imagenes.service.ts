@@ -19,4 +19,8 @@ export class ImagenesService {
         return this.http.post<ImagenesEntity>(`${environment.apiUrl}adicionales/ProcesarImagenModeloProducto`, image);
     }
 
+    agregarCertificado(image: ImagenesEntity): Observable<ImagenesEntity> {
+        return this.http.post<ImagenesEntity>(`${environment.apiUrl}adicionales/ProcesarCertificado`, image);
+    }
+
 }
