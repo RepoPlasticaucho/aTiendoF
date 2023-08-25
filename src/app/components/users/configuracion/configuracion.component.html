@@ -27,12 +27,12 @@
                             </div><br>
                                                       
                            <div align="center">
-                                   <h5 class="title">Cambio de contraseña</h5>
+                                   <h5 class="title"> Certificados Digitales</h5>
                             </div><br>
 
                             <form [formGroup]="corporationForm" (ngSubmit)="onSubmit()">
                                 <div class="form-group">
-                                    <label for="razonSocial">Contraseña Actual</label>
+                                    <label for="razonSocial">Clave Actual</label>
                                     <input type="password" class="form-control" id="razonSocial"
                                         placeholder="Ingrese la contraseña Actual " formControlName="razonSocial">
                                     <small
@@ -45,7 +45,7 @@
                                 </div>
                               
                                 <div class="form-group">
-                                    <label for="passwnew">Nueva Contraseña</label>
+                                    <label for="passwnew">Nueva Clave</label>
                                     <input type="password" class="form-control" id="passwnew"
                                         placeholder="Ingrese la nueva contraseña " formControlName="nombreComercial2">
                                     <small
@@ -56,18 +56,19 @@
                                         </small>
                                     </small>
                                 </div>
-                                <div class="form-group">
-                                    <label for="passconfirm">Confirmacion de la Nueva Contraseña</label>
-                                    <input type="password" class="form-control" id="passconfirm"
-                                        placeholder="Ingrese la nueva contraseña " formControlName="nombreComercial1">
+                                <!--<div class="form-group">
+                                    <label for="etiquetas">Imagen Marca</label>
+                                    <br>
+                                     <input type="text" class="form-control" id="etiquetas" placeholder="Ingrese las etiquetas" formControlName="etiquetas"> 
+                                    <input type="file" accept="image/*" (change)="onChangeFile($event.target)"
+                                        class="form-control" style="padding: 0px;" formControlName="urlImagen">
                                     <small
-                                        *ngIf="corporationForm.controls['nombreComercial1'].invalid && (corporationForm.controls['nombreComercial1'].dirty || corporationForm.controls['nombreComercial1'].touched)">
-                                        <small *ngIf="corporationForm.controls['nombreComercial1'].errors?.['required']"
-                                            style="color: red;">
-                                            Debe confirmar la nueva contraseña.
+                                        *ngIf="corporationForm.controls['urlImagen'].invalid && (corporationForm.controls['urlImagen'].dirty || corporationForm.controls['urlImagen'].touched)">
+                                        <small *ngIf="corporationForm.controls['urlImagen'].errors" style="color: red;">
+                                            Debe seleccionar imágen
                                         </small>
                                     </small>
-                                </div>
+                                </div>-->
                               <div align="center">
                                 <button type="submit" class="btn btn-primary">
                                     <!--[disabled]="!this.corporationForm.valid"-->

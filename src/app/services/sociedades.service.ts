@@ -16,6 +16,8 @@ const initCorporation: SociedadesEntity = {
   idSociedad: '',
   razon_social: '',
   tipo_ambienteid: '',
+  url_certificado:'',
+  clave_certificado: '',
   nombreGrupo: ''
 }
 
@@ -52,6 +54,9 @@ export class SociedadesService {
   }
   actualizarPass(sociedad: SociedadesEntity): Observable<Sociedades> {
     return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/ActualizarPass`, sociedad);
+  }
+  actualizarCertificado(sociedad: SociedadesEntity): Observable<Sociedades> {
+    return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/ActualizarCerificado`, sociedad);
   }
   obtenerSociedadL(sociedad: SociedadesEntity): Observable<Sociedades> {
     return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/ObtenerSociedad`, sociedad);

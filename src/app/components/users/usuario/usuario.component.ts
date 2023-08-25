@@ -163,4 +163,17 @@ export class UsuarioComponent implements OnInit {
     this.location.replaceState('/');
     window.location.reload();
   }
+
+  onPass1(): void{
+    switch (this.fun) {
+      case "admin":
+          this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['usuario'] } }]);
+      break;
+
+      case "client":
+           this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['usuario'] } }]);
+      break;
+    }
+  }
+
 }

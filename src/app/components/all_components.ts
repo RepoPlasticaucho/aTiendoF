@@ -1,3 +1,4 @@
+import * as exp from "constants";
 import { from } from "rxjs";
 export { ProductosCreateComponent } from "./products/productos-create/productos-create.component";
 export { ProductosEditComponent } from "./products/productos-edit/productos-edit.component";
@@ -96,3 +97,4 @@ export { MovimientosComponent } from './movements/movimientos/movimientos.compon
 export { CashBalancingComponent } from './cash-balancing/cash-balancing.component';
 export { VerCompraComponent } from './shooping/ver-compra/ver-compra.component';
 export { ProductocompraComponent} from './inventories/productocompra/productocompra.component';
+export {ConfiguracionComponent } from './users/configuracion/configuracion.component';

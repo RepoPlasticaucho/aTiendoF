@@ -17,4 +17,6 @@ export interface SociedadesEntity {
     password: string;
     funcion : string;
     tipo_ambienteid: string;
+    url_certificado?: string;
+    clave_certificado?: string;
 }
