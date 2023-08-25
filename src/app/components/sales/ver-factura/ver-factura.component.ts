@@ -6,7 +6,7 @@ import { MovimientosService } from 'src/app/services/movimientos.service';
 import { MovimientosEntity } from 'src/app/models/movimientos';
 import { SociedadesService } from 'src/app/services/sociedades.service';
 import { faShoppingCart, faEdit, faTrashAlt, faMoneyBillAlt, faFileInvoice } from '@fortawesome/free-solid-svg-icons';
-import { Subject } from 'rxjs';
+import { Subject, finalize } from 'rxjs';
 import Swal from 'sweetalert2';
 import { SociedadesEntity } from 'src/app/models/sociedades';
 import { TercerosService } from 'src/app/services/terceros.service';
@@ -180,7 +180,6 @@ export class VerFacturaComponent implements OnInit {
               // timer: 3000
             });
           } else {
-            console.log(res);
             this.lstDetalleMovimientos = res.lstDetalleMovimientos;
             this.dtTrigger.next('');
             this.calcularSumaTotal();
@@ -217,22 +216,22 @@ export class VerFacturaComponent implements OnInit {
   onInput2(event: any) {
     let inputValue = event.target.value;
     const filteredValue = inputValue.replace(/[^0-9.]/g, ''); // Filtra solo números y punto
-  
+
     if (/^\d*\.?\d*$/.test(inputValue) && !filteredValue.startsWith('.')) {
       this.calcularSumaTotal();
     } else {
       event.target.value = inputValue.length === 0 ? '0' : '';
     }
   }
-  
-  
+
+
 
   validarDescuento(): number {
-      if (this.sumaTotal) {
-        const descuento = (((this.descuentoP)*(this.totalF))/100);
+    if (this.sumaTotal) {
+      const descuento = (((this.descuentoP) * (this.totalF)) / 100);
 
-        return descuento;
-      }
+      return descuento;
+    }
     return 0;
   }
 
@@ -291,8 +290,8 @@ export class VerFacturaComponent implements OnInit {
 
   finalizarPedido() {
     const total_si = this.calcularSubtotal();
-    const descuento = (((this.descuentoP)*(this.totalF))/100);
-    const total_desc = this.calcularDescuento() + this.descuentoN + descuento;
+    const descuento = (((this.descuentoP) * (this.totalF)) / 100);
+    const total_desc = Number(this.calcularDescuento()) + Number(this.descuentoN) + Number(descuento);
     const total_imp = this.calcularTotalTarifa12() + this.calcularTotalTarifa0();
     this.httpServiceMovimiento.obtenerUltimoSecuencial().subscribe(res1 => {
       if (res1.codigoError == 'OK') {
@@ -316,7 +315,6 @@ export class VerFacturaComponent implements OnInit {
         estab: localStorage.getItem('estab')!,
         importe_total: this.sumaTotal.replace(',', '.')
       }
-      console.log(newPedido)
       Swal.fire({
         title: '¿Estás seguro de finalizar la VENTA?',
         showDenyButton: true,
@@ -325,27 +323,99 @@ export class VerFacturaComponent implements OnInit {
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-          this.httpServiceMovimiento.finalizarPedido(newPedido).subscribe(res => {
-            if (res.codigoError == 'OK') {
-              Swal.fire({
-                icon: 'success',
-                title: 'Finalizado Correctamente.',
-                text: `Se ha finalizado la venta`,
-                showConfirmButton: true,
-                confirmButtonText: "Ok"
-              }).finally(() => {
-                // this.groupForm.reset();
-                this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ventaprov'] } }]);
+          this.httpServiceMovimiento.finalizarPedido(newPedido).pipe(
+            finalize(() => {
+              this.httpServiceMovimiento.obtenerMovimientoCLAVEACCESO(newPedido).subscribe(res2 => {
+                console.log(res2)
+                if (res2.codigoError == 'OK') {
+                  const numerosAleatorios: number[] = [];
+
+                  for (let i = 0; i < 8; i++) {
+                    const numeroAleatorio = Math.floor(Math.random() * (9 - 1 + 1)) + 1;
+                    numerosAleatorios.push(numeroAleatorio);
+                  }
+
+                  const claveAccesoSinDV = res2.lstMovimientos[0].fecha_emision!.replace(/\//g, "") + res2.lstMovimientos[0].tipo_comprb_cod
+                    + res2.lstMovimientos[0].id_fiscal_soc + res2.lstMovimientos[0].tipo_ambiente + res2.lstMovimientos[0].estab +
+                    res2.lstMovimientos[0].pto_emision + res2.lstMovimientos[0].secuencial + numerosAleatorios.join("") + '1';
+
+                    let suma: number = 0;
+                    let factor: number = 2;
+                    const claveAcceso: string = claveAccesoSinDV;
+                    const clave: string[] = claveAcceso.split("").reverse();
+                    
+                    for (const item of clave) {
+                        suma = suma + parseInt(item) * factor;
+                        if (factor === 7) {
+                            factor = 2;
+                        } else {
+                            factor = factor + 1;
+                        }
+                    }
+                    
+                    let digitoVerificador: number = suma % 11;
+                    digitoVerificador = 11 - digitoVerificador;
+                    
+                    if (digitoVerificador === 11) {
+                        digitoVerificador = 0;
+                    }
+                    if (digitoVerificador === 10) {
+                        digitoVerificador = 1;
+                    }
+                  
+
+                    const claveAccesoConDV = claveAccesoSinDV + digitoVerificador
+                
+
+                    const newMovCA: MovimientosEntity = {
+                      id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
+                      tipo_id: '',
+                      tipo_emision_cod: '',
+                      estado_fact_id: '',
+                      tipo_comprb_id: '',
+                      clave_acceso: claveAccesoConDV,
+                      almacen_id: '',
+                      total_si: '',
+                      total_imp: '',
+                      total_desc: '',
+                      cod_doc: '',
+                      secuencial: '',
+                      estab: '',
+                      importe_total: ''
+                    }
+                    console.log(newMovCA)
+                    this.httpServiceMovimiento.actualizarCLAVEACCESO(newMovCA).subscribe(res3 => {
+                      console.log(res3)
+                      if(res3.codigoError == 'OK'){
+                        console.log('ACTUALIZADO')
+                      } else {
+                        console.log('ERROR')
+                      }
+                    });
+                }
               });
-            } else {
-              Swal.fire({
-                icon: 'error',
-                title: 'Ha ocurrido un error.',
-                text: res.descripcionError,
-                showConfirmButton: false,
-              });
-            }
-          })
+            })).subscribe(res => {
+              if (res.codigoError == 'OK') {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Finalizado Correctamente.',
+                  text: `Se ha finalizado la venta`,
+                  showConfirmButton: true,
+                  confirmButtonText: "Ok"
+                }).finally(() => {
+                  
+                  // this.groupForm.reset();
+                  this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ventaprov'] } }]);
+                });
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Ha ocurrido un error.',
+                  text: res.descripcionError,
+                  showConfirmButton: false,
+                });
+              }
+            })
         } else if (result.isDenied) {
           Swal.fire('No se finalizó la venta', '', 'info')
         }
@@ -392,9 +462,6 @@ export class VerFacturaComponent implements OnInit {
 
   abonar() {
     const monto = document.getElementById('monto') as HTMLInputElement;
-    console.log(monto.value)
-    console.log(this.sumaTotal.replace(',', '.'))
-    console.log(this.resto)
     if (parseFloat(monto.value) <= this.sumaTotal.replace(',', '.') && parseFloat(monto.value) <= this.resto) {
       this.resto = (this.resto - parseFloat(monto.value)).toFixed(2);
       this.actualizarColor();

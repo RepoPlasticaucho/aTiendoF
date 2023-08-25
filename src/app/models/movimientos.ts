@@ -36,4 +36,8 @@ export interface MovimientosEntity {
     camp_ad2?: string;
     updated_at?: string;
     tercero?: string;
+    tipo_comprb_cod?: string;
+    id_fiscal_soc?: string;
+    tipo_ambiente?: string;
+    pto_emision?: string;
 }

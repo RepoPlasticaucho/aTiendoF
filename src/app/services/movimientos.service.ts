@@ -94,6 +94,10 @@ export class MovimientosService {
     return this.http.get<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientosFechas?sociedad=`+sociedad+`&fechadesde=`+fechadesde+`&fechahasta=`+fechahasta);
   }
 
+  obtenerMovimientoCLAVEACCESO(movimiento: MovimientosEntity): Observable<Movimientos> {
+    return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientoCLAVEACCESO`, movimiento );
+  }
+
   obtenerMovimientosTodos(sociedad: string): Observable<Movimientos> {
     return this.http.get<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientosTodos?sociedad=`+sociedad);
   }
@@ -120,6 +124,14 @@ export class MovimientosService {
 
   obtenerMovimientosAlmacenc(movimiento: MovimientosEntity): Observable<Movimientos> {
     return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientosAlmacenC`, movimiento );
+  }
+
+  crearXML(movimiento: MovimientosEntity): Observable<Movimientos> {
+    return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/CrearXML`, movimiento );
+  }
+
+  actualizarCLAVEACCESO(movimiento: MovimientosEntity): Observable<Movimientos> {
+    return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/ActualizarCLAVEACCESO`, movimiento);
   }
 
   finalizarPedido(movimiento: MovimientosEntity): Observable<Movimientos> {
