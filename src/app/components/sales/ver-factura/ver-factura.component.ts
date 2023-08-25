@@ -17,6 +17,7 @@ import { DetallesPagoEntity } from 'src/app/models/detalles-pago';
 import { DetallesPagoService } from 'src/app/services/detalles-pago.service';
 import { AlmacenesEntity } from 'src/app/models/almacenes';
 import { AlmacenesService } from 'src/app/services/almacenes.service';
+import { SriwsService } from 'src/app/services/sriws.service';
 
 @Component({
   selector: 'app-ver-factura',
@@ -58,6 +59,7 @@ export class VerFacturaComponent implements OnInit {
   constructor(private readonly httpService: DetallesmovimientoService,
     private readonly httpServiceMovimiento: MovimientosService,
     private readonly httpServiceSociedad: SociedadesService,
+    private readonly httpServiceSRI: SriwsService,
     private readonly httpServiceDetallePago: DetallesPagoService,
     private readonly httpServiceAlmacen: AlmacenesService,
     private readonly httpServiceTercero: TercerosService,
@@ -293,7 +295,7 @@ export class VerFacturaComponent implements OnInit {
     const descuento = (((this.descuentoP) * (this.totalF)) / 100);
     const total_desc = Number(this.calcularDescuento()) + Number(this.descuentoN) + Number(descuento);
     const total_imp = this.calcularTotalTarifa12() + this.calcularTotalTarifa0();
-    this.httpServiceMovimiento.obtenerUltimoSecuencial().subscribe(res1 => {
+    this.httpServiceMovimiento.obtenerUltimoSecuencial(localStorage.getItem('almacenid')!).subscribe(res1 => {
       if (res1.codigoError == 'OK') {
         this.ultSecuencial = res1.lstMovimientos[0].secuencial;
         const numero = parseInt(this.ultSecuencial, 10)
@@ -381,10 +383,30 @@ export class VerFacturaComponent implements OnInit {
                       cod_doc: '',
                       secuencial: '',
                       estab: '',
-                      importe_total: ''
+                      importe_total: '',
+                      url_factura: 'ftp://calidad.atiendo.ec/public_ftp/FacturasXML/factura_' + claveAccesoConDV + '.xml'
                     }
                     console.log(newMovCA)
-                    this.httpServiceMovimiento.actualizarCLAVEACCESO(newMovCA).subscribe(res3 => {
+                    this.httpServiceMovimiento.actualizarCLAVEACCESO(newMovCA).pipe(finalize(() => {
+                      this.httpServiceMovimiento.crearXML(localStorage.getItem('movimiento_id')!).pipe(finalize(() => {
+                        this.httpServiceSRI.recibirXMLSri(localStorage.getItem('movimiento_id')!).subscribe(res4 => {
+                          console.log(res4);
+                          if(res4 == 'RECIBIDA'){
+                            this.httpServiceSRI.autorizarXMLSri(localStorage.getItem('movimiento_id')!).subscribe(res5 => {
+                              console.log(res5);
+                            });
+                          } else {
+                            console.log('NO SE PUEDE ENVIAR LA FACTURA PARA SU AUTORIZACIÓN')
+                          }
+                        });
+                      })).subscribe(res2 => {
+                        if(res2 == 'CREADO'){
+                          console.log('XML CREADO');
+                        } else {
+                          console.log('ERROR');
+                        }
+                      });
+                    })).subscribe(res3 => {
                       console.log(res3)
                       if(res3.codigoError == 'OK'){
                         console.log('ACTUALIZADO')
@@ -403,7 +425,6 @@ export class VerFacturaComponent implements OnInit {
                   showConfirmButton: true,
                   confirmButtonText: "Ok"
                 }).finally(() => {
-                  
                   // this.groupForm.reset();
                   this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ventaprov'] } }]);
                 });

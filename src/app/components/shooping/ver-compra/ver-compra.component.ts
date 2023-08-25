@@ -220,7 +220,7 @@ export class VerCompraComponent implements OnInit {
   finalizarPedido() {
     const total_si = this.calcularSubtotal();
     const total_imp = this.calcularTotalTarifa12() + this.calcularTotalTarifa0();
-    this.httpServiceMovimiento.obtenerUltimoSecuencial().subscribe(res1 => {
+    this.httpServiceMovimiento.obtenerUltimoSecuencial(localStorage.getItem('almacenid')!).subscribe(res1 => {
       if (res1.codigoError == 'OK') {
         this.ultSecuencial = res1.lstMovimientos[0].secuencial;
         const numero = parseInt(this.ultSecuencial, 10)

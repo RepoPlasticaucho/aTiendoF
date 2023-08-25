@@ -58,8 +58,8 @@ export class MovimientosService {
     return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/InsertarMovimiento`, movimiento);
   }
   
-  obtenerUltimoSecuencial(): Observable<Movimientos> {
-    return this.http.get<Movimientos>(`${environment.apiUrl}movimientos/ObtenerUltimoSecuencial`);
+  obtenerUltimoSecuencial(almacen_id: string): Observable<Movimientos> {
+    return this.http.get<Movimientos>(`${environment.apiUrl}movimientos/ObtenerUltimoSecuencial?almacen_id=`+almacen_id);
   }
 
   obtenerMovimientoUno(movimiento: MovimientosEntity): Observable<Movimientos> {
@@ -126,8 +126,8 @@ export class MovimientosService {
     return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientosAlmacenC`, movimiento );
   }
 
-  crearXML(movimiento: MovimientosEntity): Observable<Movimientos> {
-    return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/CrearXML`, movimiento );
+  crearXML(movimiento: string): Observable<String> {
+    return this.http.get<String>(`${environment.apiUrl}movimientos/CrearXML?movimiento=`+movimiento );
   }
 
   actualizarCLAVEACCESO(movimiento: MovimientosEntity): Observable<Movimientos> {

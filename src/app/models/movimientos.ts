@@ -40,4 +40,5 @@ export interface MovimientosEntity {
     id_fiscal_soc?: string;
     tipo_ambiente?: string;
     pto_emision?: string;
+    url_factura?: string;
 }

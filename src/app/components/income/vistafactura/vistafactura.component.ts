@@ -146,7 +146,7 @@ export class VistafacturaComponent implements OnInit {
   }
 
   finalizarPedido(){
-    this.httpServiceMovimiento.obtenerUltimoSecuencial().subscribe(res1 => {
+    this.httpServiceMovimiento.obtenerUltimoSecuencial(localStorage.getItem('almacenid')!).subscribe(res1 => {
       if (res1.codigoError == 'OK') {
         this.ultSecuencial = res1.lstMovimientos[0].secuencial;
         const numero = parseInt(this.ultSecuencial,10)
