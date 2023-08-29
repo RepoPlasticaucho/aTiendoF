@@ -142,6 +142,8 @@ import { CashBalancingComponent } from './components/cash-balancing/cash-balanci
 import { CuadreMovComponent } from './components/cash-balancing/cuadre-mov/cuadre-mov.component';
 import { ProductocompraComponent } from './components/inventories/productocompra/productocompra.component';
 import { ConfiguracionComponent } from './components/users/configuracion/configuracion.component';
+import { FacturaComponent } from './components/sales/factura/factura.component';
+
 
 @NgModule({
   declarations: [
@@ -260,7 +262,8 @@ import { ConfiguracionComponent } from './components/users/configuracion/configu
     CashBalancingComponent,
     CuadreMovComponent,
     ProductocompraComponent,
-    ConfiguracionComponent
+    ConfiguracionComponent,
+    FacturaComponent
   ],
   imports: [
     BrowserModule,

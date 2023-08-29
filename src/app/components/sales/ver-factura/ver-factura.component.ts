@@ -426,7 +426,7 @@ export class VerFacturaComponent implements OnInit {
                   confirmButtonText: "Ok"
                 }).finally(() => {
                   // this.groupForm.reset();
-                  this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ventaprov'] } }]);
+                  this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['factura'] } }]);
                 });
               } else {
                 Swal.fire({

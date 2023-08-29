@@ -1,0 +1,56 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+.factura {
+    display: flex;
+    justify-content: space-between;
+}
+.encabezado {
+    text-align: left;
+    font-size: 30px;
+    font-weight: bold;
+    color: red;
+    margin-bottom: 20px;
+}
+.encabezado2 {
+    text-align: left;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.info-comercial {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    border: 1px solid #000;
+    border-radius: 10px;
+}
+
+
+.info-comercial,
+.info-cliente {
+    flex: 1;
+    padding: 10px; /* Ajusta el padding según tus necesidades */
+    border: 1px solid #000000; /* Añade un borde para visualizar mejor la separación */
+    box-sizing: border-box;
+    margin-inline: 10px;
+}
+
+.info-cliente {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    border: 1px solid #000;
+    border-radius: 10px;
+}
+
+.invoice-details {
+    border: 1px solid #000000;
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    margin: 10px;
+    box-sizing: border-box;
+  }

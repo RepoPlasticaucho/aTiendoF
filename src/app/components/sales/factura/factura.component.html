@@ -1,0 +1,64 @@
+<div style="max-width: 95%; margin: 20px">
+  <div id="htmlData">
+  <div class="factura">
+    <div class="info-comercial">
+      <div class="comercial">
+        <br><br>
+        <div class="encabezado">NO TIENE LOGO</div>
+        <br><br>
+        <div>Razón Social:GINA ELIZABETH</div>
+        <div>Nombre Comercial: BELA</div>
+        <div>Dirección Matriz: Av. Miraflores</div>
+        <div>Dirección Sucursal: Ambato</div>
+        <div>Obligado a llevar Contabilidad: NO</div>
+      </div>
+    </div>
+    <div class="info-comercial">
+      <div class="comercial">
+        <div class="encabezado2">RUC: 1850294875001</div>
+        <div>FACTURA</div>
+        <div>Nro. 001-001-000000001</div>
+        <div>Número de Autorización: 123738128738921372181231321</div>
+        <div>Fecha y Hora de Autorización: </div>
+        <div>Ambiente: PRUEBAS</div>
+        <div>Emisión: Normal</div>
+        <div>Clave de Acceso: 123738128738921372181231321</div>
+      </div>
+    </div>
+  </div>
+  <div class="info-cliente">
+    <div class="cliente">
+      <div>Razón Social / Nombre y Apellido: DANIEL MONTERO</div>
+      <div>Identificación: 18261283812</div>
+      <div>Fecha: 22/08/2023</div>
+      <div>Dirección: Riobamba</div>
+    </div>
+
+  </div>
+  <div class="invoice-details">
+    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+      <thead style="color: #636363;">
+        <tr>
+          <th style="width: 10%; ">Producto</th>
+          <th style="width: 10%; ">Cantidad</th>
+          <th style="width: 10%; ">Precio Uni.</th>
+          <th style="width: 10%; ">Descuento</th>
+          <th style="width: 10%; ">Precio Total</th>
+        </tr>
+      </thead>
+      <tbody style="color: #767695;">
+        <tr *ngFor="let detalleMovimientos of lstDetalleMovimientos">
+          <td>{{detalleMovimientos.producto_nombre}}</td>
+          <td>{{detalleMovimientos.cantidad}}</td>
+          <td>{{detalleMovimientos.costo}}</td>
+          <td>{{detalleMovimientos.desc_add}}</td>
+          <td>{{detalleMovimientos.precio}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<button class="btn btn-primary" (click)="generarPDF()">
+  <span style="color: white; font-size: 20px;">Guardar como PDF</span>
+</button>
+</div>

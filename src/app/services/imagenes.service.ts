@@ -23,4 +23,8 @@ export class ImagenesService {
         return this.http.post<ImagenesEntity>(`${environment.apiUrl}adicionales/ProcesarCertificado`, image);
     }
 
+    agregarPDF(image: ImagenesEntity): Observable<ImagenesEntity> {
+        return this.http.post<ImagenesEntity>(`${environment.apiUrl}adicionales/ProcesarFacturasPDF`, image);
+    }
+
 }

@@ -183,6 +183,7 @@ export class ConfiguracionComponent implements OnInit {
       let reader = new FileReader();
       reader.onload = (event: any) => {
         this.certificadoUrl = event.target.result;
+        console.log(this.certificadoUrl)
         this.certificadoBase64 = this.certificadoUrl.split(',')[1];
         this.certificadoName = this.fileToUpload.name;
       }

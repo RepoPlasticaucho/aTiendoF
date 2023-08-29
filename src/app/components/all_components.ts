@@ -98,3 +98,4 @@ export { CashBalancingComponent } from './cash-balancing/cash-balancing.componen
 export { VerCompraComponent } from './shooping/ver-compra/ver-compra.component';
 export { ProductocompraComponent} from './inventories/productocompra/productocompra.component';
 export {ConfiguracionComponent } from './users/configuracion/configuracion.component';
+export { FacturaComponent } from './sales/factura/factura.component';
