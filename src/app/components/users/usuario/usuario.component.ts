@@ -175,5 +175,15 @@ export class UsuarioComponent implements OnInit {
       break;
     }
   }
+  onConfiguracion(): void{
+    switch (this.fun) {
+      case "admin":
+          this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['usuario'] } }]);
+      break;
 
+      case "client":
+           this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['cofiguracion-user'] } }]);
+      break;
+    }
+  }
 }

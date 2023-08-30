@@ -14,7 +14,7 @@
         </mat-menu>           
     </div>
     <br>
-    <mat-grid-list cols="1" rowHeight="660px">
+    <mat-grid-list cols="1" rowHeight="900px">
             <mat-grid-tile >
                 <div class="col-md-8">
                     <mat-card class="dashboard-card" 
@@ -23,14 +23,26 @@
                             border-radius: 10px;">
                            <br>
                             <div align="left">
-                                <a  class="btn btn-info" (click)="onPass()">Volver</a>                          
+                                <a  class="btn btn-info" (click)="onPass()">Ver Perfil</a>                          
                             </div><br>
-                                                      
-                           <div align="center">
-                                   <h5 class="title"> Certificados Digitales</h5>
-                            </div><br>
-
+                            
                             <form [formGroup]="corporationForm" (ngSubmit)="onSubmit()">
+                                <div align="center">
+                                    <h5 class="title"> CERTIFICADOS DIGITALES</h5>
+                                </div>
+                                <div class="form-group">
+                                    <label for="etiquetas">Certificado Electronico (Firma)</label>
+                                    <label for=""></label>
+                                    <br>
+                                    <input type="file" accept=".pfx, .p12" (change)="onChangeFile($event.target)"
+                                        class="form-control" style="padding: 0px;" formControlName="urlCertificado">
+                                    <small
+                                        *ngIf="corporationForm.controls['urlCertificado'].invalid && (corporationForm.controls['urlCertificado'].dirty || corporationForm.controls['urlCertificado'].touched)">
+                                        <small *ngIf="corporationForm.controls['urlCertificado'].errors" style="color: red;">
+                                            Debe seleccionar su certificado
+                                        </small>
+                                    </small>
+                                </div>
                                 <div class="form-group">
                                     <label for="razonSocial">Clave Actual</label>
                                     <input type="password" class="form-control" id="razonSocial"
@@ -56,26 +68,55 @@
                                         </small>
                                     </small>
                                 </div>
+
+                                <div align="left">
+                                    <br><h5 class="title"> Correo Electronico</h5>
+                                </div>  
+                                
                                 <div class="form-group">
-                                    <label for="etiquetas">Certificado</label>
-                                    <label for=""></label>
-                                    <br>
-                                    <input type="file" accept=".pfx, .p12" (change)="onChangeFile($event.target)"
-                                        class="form-control" style="padding: 0px;" formControlName="urlCertificado">
+                                    <label for="email">Email de Envio de Comprobantes</label>
+                                    <input type="text" class="form-control" id="email"
+                                        placeholder="Ingrese la contraseña Actual " formControlName="email">
                                     <small
-                                        *ngIf="corporationForm.controls['urlCertificado'].invalid && (corporationForm.controls['urlCertificado'].dirty || corporationForm.controls['urlCertificado'].touched)">
-                                        <small *ngIf="corporationForm.controls['urlCertificado'].errors" style="color: red;">
-                                            Debe seleccionar su certificado
+                                        *ngIf="corporationForm.controls['email'].invalid && (corporationForm.controls['email'].dirty || corporationForm.controls['email'].touched)">
+                                        <small *ngIf="corporationForm.controls['email'].errors?.['required']"
+                                            style="color: red;">
+                                            Debe ingresar el correo electronico
                                         </small>
                                     </small>
                                 </div>
-                              <div align="center">
-                                <button type="submit" class="btn btn-primary">
+                          
+                                <div class="form-group">
+                                    <label for="passmail">Contraseña Actual</label>
+                                    <input type="password" class="form-control" id="passmail"
+                                        placeholder="Ingrese la nueva contraseña " formControlName="passmail">
+                                    <small
+                                        *ngIf="corporationForm.controls['passmail'].invalid && (corporationForm.controls['passmail'].dirty || corporationForm.controls['passmail'].touched)">
+                                        <small *ngIf="corporationForm.controls['passmail'].errors?.['required']"
+                                            style="color: red;">
+                                            Debe ingresar la contraseña.
+                                        </small>
+                                    </small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="passmailnew">Contraseña Nueva</label>
+                                    <input type="password" class="form-control" id="passmailnew"
+                                        placeholder="Ingrese la nueva contraseña " formControlName="passmailnew">
+                                    <small
+                                        *ngIf="corporationForm.controls['passmailnew'].invalid && (corporationForm.controls['passmailnew'].dirty || corporationForm.controls['passmailnew'].touched)">
+                                        <small *ngIf="corporationForm.controls['passmailnew'].errors?.['required']"
+                                            style="color: red;">
+                                            Debe ingresar la contraseña.
+                                        </small>
+                                    </small>
+                                </div>
+                                <div align="center">
+                                    <button type="submit" class="btn btn-primary">
                                     <!--[disabled]="!this.corporationForm.valid"-->
-                                    <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
-                                    Actualizar
-                                </button>
-                              </div>
+                                        <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
+                                        Actualizar
+                                    </button>
+                                </div>
                                
                             </form>   
                             <br>

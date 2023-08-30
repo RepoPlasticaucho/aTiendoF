@@ -8,7 +8,7 @@
         </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <mat-menu #menu="matMenu">
             <a class="mat-menu-item" (click)="onPass1()">Perfil</a>
-            <a [routerLink]="[{ outlets: { contentAdmin: ['usuario'] } }]" class="mat-menu-item">Configuracion</a>
+            <a class="mat-menu-item" (click)="onConfiguracion()">Configuracion</a>
             <a class="mat-menu-item" (click)="logout()">Salir</a>
         
         </mat-menu>           

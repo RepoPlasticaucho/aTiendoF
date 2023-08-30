@@ -21,7 +21,10 @@ export class ConfiguracionComponent implements OnInit {
   corporationForm = new FormGroup({
     nombreComercial2: new FormControl('', Validators.required),
     razonSocial: new FormControl('', Validators.required),
+    email: new FormControl('', Validators.required),
+    passmail: new FormControl('', Validators.required),
     urlCertificado: new FormControl(''),
+    passmailnew: new FormControl('', Validators.required),
 
   });
 
@@ -67,7 +70,13 @@ export class ConfiguracionComponent implements OnInit {
       } else {
         console.log(res.lstSociedades)
         const razonSocialValue = res.lstSociedades[0].clave_certificado;
+        const email = res.lstSociedades[0].email_certificado;
+        const passemail = res.lstSociedades[0].pass_certificado;
         this.corporationForm.get("razonSocial")?.setValue(razonSocialValue !== undefined ? razonSocialValue : null);
+        this.corporationForm.get("email")?.setValue(email !== undefined ? email : null);
+        this.corporationForm.get("passmail")?.setValue(passemail !== undefined ? passemail : null);
+
+
       }
      // console.log(res);
      this.fun = res.lstSociedades[0].funcion;
@@ -89,7 +98,8 @@ export class ConfiguracionComponent implements OnInit {
   onSubmit(){
     const passnuevo = this.corporationForm.value!.nombreComercial2 ?? "";
     const passactual = this.corporationForm.value!.razonSocial ?? "";
-
+    const email = this.corporationForm.value!.email ?? "";
+    const passemailnew = this.corporationForm.value!.passmailnew ?? "";
 
     if (!this.corporationForm.valid) {
       this.corporationForm.markAllAsTouched();
@@ -136,7 +146,9 @@ export class ConfiguracionComponent implements OnInit {
                 idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
                 razon_social: '',
                 url_certificado: this.certificadoName == '' ? this.certificadoUrl : this.certificadoName,
-                clave_certificado: passnuevo
+                clave_certificado: passactual, // cambiar por new
+                pass_certificado : passemailnew,// activar validacion
+                email_certificado : email
               }
               this.httpService.actualizarCertificado(userEntity).subscribe(res => {
                 if (res.codigoError == "OK") {
@@ -150,10 +162,10 @@ export class ConfiguracionComponent implements OnInit {
                     localStorage.setItem('passwa',passnuevo);
                     switch (this.fun) {
                       case "admin":
-                        this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['usuario'] } }]);
+                        this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['cofiguracion-user'] } }]);
                       break;
                       case "client":
-                         this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['usuario'] } }]);
+                         this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['cofiguracion-user'] } }]);
                       break;
                   }
                   
@@ -183,7 +195,6 @@ export class ConfiguracionComponent implements OnInit {
       let reader = new FileReader();
       reader.onload = (event: any) => {
         this.certificadoUrl = event.target.result;
-        console.log(this.certificadoUrl)
         this.certificadoBase64 = this.certificadoUrl.split(',')[1];
         this.certificadoName = this.fileToUpload.name;
       }

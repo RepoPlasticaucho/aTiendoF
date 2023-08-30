@@ -22,4 +22,7 @@ export interface SociedadesEntity {
     dir1?: string;
     direccion?: string;
     ambiente?: string;
+    email_certificado?: string;
+    pass_certificado?: string;
+    
 }
