@@ -19,4 +19,7 @@ export interface SociedadesEntity {
     tipo_ambienteid: string;
     url_certificado?: string;
     clave_certificado?: string;
+    dir1?: string;
+    direccion?: string;
+    ambiente?: string;
 }

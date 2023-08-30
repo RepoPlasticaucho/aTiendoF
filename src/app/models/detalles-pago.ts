@@ -16,4 +16,5 @@ export interface DetallesPagoEntity {
     fecha_recaudo: string;
     created_at: string;
     updated_at: string;
+    nombre?: string;
 }

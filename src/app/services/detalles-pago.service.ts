@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment.prod';
 import { DetallesPago, DetallesPagoEntity } from '../models/detalles-pago';
 import { AlmacenesEntity } from '../models/almacenes';
 import { FormasPagoEntity } from '../models/formas-pago';
+import { MovimientosEntity } from '../models/movimientos';
 
 const initDetail: DetallesPagoEntity = {
   id: '',
@@ -17,6 +18,7 @@ const initDetail: DetallesPagoEntity = {
   updated_at: '',
   valorE: '',
   valorTC: '',
+  nombre: '',
   valorTD: ''
 }
 
@@ -39,7 +41,9 @@ export class DetallesPagoService {
   agregarDetallePago(detalle: DetallesPagoEntity): Observable<DetallesPago> {
     return this.http.post<DetallesPago>(`${environment.apiUrl}detallespago/InsertarDetallePago`, detalle);
   }
-
+  obtenerDetallePagoMovimiento(movimiento: MovimientosEntity): Observable<DetallesPago> {
+    return this.http.post<DetallesPago>(`${environment.apiUrl}detallespago/ObtenerDetallePagoMovimiento`, movimiento);
+  }
   obtenerDetallePagoE(almacen: AlmacenesEntity): Observable<DetallesPago> {
     return this.http.post<DetallesPago>(`${environment.apiUrl}detallespago/ObtenerDetallePagoE`, almacen);
   }

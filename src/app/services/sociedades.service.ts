@@ -17,6 +17,9 @@ const initCorporation: SociedadesEntity = {
   razon_social: '',
   tipo_ambienteid: '',
   url_certificado:'',
+  ambiente: '',
+  dir1: '',
+  direccion: '',
   clave_certificado: '',
   nombreGrupo: ''
 }
@@ -66,6 +69,9 @@ export class SociedadesService {
   }
   obtenerUser(sociedad: SociedadesEntity): Observable<Sociedades> {
     return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/ObtenerUser`, sociedad);
+  }
+  obtenerSociedadDatos(sociedad: SociedadesEntity): Observable<Sociedades> {
+    return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/ObtenerSociedadDatos`, sociedad);
   }
   obtenerSociedadesN(nombre: SociedadesEntity):Observable<Sociedades>{
     return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/ObtenerSociedadesN`, nombre);

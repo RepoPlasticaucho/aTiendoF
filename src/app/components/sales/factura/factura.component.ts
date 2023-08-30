@@ -3,10 +3,12 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { Subject } from 'rxjs';
 import { AlmacenesEntity } from 'src/app/models/almacenes';
+import { DetallesPagoEntity } from 'src/app/models/detalles-pago';
 import { DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
 import { FormasPagoEntity } from 'src/app/models/formas-pago';
 import { ImagenesEntity } from 'src/app/models/imagenes';
 import { MovimientosEntity } from 'src/app/models/movimientos';
+import { SociedadesEntity } from 'src/app/models/sociedades';
 import { TercerosEntity } from 'src/app/models/terceros';
 import { AlmacenesService } from 'src/app/services/almacenes.service';
 import { DetallesPagoService } from 'src/app/services/detalles-pago.service';
@@ -29,34 +31,35 @@ export class FacturaComponent implements OnInit {
   @ViewChild('contentToPrint', { static: false }) contentToPrint!: ElementRef;
 
   lstDetalleMovimientos: DetallesMovimientoEntity[] = [];
-  dtOptions: DataTables.Settings = {};
-  dtTrigger: Subject<any> = new Subject<any>();
+  lstDetallePagos: DetallesPagoEntity[] = [];
   lstFormasPago: FormasPagoEntity[] = [];
   lstFormasPago2: FormasPagoEntity[] = [];
-  sumaTotal: any;
-  isBotonHabilitado = false;
-  resto: any
-  nombreSoc: string = '';
+  razonSocial: string = '';
+  nombreComercial: string = '';
+  claveAcceso: string = '';
+  facturaNro: string = '';
   idFiscalSoc: string = '';
+  ambiente: string = '';
   numFactura: string = '';
-  fechaEmision: string = '';
+  fechaEmision: Date | undefined;
   direccionAlm: string = '';
-  telefonoAlm: string = '';
+  dir1: string = '';
+  fechaAut = localStorage.getItem('fechaAutoriz')!;
   cliente: string = '';
   idFiscalCliente: string = '';
   email: string = '';
   telefono: string = '';
-  ultSecuencial: any = '';
-  secuencial: any;
-  inputColor: string = '';
-  esRestoCero: boolean = false;
-  descuentoN: number = 0;
-  descuentoP: number = 0;
-  totalF: number = 0;
-  deshabilitarIn = false;
+  direccionCl: string = '';
   facturaUrl: any = "https://calidad.atiendo.ec/eojgprlg/FacturasPDF/ejemplo.pdf";
   facturaBase64: string = "";
   facturaName: string = "";
+  subtotal0: string = '';
+  subtotal12: string = '';
+  descuento: string = '';
+  ice: string = '0.00';
+  iva: string = '';
+  propina: string = '';
+  valorTotal: string = '';
 
   constructor(private readonly httpService: DetallesmovimientoService,
     private readonly httpServiceMovimiento: MovimientosService,
@@ -69,17 +72,6 @@ export class FacturaComponent implements OnInit {
     private httpServiceImage: ImagenesService) { }
 
   ngOnInit(): void {
-    this.dtOptions = {
-      language: {
-        url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
-      },
-      paging: false,
-      search: false,
-      searching: false,
-      ordering: false,
-      info: false,
-      responsive: false
-    }
     const newDetalle: DetallesMovimientoEntity = {
       id: '',
       producto_nombre: '',
@@ -128,6 +120,18 @@ export class FacturaComponent implements OnInit {
       cod_doc: '',
       secuencial: ''
     }
+    const newSociedad: SociedadesEntity = {
+      idGrupo: '',
+      idSociedad: localStorage.getItem('sociedadid')!,
+      razon_social: '',
+      nombre_comercial: '',
+      id_fiscal: '',
+      email: '',
+      telefono: '',
+      password: '',
+      funcion: '',
+      tipo_ambienteid: ''
+    }
     Swal.fire({
       title: 'CARGANDO...',
       html: 'Se está cargando el detalle.',
@@ -137,30 +141,41 @@ export class FacturaComponent implements OnInit {
           if (res1.codigoError != "OK") {
 
           } else {
-            this.numFactura = localStorage.getItem('movimiento_id')!;
             this.cliente = res1.lstTerceros[0].nombre;
             this.telefono = res1.lstTerceros[0].telefono;
             this.email = res1.lstTerceros[0].correo;
+            this.direccionCl = res1.lstTerceros[0].direccion;
             this.idFiscalCliente = res1.lstTerceros[0].id_fiscal;
           }
         });
-        this.httpServiceAlmacen.obtenerAlmacenID(newAlmacen).subscribe(res1 => {
+        this.httpServiceMovimiento.obtenerMovimientoCLAVEACCESO(newMovimiento).subscribe(res1 => {
           if (res1.codigoError != "OK") {
 
           } else {
-            this.nombreSoc = res1.lstAlmacenes[0].nombresociedad!;
-            this.idFiscalSoc = res1.lstAlmacenes[0].idfiscal_sociedad!;
-            this.direccionAlm = res1.lstAlmacenes[0].direccion!;
-            this.telefonoAlm = res1.lstAlmacenes[0].telefono!;
+            this.facturaNro = res1.lstMovimientos[0].pto_emision + '-' + res1.lstMovimientos[0].estab! + '-' + res1.lstMovimientos[0].secuencial;
+            this.claveAcceso = res1.lstMovimientos[0].clave_acceso!;
           }
         });
-        this.httpServiceMovimiento.obtenerMovimientoID(newMovimiento).subscribe(res2 => {
-          if (res2.codigoError != "OK") {
+        this.httpServiceSociedad.obtenerSociedadDatos(newSociedad).subscribe(res1 => {
+          if (res1.codigoError != "OK") {
 
           } else {
-            this.fechaEmision = res2.lstMovimientos[0].fecha_emision!;
+            this.razonSocial = res1.lstSociedades[0].razon_social!;
+            this.nombreComercial = res1.lstSociedades[0].nombre_comercial!;
+            this.idFiscalSoc = res1.lstSociedades[0].id_fiscal!;
+            this.direccionAlm = res1.lstSociedades[0].direccion!;
+            this.dir1 = res1.lstSociedades[0].dir1!;
+            this.ambiente = res1.lstSociedades[0].ambiente!;
           }
         });
+        
+        this, this.httpServiceDetallePago.obtenerDetallePagoMovimiento(newMovimiento).subscribe(res => {
+          if (res.codigoError != "OK") {
+
+          } else {
+            this.lstDetallePagos = res.lstDetallePagos;
+          }
+        })
         this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe(res => {
           if (res.codigoError != "OK") {
             Swal.fire({
@@ -172,12 +187,50 @@ export class FacturaComponent implements OnInit {
             });
           } else {
             this.lstDetalleMovimientos = res.lstDetalleMovimientos;
-            this.dtTrigger.next('');
             Swal.close();
+            this.httpServiceMovimiento.obtenerMovimientoID(newMovimiento).subscribe(res2 => {
+              if (res2.codigoError != "OK") {
+    
+              } else {
+                const fecha: string[] = res2.lstMovimientos[0].fecha_emision!.split(' ');
+                const fechaEmisionStr: string = fecha[0];
+                const partesFecha: string[] = fechaEmisionStr.split("/");
+                const dia: number = parseInt(partesFecha[0], 10);
+                const mes: number = parseInt(partesFecha[1], 10) - 1; // Los meses en JavaScript son indexados desde 0
+                const anio: number = parseInt(partesFecha[2], 10);
+    
+                const fechaEmision: Date = new Date(anio, mes, dia);
+                this.fechaEmision = fechaEmision;
+                const sub: number = this.calcularTotalTarifa0();
+                const numeroFormateado: string = sub.toFixed(2);
+                this.subtotal0 = numeroFormateado;
+                const sub12: number = this.calcularTotalTarifa12();
+                const numeroFormateado2: string = sub12.toFixed(2);
+                this.subtotal12 =  numeroFormateado2;
+                this.descuento = res2.lstMovimientos[0].total_desc!;
+                const iva12: number = this.calcularIva12();
+                const numeroFormateado3: string = iva12.toFixed(2);
+                this.iva = numeroFormateado3;
+                this.propina = res2.lstMovimientos[0].propina!;
+                this.valorTotal = res2.lstMovimientos[0].importe_total!;
+              }
+            });
           }
         });
       },
     });
+    
+  }
+
+  calcularIva12(): number {
+    const totalTarifa12 = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
+      .reduce((total, detalleMovimientos) => {
+        return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
+      }, 0);
+    const porcen = totalTarifa12 * 0.12;
+
+    return porcen;
   }
 
   generarPDF() {
@@ -235,13 +288,33 @@ export class FacturaComponent implements OnInit {
           .agregarPDF(imageEntity).subscribe(res1 => {
             if (res1.codigoError == 'OK') {
               console.log('CORRECTO')
-              
+
             } else {
               console.log(res1.descripcionError)
             }
           });
       });
     })
+  }
+
+  calcularTotalTarifa0(): number {
+    const totalTarifa0 = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '0%')
+      .reduce((total, detalleMovimientos) => {
+        return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
+      }, 0);
+
+    return totalTarifa0;
+  }
+
+  calcularTotalTarifa12(): number {
+    const totalTarifa12 = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
+      .reduce((total, detalleMovimientos) => {
+        return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
+      }, 0);
+
+    return totalTarifa12;
   }
 
 }

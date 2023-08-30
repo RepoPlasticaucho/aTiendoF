@@ -258,6 +258,16 @@ export class VerFacturaComponent implements OnInit {
     return totalTarifa12 + porcen;
   }
 
+  calcularTotalTarifa12P(): number {
+    const totalTarifa12 = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
+      .reduce((total, detalleMovimientos) => {
+        return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
+      }, 0);
+
+    return totalTarifa12;
+  }
+
   calcularIva12(): number {
     const totalTarifa12 = this.lstDetalleMovimientos
       .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
@@ -384,7 +394,7 @@ export class VerFacturaComponent implements OnInit {
                       secuencial: '',
                       estab: '',
                       importe_total: '',
-                      url_factura: 'ftp://calidad.atiendo.ec/public_ftp/FacturasXML/factura_' + claveAccesoConDV + '.xml'
+                      url_factura: 'ftp://calidad.atiendo.ec/FacturasXML/factura_' + claveAccesoConDV + '.xml'
                     }
                     console.log(newMovCA)
                     this.httpServiceMovimiento.actualizarCLAVEACCESO(newMovCA).pipe(finalize(() => {
@@ -394,6 +404,9 @@ export class VerFacturaComponent implements OnInit {
                           if(res4 == 'RECIBIDA'){
                             this.httpServiceSRI.autorizarXMLSri(localStorage.getItem('movimiento_id')!).subscribe(res5 => {
                               console.log(res5);
+                              const palabras: string[] = res5.split(' ');
+                              console.log(palabras)
+                              localStorage.setItem('fechaAutoriz', palabras.slice(1).join(' '));
                             });
                           } else {
                             console.log('NO SE PUEDE ENVIAR LA FACTURA PARA SU AUTORIZACIÓN')
