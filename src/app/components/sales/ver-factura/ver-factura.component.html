@@ -95,12 +95,14 @@
         <br><br>
         <div class="icon-container">
           <label for="total" class="label-input" style="font-size: 14px;">DESCUENTO NOMINAL :</label>
-          <input type="text" [(ngModel)]="descuentoN" class="cool-input resultado-input custom-input" [disabled]="deshabilitarIn" (input)="onInput2($event)">
+          <input type="text" [(ngModel)]="descuentoN" class="cool-input resultado-input custom-input"
+            [disabled]="deshabilitarIn" (input)="onInput2($event)">
         </div>
         <br><br>
         <div class="icon-container">
           <label for="total" class="label-input" style="font-size: 14px;">DESCUENTO % :</label>
-          <input type="text" [(ngModel)]="descuentoP" class="cool-input resultado-input custom-input" [disabled]="deshabilitarIn" (input)="validarDescuento()" (input)="onInput2($event)">
+          <input type="text" [(ngModel)]="descuentoP" class="cool-input resultado-input custom-input"
+            [disabled]="deshabilitarIn" (input)="validarDescuento()" (input)="onInput2($event)">
         </div>
         <br><br>
         <div class="icon-container">
@@ -134,6 +136,43 @@
         [ngStyle]="{'background-color': inputColor}" style="margin-right: 200px;" id="resto">
     </div>
     <br>
+    <table datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger2" style="width: 50%; margin-left: 20px;">
+      <thead>
+        <tr>
+          <th style="width: 10%; ">FORMA DE PAGO</th>
+          <th style="width: 10%; ">FORMA DE PAGO</th>
+          <th style="width: 10%; ">VALOR</th>
+          <th style="width: 10%; "></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let detallePago of lstDetallePagos; let i = index">
+          <td>{{detallePago.id}}</td>
+          <td>{{detallePago.nombre}}</td>
+          <td>
+            <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
+            {{detallePago.valor}}
+        </ng-container>
+        <input class="small-input" (input)="onInput($event)"
+            *ngIf="editarDetalle && i === detalleEditIndex" type="text"
+            [(ngModel)]="detallePago.valor">
+          </td>
+          <td style="text-align: center;">
+            <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
+              <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'lg'" style="margin-right: 5px;"
+                data-placement="bottom" (click)="editarDetallePago(i)" title="Editar pago"></fa-icon>
+            </ng-container>
+            <ng-container *ngIf="editarDetalle && i === detalleEditIndex">
+              <fa-icon [icon]="faCheck" class="btn btn-success" [size]="'lg'" style="margin-right: 5px;"
+                data-placement="bottom" (click)="aplicarCambiosDetalle(i)" title="Aplicar"></fa-icon>
+            </ng-container>
+            <fa-icon [icon]="faTrashAlt" class="btn btn-danger" [size]=" 'lg' " data-placement="bottom"
+              (click)=" eliminarDetalle(detallePago)" title="Eliminar pago"></fa-icon>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br><br>
     <div class="button-container">
       <button class="btn btn-primary" [disabled]="!esRestoCero" (click)="finalizarPedido()">
         <span style="color: white; font-size: 20px;"> FINALIZAR VENTA </span>

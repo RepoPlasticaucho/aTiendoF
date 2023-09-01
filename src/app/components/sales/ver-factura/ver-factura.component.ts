@@ -5,7 +5,7 @@ import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.s
 import { MovimientosService } from 'src/app/services/movimientos.service';
 import { MovimientosEntity } from 'src/app/models/movimientos';
 import { SociedadesService } from 'src/app/services/sociedades.service';
-import { faShoppingCart, faEdit, faTrashAlt, faMoneyBillAlt, faFileInvoice } from '@fortawesome/free-solid-svg-icons';
+import { faShoppingCart, faEdit, faTrashAlt, faMoneyBillAlt, faFileInvoice, faCheck, faSave } from '@fortawesome/free-solid-svg-icons';
 import { Subject, finalize } from 'rxjs';
 import Swal from 'sweetalert2';
 import { SociedadesEntity } from 'src/app/models/sociedades';
@@ -18,6 +18,7 @@ import { DetallesPagoService } from 'src/app/services/detalles-pago.service';
 import { AlmacenesEntity } from 'src/app/models/almacenes';
 import { AlmacenesService } from 'src/app/services/almacenes.service';
 import { SriwsService } from 'src/app/services/sriws.service';
+import { DataTableDirective } from 'angular-datatables';
 
 @Component({
   selector: 'app-ver-factura',
@@ -29,7 +30,16 @@ export class VerFacturaComponent implements OnInit {
 
   //Declaración de variables
   dtOptions: DataTables.Settings = {};
+  dtOptions2: DataTables.Settings = {};
+  faEdit = faEdit;
+  faCheck = faCheck;
+  faSave = faSave;
+  faShoppingCart = faShoppingCart;
+  faTrashAlt = faTrashAlt;
+  faMoneyBillAlt = faMoneyBillAlt;
   dtTrigger: Subject<any> = new Subject<any>();
+  dtTrigger2: Subject<any> = new Subject<any>();
+  lstDetallePagos: DetallesPagoEntity[] = [];
   lstDetalleMovimientos: DetallesMovimientoEntity[] = [];
   lstFormasPago: FormasPagoEntity[] = [];
   lstFormasPago2: FormasPagoEntity[] = [];
@@ -49,11 +59,16 @@ export class VerFacturaComponent implements OnInit {
   ultSecuencial: any = '';
   secuencial: any;
   inputColor: string = '';
+  private datatableElement!: DataTableDirective;
   esRestoCero: boolean = false;
   descuentoN: number = 0;
   descuentoP: number = 0;
   totalF: number = 0;
   deshabilitarIn = false;
+  editarDetalle: boolean = false;
+  detalleEditIndex: number = -1;
+  detalleEditBackup: DetallesPagoEntity | null = null;
+  valorAnterior: string = '';
 
 
   constructor(private readonly httpService: DetallesmovimientoService,
@@ -68,6 +83,17 @@ export class VerFacturaComponent implements OnInit {
 
   ngOnInit(): void {
     this.dtOptions = {
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+      },
+      paging: false,
+      search: false,
+      searching: false,
+      ordering: false,
+      info: false,
+      responsive: true
+    }
+    this.dtOptions2 = {
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
       },
@@ -172,31 +198,115 @@ export class VerFacturaComponent implements OnInit {
             this.fechaEmision = res2.lstMovimientos[0].fecha_emision!;
           }
         });
-        this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe(res => {
+        this, this.httpServiceDetallePago.obtenerDetallePagoMov(newMovimiento).subscribe(res => {
           if (res.codigoError != "OK") {
-            Swal.fire({
-              icon: 'error',
-              title: 'No existe nada en el carrito.',
-              text: res.descripcionError,
-              showConfirmButton: false,
-              // timer: 3000
+            this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe(res1 => {
+              console.log(res1)
+              
+              if (res1.codigoError != "OK") {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'No existe nada en el carrito.',
+                  text: res.descripcionError,
+                  showConfirmButton: false,
+                  // timer: 3000
+                });
+              } else {
+                this.lstDetalleMovimientos = res1.lstDetalleMovimientos;
+                this.dtTrigger.next('');
+                this.calcularSumaTotal();
+                this.actualizarColor();
+                Swal.close();
+              }
             });
           } else {
-            this.lstDetalleMovimientos = res.lstDetalleMovimientos;
-            this.dtTrigger.next('');
-            this.calcularSumaTotal();
-            this.resto = parseFloat(this.sumaTotal.replace(',', '.')).toFixed(2);
-            this.actualizarColor();
-            Swal.close();
+            this.lstDetallePagos = res.lstDetallePagos;
+            this.dtTrigger2.next('');
+            console.log(this.lstDetalleMovimientos)
+            this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe(res1 => {
+              console.log(res1)
+              
+              if (res1.codigoError != "OK") {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'No existe nada en el carrito.',
+                  text: res.descripcionError,
+                  showConfirmButton: false,
+                  // timer: 3000
+                });
+              } else {
+                this.lstDetalleMovimientos = res1.lstDetalleMovimientos;
+                this.dtTrigger.next('');
+                this.calcularSumaTotal();
+                this.actualizarColor();
+                Swal.close();
+              }
+            });
           }
-        });
+        })
+        
       },
+      
     }).then((result) => {
       /* Read more about handling dismissals below */
       if (result.dismiss === Swal.DismissReason.timer) {
         console.log('I was closed by the timer');
       }
     });
+
+  }
+
+  editarDetallePago(index: number): void {
+    this.detalleEditIndex = index;
+    this.detalleEditBackup = { ...this.lstDetallePagos[index] };
+    this.editarDetalle = true;
+    this.valorAnterior = this.lstDetallePagos[this.detalleEditIndex].valor;
+  }
+
+  aplicarCambiosDetalle(index: number): void {
+    if (parseFloat(this.lstDetallePagos[this.detalleEditIndex].valor) <= this.sumaTotal.replace(',', '.') && parseFloat(this.lstDetallePagos[this.detalleEditIndex].valor) <= (parseFloat(this.resto) + parseFloat(this.valorAnterior))){
+    if (this.detalleEditIndex >= 0 && this.detalleEditBackup) {
+      // Realizar lógica de guardado o actualización del detalle en tu servicio
+      // Por ejemplo:
+      this.httpServiceDetallePago
+        .modificarDetallePago(
+          this.lstDetallePagos[this.detalleEditIndex]
+        )
+        .subscribe((res) => {
+          if (res.codigoError == 'OK') {
+            Swal.fire({
+              icon: 'success',
+              title: 'Guardado Exitosamente.',
+              text: `Se han guardado los cambios del detalle`,
+              showConfirmButton: true,
+              confirmButtonText: 'Ok',
+            }).then(() => {
+              //this.cargarTablaMenuvent();
+              this.editarDetalle = false;
+              this.detalleEditIndex = -1;
+              this.detalleEditBackup = null;
+              this.calcularSumaTotal();
+              this.actualizarColor();
+              });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Ha ocurrido un error.',
+              text: res.descripcionError,
+              showConfirmButton: false,
+            });
+          }
+        });
+    }
+  }else {
+    Swal.fire({
+      icon: 'error',
+      title: 'Ha ocurrido un error.',
+      text: 'Estás abonando más del resto o has abonado el total',
+      showConfirmButton: false,
+    });
+  }
+    
   }
 
   calcularSumaTotal() {
@@ -204,6 +314,7 @@ export class VerFacturaComponent implements OnInit {
     const totalTarifa0 = this.calcularTotalTarifa0();
     const desc = this.calcularDescuento();
     const descP = this.validarDescuento();
+    const resto = this.calcularTotalAbonado();
     this.totalF = totalTarifa12 + totalTarifa0 - desc - this.descuentoN;
 
     const suma = totalTarifa12 + totalTarifa0 - desc - this.descuentoN - descP;
@@ -212,7 +323,77 @@ export class VerFacturaComponent implements OnInit {
       .toLocaleString(undefined, { maximumFractionDigits: 2 })
       .replace('.', ',');
 
-    this.resto = this.sumaTotal.replace(',', '.');
+    this.resto = (this.sumaTotal.replace(',', '.') - resto).toFixed(2);
+  }
+
+  eliminarDetalle(detalle: DetallesPagoEntity): void {
+    
+    Swal.fire({
+      icon: 'question',
+      title: `¿Esta seguro de eliminar ${detalle.valor}?`,
+      showDenyButton: true,
+      confirmButtonText: 'Si',
+      denyButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        
+        this.httpServiceDetallePago.eliminarDetallePago(detalle).subscribe((res) => {
+          if (res.codigoError == 'OK') {
+            Swal.fire({
+              icon: 'success',
+              title: 'Eliminado Exitosamente.',
+              text: `Se ha eliminado la forma de pago en ${detalle.nombre}`,
+              showConfirmButton: true,
+              confirmButtonText: 'Ok',
+            }).then(() => {
+              const newMovimiento: MovimientosEntity = {
+                id: localStorage.getItem('movimiento_id')!,
+                tipo_id: '',
+                tipo_emision_cod: '',
+                estado_fact_id: '',
+                tipo_comprb_id: '',
+                almacen_id: '',
+                cod_doc: '',
+                secuencial: ''
+              }
+              this, this.httpServiceDetallePago.obtenerDetallePagoMov(newMovimiento).subscribe(res => {
+                if (res.codigoError != "OK") {
+                  window.location.reload();
+                  Swal.fire({
+                    icon: 'info',
+                    title: 'Información',
+                    text: 'Necesitas abonar dinero',
+                    showConfirmButton: true,
+                    // timer: 3000
+                  });
+                } else {
+                  this.lstDetallePagos = res.lstDetallePagos;
+                  this.datatableElement.dtInstance.then((dtInstance2: DataTables.Api) => {
+                    // Destruye la tabla existente y elimina los datos
+                    dtInstance2.destroy();
+
+                    // Renderiza la tabla con los nuevos datos
+                    this.dtTrigger2.next('');
+
+                    // Opcional: Reinicia la página a la primera página
+                    dtInstance2.page('first').draw('page');
+                    this.calcularSumaTotal();
+                  });
+                }
+              });
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Ha ocurrido un error.',
+              text: res.descripcionError,
+              showConfirmButton: false,
+            });
+          }
+        });
+      }
+    });
+    
   }
 
   onInput2(event: any) {
@@ -235,6 +416,17 @@ export class VerFacturaComponent implements OnInit {
       return descuento;
     }
     return 0;
+  }
+
+  calcularTotalAbonado(): number {
+    const totalAb = this.lstDetallePagos
+      .filter((detallePagos) => detallePagos.valor)
+      .reduce((total, detallePagos) => {
+        console.log(total)
+        return total + parseFloat(detallePagos.valor.replace(',', '.'));
+      }, 0);
+
+    return totalAb;
   }
 
   calcularSubtotal(): number {
@@ -477,6 +669,7 @@ export class VerFacturaComponent implements OnInit {
       }
     })
   }
+  
 
   onInput(event: any) {
     const inputElement = event.target as HTMLInputElement;
@@ -518,6 +711,34 @@ export class VerFacturaComponent implements OnInit {
             showConfirmButton: false,
           });
           this.deshabilitarIn = true;
+          const newMovimiento: MovimientosEntity = {
+            id: localStorage.getItem('movimiento_id')!,
+            tipo_id: '',
+            tipo_emision_cod: '',
+            estado_fact_id: '',
+            tipo_comprb_id: '',
+            almacen_id: '',
+            cod_doc: '',
+            secuencial: ''
+          }
+          this, this.httpServiceDetallePago.obtenerDetallePagoMov(newMovimiento).subscribe(res => {
+            if (res.codigoError != "OK") {
+  
+            } else {
+              this.lstDetallePagos = res.lstDetallePagos;
+              this.datatableElement.dtInstance.then((dtInstance2: DataTables.Api) => {
+                // Destruye la tabla existente y elimina los datos
+                dtInstance2.destroy();
+    
+                // Renderiza la tabla con los nuevos datos
+                this.dtTrigger2.next('');
+    
+                // Opcional: Reinicia la página a la primera página
+                dtInstance2.page('first').draw('page');
+              });
+            }
+          })
+          
         } else {
           console.log('ERROR')
         }

@@ -17,4 +17,8 @@ export class SriwsService {
   autorizarXMLSri(movimiento_id: string): Observable<String> {
     return this.http.get<String>(`${environment.apiUrl}sriws/AutorizarXMLSri?movimiento_id=`+movimiento_id );
   }
+
+  enviarComprobanteCorreo(movimiento_id: string): Observable<String> {
+    return this.http.get<String>(`${environment.apiUrl}sriws/EnviarComprobanteCorreo?movimiento_id=`+movimiento_id );
+  }
 }

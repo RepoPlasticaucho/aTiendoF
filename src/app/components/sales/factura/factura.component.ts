@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { Subject } from 'rxjs';
@@ -59,6 +60,7 @@ export class FacturaComponent implements OnInit {
   ice: string = '0.00';
   iva: string = '';
   propina: string = '';
+  pdfGenerado: boolean = false;
   valorTotal: string = '';
 
   constructor(private readonly httpService: DetallesmovimientoService,
@@ -69,7 +71,8 @@ export class FacturaComponent implements OnInit {
     private readonly httpServiceAlmacen: AlmacenesService,
     private readonly httpServiceTercero: TercerosService,
     private readonly httpServiceForma: FormasPagoService,
-    private httpServiceImage: ImagenesService) { }
+    private httpServiceImage: ImagenesService,
+    private router: Router) { }
 
   ngOnInit(): void {
     const newDetalle: DetallesMovimientoEntity = {
@@ -133,9 +136,8 @@ export class FacturaComponent implements OnInit {
       tipo_ambienteid: ''
     }
     Swal.fire({
-      title: 'CARGANDO...',
-      html: 'Se está cargando el detalle.',
-      timer: 30000,
+      title: 'FACTURA',
+      html: 'Se generó la factura correctamente',
       didOpen: () => {
         this.httpServiceTercero.obtenerTerceroCedula(newTercero).subscribe(res1 => {
           if (res1.codigoError != "OK") {
@@ -168,7 +170,7 @@ export class FacturaComponent implements OnInit {
             this.ambiente = res1.lstSociedades[0].ambiente!;
           }
         });
-        
+
         this, this.httpServiceDetallePago.obtenerDetallePagoMovimiento(newMovimiento).subscribe(res => {
           if (res.codigoError != "OK") {
 
@@ -187,18 +189,17 @@ export class FacturaComponent implements OnInit {
             });
           } else {
             this.lstDetalleMovimientos = res.lstDetalleMovimientos;
-            Swal.close();
             this.httpServiceMovimiento.obtenerMovimientoID(newMovimiento).subscribe(res2 => {
               if (res2.codigoError != "OK") {
-    
+
               } else {
                 const fecha: string[] = res2.lstMovimientos[0].fecha_emision!.split(' ');
                 const fechaEmisionStr: string = fecha[0];
                 const partesFecha: string[] = fechaEmisionStr.split("/");
                 const dia: number = parseInt(partesFecha[0], 10);
-                const mes: number = parseInt(partesFecha[1], 10) - 1; // Los meses en JavaScript son indexados desde 0
+                const mes: number = parseInt(partesFecha[1], 10) - 1;
                 const anio: number = parseInt(partesFecha[2], 10);
-    
+
                 const fechaEmision: Date = new Date(anio, mes, dia);
                 this.fechaEmision = fechaEmision;
                 const sub: number = this.calcularTotalTarifa0();
@@ -206,7 +207,7 @@ export class FacturaComponent implements OnInit {
                 this.subtotal0 = numeroFormateado;
                 const sub12: number = this.calcularTotalTarifa12();
                 const numeroFormateado2: string = sub12.toFixed(2);
-                this.subtotal12 =  numeroFormateado2;
+                this.subtotal12 = numeroFormateado2;
                 this.descuento = res2.lstMovimientos[0].total_desc!;
                 const iva12: number = this.calcularIva12();
                 const numeroFormateado3: string = iva12.toFixed(2);
@@ -219,7 +220,7 @@ export class FacturaComponent implements OnInit {
         });
       },
     });
-    
+
   }
 
   calcularIva12(): number {
@@ -234,7 +235,7 @@ export class FacturaComponent implements OnInit {
   }
 
   generarPDF() {
-    // Extraemos el
+
     const DATA = document.getElementById('htmlData')!;
     const doc = new jsPDF('p', 'pt', 'a4');
     const options = {
@@ -245,7 +246,7 @@ export class FacturaComponent implements OnInit {
 
       const img = canvas.toDataURL('image/PNG');
 
-      // Add image Canvas to PDF
+
       const bufferX = 15;
       const bufferY = 15;
       const imgProps = (doc as any).getImageProperties(img);
@@ -254,9 +255,7 @@ export class FacturaComponent implements OnInit {
       doc.addImage(img, 'PNG', bufferX, bufferY, pdfWidth, pdfHeight, undefined, 'FAST');
       return doc;
     }).then((docResult) => {
-      // Guardar pdf en local
 
-      docResult.save(`${new Date().toISOString()}_tutorial.pdf`);
       // Datos para guardar el pdf en remoto
 
       const pdfContent = doc.output('datauristring');
@@ -277,6 +276,8 @@ export class FacturaComponent implements OnInit {
       }
       this.httpServiceMovimiento.obtenerMovimientoCLAVEACCESO(newMov).subscribe(res => {
         this.facturaName = `factura_${res.lstMovimientos[0].clave_acceso}.pdf`;
+        // Guardar pdf en local
+        docResult.save(this.facturaName);
         const imageEntity: ImagenesEntity = {
           imageBase64: this.facturaBase64,
           nombreArchivo: this.facturaName,
@@ -288,13 +289,34 @@ export class FacturaComponent implements OnInit {
           .agregarPDF(imageEntity).subscribe(res1 => {
             if (res1.codigoError == 'OK') {
               console.log('CORRECTO')
-
+              this.pdfGenerado = true;
             } else {
               console.log(res1.descripcionError)
             }
           });
       });
     })
+  }
+
+  enviarComprobante(){
+    const movimientoID = localStorage.getItem('movimiento_id')!;
+    this.httpServiceSRI.enviarComprobanteCorreo(movimientoID).subscribe(res => {
+      if(res == 'Correo enviado correctamente'){
+        console.log(res);
+        Swal.fire({
+          icon: 'success',
+          title: 'Finalizado Correctamente.',
+          text: `Se ha finalizado la venta y enviado el comprobante`,
+          showConfirmButton: true,
+          confirmButtonText: "Ok"
+        }).finally(() => {
+          // this.groupForm.reset();
+          this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ventaprov'] } }]);
+        });
+      } else {
+        console.log(res);
+      }
+    });
   }
 
   calcularTotalTarifa0(): number {

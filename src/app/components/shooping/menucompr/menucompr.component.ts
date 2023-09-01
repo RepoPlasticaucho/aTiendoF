@@ -529,7 +529,9 @@ export class MenucomprComponent implements OnInit {
   }
 
 
-
+  crearProveedor() {
+    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['nuevo-proveedor'] } }]);
+  }
 
 }
 

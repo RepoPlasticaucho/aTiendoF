@@ -87,11 +87,18 @@
                 </div>
             </div>
             <br><br>
-            <div class="d-flex justify-content-left">
-                <button class="btn button carrito-button" (click)="verCarrito()" [disabled]="buttonsDisabled">
-                    <fa-icon [icon]="faCartPlus" [size]="'lg'" style="color: #ffffff; margin-right: 5px;"></fa-icon>
-                    AÑADIR
-                </button>
+            <div class="row">
+                <div class="col-md-3">
+                    <button class="btn button carrito-button" (click)="verCarrito()" [disabled]="buttonsDisabled">
+                        <fa-icon [icon]="faCartPlus" [size]="'lg'" style="color: #ffffff; margin-right: 5px;"></fa-icon>
+                        AÑADIR
+                    </button>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary" (click)="crearProveedor()">
+                        <span style="color: white"> Crear proveedor </span>
+                    </button>
+                </div>
             </div>
             <br><br>
             <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
@@ -185,7 +192,7 @@
                 <input type="text" [(ngModel)]="sumaTotal" class="cool-input resultado-input" readonly>
             </div>
             <br><br><br>
-            
+
             <br><br><br>
             <div class="button-container">
                 <button class="btn btn-primary" [disabled]="lstDetalleMovimientos.length == 0"

@@ -99,3 +99,4 @@ export { VerCompraComponent } from './shooping/ver-compra/ver-compra.component';
 export { ProductocompraComponent} from './inventories/productocompra/productocompra.component';
 export {ConfiguracionComponent } from './users/configuracion/configuracion.component';
 export { FacturaComponent } from './sales/factura/factura.component';
+export { NuevoProveedorComponent } from './shooping/nuevo-proveedor/nuevo-proveedor.component';

@@ -143,6 +143,7 @@ import { CuadreMovComponent } from './components/cash-balancing/cuadre-mov/cuadr
 import { ProductocompraComponent } from './components/inventories/productocompra/productocompra.component';
 import { ConfiguracionComponent } from './components/users/configuracion/configuracion.component';
 import { FacturaComponent } from './components/sales/factura/factura.component';
+import { NuevoProveedorComponent } from './components/shooping/nuevo-proveedor/nuevo-proveedor.component';
 
 
 @NgModule({
@@ -263,7 +264,8 @@ import { FacturaComponent } from './components/sales/factura/factura.component';
     CuadreMovComponent,
     ProductocompraComponent,
     ConfiguracionComponent,
-    FacturaComponent
+    FacturaComponent,
+    NuevoProveedorComponent
   ],
   imports: [
     BrowserModule,

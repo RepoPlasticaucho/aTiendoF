@@ -1,173 +1,213 @@
-
 <div class="grid-container" style="color: grey;">
     <h1 class="mat-h1"></h1>
     <div style="text-align: right;">
-        <button mat-button [matMenuTriggerFor]="menu" class="material-icons-outlined" style="font-size: 30px ;color: #3163ad">
-        <img  class="circular--square" src="https://atiendo.ec/black/img/anime3.png" 
-            width="35" height="35"><mat-icon class="mat-18">ligature</mat-icon>
+        <button mat-button [matMenuTriggerFor]="menu" class="material-icons-outlined"
+            style="font-size: 30px ;color: #3163ad">
+            <img class="circular--square" src="https://atiendo.ec/black/img/anime3.png" width="35" height="35"><mat-icon
+                class="mat-18">ligature</mat-icon>
         </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <mat-menu #menu="matMenu">
-            <a class="mat-menu-item" (click)="onPass()" >Perfil</a>
+            <a class="mat-menu-item" (click)="onPass()">Perfil</a>
             <a [routerLink]="[{ outlets: { contentAdmin: ['usuario'] } }]" class="mat-menu-item">Configuracion</a>
             <a [routerLink]="[{ outlets: { contentAdmin: ['usuario'] } }]" class="mat-menu-item">Salir</a>
-        
-        </mat-menu>           
+
+        </mat-menu>
     </div>
     <br>
     <mat-grid-list cols="1" rowHeight="900px">
-            <mat-grid-tile >
-                <div class="col-md-8">
-                    <mat-card class="dashboard-card" 
-                        style="
+        <mat-grid-tile>
+            <div class="col-md-8">
+                <mat-card class="dashboard-card" style="
                             padding: 15px;
                             border-radius: 10px;">
-                           <br>
-                            <div align="left">
-                                <a  class="btn btn-info" (click)="onPass()">Ver Perfil</a>                          
-                            </div><br>
-                            
-                            <form [formGroup]="corporationForm" (ngSubmit)="onSubmit()">
-                                <div align="center">
-                                    <h5 class="title"> CERTIFICADOS DIGITALES</h5>
-                                </div>
-                                <div class="form-group">
-                                    <label for="etiquetas">Certificado Electronico (Firma)</label>
-                                    <label for=""></label>
-                                    <br>
-                                    <input type="file" accept=".pfx, .p12" (change)="onChangeFile($event.target)"
-                                        class="form-control" style="padding: 0px;" formControlName="urlCertificado">
-                                    <small
-                                        *ngIf="corporationForm.controls['urlCertificado'].invalid && (corporationForm.controls['urlCertificado'].dirty || corporationForm.controls['urlCertificado'].touched)">
-                                        <small *ngIf="corporationForm.controls['urlCertificado'].errors" style="color: red;">
-                                            Debe seleccionar su certificado
-                                        </small>
-                                    </small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="razonSocial">Clave Actual</label>
-                                    <input type="password" class="form-control" id="razonSocial"
-                                        placeholder="Ingrese la contraseña Actual " formControlName="razonSocial">
-                                    <small
-                                        *ngIf="corporationForm.controls['razonSocial'].invalid && (corporationForm.controls['razonSocial'].dirty || corporationForm.controls['razonSocial'].touched)">
-                                        <small *ngIf="corporationForm.controls['razonSocial'].errors?.['required']"
-                                            style="color: red;">
-                                            Debe ingresar la contraseña actual
-                                        </small>
-                                    </small>
-                                </div>
-                              
-                                <div class="form-group">
-                                    <label for="passwnew">Nueva Clave</label>
-                                    <input type="password" class="form-control" id="passwnew"
-                                        placeholder="Ingrese la nueva contraseña " formControlName="nombreComercial2">
-                                    <small
-                                        *ngIf="corporationForm.controls['nombreComercial2'].invalid && (corporationForm.controls['nombreComercial2'].dirty || corporationForm.controls['nombreComercial2'].touched)">
-                                        <small *ngIf="corporationForm.controls['nombreComercial2'].errors?.['required']"
-                                            style="color: red;">
-                                            Debe ingresar la nueva contraseña.
-                                        </small>
-                                    </small>
-                                </div>
+                    <br>
+                    <div align="left">
+                        <a class="btn btn-info" (click)="onPass()">Ver Perfil</a>
+                    </div><br>
 
-                                <div align="left">
-                                    <br><h5 class="title"> Correo Electronico</h5>
-                                </div>  
-                                
-                                <div class="form-group">
-                                    <label for="email">Email de Envio de Comprobantes</label>
-                                    <input type="text" class="form-control" id="email"
-                                        placeholder="Ingrese la contraseña Actual " formControlName="email">
-                                    <small
-                                        *ngIf="corporationForm.controls['email'].invalid && (corporationForm.controls['email'].dirty || corporationForm.controls['email'].touched)">
-                                        <small *ngIf="corporationForm.controls['email'].errors?.['required']"
-                                            style="color: red;">
-                                            Debe ingresar el correo electronico
-                                        </small>
-                                    </small>
-                                </div>
-                          
-                                <div class="form-group">
-                                    <label for="passmail">Contraseña Actual</label>
-                                    <input type="password" class="form-control" id="passmail"
-                                        placeholder="Ingrese la nueva contraseña " formControlName="passmail">
-                                    <small
-                                        *ngIf="corporationForm.controls['passmail'].invalid && (corporationForm.controls['passmail'].dirty || corporationForm.controls['passmail'].touched)">
-                                        <small *ngIf="corporationForm.controls['passmail'].errors?.['required']"
-                                            style="color: red;">
-                                            Debe ingresar la contraseña.
-                                        </small>
-                                    </small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="passmailnew">Contraseña Nueva</label>
-                                    <input type="password" class="form-control" id="passmailnew"
-                                        placeholder="Ingrese la nueva contraseña " formControlName="passmailnew">
-                                    <small
-                                        *ngIf="corporationForm.controls['passmailnew'].invalid && (corporationForm.controls['passmailnew'].dirty || corporationForm.controls['passmailnew'].touched)">
-                                        <small *ngIf="corporationForm.controls['passmailnew'].errors?.['required']"
-                                            style="color: red;">
-                                            Debe ingresar la contraseña.
-                                        </small>
-                                    </small>
-                                </div>
-                                <div align="center">
-                                    <button type="submit" class="btn btn-primary">
-                                    <!--[disabled]="!this.corporationForm.valid"-->
-                                        <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
-                                        Actualizar
+                    <form [formGroup]="corporationForm" (ngSubmit)="onSubmit()">
+                        <div align="center">
+                            <h5 class="title"> CERTIFICADOS DIGITALES</h5>
+                        </div>
+                        <div class="form-group">
+                            <label for="etiquetas">Certificado Electronico (Firma)</label>
+                            <label for=""></label>
+                            <br>
+                            <input type="file" accept=".pfx, .p12" (change)="onChangeFile($event.target)"
+                                class="form-control" style="padding: 0px;" formControlName="urlCertificado">
+                            <small
+                                *ngIf="corporationForm.controls['urlCertificado'].invalid && (corporationForm.controls['urlCertificado'].dirty || corporationForm.controls['urlCertificado'].touched)">
+                                <small *ngIf="corporationForm.controls['urlCertificado'].errors" style="color: red;">
+                                    Debe seleccionar su certificado
+                                </small>
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <label for="razonSocial">Clave Actual</label>
+                            <div class="input-group">
+                                <input type="{{ showPassword['razonSocial'] ? 'text' : 'password' }}"
+                                    class="form-control" id="razonSocial" placeholder="Ingrese la contraseña Actual "
+                                    formControlName="razonSocial">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button"
+                                        (click)="togglePassword('razonSocial')">
+                                        <i class="fa"
+                                            [ngClass]="{'fa-eye': showPassword['razonSocial'], 'fa-eye-slash': !showPassword['razonSocial']}"></i>
                                     </button>
                                 </div>
-                               
-                            </form>   
+                            </div>
+                            <small
+                                *ngIf="corporationForm.controls['razonSocial'].invalid && (corporationForm.controls['razonSocial'].dirty || corporationForm.controls['razonSocial'].touched)">
+                                <small *ngIf="corporationForm.controls['razonSocial'].errors?.['required']"
+                                    style="color: red;">
+                                    Debe ingresar la contraseña actual
+                                </small>
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="passwnew">Nueva Clave</label>
+                            <div class="input-group">
+                                <input type="{{ showPassword['nombreComercial2'] ? 'text' : 'password' }}"
+                                    class="form-control" id="passwnew" placeholder="Ingrese la nueva contraseña "
+                                    formControlName="nombreComercial2">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button"
+                                        (click)="togglePassword('nombreComercial2')">
+                                        <i class="fa"
+                                            [ngClass]="{'fa-eye': showPassword['nombreComercial2'], 'fa-eye-slash': !showPassword['nombreComercial2']}"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <small
+                                *ngIf="corporationForm.controls['nombreComercial2'].invalid && (corporationForm.controls['nombreComercial2'].dirty || corporationForm.controls['nombreComercial2'].touched)">
+                                <small *ngIf="corporationForm.controls['nombreComercial2'].errors?.['required']"
+                                    style="color: red;">
+                                    Debe ingresar la nueva contraseña.
+                                </small>
+                            </small>
+                        </div>
+
+                        <div align="left">
                             <br>
-                        </mat-card>
-                </div> 
-                <div class="col-md-4">
-                    <mat-card class="dashboard-card" 
-                            style="
+                            <h5 class="title"> Correo Electronico</h5>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email de Envio de Comprobantes</label>
+                            <input type="text" class="form-control" id="email"
+                                placeholder="Ingrese la contraseña Actual " formControlName="email">
+                            <small
+                                *ngIf="corporationForm.controls['email'].invalid && (corporationForm.controls['email'].dirty || corporationForm.controls['email'].touched)">
+                                <small *ngIf="corporationForm.controls['email'].errors?.['required']"
+                                    style="color: red;">
+                                    Debe ingresar el correo electronico
+                                </small>
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="passmail">Contraseña Actual</label>
+                            <div class="input-group">
+                                <input type="{{ showPassword['passmail'] ? 'text' : 'password' }}" class="form-control"
+                                    id="passmail" placeholder="Ingrese la nueva contraseña " formControlName="passmail">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button"
+                                        (click)="togglePassword('passmail')">
+                                        <i class="fa"
+                                            [ngClass]="{'fa-eye': showPassword['passmail'], 'fa-eye-slash': !showPassword['passmail']}"></i>
+                                    </button>
+                                </div>
+                                <small
+                                    *ngIf="corporationForm.controls['passmail'].invalid && (corporationForm.controls['passmail'].dirty || corporationForm.controls['passmail'].touched)">
+                                    <small *ngIf="corporationForm.controls['passmail'].errors?.['required']"
+                                        style="color: red;">
+                                        Debe ingresar la contraseña.
+                                    </small>
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="passmailnew">Contraseña Nueva</label>
+                            <div class="input-group">
+                                <input type="{{ showPassword['passmailnew'] ? 'text' : 'password' }}"
+                                    class="form-control" id="passmailnew" placeholder="Ingrese la nueva contraseña "
+                                    formControlName="passmailnew">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button"
+                                        (click)="togglePassword('passmailnew')">
+                                        <i class="fa"
+                                            [ngClass]="{'fa-eye': showPassword['passmailnew'], 'fa-eye-slash': !showPassword['passmailnew']}"></i>
+                                    </button>
+                                </div>
+                                <small
+                                    *ngIf="corporationForm.controls['passmailnew'].invalid && (corporationForm.controls['passmailnew'].dirty || corporationForm.controls['passmailnew'].touched)">
+                                    <small *ngIf="corporationForm.controls['passmailnew'].errors?.['required']"
+                                        style="color: red;">
+                                        Debe ingresar la contraseña.
+                                    </small>
+                                </small>
+                            </div>
+                        </div>
+                        <div align="center">
+                            <button type="submit" class="btn btn-primary">
+                                <!--[disabled]="!this.corporationForm.valid"-->
+                                <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
+                                Actualizar
+                            </button>
+                        </div>
+
+                    </form>
+                    <br>
+                </mat-card>
+            </div>
+            <div class="col-md-4">
+                <mat-card class="dashboard-card" style="
                                 padding: 15px;
                                 border-radius: 10px;">
-                            <div class="card card-user">
-                                <div class="card-body">
-                                    <p class="card-text">
-                                        <div class="author"align="center">
-                                            <div class="block block-one"></div>
-                                            <div class="block block-two"></div>
-                                            <div class="block block-three"></div>
-                                            <div class="block block-four"></div>
-                                            <a href="#">
-                                                <img class="avatar" src="https://atiendo.ec/black/img/anime3.png" alt="">
-                                            </a>
-                                            <p class="description" style="text-align: center;">
-                                                Ceo/Co-Founder
-                                            </p>
-                                        </div>
-                                        
-                                    <div class="card-description">
-                                        <p>
-                                            'Do not be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
-                                        </p> 
-                                    </div>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="button-container" align="center">
-                                        <button class="btn btn-icon btn-round btn-facebook">
-                                            <i class="fab fa-facebook"></i>
-                                        </button>
-                                        <button class="btn btn-icon btn-round btn-twitter">
-                                            <i class="fab fa-twitter"></i>
-                                        </button>
-                                        <button class="btn btn-icon btn-round btn-google">
-                                            <i class="fab fa-google-plus"></i>
-                                        </button>
-                                        </div>
-                                </div>
-                            </div>                   
-                    
-                    </mat-card>
-                </div>    
-                        
-            </mat-grid-tile>
+                    <div class="card card-user">
+                        <div class="card-body">
+                            <p class="card-text">
+                            <div class="author" align="center">
+                                <div class="block block-one"></div>
+                                <div class="block block-two"></div>
+                                <div class="block block-three"></div>
+                                <div class="block block-four"></div>
+                                <a href="#">
+                                    <img class="avatar" src="https://atiendo.ec/black/img/anime3.png" alt="">
+                                </a>
+                                <p class="description" style="text-align: center;">
+                                    Ceo/Co-Founder
+                                </p>
+                            </div>
+
+                            <div class="card-description">
+                                <p>
+                                    'Do not be scared of the truth because we need to restart the human foundation in
+                                    truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the
+                                    back is...
+                                </p>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="button-container" align="center">
+                                <button class="btn btn-icon btn-round btn-facebook">
+                                    <i class="fab fa-facebook"></i>
+                                </button>
+                                <button class="btn btn-icon btn-round btn-twitter">
+                                    <i class="fab fa-twitter"></i>
+                                </button>
+                                <button class="btn btn-icon btn-round btn-google">
+                                    <i class="fab fa-google-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </mat-card>
+            </div>
+
+        </mat-grid-tile>
     </mat-grid-list>
-   
+
 </div>

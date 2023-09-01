@@ -123,7 +123,14 @@
       </div>
     </div>
   </div>
-  <button class="btn btn-primary" (click)="generarPDF()">
-    <span style="color: white; font-size: 20px;">Guardar como PDF</span>
-  </button>
+  <br><br>
+  <div class="botones">
+    <button class="btn btn-primary" style="margin-right: 70px;" (click)="generarPDF()" [disabled]="pdfGenerado">
+      <span style="color: white; font-size: 20px;">Generar PDF</span>
+    </button>
+    <button class="btn btn-primary" (click)="enviarComprobante()" [disabled]="!pdfGenerado">
+      <span style="color: white; font-size: 20px;">Enviar Comprobante por Correo</span>
+    </button>
+  </div>
+  <br><br>
 </div>

@@ -145,3 +145,8 @@ body {
 .separ {
     margin-right: 20px;
 }
+
+.botones {
+    align-items: center;
+    text-align: center;
+}

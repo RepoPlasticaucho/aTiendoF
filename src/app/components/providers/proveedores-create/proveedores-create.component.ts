@@ -76,7 +76,7 @@ export class ProveedoresCreateComponent implements OnInit {
             showConfirmButton: true,
             confirmButtonText: "Ok"
           }).finally(() => {
-            this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['proveedores'] } }]);
+            this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['proveedores'] } }]);
           });
         } else {
           Swal.fire({

@@ -29,7 +29,7 @@ export class ConfiguracionComponent implements OnInit {
   });
 
   encPass: string | undefined;
-  clave : string | undefined ;
+  clave: string | undefined;
   fun: any;
   //Variables para imágen
   fileToUpload: any;
@@ -37,7 +37,7 @@ export class ConfiguracionComponent implements OnInit {
   certificadoBase64: string = "";
   certificadoName: string = "";
 
-  constructor( private readonly httpService: SociedadesService,
+  constructor(private readonly httpService: SociedadesService,
     private httpServiceImage: ImagenesService, private router: Router) { }
 
   ngOnInit(): void {
@@ -78,24 +78,24 @@ export class ConfiguracionComponent implements OnInit {
 
 
       }
-     // console.log(res);
-     this.fun = res.lstSociedades[0].funcion;
+      // console.log(res);
+      this.fun = res.lstSociedades[0].funcion;
     })
   }
 
-  onPass(): void{
+  onPass(): void {
     switch (this.fun) {
       case "admin":
-          this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['usuario'] } }]);
-      break;
+        this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['usuario'] } }]);
+        break;
 
       case "client":
-           this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['usuario'] } }]);
-      break;
+        this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['usuario'] } }]);
+        break;
     }
   }
 
-  onSubmit(){
+  onSubmit() {
     const passnuevo = this.corporationForm.value!.nombreComercial2 ?? "";
     const passactual = this.corporationForm.value!.razonSocial ?? "";
     const email = this.corporationForm.value!.email ?? "";
@@ -113,14 +113,14 @@ export class ConfiguracionComponent implements OnInit {
           showConfirmButton: true,
           confirmButtonText: "Ok"
         }).finally(() => {
-          localStorage.setItem('passwa',passnuevo);
+          localStorage.setItem('passwa', passnuevo);
           switch (this.fun) {
             case "admin":
               this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['usuario'] } }]);
-            break;
+              break;
             case "client":
-               this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['usuario'] } }]);
-            break;
+              this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['usuario'] } }]);
+              break;
           }
         });
       } else {
@@ -133,7 +133,7 @@ export class ConfiguracionComponent implements OnInit {
         };
         this.httpServiceImage
           .agregarCertificado(imageEntity).subscribe(res1 => {
-            if(res1.codigoError == 'OK'){
+            if (res1.codigoError == 'OK') {
               const userEntity: SociedadesEntity = {
                 idGrupo: '',
                 nombre_comercial: '',
@@ -147,8 +147,8 @@ export class ConfiguracionComponent implements OnInit {
                 razon_social: '',
                 url_certificado: this.certificadoName == '' ? this.certificadoUrl : this.certificadoName,
                 clave_certificado: passactual, // cambiar por new
-                pass_certificado : passemailnew,// activar validacion
-                email_certificado : email
+                pass_certificado: passemailnew,// activar validacion
+                email_certificado: email
               }
               this.httpService.actualizarCertificado(userEntity).subscribe(res => {
                 if (res.codigoError == "OK") {
@@ -159,19 +159,19 @@ export class ConfiguracionComponent implements OnInit {
                     showConfirmButton: true,
                     confirmButtonText: "Ok"
                   }).finally(() => {
-                    localStorage.setItem('passwa',passnuevo);
+                    localStorage.setItem('passwa', passnuevo);
                     switch (this.fun) {
                       case "admin":
                         this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['cofiguracion-user'] } }]);
-                      break;
+                        break;
                       case "client":
-                         this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['cofiguracion-user'] } }]);
-                      break;
-                  }
-                  
+                        this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['cofiguracion-user'] } }]);
+                        break;
+                    }
+
                   });
-        
-                  
+
+
                 } else {
                   Swal.fire({
                     icon: 'error',
@@ -183,12 +183,13 @@ export class ConfiguracionComponent implements OnInit {
               });
             }
           })
-  
-        
+
+
       }
-    } 
-  }    
-  
+    }
+  }
+
+
   onChangeFile(target: any): void {
     if (target.value != "") {
       this.fileToUpload = target.files[0];
@@ -201,4 +202,10 @@ export class ConfiguracionComponent implements OnInit {
       reader.readAsDataURL(this.fileToUpload);
     }
   }
+
+  showPassword: { [key: string]: boolean } = {};
+
+togglePassword(field: string) {
+    this.showPassword[field] = !this.showPassword[field];
+}
 }

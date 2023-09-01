@@ -41,6 +41,9 @@ export class DetallesPagoService {
   agregarDetallePago(detalle: DetallesPagoEntity): Observable<DetallesPago> {
     return this.http.post<DetallesPago>(`${environment.apiUrl}detallespago/InsertarDetallePago`, detalle);
   }
+  obtenerDetallePagoMov(movimiento: MovimientosEntity): Observable<DetallesPago> {
+    return this.http.post<DetallesPago>(`${environment.apiUrl}detallespago/ObtenerDetallePagoMov`, movimiento);
+  }
   obtenerDetallePagoMovimiento(movimiento: MovimientosEntity): Observable<DetallesPago> {
     return this.http.post<DetallesPago>(`${environment.apiUrl}detallespago/ObtenerDetallePagoMovimiento`, movimiento);
   }
@@ -64,6 +67,14 @@ export class DetallesPagoService {
 
   obtenerDetallePagoF(sociedad: string, forma: string, fechadesde: string, fechahasta: string): Observable<DetallesPago> {
     return this.http.get<DetallesPago>(`${environment.apiUrl}detallespago/ObtenerDetallePagoF?sociedad=`+sociedad+`&forma=`+forma+`&fechadesde=`+fechadesde+`&fechahasta=`+fechahasta);
+  }
+
+  modificarDetallePago(detalle: DetallesPagoEntity): Observable<DetallesPago> {
+    return this.http.post<DetallesPago>(`${environment.apiUrl}detallespago/ModificarDetallePago`, detalle);
+  }
+
+  eliminarDetallePago(detalle: DetallesPagoEntity): Observable<DetallesPago> {
+    return this.http.post<DetallesPago>(`${environment.apiUrl}detallespago/EliminarDetallePago`, detalle);
   }
 
 }

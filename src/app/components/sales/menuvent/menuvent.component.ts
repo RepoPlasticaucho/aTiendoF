@@ -407,6 +407,16 @@ export class MenuventComponent implements OnInit {
     return subtotal;
   }
 
+  calcularTotalTarifa12P(): number {
+    const totalTarifa12 = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
+      .reduce((total, detalleMovimientos) => {
+        return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
+      }, 0);
+
+    return totalTarifa12;
+  }
+
   calcularTotalTarifa12(): number {
     const totalTarifa12 = this.lstDetalleMovimientos
       .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
@@ -585,14 +595,13 @@ export class MenuventComponent implements OnInit {
 
   finalizarPedido() {
     Swal.fire({
-      title: '¿Estás seguro de terminar la compra?',
+      title: '¿Continuar con la venta?',
       showDenyButton: true,
       confirmButtonText: 'SÍ',
       denyButtonText: `NO`,
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-
         //
         console.log(this.lstDetalleMovimientos[0].id)
         for (let i = 0; i < this.lstDetalleMovimientos.length; i++) {
@@ -657,7 +666,7 @@ export class MenuventComponent implements OnInit {
                     })
                   ).subscribe(res1 => {
                     if (res1.codigoError == 'OK') {
-
+                      
                     } else {
                       console.log('ERROR')
                     }
@@ -722,8 +731,7 @@ export class MenuventComponent implements OnInit {
         }
         Swal.fire({
           icon: 'success',
-          title: 'Finalizado Correctamente.',
-          text: `Se ha finalizado la compra`,
+          title: 'Continuando...',
           showConfirmButton: true,
           confirmButtonText: 'Ok',
         }).finally(() => {
@@ -734,7 +742,7 @@ export class MenuventComponent implements OnInit {
           ]);
         });
       } else if (result.isDenied) {
-        Swal.fire('No se finalizó la compra', '', 'info');
+        Swal.fire('No se finalizó el proceso de venta', '', 'info');
       }
     });
   }
