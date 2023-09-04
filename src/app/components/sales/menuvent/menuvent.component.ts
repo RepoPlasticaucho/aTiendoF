@@ -390,7 +390,7 @@ export class MenuventComponent implements OnInit {
     const totalTarifa0 = this.calcularTotalTarifa0();
     const desc = this.calcularDescuento();
 
-    const suma = totalTarifa12 + totalTarifa0 - desc;
+    const suma = totalTarifa12 + totalTarifa0;
 
     this.sumaTotal = suma
       .toLocaleString(undefined, { maximumFractionDigits: 2 })
@@ -573,9 +573,10 @@ export class MenuventComponent implements OnInit {
     const detalleMovimientos = this.lstDetalleMovimientos[index];
     const cantidad = parseFloat(detalleMovimientos.cantidad);
     const costo = parseFloat(detalleMovimientos.costo);
+    const desc = parseFloat(detalleMovimientos.desc_add!);
 
     if (!isNaN(cantidad) && !isNaN(costo)) {
-      detalleMovimientos.precio = (cantidad * costo).toFixed(2);
+      detalleMovimientos.precio = (cantidad * costo - desc).toFixed(2);
     } else {
       detalleMovimientos.precio = '';
     }

@@ -166,8 +166,10 @@ searchText: string = '';
                   text: `Se ha cambiado la cantidad`,
                   showConfirmButton: true,
                   confirmButtonText: 'Ok',
-                }).then(() => {
-                  this.cerrarDialog();
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    this.cerrarDialog();
+                  }
                 });
               } else {
                 Swal.fire({

@@ -116,7 +116,7 @@
                     <th style="width: 10%; ">Producto</th>
                     <th style="width: 10%; ">Cantidad</th>
                     <th style="width: 10%; ">Precio Uni.</th>
-                    <th style="width: 10%; ">Precio</th>
+                    <th style="width: 10%; ">Precio Total</th>
                     <th style="width: 10%; ">Descuento</th>
                     <th style="width: 10%; ">Tarifa</th>
                     <th style="width: 10%; ">Tamaño</th>
@@ -150,7 +150,7 @@
                         </ng-container>
                         <input class="small-input" (input)="onInput2($event)"
                             *ngIf="editarDetalle && i === detalleEditIndex" type="text"
-                            [(ngModel)]="detalleMovimientos.desc_add">
+                            [(ngModel)]="detalleMovimientos.desc_add" (ngModelChange)="calcularPrecio(i)">
                     </td>
                     <td>{{detalleMovimientos.tarifa}}</td>
                     <td>{{detalleMovimientos.tamanio}}</td>

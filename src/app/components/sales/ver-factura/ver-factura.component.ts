@@ -315,9 +315,9 @@ export class VerFacturaComponent implements OnInit {
     const desc = this.calcularDescuento();
     const descP = this.validarDescuento();
     const resto = this.calcularTotalAbonado();
-    this.totalF = totalTarifa12 + totalTarifa0 - desc - this.descuentoN;
+    this.totalF = totalTarifa12 + totalTarifa0 - this.descuentoN;
 
-    const suma = totalTarifa12 + totalTarifa0 - desc - this.descuentoN - descP;
+    const suma = totalTarifa12 + totalTarifa0 - this.descuentoN - descP;
 
     this.sumaTotal = suma
       .toLocaleString(undefined, { maximumFractionDigits: 2 })

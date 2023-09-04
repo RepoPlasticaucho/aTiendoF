@@ -333,6 +333,7 @@ export class FacturaComponent implements OnInit {
     const totalTarifa12 = this.lstDetalleMovimientos
       .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
       .reduce((total, detalleMovimientos) => {
+        console.log(parseFloat(detalleMovimientos.precio.replace(',', '.')))
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
 
