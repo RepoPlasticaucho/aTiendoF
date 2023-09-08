@@ -116,7 +116,6 @@ export class InventariosPedidoComponent implements OnInit {
     }, 0).toFixed(2);
 
     this.totalRegistros = this.lstInventarios.length;
-
   }
 
   buscarPortafolioLinea(card: CategoriasEntity) {
@@ -176,6 +175,10 @@ export class InventariosPedidoComponent implements OnInit {
     // console.log(inventario);
     this.httpService.asignarCategoria(inventario);
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['pedido-sugeridos'] } }]);
+  }
+
+  abrirMovInv(){
+    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['movimiento-inventario'] } }]);
   }
 
 

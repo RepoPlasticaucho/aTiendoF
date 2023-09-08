@@ -100,3 +100,4 @@ export { ProductocompraComponent} from './inventories/productocompra/productocom
 export {ConfiguracionComponent } from './users/configuracion/configuracion.component';
 export { FacturaComponent } from './sales/factura/factura.component';
 export { NuevoProveedorComponent } from './shooping/nuevo-proveedor/nuevo-proveedor.component';
+export { MovimientoInventariosComponent } from './inventories/movimiento-inventarios/movimiento-inventarios.component'

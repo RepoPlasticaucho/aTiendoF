@@ -125,6 +125,9 @@ export class InventariosService {
   obtenerInventariosExiste(inventario: InventariosEntity): Observable<Inventarios> {
     return this.http.post<Inventarios>(`${environment.apiUrl}inventarios/ObtenerInventarioExiste`,inventario );
   }
+  obtenerInventariosAlm(inventario: InventariosEntity): Observable<Inventarios> {
+    return this.http.post<Inventarios>(`${environment.apiUrl}inventarios/ObtenerInventarioAlm`,inventario );
+  }
   agregarInventario(inventario: InventariosEntity): Observable<Inventarios> {
     return this.http.post<Inventarios>(`${environment.apiUrl}inventarios/InsertarInventarios`, inventario);
   }
@@ -133,6 +136,12 @@ export class InventariosService {
   }
   actualizarInventario(inventario: InventariosEntity): Observable<Inventarios> {
     return this.http.post<Inventarios>(`${environment.apiUrl}inventarios/ModificarInventarios`, inventario);
+  }
+  actualizarInventarioEx(inventario: InventariosEntity): Observable<Inventarios> {
+    return this.http.post<Inventarios>(`${environment.apiUrl}inventarios/ActualizarInventarioEx`, inventario);
+  }
+  actualizarSinc(inventario: InventariosEntity): Observable<Inventarios> {
+    return this.http.post<Inventarios>(`${environment.apiUrl}inventarios/ActualizarSinc`, inventario);
   }
   actualizarCosto(inventario: InventariosEntity): Observable<Inventarios> {
     return this.http.post<Inventarios>(`${environment.apiUrl}inventarios/ActualizarCosto`, inventario);

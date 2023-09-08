@@ -41,6 +41,9 @@ export class AlmacenesService {
   obtenerAlmacenesSociedad(almacen: SociedadesEntity): Observable<Almacenes> {
     return this.http.post<Almacenes>(`${environment.apiUrl}almacenes/ObtenerAlmacenesSociedad`, almacen );
   }
+  obtenerAlmacenesEsp(almacen: AlmacenesEntity): Observable<Almacenes> {
+    return this.http.post<Almacenes>(`${environment.apiUrl}almacenes/ObtenerAlmacenesEsp`, almacen );
+  }
   obtenerAlmacenID(almacen: AlmacenesEntity): Observable<Almacenes> {
     return this.http.post<Almacenes>(`${environment.apiUrl}almacenes/ObtenerAlmacenID`, almacen );
   }

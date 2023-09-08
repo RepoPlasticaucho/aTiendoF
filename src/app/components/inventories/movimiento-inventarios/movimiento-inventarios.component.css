@@ -1,0 +1,33 @@
+.d-flex {
+    display: flex;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+.card-body {
+    overflow-x: auto
+}
+
+.button-container {
+    margin-top: 28px;
+    text-align: center;
+    margin-left: 70px;
+    width: 200px;
+  }
+
+  .table-container {
+    max-height: 345px; /* Ajusta este valor según tus necesidades */
+    max-width: 1500px;
+    overflow-y: auto;
+    overflow-x: auto;
+    font-size: 12px;
+  }
+
+  .cool-input {
+    border: 1px solid #35b0e9;
+    border-radius: 5px;
+    padding: 5px;
+    width: 70px;
+    font-size: 14px;
+    /* Otros estilos personalizados */
+    }

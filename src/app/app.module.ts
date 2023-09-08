@@ -144,6 +144,7 @@ import { ProductocompraComponent } from './components/inventories/productocompra
 import { ConfiguracionComponent } from './components/users/configuracion/configuracion.component';
 import { FacturaComponent } from './components/sales/factura/factura.component';
 import { NuevoProveedorComponent } from './components/shooping/nuevo-proveedor/nuevo-proveedor.component';
+import { MovimientoInventariosComponent } from './components/inventories/movimiento-inventarios/movimiento-inventarios.component';
 
 
 @NgModule({
@@ -265,7 +266,8 @@ import { NuevoProveedorComponent } from './components/shooping/nuevo-proveedor/n
     ProductocompraComponent,
     ConfiguracionComponent,
     FacturaComponent,
-    NuevoProveedorComponent
+    NuevoProveedorComponent,
+    MovimientoInventariosComponent
   ],
   imports: [
     BrowserModule,
