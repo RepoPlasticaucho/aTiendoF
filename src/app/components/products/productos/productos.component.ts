@@ -45,7 +45,6 @@ export class ProductosComponent implements OnInit {
       didOpen: () => {
         Swal.showLoading();
         this.httpService.obtenerProductos().subscribe(res => {
-    
           if (res.codigoError != "OK") {
             Swal.fire({
               icon: 'error',
@@ -64,7 +63,38 @@ export class ProductosComponent implements OnInit {
       if (result.dismiss === Swal.DismissReason.timer) {
         console.log('I was closed by the timer');
       }
-    });    
+    });
+
+    // Agrega un controlador de clic usando delegación de eventos
+    // Agrega un controlador de clic usando delegación de eventos
+    /*
+    document.getElementById('tabla-contenedor')?.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      if (target) {
+        if (target.classList.contains('btn-info')) {
+          // Clic en el botón "Editar"
+          // Acción de edición aquí
+          const row = target.closest('tr');
+          const rowIndex = row ? row.rowIndex : -2;
+
+          if (rowIndex >= 0) {
+            const producto = this.lstProductos[rowIndex - 2];
+            this.editarProducto(producto);
+          }
+        } else if (target.classList.contains('btn-danger')) {
+          // Clic en el botón "Eliminar"
+          // Acción de eliminación aquí
+          const row = target.closest('tr');
+          const rowIndex = row ? row.rowIndex : -2;
+
+          if (rowIndex >= 0) {
+            const producto = this.lstProductos[rowIndex - 2];
+            this.deshabilitarProducto(producto);
+          }
+        }
+      }
+    });
+    */
   }
 
   editarProducto(producto: ProducAdmEntity): void {

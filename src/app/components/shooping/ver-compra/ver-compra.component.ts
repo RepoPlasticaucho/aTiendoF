@@ -183,6 +183,16 @@ export class VerCompraComponent implements OnInit {
     return subtotal;
   }
 
+  calcularTotalTarifa12P(): number {
+    const totalTarifa12 = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
+      .reduce((total, detalleMovimientos) => {
+        return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
+      }, 0);
+
+    return totalTarifa12;
+  }
+  
   calcularTotalTarifa12(): number {
     const totalTarifa12 = this.lstDetalleMovimientos
       .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')

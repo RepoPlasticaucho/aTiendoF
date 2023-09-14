@@ -79,6 +79,25 @@ export class InventariosComponent implements OnInit {
       }
     });
 
+    /*
+    // Agrega un controlador de clic usando delegación de eventos
+    document.getElementById('tabla-contenedor')?.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      if (target && target.classList.contains('btn-danger')) {
+          // Identifica el botón de eliminación
+          // Puedes acceder a los datos de la fila haciendo referencia al elemento padre
+          const row = target.closest('tr');
+          const rowIndex = row ? row.rowIndex : -3;
+
+          if (rowIndex >= 0) {
+              // Acción de eliminación aquí, usa rowIndex para acceder a los datos
+              const inventario = this.lstInventarios[rowIndex -3];
+              this.deshabilitarInventarios(inventario);
+          }
+      }
+  });
+  */
+
   }
 
   eliminarInventarios(inventario: InventariosEntity): void {

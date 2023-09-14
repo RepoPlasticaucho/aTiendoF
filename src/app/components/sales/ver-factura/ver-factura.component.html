@@ -111,6 +111,11 @@
         </div>
         <br><br>
         <div class="icon-container">
+          <label for="total" class="label-input" style="font-size: 14px;">ICE :</label>
+          <input type="text" value="0" class="cool-input resultado-input" readonly>
+        </div>
+        <br><br>
+        <div class="icon-container">
           <label for="total" class="label-input">TOTAL:</label>
           <input type="text" [(ngModel)]="sumaTotal" class="cool-input resultado-input" readonly>
         </div>
@@ -151,11 +156,10 @@
           <td>{{detallePago.nombre}}</td>
           <td>
             <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
-            {{detallePago.valor}}
-        </ng-container>
-        <input class="small-input" (input)="onInput($event)"
-            *ngIf="editarDetalle && i === detalleEditIndex" type="text"
-            [(ngModel)]="detallePago.valor">
+              {{detallePago.valor}}
+            </ng-container>
+            <input class="small-input" (input)="onInput($event)" *ngIf="editarDetalle && i === detalleEditIndex"
+              type="text" [(ngModel)]="detallePago.valor">
           </td>
           <td style="text-align: center;">
             <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">

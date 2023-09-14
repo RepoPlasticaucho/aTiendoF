@@ -4,8 +4,10 @@ import { Router } from '@angular/router';
 import { faCopy, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ImagenesEntity } from 'src/app/models/imagenes';
 import { SociedadesEntity } from 'src/app/models/sociedades';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ImagenesService } from 'src/app/services/imagenes.service';
 import { SociedadesService } from 'src/app/services/sociedades.service';
+import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -38,7 +40,9 @@ export class ConfiguracionComponent implements OnInit {
   certificadoName: string = "";
 
   constructor(private readonly httpService: SociedadesService,
-    private httpServiceImage: ImagenesService, private router: Router) { }
+    private httpServiceImage: ImagenesService, private router: Router,
+    private authService: AuthenticationService,
+    private location: Location) { }
 
   ngOnInit(): void {
 
@@ -201,6 +205,17 @@ export class ConfiguracionComponent implements OnInit {
       }
       reader.readAsDataURL(this.fileToUpload);
     }
+  }
+
+  onPass1(): void{
+      this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['cofiguracion-user'] } }]);
+    
+  }
+
+  logout() {
+    this.authService.logout();
+    this.location.replaceState('/');
+    window.location.reload();
   }
 
   showPassword: { [key: string]: boolean } = {};
