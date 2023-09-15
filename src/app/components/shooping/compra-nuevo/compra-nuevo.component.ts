@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import { ProductosAdminService } from 'src/app/services/productos-admin.service';
 import { ProducAdmEntity } from 'src/app/models/productadm';
 import { ProveedoresEntity } from 'src/app/models/proveedores';
+import { forkJoin } from 'rxjs';
 import { InventariosEntity } from 'src/app/models/inventarios';
 import { InventariosService } from 'src/app/services/inventarios.service';
 import { ProveedoresproductosService } from 'src/app/services/proveedoresproductos.service';
@@ -82,6 +83,7 @@ export class CompraNuevoComponent implements OnInit {
       didOpen: () => {
         Swal.showLoading();
         this.httpServiceProvProd.obtenerProveedoresProductosProv(newProveedor).subscribe((res1) => {
+          console.log(res1)
           if (res1.codigoError != 'OK') {
             Swal.fire({
               icon: 'error',
@@ -92,28 +94,51 @@ export class CompraNuevoComponent implements OnInit {
           } else {
             this.lstProveedoresProductos = res1.lstProveedoresProductos;
             this.dtTrigger.next('');
-            for(let i = 0; i < this.lstProveedoresProductos.length; i++){
-              const newDetalle: DetallesMovimientoEntity = {
-                id: '',
-                producto_id: this.lstProveedoresProductos[i].producto_id,
-                producto_nombre: '',
-                inventario_id: '',
-                movimiento_id: localStorage.getItem('movimiento_id')!,
-                cantidad: '',
-                costo: '',
-                precio: ''
+            const batchSize = 10; // Cantidad de productos por lote
+            const totalProducts = this.lstProveedoresProductos.length;
+
+            const processBatch = (startIndex: number) => {
+              const endIndex = Math.min(startIndex + batchSize, totalProducts);
+              const batchObservables = [];
+
+              for (let i = startIndex; i < endIndex; i++) {
+                const proveedorProducto = this.lstProveedoresProductos[i];
+                const newDetalle: DetallesMovimientoEntity = {
+                  id: '',
+                  producto_id: proveedorProducto.producto_id,
+                  producto_nombre: '',
+                  inventario_id: '',
+                  movimiento_id: localStorage.getItem('movimiento_id')!,
+                  cantidad: '',
+                  costo: '',
+                  precio: ''
+                };
+
+                batchObservables.push(this.httpServiceDetalle.obtenerDetalleMovimientoEx(newDetalle));
               }
-              console.log(newDetalle)
-              this.httpServiceDetalle.obtenerDetalleMovimientoEx(newDetalle).subscribe(res2 => {
-                if (res2.codigoError == 'OK'){
-                  this.lstProveedoresProductos[i].productoExistente = true; // El producto ya existe en detalle_movimientos
-                  this.lstProveedoresProductos[i].cantidad = res2.lstDetalleMovimientos[0].cantidad;
+
+              forkJoin(batchObservables).subscribe(responses => {
+                responses.forEach((res2, i) => {
+                  if (res2.codigoError == 'OK') {
+                    this.lstProveedoresProductos[startIndex + i].productoExistente = true;
+                    this.lstProveedoresProductos[startIndex + i].cantidad = res2.lstDetalleMovimientos[0].cantidad;
+                  } else {
+                    this.lstProveedoresProductos[startIndex + i].productoExistente = false;
+                  }
+                });
+
+                // Procesar el próximo lote si es necesario
+                if (endIndex < totalProducts) {
+                  processBatch(endIndex);
                 } else {
-                  this.lstProveedoresProductos[i].productoExistente = false; // El producto no existe en detalle_movimientos
+                  // Todos los lotes han sido procesados, cierra el indicador de carga aquí
+                  Swal.close();
                 }
               });
-            }
-            Swal.close();
+            };
+
+            processBatch(0); // Comienza el procesamiento del primer lote
+
           }
         });
       },
@@ -123,6 +148,19 @@ export class CompraNuevoComponent implements OnInit {
       }
     });
   }
+
+  /*
+  const newDetalle: DetallesMovimientoEntity = {
+    id: '',
+    producto_id: proveedorProducto.producto_id,
+    producto_nombre: '',
+    inventario_id: '',
+    movimiento_id: localStorage.getItem('movimiento_id')!,
+    cantidad: '',
+    costo: '',
+    precio: ''
+  };
+  */
 
   cerrarDialog(): void {
     this.dialogRef.close();
@@ -231,7 +269,7 @@ export class CompraNuevoComponent implements OnInit {
             this.stockStatic = res1.lstInventarios[0].stock;
             const oper1 = parseFloat(res1.lstInventarios[0].costo!) * parseFloat(res1.lstInventarios[0].stock!);
             const oper2 = parseFloat(proveedorProducto.cantidad!) * parseFloat(proveedorProducto.costo!);
-            const nuevoCosto = (oper1+oper2)/(parseFloat(res1.lstInventarios[0].stock!)+parseFloat(proveedorProducto.cantidad!));
+            const nuevoCosto = (oper1 + oper2) / (parseFloat(res1.lstInventarios[0].stock!) + parseFloat(proveedorProducto.cantidad!));
             const inventarioCosto: InventariosEntity = {
               categoria_id: '',
               categoria: '',
@@ -261,7 +299,7 @@ export class CompraNuevoComponent implements OnInit {
                   showConfirmButton: false
                 });
               } else {
-                
+
               }
             });
             const newDetalle: DetallesMovimientoEntity = {
@@ -294,7 +332,7 @@ export class CompraNuevoComponent implements OnInit {
                     this.productoAgregado.emit(proveedorProducto);
                     this.cerrarDialog();
                   }
-                }); 
+                });
               }
             });
           }

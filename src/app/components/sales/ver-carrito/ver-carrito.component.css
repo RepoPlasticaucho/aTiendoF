@@ -87,6 +87,14 @@ font-size: 14px;
   overflow-y: auto;
   overflow-x: auto;
   font-size: 12px;
+  position: relative;
+}
+
+.fixed-header {
+  position: sticky;
+  top: 0;
+  background-color: #fff; /* Cambia esto al color de fondo deseado */
+  z-index: 1;
 }
 
 /* Estilos personalizados para el scrollbar */

@@ -4,7 +4,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MenuventComponent } from '../menuvent/menuvent.component';
 import { DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
 import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service';
-import { Subject, take } from 'rxjs';
+import { Subject, forkJoin, take } from 'rxjs';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { AlmacenesEntity } from 'src/app/models/almacenes';
@@ -83,28 +83,50 @@ searchText: string = '';
           } else {
             this.lstInventarios = res1.lstInventarios;
             this.dtTrigger.next('');
-            for(let i = 0; i < this.lstInventarios.length; i++){
-              const newDetalle: DetallesMovimientoEntity = {
-                id: '',
-                producto_id: this.lstInventarios[i].producto_id,
-                producto_nombre: '',
-                inventario_id: '',
-                movimiento_id: localStorage.getItem('movimiento_id')!,
-                cantidad: '',
-                costo: '',
-                precio: ''
+            const batchSize = 10; // Cantidad de productos por lote
+            const totalProducts = this.lstInventarios.length;
+
+            const processBatch = (startIndex: number) => {
+              const endIndex = Math.min(startIndex + batchSize, totalProducts);
+              const batchObservables = [];
+
+              for (let i = startIndex; i < endIndex; i++) {
+                const inventario = this.lstInventarios[i];
+                const newDetalle: DetallesMovimientoEntity = {
+                  id: '',
+                  producto_id: inventario.producto_id,
+                  producto_nombre: '',
+                  inventario_id: '',
+                  movimiento_id: localStorage.getItem('movimiento_id')!,
+                  cantidad: '',
+                  costo: '',
+                  precio: ''
+                };
+
+                batchObservables.push(this.httpServiceDetalle.obtenerDetalleMovimientoEx(newDetalle));
               }
-              console.log(newDetalle)
-              this.httpServiceDetalle.obtenerDetalleMovimientoEx(newDetalle).subscribe(res2 => {
-                if (res2.codigoError == 'OK'){
-                  this.lstInventarios[i].productoExistente = true; // El producto ya existe en detalle_movimientos
-                  this.lstInventarios[i].cantidad = res2.lstDetalleMovimientos[0].cantidad;
+
+              forkJoin(batchObservables).subscribe(responses => {
+                responses.forEach((res2, i) => {
+                  if (res2.codigoError == 'OK') {
+                    this.lstInventarios[startIndex + i].productoExistente = true;
+                    this.lstInventarios[startIndex + i].cantidad = res2.lstDetalleMovimientos[0].cantidad;
+                  } else {
+                    this.lstInventarios[startIndex + i].productoExistente = false;
+                  }
+                });
+
+                // Procesar el próximo lote si es necesario
+                if (endIndex < totalProducts) {
+                  processBatch(endIndex);
                 } else {
-                  this.lstInventarios[i].productoExistente = false; // El producto no existe en detalle_movimientos
+                  // Todos los lotes han sido procesados, cierra el indicador de carga aquí
+                  Swal.close();
                 }
               });
-            }
-            Swal.close();
+            };
+
+            processBatch(0); // Comienza el procesamiento del primer lote
           }
         });
       },

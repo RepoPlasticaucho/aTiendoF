@@ -47,6 +47,14 @@
     max-width: 1800px;
     overflow-y: auto;
     overflow-x: auto;
+    position: relative;
+}
+
+.fixed-header {
+  position: sticky;
+  top: 0;
+  background-color: #fff; /* Cambia esto al color de fondo deseado */
+  z-index: 1;
 }
 
 /* Estilos personalizados para el scrollbar */
