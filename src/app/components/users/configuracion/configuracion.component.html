@@ -24,7 +24,7 @@
                         <a class="btn btn-info" (click)="onPass()">Ver Perfil</a>
                     </div><br>
 
-                    <form [formGroup]="corporationForm" (ngSubmit)="onSubmit()">
+                    <form [formGroup]="corporationForm">
                         <div align="center">
                             <h5 class="title"> CERTIFICADOS DIGITALES</h5>
                         </div>
@@ -86,19 +86,27 @@
                                 </small>
                             </small>
                         </div>
+                        <div align="center">
+                            <button (click)="actualizarCert()" class="btn btn-primary">
+                                <!--[disabled]="!this.corporationForm.valid"-->
+                                <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
+                                Actualizar certificado
+                            </button>
+                        </div>
+                    </form>
 
+                    <form [formGroup]="emailForm">
                         <div align="left">
                             <br>
                             <h5 class="title"> Correo Electronico</h5>
                         </div>
-
                         <div class="form-group">
                             <label for="email">Email de Envio de Comprobantes</label>
                             <input type="text" class="form-control" id="email"
-                                placeholder="Ingrese la contraseña Actual " formControlName="email">
+                                placeholder="Ingrese el email remitente de comprobantes " formControlName="email">
                             <small
-                                *ngIf="corporationForm.controls['email'].invalid && (corporationForm.controls['email'].dirty || corporationForm.controls['email'].touched)">
-                                <small *ngIf="corporationForm.controls['email'].errors?.['required']"
+                                *ngIf="emailForm.controls['email'].invalid && (emailForm.controls['email'].dirty || emailForm.controls['email'].touched)">
+                                <small *ngIf="emailForm.controls['email'].errors?.['required']"
                                     style="color: red;">
                                     Debe ingresar el correo electronico
                                 </small>
@@ -109,7 +117,7 @@
                             <label for="passmail">Contraseña Actual</label>
                             <div class="input-group">
                                 <input type="{{ showPassword['passmail'] ? 'text' : 'password' }}" class="form-control"
-                                    id="passmail" placeholder="Ingrese la nueva contraseña " formControlName="passmail">
+                                    id="passmail" placeholder="Ingrese la contraseña actual " formControlName="passmail">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" type="button"
                                         (click)="togglePassword('passmail')">
@@ -118,8 +126,8 @@
                                     </button>
                                 </div>
                                 <small
-                                    *ngIf="corporationForm.controls['passmail'].invalid && (corporationForm.controls['passmail'].dirty || corporationForm.controls['passmail'].touched)">
-                                    <small *ngIf="corporationForm.controls['passmail'].errors?.['required']"
+                                    *ngIf="emailForm.controls['passmail'].invalid && (emailForm.controls['passmail'].dirty || emailForm.controls['passmail'].touched)">
+                                    <small *ngIf="emailForm.controls['passmail'].errors?.['required']"
                                         style="color: red;">
                                         Debe ingresar la contraseña.
                                     </small>
@@ -140,8 +148,8 @@
                                     </button>
                                 </div>
                                 <small
-                                    *ngIf="corporationForm.controls['passmailnew'].invalid && (corporationForm.controls['passmailnew'].dirty || corporationForm.controls['passmailnew'].touched)">
-                                    <small *ngIf="corporationForm.controls['passmailnew'].errors?.['required']"
+                                    *ngIf="emailForm.controls['passmailnew'].invalid && (emailForm.controls['passmailnew'].dirty || emailForm.controls['passmailnew'].touched)">
+                                    <small *ngIf="emailForm.controls['passmailnew'].errors?.['required']"
                                         style="color: red;">
                                         Debe ingresar la contraseña.
                                     </small>
@@ -149,14 +157,15 @@
                             </div>
                         </div>
                         <div align="center">
-                            <button type="submit" class="btn btn-primary">
+                            <button (click)="actualizarEmail()" class="btn btn-primary">
                                 <!--[disabled]="!this.corporationForm.valid"-->
                                 <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
-                                Actualizar
+                                Actualizar correo
                             </button>
                         </div>
-
                     </form>
+
+
                     <br>
                 </mat-card>
             </div>

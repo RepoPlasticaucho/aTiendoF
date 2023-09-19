@@ -61,6 +61,9 @@ export class SociedadesService {
   actualizarCertificado(sociedad: SociedadesEntity): Observable<Sociedades> {
     return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/ActualizarCerificado`, sociedad);
   }
+  actualizarClaveCorreo(sociedad: SociedadesEntity): Observable<Sociedades> {
+    return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/ActualizarClaveCorreo`, sociedad);
+  }
   obtenerSociedadL(sociedad: SociedadesEntity): Observable<Sociedades> {
     return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/ObtenerSociedad`, sociedad);
   }

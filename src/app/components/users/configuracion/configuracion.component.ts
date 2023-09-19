@@ -23,11 +23,13 @@ export class ConfiguracionComponent implements OnInit {
   corporationForm = new FormGroup({
     nombreComercial2: new FormControl('', Validators.required),
     razonSocial: new FormControl('', Validators.required),
+    urlCertificado: new FormControl(''),
+  });
+
+  emailForm = new FormGroup({
     email: new FormControl('', Validators.required),
     passmail: new FormControl('', Validators.required),
-    urlCertificado: new FormControl(''),
     passmailnew: new FormControl('', Validators.required),
-
   });
 
   encPass: string | undefined;
@@ -77,8 +79,8 @@ export class ConfiguracionComponent implements OnInit {
         const email = res.lstSociedades[0].email_certificado;
         const passemail = res.lstSociedades[0].pass_certificado;
         this.corporationForm.get("razonSocial")?.setValue(razonSocialValue !== undefined ? razonSocialValue : null);
-        this.corporationForm.get("email")?.setValue(email !== undefined ? email : null);
-        this.corporationForm.get("passmail")?.setValue(passemail !== undefined ? passemail : null);
+        this.emailForm.get("email")?.setValue(email !== undefined ? email : null);
+        this.emailForm.get("passmail")?.setValue(passemail !== undefined ? passemail : null);
 
 
       }
@@ -99,11 +101,10 @@ export class ConfiguracionComponent implements OnInit {
     }
   }
 
-  onSubmit() {
+  actualizarCert() {
     const passnuevo = this.corporationForm.value!.nombreComercial2 ?? "";
     const passactual = this.corporationForm.value!.razonSocial ?? "";
-    const email = this.corporationForm.value!.email ?? "";
-    const passemailnew = this.corporationForm.value!.passmailnew ?? "";
+    const emailCert = this.emailForm.value!.email ?? "";
 
     if (!this.corporationForm.valid) {
       this.corporationForm.markAllAsTouched();
@@ -117,7 +118,6 @@ export class ConfiguracionComponent implements OnInit {
           showConfirmButton: true,
           confirmButtonText: "Ok"
         }).finally(() => {
-          localStorage.setItem('passwa', passnuevo);
           switch (this.fun) {
             case "admin":
               this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['usuario'] } }]);
@@ -151,8 +151,8 @@ export class ConfiguracionComponent implements OnInit {
                 razon_social: '',
                 url_certificado: this.certificadoName == '' ? this.certificadoUrl : this.certificadoName,
                 clave_certificado: passactual, // cambiar por new
-                pass_certificado: passemailnew,// activar validacion
-                email_certificado: email
+                pass_certificado: '',// activar validacion
+                email_certificado: emailCert
               }
               this.httpService.actualizarCertificado(userEntity).subscribe(res => {
                 if (res.codigoError == "OK") {
@@ -163,7 +163,6 @@ export class ConfiguracionComponent implements OnInit {
                     showConfirmButton: true,
                     confirmButtonText: "Ok"
                   }).finally(() => {
-                    localStorage.setItem('passwa', passnuevo);
                     switch (this.fun) {
                       case "admin":
                         this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['cofiguracion-user'] } }]);
@@ -190,6 +189,64 @@ export class ConfiguracionComponent implements OnInit {
 
 
       }
+    }
+  }
+
+  actualizarEmail() {
+    const email = this.emailForm.value!.email ?? "";
+    const passemailnew = this.emailForm.value!.passmailnew ?? "";
+
+    if (!this.emailForm.valid) {
+      this.emailForm.markAllAsTouched();
+    } else {
+              const userEntity: SociedadesEntity = {
+                idGrupo: '',
+                nombre_comercial: '',
+                tipo_ambienteid: '',
+                id_fiscal: '',
+                email: '',
+                telefono: '',
+                password: '',
+                funcion: '',
+                idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
+                razon_social: '',
+                url_certificado: '',
+                clave_certificado: '', // cambiar por new
+                pass_certificado: passemailnew,// activar validacion
+                email_certificado: email
+              }
+              this.httpService.actualizarClaveCorreo(userEntity).subscribe(res => {
+                if (res.codigoError == "OK") {
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Actualizado Correctamente.',
+                    text: `Se ha actualizado la información`,
+                    showConfirmButton: true,
+                    confirmButtonText: "Ok"
+                  }).finally(() => {
+                    switch (this.fun) {
+                      case "admin":
+                        this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['cofiguracion-user'] } }]);
+                        break;
+                      case "client":
+                        this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['cofiguracion-user'] } }]);
+                        break;
+                    }
+
+                  });
+
+
+                } else {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Ha ocurrido un error.',
+                    text: res.descripcionError,
+                    showConfirmButton: false,
+                  });
+                }
+              });
+
+      
     }
   }
 
