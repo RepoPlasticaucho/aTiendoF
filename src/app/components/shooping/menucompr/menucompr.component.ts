@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { Subject } from 'rxjs';
+import { Subject, finalize } from 'rxjs';
 import { faShoppingBag, faSave, faList, faTimes, faCartPlus, faEdit, faTrashAlt, faMoneyBillAlt, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
 import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service';
@@ -22,6 +22,8 @@ import { SociedadesEntity } from 'src/app/models/sociedades';
 import { InventariosService } from 'src/app/services/inventarios.service';
 import { InventariosEntity } from 'src/app/models/inventarios';
 import { DataTableDirective } from 'angular-datatables';
+import { DetalleImpuestosEntity } from 'src/app/models/detalle-impuestos';
+import { DetalleImpuestosService } from 'src/app/services/detalle-impuestos.service';
 
 @Component({
   selector: 'app-menucompr',
@@ -80,6 +82,7 @@ export class MenucomprComponent implements OnInit {
     private readonly httpServiceMov: MovimientosService,
     private readonly httpServiceSus: SustentosTributariosService,
     private readonly httpServiceInv: InventariosService,
+    private readonly httpServiceDet: DetalleImpuestosService,
     private datePipe: DatePipe,
     private router: Router) { }
 
@@ -499,7 +502,7 @@ export class MenucomprComponent implements OnInit {
     localStorage.setItem('compventa', this.comprobante);
     localStorage.setItem('autorizacion', this.autorizacion);
     Swal.fire({
-      title: '¿Estás seguro de terminar la compra?',
+      title: '¿Deseas continuar?',
       showDenyButton: true,
       confirmButtonText: 'SÍ',
       denyButtonText: `NO`,
@@ -520,6 +523,131 @@ export class MenucomprComponent implements OnInit {
         sustento_id: localStorage.getItem('sustentoid')!
       }
       if (result.isConfirmed) {
+        for (let i = 0; i < this.lstDetalleMovimientos.length; i++) {
+          const detalleMovimiento = this.lstDetalleMovimientos[i];
+          if (detalleMovimiento) {
+            const newDetalleImp: DetalleImpuestosEntity = {
+              id: '',
+              detalle_movimiento_id: detalleMovimiento.id ?? '',
+              cod_impuesto: '',
+              porcentaje: detalleMovimiento.tarifa ?? '',
+              base_imponible: '',
+              valor: '',
+              movimiento_id: detalleMovimiento.movimiento_id ?? '',
+              created_at: '',
+              updated_at: ''
+            };
+            this.httpServiceDet.obtenerDetalleImpuesto(newDetalleImp).subscribe(res => {
+              if (res.codigoError == 'OK') {
+                if (res.lstDetalleImpuestos[0].porcentaje == '12%') {
+                  const newDetalleImp2: DetalleImpuestosEntity = {
+                    id: '',
+                    detalle_movimiento_id: detalleMovimiento.id ?? '',
+                    cod_impuesto: '',
+                    porcentaje: detalleMovimiento.tarifa ?? '',
+                    base_imponible: '',
+                    valor: (parseFloat(res.lstDetalleImpuestos[0].base_imponible) * 0.12).toString(),
+                    movimiento_id: detalleMovimiento.movimiento_id ?? '',
+                    created_at: '',
+                    updated_at: ''
+                  };
+                  this.httpServiceDet.modificarMovimientoBP(newDetalleImp).subscribe(resp => {
+                    if (resp.codigoError == 'OK') {
+                      console.log('Actualizado BP GENERAL')
+                    } else {
+                      console.log('ERROR')
+                    }
+                  });
+                  this.httpServiceDet.modificarDetalleImpuestosBP(newDetalleImp2).pipe(
+                    finalize(() => {
+                      this.httpServiceDet.obtenerDetalleImpuesto(newDetalleImp).subscribe(res3 => {
+                        if (res3.codigoError == 'OK') {
+                          const newDetalleImp3: DetalleImpuestosEntity = {
+                            id: '',
+                            detalle_movimiento_id: detalleMovimiento.id ?? '',
+                            cod_impuesto: '',
+                            porcentaje: detalleMovimiento.tarifa ?? '',
+                            base_imponible: '',
+                            valor: (parseFloat(res3.lstDetalleImpuestos[0].base_imponible) * 0.12).toString(),
+                            movimiento_id: detalleMovimiento.movimiento_id ?? '',
+                            created_at: '',
+                            updated_at: ''
+                          };
+                          this.httpServiceDet.modificarDetalleImpuestosVal(newDetalleImp3).subscribe(res2 => {
+                            if (res2.codigoError == 'OK') {
+                              console.log('Actualizado')
+                            } else {
+                              console.log('ERROR')
+                            }
+                          });
+                        }
+                      })
+                    })
+                  ).subscribe(res1 => {
+                    if (res1.codigoError == 'OK') {
+                      
+                    } else {
+                      console.log('ERROR')
+                    }
+                  });
+                } else {
+                  const newDetalleImp2: DetalleImpuestosEntity = {
+                    id: '',
+                    detalle_movimiento_id: detalleMovimiento.id ?? '',
+                    cod_impuesto: '',
+                    porcentaje: detalleMovimiento.tarifa ?? '',
+                    base_imponible: '',
+                    valor: (parseFloat(res.lstDetalleImpuestos[0].base_imponible) * 0).toString(),
+                    movimiento_id: detalleMovimiento.movimiento_id ?? '',
+                    created_at: '',
+                    updated_at: ''
+                  };
+                  this.httpServiceDet.modificarMovimientoBP(newDetalleImp).subscribe(resp => {
+                    if (resp.codigoError == 'OK') {
+                      console.log('Actualizado BP GENERAL')
+                    } else {
+                      console.log('ERROR')
+                    }
+                  });
+                  this.httpServiceDet.modificarDetalleImpuestosBP(newDetalleImp2).pipe(
+                    finalize(() => {
+                      this.httpServiceDet.obtenerDetalleImpuesto(newDetalleImp).subscribe(res3 => {
+                        if (res3.codigoError == 'OK') {
+                          const newDetalleImp3: DetalleImpuestosEntity = {
+                            id: '',
+                            detalle_movimiento_id: detalleMovimiento.id ?? '',
+                            cod_impuesto: '',
+                            porcentaje: detalleMovimiento.tarifa ?? '',
+                            base_imponible: '',
+                            valor: (parseFloat(res3.lstDetalleImpuestos[0].base_imponible) * 0.12).toString(),
+                            movimiento_id: detalleMovimiento.movimiento_id ?? '',
+                            created_at: '',
+                            updated_at: ''
+                          };
+                          this.httpServiceDet.modificarDetalleImpuestosVal(newDetalleImp3).subscribe(res2 => {
+                            if (res2.codigoError == 'OK') {
+                              console.log('Actualizado')
+                            } else {
+                              console.log('ERROR')
+                            }
+                          });
+                        }
+                      })
+                    })
+                  ).subscribe(res1 => {
+                    if (res1.codigoError == 'OK') {
+
+                    } else {
+                      console.log('ERROR')
+                    }
+                  });
+                }
+              } else {
+                console.log('ERROR')
+              }
+            });
+          }
+        }
         this.httpServiceMov.finalizarCompra(newMov).subscribe(res => {
           Swal.fire({
             icon: 'success',

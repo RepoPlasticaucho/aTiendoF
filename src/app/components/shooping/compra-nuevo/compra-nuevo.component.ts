@@ -16,6 +16,8 @@ import { InventariosService } from 'src/app/services/inventarios.service';
 import { ProveedoresproductosService } from 'src/app/services/proveedoresproductos.service';
 import { ProveedoresProductosEntity } from 'src/app/models/proveedoresproductos';
 import { NuevoProductoComponent } from '../nuevo-producto/nuevo-producto.component';
+import { DetalleImpuestosEntity } from 'src/app/models/detalle-impuestos';
+import { DetalleImpuestosService } from 'src/app/services/detalle-impuestos.service';
 
 @Component({
   selector: 'app-compra-nuevo',
@@ -49,6 +51,7 @@ export class CompraNuevoComponent implements OnInit {
     private readonly httpServiceDetalle: DetallesmovimientoService,
     private readonly httpServiceInventario: InventariosService,
     private router: Router,
+    private readonly httpServiceDetalleImp: DetalleImpuestosService,
     private dialogRef: MatDialogRef<MenucomprComponent>,
   ) { }
 
@@ -227,7 +230,32 @@ export class CompraNuevoComponent implements OnInit {
                     costo: this.costo,
                     precio: this.precio
                   }
-                  this.httpServiceDetalle.agregarDetalleCompra(newDetalle).subscribe(res4 => {
+                  this.httpServiceDetalle.agregarDetalleCompra(newDetalle).pipe(finalize(() => {
+                    this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
+                      if (res1.codigoError == 'OK') {
+                        const newDetalleImp: DetalleImpuestosEntity = {
+                          id: '',
+                          detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
+                          cod_impuesto: res1.lstDetalleMovimientos[0].cod_tarifa!,
+                          porcentaje: res1.lstDetalleMovimientos[0].tarifa!,
+                          base_imponible: '',
+                          valor: res1.lstDetalleMovimientos[0].costo!,
+                          created_at: '',
+                          updated_at: ''
+                        }
+                        this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
+                          if (res2.codigoError != 'OK') {
+                            Swal.fire({
+                              icon: 'error',
+                              title: 'Ha ocurrido un error.',
+                              text: res2.descripcionError,
+                              showConfirmButton: false
+                            });
+                          }
+                        });
+                      }
+                    });
+                  })).subscribe(res4 => {
                     if (res4.codigoError != 'OK') {
                       Swal.fire({
                         icon: 'error',
@@ -312,7 +340,32 @@ export class CompraNuevoComponent implements OnInit {
               costo: this.costo,
               precio: this.precio
             }
-            this.httpServiceDetalle.agregarDetalleCompras(newDetalle).subscribe(res3 => {
+            this.httpServiceDetalle.agregarDetalleCompras(newDetalle).pipe(finalize(() => {
+              this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
+                if (res1.codigoError == 'OK') {
+                  const newDetalleImp: DetalleImpuestosEntity = {
+                    id: '',
+                    detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
+                    cod_impuesto: res1.lstDetalleMovimientos[0].cod_tarifa!,
+                    porcentaje: res1.lstDetalleMovimientos[0].tarifa!,
+                    base_imponible: '',
+                    valor: res1.lstDetalleMovimientos[0].costo!,
+                    created_at: '',
+                    updated_at: ''
+                  }
+                  this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
+                    if (res2.codigoError != 'OK') {
+                      Swal.fire({
+                        icon: 'error',
+                        title: 'Ha ocurrido un error.',
+                        text: res2.descripcionError,
+                        showConfirmButton: false
+                      });
+                    }
+                  });
+                }
+              });
+            })).subscribe(res3 => {
               if (res3.codigoError != 'OK') {
                 Swal.fire({
                   icon: 'error',

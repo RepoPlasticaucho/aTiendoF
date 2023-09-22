@@ -601,7 +601,7 @@ export class MenuventComponent implements OnInit {
       confirmButtonText: 'SÍ',
       denyButtonText: `NO`,
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
+      
       if (result.isConfirmed) {
         //
         console.log(this.lstDetalleMovimientos[0].id)
