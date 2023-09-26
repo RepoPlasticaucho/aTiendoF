@@ -150,7 +150,7 @@ export class ConfiguracionComponent implements OnInit {
                 idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
                 razon_social: '',
                 url_certificado: this.certificadoName == '' ? this.certificadoUrl : this.certificadoName,
-                clave_certificado: passactual, // cambiar por new
+                clave_certificado: passnuevo, // cambiar por new
                 pass_certificado: '',// activar validacion
                 email_certificado: emailCert
               }

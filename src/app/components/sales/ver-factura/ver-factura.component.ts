@@ -608,7 +608,7 @@ export class VerFacturaComponent implements OnInit {
                         if(res2 == 'CREADO'){
                           console.log('XML CREADO');
                         } else {
-                          console.log('ERROR');
+                          console.log(res2);
                         }
                       });
                     })).subscribe(res3 => {

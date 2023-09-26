@@ -82,7 +82,7 @@ export class CompraNuevoComponent implements OnInit {
     Swal.fire({
       title: 'CARGANDO...',
       html: 'Se están cargando los productos.',
-      timer: 30000,
+      timer: 20000,
       didOpen: () => {
         Swal.showLoading();
         this.httpServiceProvProd.obtenerProveedoresProductosProv(newProveedor).subscribe((res1) => {
