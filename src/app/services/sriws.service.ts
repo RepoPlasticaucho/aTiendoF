@@ -21,4 +21,10 @@ export class SriwsService {
   enviarComprobanteCorreo(movimiento_id: string): Observable<String> {
     return this.http.get<String>(`${environment.apiUrl}sriws/EnviarComprobanteCorreo?movimiento_id=`+movimiento_id );
   }
+
+  /*
+  crearATS(sociedad: string, fechaDesde: string, fechaHasta: string): Observable<String> {
+    return this.http.get<String>(`${environment.apiUrl}sriws/CrearATS?sociedad=`+movimiento );
+  }
+  */
 }

@@ -24,6 +24,8 @@ import { InventariosEntity } from 'src/app/models/inventarios';
 import { DataTableDirective } from 'angular-datatables';
 import { DetalleImpuestosEntity } from 'src/app/models/detalle-impuestos';
 import { DetalleImpuestosService } from 'src/app/services/detalle-impuestos.service';
+import { ComprobanteComprasEntity } from 'src/app/models/comprobante_compras';
+import { ComprobanteComprasService } from 'src/app/services/comprobante-compras.service';
 
 @Component({
   selector: 'app-menucompr',
@@ -52,6 +54,7 @@ export class MenucomprComponent implements OnInit {
 
   public proveedorSeleccionado = false;
   public sustentoSeleccionado = false;
+  public comprobanteCompraSeleccionado = false;
   public comprobanteLleno = false;
   public autorizacionLlena = false;
 
@@ -68,6 +71,8 @@ export class MenucomprComponent implements OnInit {
   lstProveedores2: ProveedoresEntity[] = [];
   lstSustentos: SustentosTributariosEntity[] = [];
   lstSustentos2: SustentosTributariosEntity[] = [];
+  lstComprobantes: ComprobanteComprasEntity[] = [];
+  lstComprobantes2: ComprobanteComprasEntity[] = [];
   editarDetalle: boolean = false;
   selectTipo: boolean = false;
   disableProveedor: boolean = false;
@@ -83,6 +88,7 @@ export class MenucomprComponent implements OnInit {
     private readonly httpServiceSus: SustentosTributariosService,
     private readonly httpServiceInv: InventariosService,
     private readonly httpServiceDet: DetalleImpuestosService,
+    private readonly httpServiceComprobante: ComprobanteComprasService,
     private datePipe: DatePipe,
     private router: Router) { }
 
@@ -124,16 +130,16 @@ export class MenucomprComponent implements OnInit {
       }
     });
 
-    this.httpServiceSus.obtenerSustentos().subscribe(res => {
+    this.httpServiceComprobante.obtenerComprobantes().subscribe(res => {
       if (res.codigoError != "OK") {
         Swal.fire({
           icon: 'error',
-          title: 'No se pudo obtener sustentos.',
+          title: 'No se pudo obtener comprobantes.',
           text: res.descripcionError,
           showConfirmButton: false,
         });
       } else {
-        this.lstSustentos = res.lstSustentos;
+        this.lstComprobantes = res.lstComprobantes;
       }
     });
 
@@ -206,6 +212,55 @@ export class MenucomprComponent implements OnInit {
         });
       } else {
         localStorage.setItem('sustentoid', res.lstSustentos[0].id);
+      }
+    })
+  }
+
+  changeGroup3(comprobanteCompra: any): void {
+    this.comprobanteCompraSeleccionado = comprobanteCompra.target.value !== "0";
+    this.buttonsDisabled = !this.checkAllConditions();
+    if (comprobanteCompra.target.value == 0) {
+      localStorage.setItem('comprobanteCompraid', '0')
+    } else {
+
+    }
+    const comprobanteCompras: ComprobanteComprasEntity = {
+      id: '',
+      tipo: comprobanteCompra.target.value,
+      codigo: ''
+    }
+
+    this.httpServiceComprobante.obtenerComprobantesN(comprobanteCompras).subscribe(res => {
+      if (res.codigoError != "OK") {
+        Swal.fire({
+          icon: 'error',
+          title: 'No se pudo obtener el comprobante',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      } else {
+        localStorage.setItem('comprobanteCompraid', res.lstComprobantes[0].id);
+        const sustento: SustentosTributariosEntity = {
+          id: '',
+          etiquetas: '',
+          codigo: '',
+          sustento: '',
+          comprobante_id: res.lstComprobantes[0].id,
+        }
+        this.httpServiceSus.obtenerSustentosComp(sustento).subscribe(res1 => {
+          if (res1.codigoError != "OK") {
+            this.lstSustentos = [];
+            Swal.fire({
+              icon: 'error',
+              title: 'No se pudo obtener sustentos.',
+              text: res1.descripcionError,
+              showConfirmButton: false,
+            });
+          } else {
+            this.lstSustentos = res1.lstSustentos;
+          }
+        });
+        
       }
     })
   }
@@ -520,7 +575,8 @@ export class MenucomprComponent implements OnInit {
         autorizacion_venta: this.autorizacion,
         comp_venta: this.comprobante,
         fecha_emision: this.fechaFormateada,
-        sustento_id: localStorage.getItem('sustentoid')!
+        sustento_id: localStorage.getItem('sustentoid')!,
+        comprobante_compra_id: localStorage.getItem('comprobanteCompraid')!
       }
       if (result.isConfirmed) {
         for (let i = 0; i < this.lstDetalleMovimientos.length; i++) {

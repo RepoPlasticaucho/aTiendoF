@@ -9,6 +9,7 @@ export interface SustentosTributariosEntity {
     etiquetas: string;
     created_at?: string;
     codigo: string;
+    comprobante_id?: string;
     sustento: string;
     updated_at?: string;
 }

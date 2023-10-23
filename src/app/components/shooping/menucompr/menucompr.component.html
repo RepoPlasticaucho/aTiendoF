@@ -41,6 +41,18 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
+                            <label for="cedula">Comprobante:</label>
+                            <select class="form-control small-select" (change)="changeGroup3($event)"
+                                [disabled]="disableProveedor">
+                                <option value="0" selected>Seleccione un comprobante</option>
+                                <option *ngFor="let comprobante of lstComprobantes" [value]="comprobante.tipo">
+                                    {{comprobante.tipo}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
                             <label for="cedula">Sustento:</label>
                             <select class="form-control small-select" (change)="changeGroup2($event)"
                                 [disabled]="disableProveedor">
@@ -51,6 +63,8 @@
                             </select>
                         </div>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="cedula">Comprobante de venta:</label>
@@ -59,8 +73,6 @@
                                 placeholder="Comprobante de venta" (input)="onInputComprobante($event)">
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="cedula">Autorización de venta:</label>

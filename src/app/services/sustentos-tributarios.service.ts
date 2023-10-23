@@ -33,5 +33,8 @@ export class SustentosTributariosService {
 
   obtenerSustentosN(sustento: SustentosTributariosEntity):Observable<SustentosTributarios>{
     return this.http.post<SustentosTributarios>(`${environment.apiUrl}sustentos_tributarios/ObtenerSustentosN`, sustento);
-}
+  }
+  obtenerSustentosComp(sustento: SustentosTributariosEntity):Observable<SustentosTributarios>{
+    return this.http.post<SustentosTributarios>(`${environment.apiUrl}sustentos_tributarios/ObtenerSustentosComp`, sustento);
+  }
 }
