@@ -17,7 +17,7 @@ import { DetallesPagoEntity } from 'src/app/models/detalles-pago';
 import { DetallesPagoService } from 'src/app/services/detalles-pago.service';
 import { ProveedoresEntity } from 'src/app/models/proveedores';
 import { ProveedoresService } from 'src/app/services/proveedores.service';
-
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-ver-compra',
@@ -44,6 +44,7 @@ export class VerCompraComponent implements OnInit {
   secuencial: any;
   inputColor: string = '';
   totalF: number = 0;
+
 
 
   constructor(private readonly httpService: DetallesmovimientoService,

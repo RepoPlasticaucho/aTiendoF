@@ -19,6 +19,7 @@ import { CiudadesEntity } from 'src/app/models/ciudades';
 import { DetalleImpuestosService } from 'src/app/services/detalle-impuestos.service';
 import { DetalleImpuestosEntity } from 'src/app/models/detalle-impuestos';
 import { DataTableDirective } from 'angular-datatables';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-menuvent',
@@ -43,6 +44,8 @@ export class MenuventComponent implements OnInit {
   faTrashAlt = faTrashAlt;
   faMoneyBillAlt = faMoneyBillAlt;
   faShoppingBag = faShoppingBag;
+
+  iva= environment.iva;
 
   //Declaración de variables
   dtOptions: DataTables.Settings = {};
@@ -328,6 +331,8 @@ export class MenuventComponent implements OnInit {
       };
   
       this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe((res) => {
+      console.log(res)
+
         if (res.codigoError != 'OK') {
           Swal.fire({
             icon: 'info',
@@ -386,11 +391,11 @@ export class MenuventComponent implements OnInit {
   }
 
   calcularSumaTotal() {
-    const totalTarifa12 = this.calcularTotalTarifa12();
+    const totalTarifa15 = this.calcularTotalTarifa15();
     const totalTarifa0 = this.calcularTotalTarifa0();
     const desc = this.calcularDescuento();
 
-    const suma = totalTarifa12 + totalTarifa0;
+    const suma = totalTarifa15 + totalTarifa0;
 
     this.sumaTotal = suma
       .toLocaleString(undefined, { maximumFractionDigits: 2 })
@@ -407,34 +412,34 @@ export class MenuventComponent implements OnInit {
     return subtotal;
   }
 
-  calcularTotalTarifa12P(): number {
-    const totalTarifa12 = this.lstDetalleMovimientos
-      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
+  calcularTotalTarifa15P(): number {
+    const totalTarifa15 = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === this.iva+'%')
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
 
-    return totalTarifa12;
+    return totalTarifa15;
   }
 
-  calcularTotalTarifa12(): number {
-    const totalTarifa12 = this.lstDetalleMovimientos
-      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
+  calcularTotalTarifa15(): number {
+    const totalTarifa15 = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === this.iva+'%')
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
-    const porcen = totalTarifa12 * 0.12;
+    const porcen = totalTarifa15 * (this.iva/100)
 
-    return totalTarifa12 + porcen;
+    return totalTarifa15 + porcen;
   }
 
-  calcularIva12(): number {
-    const totalTarifa12 = this.lstDetalleMovimientos
-      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
+  calcularIva15(): number {
+    const totalTarifa15 = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === this.iva+'%')
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
-    const porcen = totalTarifa12 * 0.12;
+    const porcen = totalTarifa15 * (this.iva/100)
 
     return porcen;
   }
@@ -621,14 +626,14 @@ export class MenuventComponent implements OnInit {
             };
             this.httpServiceDet.obtenerDetalleImpuesto(newDetalleImp).subscribe(res => {
               if (res.codigoError == 'OK') {
-                if (res.lstDetalleImpuestos[0].porcentaje == '12%') {
+                if (res.lstDetalleImpuestos[0].porcentaje == this.iva+'%') {
                   const newDetalleImp2: DetalleImpuestosEntity = {
                     id: '',
                     detalle_movimiento_id: detalleMovimiento.id ?? '',
                     cod_impuesto: '',
                     porcentaje: detalleMovimiento.tarifa ?? '',
                     base_imponible: '',
-                    valor: (parseFloat(res.lstDetalleImpuestos[0].base_imponible) * 0.12).toString(),
+                    valor: (parseFloat(res.lstDetalleImpuestos[0].base_imponible) * (this.iva/100)).toString(),
                     movimiento_id: detalleMovimiento.movimiento_id ?? '',
                     created_at: '',
                     updated_at: ''
@@ -650,7 +655,7 @@ export class MenuventComponent implements OnInit {
                             cod_impuesto: '',
                             porcentaje: detalleMovimiento.tarifa ?? '',
                             base_imponible: '',
-                            valor: (parseFloat(res3.lstDetalleImpuestos[0].base_imponible) * 0.12).toString(),
+                            valor: (parseFloat(res3.lstDetalleImpuestos[0].base_imponible) * (this.iva/100)).toString(),
                             movimiento_id: detalleMovimiento.movimiento_id ?? '',
                             created_at: '',
                             updated_at: ''
@@ -701,7 +706,7 @@ export class MenuventComponent implements OnInit {
                             cod_impuesto: '',
                             porcentaje: detalleMovimiento.tarifa ?? '',
                             base_imponible: '',
-                            valor: (parseFloat(res3.lstDetalleImpuestos[0].base_imponible) * 0.12).toString(),
+                            valor: (parseFloat(res3.lstDetalleImpuestos[0].base_imponible) * (this.iva/100)).toString(),
                             movimiento_id: detalleMovimiento.movimiento_id ?? '',
                             created_at: '',
                             updated_at: ''
