@@ -41,6 +41,7 @@ export class CompraNuevoComponent implements OnInit {
   stockStatic: any;
   costo2: any;
   precio: any;
+  botonBloqueado: boolean = false;
 
   productoAgregado: EventEmitter<any> = new EventEmitter<any>();
 
@@ -173,7 +174,7 @@ export class CompraNuevoComponent implements OnInit {
   crearDetalle(proveedorProducto: ProveedoresProductosEntity): void {
     this.httpServiceProvProd.asignarProveedorProducto(proveedorProducto);
     this.httpServiceProvProd.obtenerProveedorProducto$.pipe(take(1)).subscribe((res) => {
-      console.log(res)
+      this.botonBloqueado=true;
       if (res.producto_id == '') {
         Swal.fire({
           icon: 'error',
@@ -381,6 +382,7 @@ export class CompraNuevoComponent implements OnInit {
                   showConfirmButton: true,
                   confirmButtonText: 'Ok',
                 }).then((result) => {
+                  this.botonBloqueado=false;
                   if (result.isConfirmed) {
                     this.productoAgregado.emit(proveedorProducto);
                     this.cerrarDialog();

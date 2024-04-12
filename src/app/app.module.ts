@@ -146,7 +146,6 @@ import { FacturaComponent } from './components/sales/factura/factura.component';
 import { NuevoProveedorComponent } from './components/shooping/nuevo-proveedor/nuevo-proveedor.component';
 import { MovimientoInventariosComponent } from './components/inventories/movimiento-inventarios/movimiento-inventarios.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -267,7 +266,7 @@ import { MovimientoInventariosComponent } from './components/inventories/movimie
     ConfiguracionComponent,
     FacturaComponent,
     NuevoProveedorComponent,
-    MovimientoInventariosComponent
+    MovimientoInventariosComponent,
   ],
   imports: [
     BrowserModule,

@@ -55,6 +55,8 @@ export class VerCompraComponent implements OnInit {
     private readonly httpServiceForma: FormasPagoService,
     private router: Router) { }
 
+  iva=environment.iva;
+
   ngOnInit(): void {
     this.dtOptions = {
       language: {
@@ -151,11 +153,11 @@ export class VerCompraComponent implements OnInit {
   }
 
   calcularSumaTotal() {
-    const totalTarifa12 = this.calcularTotalTarifa12();
+    const totalTarifa15 = this.calcularTotalTarifa15();
     const totalTarifa0 = this.calcularTotalTarifa0();
-    this.totalF = totalTarifa12 + totalTarifa0;
+    this.totalF = totalTarifa15 + totalTarifa0;
 
-    const suma = totalTarifa12 + totalTarifa0;
+    const suma = totalTarifa15 + totalTarifa0;
 
     this.sumaTotal = suma
       .toLocaleString(undefined, { maximumFractionDigits: 2 })
@@ -184,34 +186,34 @@ export class VerCompraComponent implements OnInit {
     return subtotal;
   }
 
-  calcularTotalTarifa12P(): number {
-    const totalTarifa12 = this.lstDetalleMovimientos
-      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
+  calcularTotalTarifa15P(): number {
+    const totalTarifa15 = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === this.iva+'%')
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
 
-    return totalTarifa12;
+    return totalTarifa15;
   }
   
-  calcularTotalTarifa12(): number {
-    const totalTarifa12 = this.lstDetalleMovimientos
-      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
+  calcularTotalTarifa15(): number {
+    const totalTarifa15 = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === this.iva+'%')
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
-    const porcen = totalTarifa12 * 0.12;
+    const porcen = totalTarifa15 * (this.iva/100);
 
-    return totalTarifa12 + porcen;
+    return totalTarifa15 + porcen;
   }
 
-  calcularIva12(): number {
-    const totalTarifa12 = this.lstDetalleMovimientos
-      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
+  calcularIva15(): number {
+    const totalTarifa15 = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === this.iva+'%')
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
-    const porcen = totalTarifa12 * 0.12;
+    const porcen = totalTarifa15 * (this.iva/100);
 
     return porcen;
   }
@@ -230,7 +232,7 @@ export class VerCompraComponent implements OnInit {
 
   finalizarPedido() {
     const total_si = this.calcularSubtotal();
-    const total_imp = this.calcularTotalTarifa12() + this.calcularTotalTarifa0();
+    const total_imp = this.calcularTotalTarifa15() + this.calcularTotalTarifa0();
     this.httpServiceMovimiento.obtenerUltimoSecuencial(localStorage.getItem('almacenid')!).subscribe(res1 => {
       if (res1.codigoError == 'OK') {
         this.ultSecuencial = res1.lstMovimientos[0].secuencial;

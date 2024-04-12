@@ -19,6 +19,7 @@ import { AlmacenesEntity } from 'src/app/models/almacenes';
 import { AlmacenesService } from 'src/app/services/almacenes.service';
 import { SriwsService } from 'src/app/services/sriws.service';
 import { DataTableDirective } from 'angular-datatables';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-ver-factura',
@@ -70,6 +71,7 @@ export class VerFacturaComponent implements OnInit {
   detalleEditBackup: DetallesPagoEntity | null = null;
   valorAnterior: string = '';
 
+  iva=environment.iva;
 
   constructor(private readonly httpService: DetallesmovimientoService,
     private readonly httpServiceMovimiento: MovimientosService,
@@ -171,7 +173,11 @@ export class VerFacturaComponent implements OnInit {
       didOpen: () => {
         Swal.showLoading();
         this.httpServiceTercero.obtenerTerceroCedula(newTercero).subscribe(res1 => {
+          console.log("ACA RES1"+res1.lstTerceros)
           if (res1.codigoError != "OK") {
+            this.cliente = "Consumidor Final";
+            this.telefono = "999999999";
+            this.email = "99999999";
 
           } else {
             this.numFactura = localStorage.getItem('movimiento_id')!;
@@ -201,8 +207,6 @@ export class VerFacturaComponent implements OnInit {
         this, this.httpServiceDetallePago.obtenerDetallePagoMov(newMovimiento).subscribe(res => {
           if (res.codigoError != "OK") {
             this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe(res1 => {
-              console.log(res1)
-              
               if (res1.codigoError != "OK") {
                 Swal.fire({
                   icon: 'error',
@@ -310,14 +314,14 @@ export class VerFacturaComponent implements OnInit {
   }
 
   calcularSumaTotal() {
-    const totalTarifa12 = this.calcularTotalTarifa12();
+    const totalTarifa15 = this.calcularTotalTarifa15();
     const totalTarifa0 = this.calcularTotalTarifa0();
     const desc = this.calcularDescuento();
     const descP = this.validarDescuento();
     const resto = this.calcularTotalAbonado();
-    this.totalF = totalTarifa12 + totalTarifa0 - this.descuentoN;
+    this.totalF = totalTarifa15 + totalTarifa0 - this.descuentoN;
 
-    const suma = totalTarifa12 + totalTarifa0 - this.descuentoN - descP;
+    const suma = totalTarifa15 + totalTarifa0 - this.descuentoN - descP;
 
     this.sumaTotal = suma
       .toLocaleString(undefined, { maximumFractionDigits: 2 })
@@ -439,34 +443,34 @@ export class VerFacturaComponent implements OnInit {
     return subtotal;
   }
 
-  calcularTotalTarifa12(): number {
-    const totalTarifa12 = this.lstDetalleMovimientos
-      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
+  calcularTotalTarifa15(): number {
+    const totalTarifa15 = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === this.iva+'%')
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
-    const porcen = totalTarifa12 * 0.12;
+    const porcen = totalTarifa15 * (this.iva/100);
 
-    return totalTarifa12 + porcen;
+    return totalTarifa15 + porcen;
   }
 
-  calcularTotalTarifa12P(): number {
-    const totalTarifa12 = this.lstDetalleMovimientos
-      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
+  calcularTotalTarifa15P(): number {
+    const totalTarifa15 = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === this.iva+'%')
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
 
-    return totalTarifa12;
+    return totalTarifa15;
   }
 
-  calcularIva12(): number {
-    const totalTarifa12 = this.lstDetalleMovimientos
-      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
+  calcularIva15(): number {
+    const totalTarifa15 = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === this.iva+'%')
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
-    const porcen = totalTarifa12 * 0.12;
+    const porcen = totalTarifa15 * (this.iva/100);
 
     return porcen;
   }
@@ -496,7 +500,7 @@ export class VerFacturaComponent implements OnInit {
     const total_si = this.calcularSubtotal();
     const descuento = (((this.descuentoP) * (this.totalF)) / 100);
     const total_desc = Number(this.calcularDescuento()) + Number(this.descuentoN) + Number(descuento);
-    const total_imp = this.calcularTotalTarifa12() + this.calcularTotalTarifa0();
+    const total_imp = this.calcularTotalTarifa15() + this.calcularTotalTarifa0();
     this.httpServiceMovimiento.obtenerUltimoSecuencial(localStorage.getItem('almacenid')!).subscribe(res1 => {
       if (res1.codigoError == 'OK') {
         this.ultSecuencial = res1.lstMovimientos[0].secuencial;

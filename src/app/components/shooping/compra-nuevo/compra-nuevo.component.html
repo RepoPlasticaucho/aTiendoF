@@ -47,22 +47,23 @@
                     <td>{{proveedorProducto.precio}}</td>
                     <td>
                         <i *ngIf="proveedorProducto.productoExistente" class="fas fa-check-circle"
-                                style="color: green; margin-right: 5px;"></i>
+                            style="color: green; margin-right: 5px;"></i>
                     </td>
                     <td style="text-align: center;">
-                        <a class="btn button" (click)=" crearDetalle(proveedorProducto)" style="border-radius: 5px; 
-                                       background: rgb(49,99,173,0.8); 
-                                       font-size: 13px; width:75px; 
-                                       height:35px;
-                                       text-align:left;
-                                       margin-right: 30px;
-                                       margin-left: 0px;
-                                       margin-top: 0px;
-                                       ">
+                        <button class="btn button" (click)="crearDetalle(proveedorProducto)" [disabled]="botonBloqueado"
+                            style="border-radius: 5px; 
+                 background: rgb(49,99,173,0.8); 
+                 font-size: 13px; 
+                 width:75px; 
+                 height:35px;
+                 text-align:left;
+                 margin-right: 30px;
+                 margin-left: 0px;
+                 margin-top: 0px;">
                             <span style="color:white;">
                                 AÑADIR
                             </span>
-                        </a>
+                        </button>
                     </td>
                 </tr>
             </tbody>

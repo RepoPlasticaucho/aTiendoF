@@ -20,8 +20,8 @@ import { MovimientosService } from 'src/app/services/movimientos.service';
 import { SociedadesService } from 'src/app/services/sociedades.service';
 import { SriwsService } from 'src/app/services/sriws.service';
 import { TercerosService } from 'src/app/services/terceros.service';
+import { environment } from 'src/environments/environment.prod';
 import Swal from 'sweetalert2';
-
 
 @Component({
   selector: 'app-factura',
@@ -30,7 +30,6 @@ import Swal from 'sweetalert2';
 })
 export class FacturaComponent implements OnInit {
   @ViewChild('contentToPrint', { static: false }) contentToPrint!: ElementRef;
-
   lstDetalleMovimientos: DetallesMovimientoEntity[] = [];
   lstDetallePagos: DetallesPagoEntity[] = [];
   lstFormasPago: FormasPagoEntity[] = [];
@@ -58,10 +57,14 @@ export class FacturaComponent implements OnInit {
   subtotal12: string = '';
   descuento: string = '';
   ice: string = '0.00';
-  iva: string = '';
+  //iva: string = '';
   propina: string = '';
   pdfGenerado: boolean = false;
   valorTotal: string = '';
+  iva: number = environment.iva;
+  ivaCalculado: number = 0;
+
+
 
   constructor(private readonly httpService: DetallesmovimientoService,
     private readonly httpServiceMovimiento: MovimientosService,
@@ -141,7 +144,11 @@ export class FacturaComponent implements OnInit {
       didOpen: () => {
         this.httpServiceTercero.obtenerTerceroCedula(newTercero).subscribe(res1 => {
           if (res1.codigoError != "OK") {
-
+            this.cliente = "Consumidor Final";
+            this.telefono = "9999999999";
+            this.email = "consumidorfinal@hotmail.com";
+            this.direccionCl = "Sin dirección";
+            this.idFiscalCliente = "Sin identificación"
           } else {
             this.cliente = res1.lstTerceros[0].nombre;
             this.telefono = res1.lstTerceros[0].telefono;
@@ -210,8 +217,9 @@ export class FacturaComponent implements OnInit {
                 this.subtotal12 = numeroFormateado2;
                 this.descuento = res2.lstMovimientos[0].total_desc!;
                 const iva12: number = this.calcularIva12();
-                const numeroFormateado3: string = iva12.toFixed(2);
-                this.iva = numeroFormateado3;
+            //    const numeroFormateado3: string = iva12.toFixed(2);
+            //  console.log("Este es el formateado "+ numeroFormateado3)
+                this.ivaCalculado = iva12;
                 this.propina = res2.lstMovimientos[0].propina!;
                 this.valorTotal = res2.lstMovimientos[0].importe_total!;
               }
@@ -225,11 +233,11 @@ export class FacturaComponent implements OnInit {
 
   calcularIva12(): number {
     const totalTarifa12 = this.lstDetalleMovimientos
-      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === this.iva+'%')
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
-    const porcen = totalTarifa12 * 0.12;
+    const porcen = totalTarifa12 * (this.iva/100);
 
     return porcen;
   }
@@ -331,7 +339,7 @@ export class FacturaComponent implements OnInit {
 
   calcularTotalTarifa12(): number {
     const totalTarifa12 = this.lstDetalleMovimientos
-      .filter((detalleMovimientos) => detalleMovimientos.tarifa === '12%')
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === this.iva+'%')
       .reduce((total, detalleMovimientos) => {
         console.log(parseFloat(detalleMovimientos.precio.replace(',', '.')))
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));

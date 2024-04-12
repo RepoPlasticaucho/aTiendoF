@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -35,7 +35,6 @@ import { environment } from 'src/environments/environment.prod';
   providers: [DatePipe]
 })
 export class MenucomprComponent implements OnInit {
-
   clienteForm = new FormGroup({
     tipo: new FormControl('0', Validators.required)
   });
