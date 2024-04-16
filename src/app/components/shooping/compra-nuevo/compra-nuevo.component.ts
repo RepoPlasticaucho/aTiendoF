@@ -172,6 +172,16 @@ export class CompraNuevoComponent implements OnInit {
 
 
   crearDetalle(proveedorProducto: ProveedoresProductosEntity): void {
+                    
+    if(proveedorProducto.cantidad == "0"){
+      Swal.fire({
+        icon: 'error',
+        title: 'Cantidad 0.',
+        text: 'La cantidad del producto no puede ser 0.',
+        showConfirmButton: true,
+      })
+      return
+    }
     this.httpServiceProvProd.asignarProveedorProducto(proveedorProducto);
     this.httpServiceProvProd.obtenerProveedorProducto$.pipe(take(1)).subscribe((res) => {
       this.botonBloqueado=true;
@@ -217,7 +227,7 @@ export class CompraNuevoComponent implements OnInit {
           pvp2: this.costo
         }
         // cambios
-        console.log(proveedorProducto.productoExistente)
+        //console.log(proveedorProducto.productoExistente)
         
         this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res1 => {
           if (res1.codigoError == 'NEXISTE') {
@@ -235,7 +245,9 @@ export class CompraNuevoComponent implements OnInit {
                     precio: this.precio
                   }
                   this.httpServiceDetalle.agregarDetalleCompra(newDetalle).pipe(finalize(() => {
+                    
                     this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
+    
                       if (res1.codigoError == 'OK') {
                         const newDetalleImp: DetalleImpuestosEntity = {
                           id: '',
@@ -345,6 +357,7 @@ export class CompraNuevoComponent implements OnInit {
               precio: this.precio
             }
             if (!proveedorProducto.productoExistente){
+              
               this.httpServiceDetalle.agregarDetalleCompras(newDetalle).pipe(finalize(() => {
                 this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
                   if (res1.codigoError == 'OK') {
@@ -409,6 +422,7 @@ export class CompraNuevoComponent implements OnInit {
                       if (result.isConfirmed) {
                         this.cerrarDialog();
                       }
+                      this.productoAgregado.emit(proveedorProducto);
                     });
                   } else {
                     
@@ -416,7 +430,7 @@ export class CompraNuevoComponent implements OnInit {
                 });
               } else {
                 this.httpServiceDetalle.eliminarDetallePedidoVenta(newDetalle).subscribe(res => {
-                  console.log(res)
+                  console.log("en este metodo"+res)
                   Swal.fire({
                     icon: 'success',
                       title: 'Eliminado',
