@@ -18,6 +18,7 @@ import { ProveedoresProductosEntity } from 'src/app/models/proveedoresproductos'
 import { NuevoProductoComponent } from '../nuevo-producto/nuevo-producto.component';
 import { DetalleImpuestosEntity } from 'src/app/models/detalle-impuestos';
 import { DetalleImpuestosService } from 'src/app/services/detalle-impuestos.service';
+import { DataTableDirective } from 'angular-datatables';
 
 @Component({
   selector: 'app-compra-nuevo',
@@ -32,6 +33,8 @@ export class CompraNuevoComponent implements OnInit {
   faTimes = faTimes;
   faFolderPlus = faFolderPlus;
   // Nueva propiedad para las tarjetas de la página actual
+  private datatableElement!: DataTableDirective;
+
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
   lstProveedoresProductos: ProveedoresProductosEntity[] = [];
@@ -172,16 +175,6 @@ export class CompraNuevoComponent implements OnInit {
 
 
   crearDetalle(proveedorProducto: ProveedoresProductosEntity): void {
-                    
-    if(proveedorProducto.cantidad == "0"){
-      Swal.fire({
-        icon: 'error',
-        title: 'Cantidad 0.',
-        text: 'La cantidad del producto no puede ser 0.',
-        showConfirmButton: true,
-      })
-      return
-    }
     this.httpServiceProvProd.asignarProveedorProducto(proveedorProducto);
     this.httpServiceProvProd.obtenerProveedorProducto$.pipe(take(1)).subscribe((res) => {
       this.botonBloqueado=true;
@@ -244,10 +237,11 @@ export class CompraNuevoComponent implements OnInit {
                     costo: this.costo,
                     precio: this.precio
                   }
+               
+                  
                   this.httpServiceDetalle.agregarDetalleCompra(newDetalle).pipe(finalize(() => {
-                    
+               
                     this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
-    
                       if (res1.codigoError == 'OK') {
                         const newDetalleImp: DetalleImpuestosEntity = {
                           id: '',
@@ -357,9 +351,20 @@ export class CompraNuevoComponent implements OnInit {
               precio: this.precio
             }
             if (!proveedorProducto.productoExistente){
-              
+              if(proveedorProducto.cantidad=="0"){
+                Swal.fire({
+                  icon: 'error',
+                  title: 'No se puede agregar 0',
+                  text: "La cantidad no puede ser 0",
+                  showConfirmButton: false
+                });
+                this.botonBloqueado=false
+                return
+              }
               this.httpServiceDetalle.agregarDetalleCompras(newDetalle).pipe(finalize(() => {
+
                 this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
+                  
                   if (res1.codigoError == 'OK') {
                     const newDetalleImp: DetalleImpuestosEntity = {
                       id: '',
@@ -372,6 +377,7 @@ export class CompraNuevoComponent implements OnInit {
                       updated_at: ''
                     }
                     this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
+                      
                       if (res2.codigoError != 'OK') {
                         Swal.fire({
                           icon: 'error',
@@ -439,8 +445,9 @@ export class CompraNuevoComponent implements OnInit {
                       confirmButtonText: 'Ok',
                   }).then(() => {
                     this.cerrarDialog();
+                    window.location.reload();
                   });
-                });
+                });     
               }
             }
           }
@@ -467,5 +474,10 @@ export class CompraNuevoComponent implements OnInit {
     });
   }
 
+  
+
+
+
+  
 }
 

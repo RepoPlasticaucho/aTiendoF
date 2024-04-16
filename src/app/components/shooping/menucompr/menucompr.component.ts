@@ -520,11 +520,15 @@ export class MenucomprComponent implements OnInit {
   onInputComprobante(event: any) {
     this.comprobanteLleno = event.target.value.trim() !== "";
     this.buttonsDisabled = !this.checkAllConditions();
+    localStorage.setItem('comprobante', JSON.stringify(event.target.value.trim()));
+
   }
 
   onInputAutorizacion(event: any) {
     this.autorizacionLlena = event.target.value.trim() !== "";
     this.buttonsDisabled = !this.checkAllConditions();
+    localStorage.setItem('autorizacion', JSON.stringify(event.target.value.trim()));
+
   }
 
   keyPressNumbers(event: any) {
