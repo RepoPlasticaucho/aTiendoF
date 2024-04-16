@@ -216,6 +216,9 @@ export class CompraNuevoComponent implements OnInit {
           stock: proveedorProducto.cantidad!,
           pvp2: this.costo
         }
+        // cambios
+        console.log(proveedorProducto.productoExistente)
+        
         this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res1 => {
           if (res1.codigoError == 'NEXISTE') {
             this.httpServiceInventario.agregarInventario(newInventario).pipe(
@@ -341,55 +344,96 @@ export class CompraNuevoComponent implements OnInit {
               costo: this.costo,
               precio: this.precio
             }
-            this.httpServiceDetalle.agregarDetalleCompras(newDetalle).pipe(finalize(() => {
-              this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
-                if (res1.codigoError == 'OK') {
-                  const newDetalleImp: DetalleImpuestosEntity = {
-                    id: '',
-                    detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
-                    cod_impuesto: res1.lstDetalleMovimientos[0].cod_tarifa!,
-                    porcentaje: res1.lstDetalleMovimientos[0].tarifa!,
-                    base_imponible: '',
-                    valor: res1.lstDetalleMovimientos[0].costo!,
-                    created_at: '',
-                    updated_at: ''
+            if (!proveedorProducto.productoExistente){
+              this.httpServiceDetalle.agregarDetalleCompras(newDetalle).pipe(finalize(() => {
+                this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
+                  if (res1.codigoError == 'OK') {
+                    const newDetalleImp: DetalleImpuestosEntity = {
+                      id: '',
+                      detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
+                      cod_impuesto: res1.lstDetalleMovimientos[0].cod_tarifa!,
+                      porcentaje: res1.lstDetalleMovimientos[0].tarifa!,
+                      base_imponible: '',
+                      valor: res1.lstDetalleMovimientos[0].costo!,
+                      created_at: '',
+                      updated_at: ''
+                    }
+                    this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
+                      if (res2.codigoError != 'OK') {
+                        Swal.fire({
+                          icon: 'error',
+                          title: 'Ha ocurrido un error.',
+                          text: res2.descripcionError,
+                          showConfirmButton: false
+                        });
+                      }
+                    });
                   }
-                  this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
-                    if (res2.codigoError != 'OK') {
-                      Swal.fire({
-                        icon: 'error',
-                        title: 'Ha ocurrido un error.',
-                        text: res2.descripcionError,
-                        showConfirmButton: false
-                      });
+                });
+              })).subscribe(res3 => {
+                if (res3.codigoError != 'OK') {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Ha ocurrido un error.',
+                    text: 'La cantidad no puede ser vacía',
+                    showConfirmButton: false
+                  });
+                } else {
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Se ha agregado al detalle',
+                    text: `Se ha guardado con éxito el producto`,
+                    showConfirmButton: true,
+                    confirmButtonText: 'Ok',
+                  }).then((result) => {
+                    this.botonBloqueado=false;
+                    if (result.isConfirmed) {
+                      this.productoAgregado.emit(proveedorProducto);
+                      this.cerrarDialog();
                     }
                   });
                 }
               });
-            })).subscribe(res3 => {
-              if (res3.codigoError != 'OK') {
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Ha ocurrido un error.',
-                  text: 'La cantidad no puede ser vacía',
-                  showConfirmButton: false
-                });
-              } else {
-                Swal.fire({
-                  icon: 'success',
-                  title: 'Se ha agregado al detalle',
-                  text: `Se ha guardado con éxito el producto`,
-                  showConfirmButton: true,
-                  confirmButtonText: 'Ok',
-                }).then((result) => {
-                  this.botonBloqueado=false;
-                  if (result.isConfirmed) {
-                    this.productoAgregado.emit(proveedorProducto);
-                    this.cerrarDialog();
+            } else {
+              if(proveedorProducto.cantidad! != '0'){
+                this.httpServiceDetalle.modificarDetallePedidoVenta(newDetalle).subscribe(res => {
+                  console.log(res.codigoError)
+                  if(res.codigoError == 'OK'){
+                    Swal.fire({
+                      icon: 'success',
+                      title: 'Actualizado',
+                      text: `Se ha cambiado la cantidad`,
+                      showConfirmButton: true,
+                      confirmButtonText: 'Ok',
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        this.cerrarDialog();
+                      }
+                    });
+                  } else {
+                    Swal.fire({
+                      icon: 'error',
+                      title: 'Ha ocurrido un error.',
+                      text: 'No existe suficiente stock.',
+                      showConfirmButton: false
+                    });
                   }
                 });
+              } else {
+                this.httpServiceDetalle.eliminarDetallePedidoVenta(newDetalle).subscribe(res => {
+                  console.log(res)
+                  Swal.fire({
+                    icon: 'success',
+                      title: 'Eliminado',
+                      text: `Se ha eliminado el producto del detalle`,
+                      showConfirmButton: true,
+                      confirmButtonText: 'Ok',
+                  }).then(() => {
+                    this.cerrarDialog();
+                  });
+                });
               }
-            });
+            }
           }
         });
       }
