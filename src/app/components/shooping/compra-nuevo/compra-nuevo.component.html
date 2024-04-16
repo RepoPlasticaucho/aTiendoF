@@ -50,7 +50,9 @@
                             style="color: green; margin-right: 5px;"></i>
                     </td>
                     <td style="text-align: center;">
-                        <button class="btn button" (click)="crearDetalle(proveedorProducto)" [disabled]="botonBloqueado"
+                        <button 
+                        (click)="crearDetalle(proveedorProducto)" [disabled]="botonBloqueado"
+                        
                             style="border-radius: 5px; 
                  background: rgb(49,99,173,0.8); 
                  font-size: 13px; 
@@ -60,9 +62,9 @@
                  margin-right: 30px;
                  margin-left: 0px;
                  margin-top: 0px;">
-                            <span style="color:white;">
-                                AÑADIR
-                            </span>
+             <span style="color:white;">
+                {{ proveedorProducto.productoExistente ? 'ACTUALIZAR' : 'AÑADIR' }}
+            </span>
                         </button>
                     </td>
                 </tr>
