@@ -411,12 +411,7 @@ export class CompraNuevoComponent implements OnInit {
                       }
                     });
                   } else {
-                    Swal.fire({
-                      icon: 'error',
-                      title: 'Ha ocurrido un error.',
-                      text: 'No existe suficiente stock.',
-                      showConfirmButton: false
-                    });
+                    
                   }
                 });
               } else {

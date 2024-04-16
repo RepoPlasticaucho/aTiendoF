@@ -50,22 +50,15 @@
                             style="color: green; margin-right: 5px;"></i>
                     </td>
                     <td style="text-align: center;">
-                        <button 
-                        (click)="crearDetalle(proveedorProducto)" [disabled]="botonBloqueado"
-                        
-                            style="border-radius: 5px; 
-                 background: rgb(49,99,173,0.8); 
-                 font-size: 13px; 
-                 width:75px; 
-                 height:35px;
-                 text-align:left;
-                 margin-right: 30px;
-                 margin-left: 0px;
-                 margin-top: 0px;">
-             <span style="color:white;">
-                {{ proveedorProducto.productoExistente ? 'ACTUALIZAR' : 'AÑADIR' }}
-            </span>
-                        </button>
+                        <a class="btn button" (click)="crearDetalle(proveedorProducto)" 
+                            [ngClass]="{'btn-success': proveedorProducto.productoExistente, 'btn-primary': !proveedorProducto.productoExistente}"
+                            style="border-radius: 5px; font-size: 15px; width:120px; height:35px; text-align:center; margin-top: 10px;"
+                            [class.disabled]="botonBloqueado"
+                            >
+                            <span style="color:white;">
+                                {{ proveedorProducto.productoExistente ? 'ACTUALIZAR' : 'AÑADIR' }}
+                            </span>
+                        </a>
                     </td>
                 </tr>
             </tbody>
