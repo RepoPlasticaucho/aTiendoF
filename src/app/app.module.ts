@@ -145,6 +145,12 @@ import { ConfiguracionComponent } from './components/users/configuracion/configu
 import { FacturaComponent } from './components/sales/factura/factura.component';
 import { NuevoProveedorComponent } from './components/shooping/nuevo-proveedor/nuevo-proveedor.component';
 import { MovimientoInventariosComponent } from './components/inventories/movimiento-inventarios/movimiento-inventarios.component';
+import { NavegationFacturadorComponent } from './components/navegation-facturador/navegation-facturador.component';
+import { DashboardPerComponent } from './components/dashboard-per/dashboard-per.component';
+import { GestionarPersonalComponent } from './components/gestionar-personal/gestionar-personal.component';
+import { PersonalComponent } from './components/personalFactory/personal/personal.component';
+import { PersonalCreateComponent } from './components/personalFactory/personal-create/personal-create.component';
+import { PersonalEditComponent } from './components/personalFactory/personal-edit/personal-edit.component';
 
 @NgModule({
   declarations: [
@@ -267,6 +273,12 @@ import { MovimientoInventariosComponent } from './components/inventories/movimie
     FacturaComponent,
     NuevoProveedorComponent,
     MovimientoInventariosComponent,
+    NavegationFacturadorComponent,
+    DashboardPerComponent,
+    GestionarPersonalComponent,
+    PersonalComponent,
+    PersonalCreateComponent,
+    PersonalEditComponent,
   ],
   imports: [
     BrowserModule,

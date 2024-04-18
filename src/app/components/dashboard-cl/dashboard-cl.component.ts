@@ -30,6 +30,7 @@ export class DashboardClComponent {
           { title: 'Terceros', cols: 1, rows: 1, name: "los terceros", figure: "person", dir: "navegation-cl/(contentClient:tercerosalmacen)" },
           { title: 'Pedidos Plasticaucho', cols: 1, rows: 1, name: "plasticaucho", figure: "book" , dir: "navegation-cl/(contentClient:almaceningresos)"},
           { title: 'Proveedores', cols: 1, rows: 1, name: "los proveedores", figure: "supervisor_account", dir: "navegation-cl/(contentClient:proveedores)" },
+          { title: 'Personal', cols: 1, rows: 1, name: "el personal", figure: "supervisor_account", dir: "navegation-cl/(contentClient:personal)" },
 
         ];
       }
@@ -46,6 +47,7 @@ export class DashboardClComponent {
         { title: 'Terceros', cols: 1, rows: 1, name: "los terceros", figure: "person", dir: "navegation-cl/(contentClient:tercerosalmacen)" },
         { title: 'Plasticaucho', cols: 1, rows: 1, name: "plasticaucho", figure: "book" , dir: "navegation-cl/(contentClient:almaceningresos)"},
         { title: 'Proveedores', cols: 1, rows: 1, name: "los proveedores", figure: "supervisor_account", dir: "navegation-cl/(contentClient:proveedores)" },
+        { title: 'Personal', cols: 1, rows: 1, name: "el personal", figure: "supervisor_account", dir: "navegation-cl/(contentClient:personal)" },
 
       ];
     })

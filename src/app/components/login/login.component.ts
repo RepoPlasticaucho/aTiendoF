@@ -154,6 +154,15 @@ export class LoginComponent {
                       })
                       break;
 
+                      case "personal":
+                        Swal.fire({
+                          icon: 'success',
+                          title: 'Bienvenido!!!'
+                        }).finally(() => {
+                          this.router.navigate(['/navegation-facturador']);
+                        })
+                        break;
+
                   }
                 } else {
                   Swal.fire({

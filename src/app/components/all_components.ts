@@ -1,5 +1,6 @@
 import * as exp from "constants";
 import { from } from "rxjs";
+import { PersonalCreateComponent } from "./personalFactory/personal-create/personal-create.component";
 export { ProductosCreateComponent } from "./products/productos-create/productos-create.component";
 export { ProductosEditComponent } from "./products/productos-edit/productos-edit.component";
 export { ProductosComponent } from "./products/productos/productos.component";
@@ -101,3 +102,6 @@ export {ConfiguracionComponent } from './users/configuracion/configuracion.compo
 export { FacturaComponent } from './sales/factura/factura.component';
 export { NuevoProveedorComponent } from './shooping/nuevo-proveedor/nuevo-proveedor.component';
 export { MovimientoInventariosComponent } from './inventories/movimiento-inventarios/movimiento-inventarios.component'
+export { NavegationFacturadorComponent } from './navegation-facturador/navegation-facturador.component';
+export { DashboardPerComponent } from './dashboard-per/dashboard-per.component';
+export { GestionarPersonalComponent } from './gestionar-personal/gestionar-personal.component';

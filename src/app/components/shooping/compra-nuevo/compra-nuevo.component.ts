@@ -445,7 +445,6 @@ export class CompraNuevoComponent implements OnInit {
                       confirmButtonText: 'Ok',
                   }).then(() => {
                     this.cerrarDialog();
-                    window.location.reload();
                   });
                 });     
               }

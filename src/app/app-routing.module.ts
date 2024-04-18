@@ -1,11 +1,11 @@
 import { LocationStrategy } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AlmacenesComponent, AlmacenesCreateComponent, AlmacenesEditComponent, AlmacenesegresosComponent, AlmacenesshoopingComponent, AlmacenessociedadComponent, AlmacenessociedadCreateComponent, AlmacenessociedadEditComponent, AlmaceningresosComponent, AtributosComponent, AtributosCreateComponent, AtributosEditComponent, CarritoComponent, CarritoDevComponent, CatalogosComponent, CategoriasComponent, CategoriasCreateComponent, CategoriasEditComponent, ColorsComponent, ColorsCreateComponent, ColorsEditComponent, DashboardAdmComponent, DashboardBoComponent, DashboardClComponent, EstadopedidoComponent, GenerosComponent, GenerosCreateComponent, GenerosEditComponent, GruposComponent, GruposCreateComponent, GruposEditComponent, InventariosAlmacenComponent, InventariosComponent, InventariosCreateComponent, InventariosEditComponent, InventariosPedidoCategoriaComponent, InventariosPedidoColoresComponent, InventariosPedidoComponent, InventariosPedidoLineasComponent, InventariosPedidoModelosComponent, InventariosProductosComponent, LineasComponent, LineasCreateComponent, LineasEditComponent, MarcasComponent, MarcasCreateComponent, MarcasEditComponent, MenuventComponent, ModeloproductosComponent, ModeloproductosCreateComponent, ModeloproductosEditComponent, ModelosComponent, ModelosCreateComponent, ModelosEditComponent, NavegationAdmComponent, NavegationBoComponent, NavegationClComponent, PedidoprovComponent, PedidoSugeridoComponent, PedidoventComponent, PortafoliosComponent, PortafoliosDevComponent, PortafoliosComponentM, PortafoliosComprarComponent, PortafoliosComprarDevComponent, PortafoliosEditarComponent, ProductosComponent, ProductosCreateComponent, ProductosEditComponent, SociedadesComponent, SociedadesCreateComponent, SociedadesEditComponent, TercerosalmacenComponent, TercerosComponent, TercerosCreateComponent, TercerosEditComponent, TercerosusuariosComponent, TercerosusuariosCreateComponent, TercerosusuariosEditComponent, UsuarioComponent, UsuarioPassComponent, VerFacturaComponent, VistafacturaComponent, VistamarcasComponent,VistamarcasDevComponent, VistapedidosComponent, VistaventasComponent, VentaprovComponent, MenucomprComponent, CompraprovComponent, ProveedoresComponent, ProveedoresCreateComponent, ProveedoresEditComponent, MovimientosComponent, CashBalancingComponent, VerCompraComponent, ProductocompraComponent, ConfiguracionComponent, FacturaComponent, NuevoProveedorComponent, MovimientoInventariosComponent } from './components/all_components';
+import { AlmacenesComponent, AlmacenesCreateComponent, AlmacenesEditComponent, AlmacenesegresosComponent, AlmacenesshoopingComponent, AlmacenessociedadComponent, AlmacenessociedadCreateComponent, AlmacenessociedadEditComponent, AlmaceningresosComponent, AtributosComponent, AtributosCreateComponent, AtributosEditComponent, CarritoComponent, CarritoDevComponent, CatalogosComponent, CategoriasComponent, CategoriasCreateComponent, CategoriasEditComponent, ColorsComponent, ColorsCreateComponent, ColorsEditComponent, DashboardAdmComponent, DashboardBoComponent, DashboardClComponent, DashboardPerComponent ,EstadopedidoComponent, GenerosComponent, GenerosCreateComponent, GenerosEditComponent, GruposComponent, GruposCreateComponent, GruposEditComponent, InventariosAlmacenComponent, InventariosComponent, InventariosCreateComponent, InventariosEditComponent, InventariosPedidoCategoriaComponent, InventariosPedidoColoresComponent, InventariosPedidoComponent, InventariosPedidoLineasComponent, InventariosPedidoModelosComponent, InventariosProductosComponent, LineasComponent, LineasCreateComponent, LineasEditComponent, MarcasComponent, MarcasCreateComponent, MarcasEditComponent, MenuventComponent, ModeloproductosComponent, ModeloproductosCreateComponent, ModeloproductosEditComponent, ModelosComponent, ModelosCreateComponent, ModelosEditComponent, NavegationAdmComponent, NavegationBoComponent, NavegationClComponent, NavegationFacturadorComponent, PedidoprovComponent, PedidoSugeridoComponent, PedidoventComponent, PortafoliosComponent, PortafoliosDevComponent, PortafoliosComponentM, PortafoliosComprarComponent, PortafoliosComprarDevComponent, PortafoliosEditarComponent, ProductosComponent, ProductosCreateComponent, ProductosEditComponent, SociedadesComponent, SociedadesCreateComponent, SociedadesEditComponent, TercerosalmacenComponent, TercerosComponent, TercerosCreateComponent, TercerosEditComponent, TercerosusuariosComponent, TercerosusuariosCreateComponent, TercerosusuariosEditComponent, UsuarioComponent, UsuarioPassComponent, VerFacturaComponent, VistafacturaComponent, VistamarcasComponent,VistamarcasDevComponent, VistapedidosComponent, VistaventasComponent, VentaprovComponent, MenucomprComponent, CompraprovComponent, ProveedoresComponent, ProveedoresCreateComponent, ProveedoresEditComponent, MovimientosComponent, CashBalancingComponent, VerCompraComponent, ProductocompraComponent, ConfiguracionComponent, FacturaComponent, NuevoProveedorComponent, MovimientoInventariosComponent } from './components/all_components';
 import { LoginNavComponent } from './components/login-nav/login-nav.component';
 import { LoginComponent } from './components/login/login.component';
-
-
+import { GestionarPersonalComponent } from './components/all_components';
+import { PersonalCreateComponent } from './components/personalFactory/personal-create/personal-create.component';
 const routes: Routes = [
   {
     path: 'navegation-cl', component: NavegationClComponent,
@@ -65,8 +65,9 @@ const routes: Routes = [
       { path: "cofiguracion-user", component: ConfiguracionComponent , outlet: "contentClient" },
       { path: "factura", component: FacturaComponent , outlet: "contentClient" },
       { path: "nuevo-proveedor", component: NuevoProveedorComponent , outlet: "contentClient" },
-      { path: "movimiento-inventario", component: MovimientoInventariosComponent , outlet: "contentClient" }
-
+      { path: "movimiento-inventario", component: MovimientoInventariosComponent , outlet: "contentClient" },
+      { path: "personal", component: GestionarPersonalComponent, outlet: "contentClient" },
+      { path: "personal-create", component: PersonalCreateComponent, outlet: "contentClient" },
     ]
   },
   {
@@ -157,6 +158,54 @@ const routes: Routes = [
     ]
   },
   
+  {
+    path: 'navegation-facturador', component: NavegationFacturadorComponent,
+    children: [
+      { path: "", component: DashboardPerComponent, outlet: "contentPersonal" },
+      { path: "inventarios", component: InventariosComponent, outlet: "contentPersonal" },
+      { path: "inventarios-pedido", component: InventariosPedidoComponent, outlet: "contentPersonal" },
+      { path: "inventarios-pedido-categoria", component: InventariosPedidoCategoriaComponent, outlet: "contentPersonal" },
+      { path: "inventarios-pedido-colores", component: InventariosPedidoColoresComponent, outlet: "contentPersonal" },
+      { path: "inventarios-pedido-lineas", component: InventariosPedidoLineasComponent, outlet: "contentPersonal" },
+      { path: "inventarios-pedido-modelos", component: InventariosPedidoModelosComponent, outlet: "contentPersonal" },
+      { path: "inventarios-almacen", component: InventariosAlmacenComponent, outlet: "contentPersonal" },
+      { path: "inventarios-productos", component: InventariosProductosComponent, outlet: "contentPersonal" },
+      { path: "inventarios-create", component: InventariosCreateComponent, outlet: "contentPersonal" },
+      { path: "inventarios-edit", component: InventariosEditComponent, outlet: "contentPersonal" },
+      { path: "pedido-sugeridos", component: PedidoSugeridoComponent, outlet: "contentPersonal" },
+      { path: "usuario", component: UsuarioComponent, outlet: "contentPersonal" },
+      { path: "usuario-pass", component: UsuarioPassComponent, outlet: "contentPersonal" },
+      { path: "modeloproductos", component: ModeloproductosComponent, outlet: "contentPersonal" },
+      { path: "almacenegresos", component: AlmacenesegresosComponent, outlet: "contentPersonal" },
+      { path: "almaceningresos", component: AlmaceningresosComponent, outlet: "contentPersonal" },
+      { path: "vistapedidos", component: VistapedidosComponent, outlet: "contentPersonal" },
+      { path: "pedidoprov", component: PedidoprovComponent, outlet: "contentPersonal" },
+      { path: "vistamarcas", component: VistamarcasComponent, outlet: "contentPersonal" },
+      { path: "portafolios", component: PortafoliosComponent, outlet: "contentPersonal" },
+      { path: "portafolios-comprar", component: PortafoliosComprarComponent, outlet: "contentPersonal" },
+      { path: "carrito", component: CarritoComponent, outlet: "contentPersonal" },
+      { path: "portafolios-editar", component: PortafoliosEditarComponent, outlet: "contentPersonal" },
+      { path: "vistafactura", component: VistafacturaComponent, outlet: "contentPersonal" },
+      { path: "vistamarcas-dev", component: VistamarcasDevComponent, outlet: "contentPersonal" },
+      { path: "portafolios-dev", component: PortafoliosDevComponent, outlet: "contentPersonal" },
+      { path: "portafolios-comprar-dev", component: PortafoliosComprarDevComponent, outlet: "contentPersonal" },
+      { path: "carrito-dev", component: CarritoDevComponent, outlet: "contentPersonal" },
+      { path: "estadopedido", component: EstadopedidoComponent, outlet: "contentPersonal" },
+      { path: "vistaventas", component: VistaventasComponent ,outlet:"contentPersonal"},
+      { path: "ventaprov", component: VentaprovComponent , outlet:"contentPersonal"},
+      { path: "pedidovent", component: PedidoventComponent , outlet:"contentPersonal"},
+      { path: "menuvent", component:  MenuventComponent , outlet:"contentPersonal"},
+      { path: "menucompr", component: MenucomprComponent , outlet:"contentPersonal"},
+      { path: "ver-factura", component: VerFacturaComponent , outlet:"contentPersonal"},
+      { path: "movimientos", component: MovimientosComponent , outlet:"contentPersonal"},
+      { path: "cuadre-caja", component: CashBalancingComponent, outlet: "contentPersonal" },
+      { path: "ver-compra", component: VerCompraComponent, outlet: "contentPersonal" },
+      { path: "cofiguracion-user", component: ConfiguracionComponent , outlet: "contentPersonal" },
+      { path: "factura", component: FacturaComponent , outlet: "contentPersonal" },
+      { path: "nuevo-proveedor", component: NuevoProveedorComponent , outlet: "contentPersonal" },
+      { path: "movimiento-inventario", component: MovimientoInventariosComponent , outlet: "contentPersonal" },
+    ]
+  },
   {
     path: 'login-nav', component: LoginNavComponent,
     children: [

@@ -40,6 +40,7 @@ export class SociedadesCreateComponent implements OnInit {
   produccion: string = '2';
   client: string = 'client';
   bo: string = 'bo';
+  personal: string = 'personal';
 
 
   constructor(private readonly httpService: SociedadesService,
