@@ -81,13 +81,13 @@ export class GestionarPersonalComponent implements OnInit {
     });
   }
 
-  editarProveedor(proveedor: ProveedoresEntity): void {
+  editarPersonal(proveedor: ProveedoresEntity): void {
     this.httpService.asignarProveedor(proveedor);
     // console.log(producto);
-    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['proveedores-edit'] } }]);
+    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['personal-edit'] } }]);
   }
 
-  eliminarProveedor(proveedor: ProveedoresEntity): void {
+  eliminarPersonal(proveedor: ProveedoresEntity): void {
     Swal.fire({
       icon: 'question',
       title: `¿Esta seguro de eliminar ${proveedor.nombre}?`,

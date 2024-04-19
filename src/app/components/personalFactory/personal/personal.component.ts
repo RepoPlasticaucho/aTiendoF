@@ -82,10 +82,10 @@ export class PersonalComponent implements OnInit {
     });
   }
 
-  editarProveedor(proveedor: ProveedoresEntity): void {
+  editarPersonal(proveedor: ProveedoresEntity): void {
     this.httpService.asignarProveedor(proveedor);
     // console.log(producto);
-    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['proveedores-edit'] } }]);
+    this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['personal-edit'] } }]);
   }
 
   eliminarProveedor(proveedor: ProveedoresEntity): void {
@@ -128,7 +128,7 @@ export class PersonalComponent implements OnInit {
   }
 
   agregarProveedor() {
-    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['proveedores-create'] } }]);
+    this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['personal-create'] } }]);
   }
 
 }

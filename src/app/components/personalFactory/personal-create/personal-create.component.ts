@@ -3,9 +3,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { faList, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { CiudadesEntity } from 'src/app/models/ciudades';
-import { ProveedoresEntity } from 'src/app/models/proveedores';
+import { PersonalEntity } from 'src/app/models/personal';
 import { CiudadesService } from 'src/app/services/ciudades.service';
-import { ProveedoresService } from 'src/app/services/proveedores.service';
+import { PersonalService } from 'src/app/services/personal.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -25,15 +25,14 @@ export class PersonalCreateComponent implements OnInit {
   selectCiudad: boolean = false;
   //Creación de la variable para formulario
   proveedoresForm = new FormGroup({
-    nombre: new FormControl(''),
-    id_fiscal: new FormControl('', [Validators.required]),
-    correo: new FormControl('', [Validators.required]),
+    nombre: new FormControl('', [Validators.required]),
     telefono: new FormControl('', [Validators.required]),
-    ciudad: new FormControl('0', [Validators.required]),
-    direccion: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required]),
+    email: new FormControl('', [Validators.required]),
+    cedula: new FormControl('', [Validators.required]),
   })
 
-  constructor(private readonly httpService: ProveedoresService,
+  constructor(private readonly httpService: PersonalService,
     private router: Router,
     private readonly httpServiceCiudades: CiudadesService) { }
 
@@ -57,26 +56,29 @@ export class PersonalCreateComponent implements OnInit {
       this.proveedoresForm.markAllAsTouched();
       console.log("Error");
     } else {
-      const proveedorDatos: ProveedoresEntity = {
-        id: '',
-        ciudadid: this.lstCiudades2[0].idCiudad ?? 0,
-        id_fiscal: this.proveedoresForm.value!.id_fiscal ?? "",
-        correo: this.proveedoresForm.value!.correo ?? "",
-        direccionprov: this.proveedoresForm.value!.direccion ?? "",
-        nombre: this.proveedoresForm.value!.nombre ?? "",
+      const personalDatos: PersonalEntity = {
+        nombre_personal: this.proveedoresForm.value!.nombre ?? "",
         telefono: this.proveedoresForm.value!.telefono ?? "",
-        sociedad_id : JSON.parse(localStorage.getItem('sociedadid') || "[]")
+        email: this.proveedoresForm.value!.email ?? "",
+        password: this.proveedoresForm.value!.password ?? "",
+        idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
+        sociedad_pertenece : JSON.parse(localStorage.getItem('sociedadid') || "[]"),
+        funcion: 'personal',
+        tipo_ambienteid: '1',
+        idGrupo: '1',
+        id_fiscal: this.proveedoresForm.value!.cedula ?? "",
+        
       }
-      this.httpService.agregarProveedores(proveedorDatos).subscribe(res => {
+      this.httpService.agregarPersonal(personalDatos).subscribe(res => {
         if (res.codigoError == "OK") {
           Swal.fire({
             icon: 'success',
             title: 'Guardado Exitosamente.',
-            text: `Se ha creado el proveedor ${this.proveedoresForm.value.nombre}`,
+            text: `Se ha creado el personal ${this.proveedoresForm.value.nombre}`,
             showConfirmButton: true,
             confirmButtonText: "Ok"
           }).finally(() => {
-            this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['proveedores'] } }]);
+            this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['personal'] } }]);
           });
         } else {
           Swal.fire({
@@ -127,7 +129,7 @@ export class PersonalCreateComponent implements OnInit {
   visualizarProveedores() {
     this.router.navigate([
       '/navegation-cl',
-      { outlets: { contentClient: ['proveedores'] } },
+      { outlets: { contentClient: ['personal'] } },
     ]);
   }
 

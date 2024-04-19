@@ -6,6 +6,7 @@ import { LoginNavComponent } from './components/login-nav/login-nav.component';
 import { LoginComponent } from './components/login/login.component';
 import { GestionarPersonalComponent } from './components/all_components';
 import { PersonalCreateComponent } from './components/personalFactory/personal-create/personal-create.component';
+import { PersonalEditComponent } from './components/personalFactory/personal-edit/personal-edit.component';
 const routes: Routes = [
   {
     path: 'navegation-cl', component: NavegationClComponent,
@@ -68,6 +69,7 @@ const routes: Routes = [
       { path: "movimiento-inventario", component: MovimientoInventariosComponent , outlet: "contentClient" },
       { path: "personal", component: GestionarPersonalComponent, outlet: "contentClient" },
       { path: "personal-create", component: PersonalCreateComponent, outlet: "contentClient" },
+      { path: "personal-edit", component: PersonalEditComponent, outlet: "contentClient" },
     ]
   },
   {
