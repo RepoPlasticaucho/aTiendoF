@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { Sociedades, SociedadesEntity } from '../models/sociedades';
-import { PersonalEntity } from '../models/personal';
+import { Personal, PersonalEntity } from '../models/personal';
 
 const initCorporation: PersonalEntity = {
   idSociedad: '',
@@ -44,8 +44,20 @@ export class PersonalService {
    // return this.sociedad$.asObservable();
  // }
 
+ get obtenerpersonal$(): Observable<PersonalEntity> {
+  return this.personal$.asObservable();
+}
   agregarPersonal(personal: PersonalEntity): Observable<Sociedades> {
     return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/InsertarSociedadPersonal`, personal);
   }
+  
+  obtenerPersonal(sociedad: string): Observable<Personal> {
+    return this.http.get<Personal>(`${environment.apiUrl}sociedades/ObtenerPersonalS?idSociedad=${sociedad}`);
+  }
+
+  asignarPersonal(proveedor: PersonalEntity) {
+    this.personal$.next(proveedor);
+  }
+
 
 }

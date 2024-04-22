@@ -5,6 +5,7 @@ import { faList, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { CiudadesEntity } from 'src/app/models/ciudades';
 import { ProveedoresEntity } from 'src/app/models/proveedores';
 import { CiudadesService } from 'src/app/services/ciudades.service';
+import { PersonalService } from 'src/app/services/personal.service';
 import { ProveedoresService } from 'src/app/services/proveedores.service';
 import Swal from 'sweetalert2';
 
@@ -35,24 +36,13 @@ export class PersonalEditComponent implements OnInit {
 
   constructor(private readonly httpService: ProveedoresService,
     private router: Router,
-    private readonly httpServiceCiudades: CiudadesService) { }
+    private readonly httpPersonal: PersonalService,
+  ) { }
 
   ngOnInit(): void {
-    this.httpServiceCiudades.obtenerCiudadesAll().subscribe(res => {
-      if (res.codigoError != "OK") {
-        Swal.fire({
-          icon: 'error',
-          title: 'No se pudo obtener las ciudades.',
-          text: res.descripcionError,
-          showConfirmButton: false,
-        });
-      } else {
-        this.lstCiudades = res.lstCiudades;
-      }
-    });
 
-    this.httpService.obtenerproveedor$.subscribe((res) => {
-      if (res.id == '') {
+    this.httpPersonal.obtenerpersonal$.subscribe((res) => {
+      if (res.idSociedad == '') {
         Swal.fire({
           icon: 'error',
           title: 'Ha ocurrido un error.',
@@ -60,38 +50,13 @@ export class PersonalEditComponent implements OnInit {
           showConfirmButton: false,
         });
       } else {
-        this.codigo = res.id ?? '';
-        this.proveedoresForm.get('nombre')?.setValue(res.nombre);
-        this.proveedoresForm.get('id_fiscal')?.setValue(res.id_fiscal);
-        this.proveedoresForm.get('correo')?.setValue(res.correo);
+        this.codigo = res.idSociedad ?? '';
+        this.proveedoresForm.get('nombre')?.setValue(res.nombre_personal);
+        this.proveedoresForm.get('correo')?.setValue(res.email);
         this.proveedoresForm.get('telefono')?.setValue(res.telefono);
-        this.proveedoresForm.get('ciudad')?.setValue(res.ciudad!);
-        this.proveedoresForm.get('direccion')?.setValue(res.direccionprov);
       }
     });
 
-    // Extracción de la ciudad
-    const ciudadnew: CiudadesEntity = {
-      idCiudad: '',
-      ciudad: this.proveedoresForm.value!.ciudad ?? '',
-      provinciaid: '',
-      provincia: '',
-      codigo: '',
-      created_at: '',
-      update_at: '',
-    };
-    this.httpServiceCiudades.obtenerCiudadesN(ciudadnew).subscribe((res) => {
-      if (res.codigoError != 'OK') {
-        Swal.fire({
-          icon: 'error',
-          title: 'No se pudo obtener la Sociedad.',
-          text: res.descripcionError,
-          showConfirmButton: false,
-        });
-      } else {
-        this.lstCiudades2 = res.lstCiudades;
-      }
-    });
   }
 
   onSubmit() {
@@ -131,39 +96,7 @@ export class PersonalEditComponent implements OnInit {
     }
   }
 
-  changeGroup(e: any) {
-
-    if (e.target.value == 0) {
-      this.selectCiudad = true;
-    } else {
-      this.selectCiudad = false;
-    }
-    if (e.target.value == null || undefined) {
-
-    } else {
-      const ciudad: CiudadesEntity = {
-        idCiudad: '',
-        ciudad: e.target.value,
-        provinciaid: '',
-        provincia: '',
-        codigo: '',
-        created_at: '',
-        update_at: ''
-      }
-      this.httpServiceCiudades.obtenerCiudadesN(ciudad).subscribe(res => {
-        if (res.codigoError != "OK") {
-          Swal.fire({
-            icon: 'error',
-            title: 'No se pudo obtener las ciudades.',
-            text: res.descripcionError,
-            showConfirmButton: false,
-          });
-        } else {
-          this.lstCiudades2 = res.lstCiudades;
-        }
-      })
-    }
-  }
+  
 
   visualizarProveedores() {
     this.router.navigate([

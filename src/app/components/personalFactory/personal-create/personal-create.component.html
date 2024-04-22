@@ -3,7 +3,7 @@
         <div class="card-header">
             <div class="row mx-3">
                 <fa-icon [icon]="faList" [size]="'3x'" style="color: #636363;"></fa-icon>
-                <h1 class="mx-5 " style="color: #636363;">Agregar Personaaal</h1>
+                <h1 class="mx-5 " style="color: #636363;">Agregar Personal</h1>
                 <div style="position: absolute;right:0;" class="mx-3">
                     <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip"
                         data-placement="bottom" title="Regresar a modelos" (click)="visualizarProveedores()">
@@ -14,24 +14,26 @@
         <div class="card-body ">
             <form [formGroup]="proveedoresForm" (ngSubmit)="onSubmit()">
                 <div class="form-group ">
-                    <label for="nombre" style="margin: 0;">Nombre</label>
-                    <input type="text " class="form-control " id="nombre" placeholder="Ingrese el nombre del proveedor."
-                        formControlName="nombre">
+                    <label for="nombre_personal" style="margin: 0;">Nombre</label>
+                    <input type="text " class="form-control " id="nombre_personal" placeholder="Ingrese el nombre del personal."
+                        formControlName="nombre_personal">
                     <small
-                        *ngIf="proveedoresForm.controls['nombre'].invalid && (proveedoresForm.controls['nombre'].dirty || proveedoresForm.controls['nombre'].touched)">
-                        <small *ngIf="proveedoresForm.controls['nombre'].errors?.['required']" style="color: red;">
-                            Debe ingresar el nombre del proveedor.
+                        *ngIf="proveedoresForm.controls['nombre_personal'].invalid && (proveedoresForm.controls['nombre_personal'].dirty || proveedoresForm.controls['nombre_personal'].touched)">
+                        <small *ngIf="proveedoresForm.controls['nombre_personal'].errors?.['required']" style="color: red;">
+                            Debe ingresar el nombre del personal.
                         </small>
                     </small>
                 </div>
-                <div class="form-group ">
-                    <label for="email" style="margin: 0;">Cedula</label>
-                    <input type="text " class="form-control " id="cedula" placeholder="Ingrese la cedula personal."
-                        formControlName="cedula">
-                    <small
-                        *ngIf="proveedoresForm.controls['email'].invalid && (proveedoresForm.controls['email'].dirty || proveedoresForm.controls['email'].touched)">
-                        <small *ngIf="proveedoresForm.controls['email'].errors?.['required']" style="color: red;">
+                <div class="form-group">
+                    <label for="cedula" style="margin: 0;">Cedula</label>
+                    <input type="text" class="form-control" id="cedula" placeholder="Ingrese la cedula personal."
+                        formControlName="cedula" pattern="[0-9]{10}">
+                    <small *ngIf="proveedoresForm.controls['cedula'].invalid && (proveedoresForm.controls['cedula'].dirty || proveedoresForm.controls['cedula'].touched)">
+                        <small *ngIf="proveedoresForm.controls['cedula'].errors?.['required']" style="color: red;">
                             Debe ingresar la cedula del personal.
+                        </small>
+                        <small *ngIf="proveedoresForm.controls['cedula'].errors?.['pattern']" style="color: red;">
+                            La cedula debe contener exactamente 10 números.
                         </small>
                     </small>
                 </div>
@@ -45,10 +47,16 @@
                             Debe ingresar el email del personal.
                         </small>
                     </small>
+                    <small
+                        *ngIf="proveedoresForm.controls['email'].invalid && (proveedoresForm.controls['email'].dirty || proveedoresForm.controls['email'].touched)">
+                        <small *ngIf="proveedoresForm.controls['email'].errors?.['email']" style="color: red;">
+                            Debe ingresar un email valido.
+                        </small>
+                    </small>
                 </div>
                 <div class="form-group ">
-                    <label for="nombre" style="margin: 0;">Password</label>
-                    <input type="text " class="form-control " id="password" placeholder="Ingrese la contraseña."
+                    <label for="password" style="margin: 0;">Password</label>
+                    <input type="password" class="form-control " id="password" placeholder="Ingrese la contraseña."
                         formControlName="password">
                     <small
                         *ngIf="proveedoresForm.controls['password'].invalid && (proveedoresForm.controls['password'].dirty || proveedoresForm.controls['password'].touched)">
@@ -57,16 +65,35 @@
                         </small>
                     </small>
                 </div>
+                
+<div class="form-group">
+    <label for="confirmPassword" style="margin: 0;">Confirmar Contraseña</label>
+    <input type="password" class="form-control" id="confirmPassword" placeholder="Confirme la contraseña." formControlName="confirmPassword">
+    <small *ngIf="proveedoresForm.controls['confirmPassword'].invalid && (proveedoresForm.controls['confirmPassword'].dirty || proveedoresForm.controls['confirmPassword'].touched)">
+        <small *ngIf="proveedoresForm.controls['confirmPassword'].errors?.['required']" style="color: red;">
+            Las contraseñas no coinciden.
+        </small>
+    </small>
+</div>
                 <div class="form-group ">
-                    <label for="nombre" style="margin: 0;">Telefono</label>
+                    <label for="telefono" style="margin: 0;">Telefono</label>
                     <input type="text " class="form-control " id="telefono" placeholder="Ingrese el telefono."
-                        formControlName="telefono">
+                        formControlName="telefono" maxlength="10">
                     <small
                         *ngIf="proveedoresForm.controls['telefono'].invalid && (proveedoresForm.controls['telefono'].dirty || proveedoresForm.controls['telefono'].touched)">
                         <small *ngIf="proveedoresForm.controls['telefono'].errors?.['required']" style="color: red;">
                             Debe ingresar el telefono.
                         </small>
                     </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="almacen" style="margin: 0;">Almacen</label>
+                    <select class="form-control" id="almacen" formControlName="almacen">
+                        <option [value]="0" selected>Seleccione un grupo</option>
+                        <option *ngFor="let almacen of almacenes" [value]="almacen.idAlmacen">{{almacen.nombre_almacen}}</option>
+                    </select>
+
                 </div>
      
      
