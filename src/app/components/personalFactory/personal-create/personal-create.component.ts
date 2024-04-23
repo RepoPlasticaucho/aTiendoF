@@ -123,7 +123,9 @@ export class PersonalCreateComponent implements OnInit {
         tipo_ambienteid: '1',
         idGrupo: '1',
         id_fiscal: this.proveedoresForm.value!.cedula ?? "",  
+        almacen_personal_id: this.proveedoresForm.value!.almacenes ?? ""
       }
+
       this.httpService.agregarPersonal(personalDatos).subscribe(res => {
         if (res.codigoError == "OK") {
           Swal.fire({

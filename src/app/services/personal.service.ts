@@ -50,7 +50,10 @@ export class PersonalService {
   agregarPersonal(personal: PersonalEntity): Observable<Sociedades> {
     return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/InsertarSociedadPersonal`, personal);
   }
-  
+  actualizarPersonal(sociedad: PersonalEntity): Observable<Sociedades> {
+    return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/ModificarPersonal`, sociedad);
+  }
+
   obtenerPersonal(sociedad: string): Observable<Personal> {
     return this.http.get<Personal>(`${environment.apiUrl}sociedades/ObtenerPersonalS?idSociedad=${sociedad}`);
   }

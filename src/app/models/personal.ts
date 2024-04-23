@@ -26,5 +26,6 @@ export interface PersonalEntity {
     pass_certificado?: string;
     nombre_personal: string;
     sociedad_pertenece: string;
+    almacen_personal_id?: string;
     
 }

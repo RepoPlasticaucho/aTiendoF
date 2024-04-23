@@ -46,6 +46,20 @@
                         </small>
                     </small>
                 </div>
+
+                <div class="form-group">
+                    <label for="almacen">Almacen</label>
+                    <select class="form-control" formControlName="almacen">
+                        <option *ngFor="let almacen of almacenes" [value]="almacen.nombre_almacen">
+                            {{almacen.nombre_almacen}}
+                        </option>
+                    </select>
+                    <small *ngIf="selectCiudad">
+                        <small *ngIf="selectCiudad" style="color: red; ">
+                            Debe seleccionar una ciudad.
+                        </small>
+                    </small>
+                </div>
                 
                 <button type="submit" class="btn btn-primary">
                     <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>

@@ -18,6 +18,8 @@
                     <th style="width: 15%; ">Nombre</th>
                     <th style="width: 10%; ">Correo</th>
                     <th style="width: 15%; ">Telefono</th>
+                    <th style="width: 15%; ">Almacen</th>
+
                     <th style="width: 14%; "></th>
                 </tr>
             </thead>
@@ -26,13 +28,14 @@
                     <td>{{proveedor.nombre_personal}}</td>
                     <td>{{proveedor.email}}</td>
                     <td>{{proveedor.telefono}}</td>
+                    <td>{{proveedor.almacen_personal_id}}</td>
                     <td style="text-align: center;">
                         <td style="text-align: center;">
                             <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'lg'" style="margin-right: 5px;"
-                                data-placement="bottom" title="Editar Modelo Producto"
+                                data-placement="bottom" title="Editar Personañ"
                                 (click)=" editarPersonal(proveedor) "></fa-icon>
                             <fa-icon [icon]="faTrashAlt " class="btn btn-danger " [size]=" 'lg' " data-placement="bottom "
-                                title="Eliminar Modelo Producto" (click)="eliminarSociedades(proveedor)"></fa-icon>
+                                title="Eliminar Personal" (click)="eliminarSociedades(proveedor)"></fa-icon>
                     </td>
                 </tr>
             </tbody>
