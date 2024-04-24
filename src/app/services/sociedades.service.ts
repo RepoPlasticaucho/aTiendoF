@@ -43,6 +43,11 @@ export class SociedadesService {
   agregarSociedad(sociedad: SociedadesEntity): Observable<Sociedades> {
     return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/InsertarSociedad`, sociedad);
   }
+
+  obtenerAlmacenPertenece(sociedadId: string): Observable<string> {
+    return this.http.get<string>(`${environment.apiUrl}sociedades/ObtenerAlmacenPersonalIdPorIdPersonal?idSociedad=${sociedadId}`);
+  }
+  
   obtenerSociedades(): Observable<Sociedades> {
     return this.http.get<Sociedades>(`${environment.apiUrl}sociedades/ObtenerSociedades`);
   }

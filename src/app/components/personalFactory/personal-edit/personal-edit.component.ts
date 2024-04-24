@@ -13,6 +13,8 @@ import { PersonalService } from 'src/app/services/personal.service';
 import { ProveedoresService } from 'src/app/services/proveedores.service';
 import { SociedadesService } from 'src/app/services/sociedades.service';
 import Swal from 'sweetalert2';
+import * as CryptoJS from 'crypto-js';
+
 
 @Component({
   selector: 'app-personal-edit',
@@ -24,6 +26,8 @@ export class PersonalEditComponent implements OnInit {
   faList = faList;
   faTimes = faTimes;
   faSave = faSave;
+  encPass: string | undefined;
+
   //Variables para ejecucion del Form
   lstCiudades: CiudadesEntity[] = [];
   lstCiudades2: CiudadesEntity[] = [];
@@ -31,6 +35,7 @@ export class PersonalEditComponent implements OnInit {
   selectCiudad: boolean = false;
   private codigo: string = '';
   idPersonal: string = '';
+  idAlmacenActual: string = '';
   //Creación de la variable para formulario
   proveedoresForm = new FormGroup({
     nombre: new FormControl(''),
@@ -38,19 +43,32 @@ export class PersonalEditComponent implements OnInit {
     telefono: new FormControl('', [Validators.required]),
     almacenes: new FormControl('', [Validators.required]),
     almacen: new FormControl('', [Validators.required]),
+    password: new FormControl('',),
+    confirmarPassword: new FormControl('',),
   })
 
   constructor(private readonly httpService: ProveedoresService,
     private router: Router,
     private readonly httpPersonal: PersonalService,
     private readonly httpServiceAlmacen: AlmacenesService,
-    private readonly httpServiceSociedades: PersonalService
+    private readonly httpServiceSociedades: PersonalService,
+    private readonly httpServiceSociedad: SociedadesService
 
   ) { }
 
   almacenes: AlmacenesEntity[] = [];
   almacenSeleccionado: string = '';
   nombreAlmacenSeleccionado: string = '';
+  idAlmacenPersonal: string = '';
+  password: string = '';
+  confirmarPassword: string = '';
+  cambiarContrasena: boolean = false;
+
+
+  toggleCambiarContrasena() {
+    console.log("Cambiar contraseña");
+    this.cambiarContrasena = !this.cambiarContrasena;
+  }
 
   ngOnInit(): void {
 
@@ -63,6 +81,9 @@ export class PersonalEditComponent implements OnInit {
           showConfirmButton: false,
         });
       } else {
+        console.log("Res:", res);
+        this.idAlmacenPersonal = res.almacen_personal_id ?? '';
+
         this.codigo = res.idSociedad ?? '';
         this.proveedoresForm.get('nombre')?.setValue(res.nombre_personal);
         this.proveedoresForm.get('correo')?.setValue(res.email);
@@ -72,8 +93,16 @@ export class PersonalEditComponent implements OnInit {
         this.proveedoresForm.get('almacen')?.setValue(res.almacen_personal_id!);
         this.nombreAlmacenSeleccionado = this.almacenes.find(x => x.idAlmacen == this.almacenSeleccionado)?.nombre_almacen ?? '';
         this.idPersonal = res.idSociedad ?? '';
-      }
+        
+
+        //Obtener el almacen en el que esta el personal
+        this.httpServiceSociedad.obtenerAlmacenPertenece(this.idPersonal).subscribe(res => {
+          this.idAlmacenActual = res
+      })    
+    };
     });
+
+
     
     const sociedadNew: SociedadesEntity = {
       idGrupo: '',
@@ -105,10 +134,48 @@ export class PersonalEditComponent implements OnInit {
   }
 
   onSubmit() {
+    //Imprimir el nuevo valor del formulario
+  
+    if(this.cambiarContrasena){
+      //Si las contraseñas no coinciden
+      if(this.proveedoresForm.value.password != this.proveedoresForm.value.confirmarPassword){
+        Swal.fire({
+          icon: 'error',
+          title: 'Las contraseñas no coinciden.',
+          text: 'Las contraseñas no coinciden, por favor verifique.',
+          showConfirmButton: false,
+        });
+        return;
+      }
+
+      //Verificar que la contraseña tenga al menos 8 caracteres
+      if(this.proveedoresForm.value.password!.length < 8){
+        Swal.fire({
+          icon: 'error',
+          title: 'La contraseña debe tener al menos 8 caracteres.',
+          text: 'Por favor ingrese una contraseña con al menos 8 caracteres.',
+          showConfirmButton: false,
+        });
+        return;
+      }
+    }
+    
+
     if (!this.proveedoresForm.valid) {
       this.proveedoresForm.markAllAsTouched();
       console.log("Error");
     } else {
+      console.log("Alamacen: ", this.proveedoresForm.value.almacenes);
+      console.log("Almacenes: ", this.proveedoresForm.value.almacen);
+
+
+      if(this.proveedoresForm.value.almacenes == this.proveedoresForm.value.almacen){
+        this.proveedoresForm.value.almacenes = this.idAlmacenActual;
+        console.log("Entro aca");
+
+        console.log("Almacen personal: ", this.idAlmacenActual);
+      }
+
       const proveedorDatos: PersonalEntity = {
         nombre_personal: this.proveedoresForm.value!.nombre ?? "",
         telefono: this.proveedoresForm.value!.telefono ?? "",
@@ -121,6 +188,7 @@ export class PersonalEditComponent implements OnInit {
         idGrupo: '',
         almacen_personal_id: this.proveedoresForm.value!.almacenes ?? ""
       }
+
 
       this.httpServiceSociedades.actualizarPersonal(proveedorDatos).subscribe(res => {
         if (res.codigoError == "OK") {
@@ -142,6 +210,11 @@ export class PersonalEditComponent implements OnInit {
           });
         }
       })
+
+      //Actualizar la contraseña
+      if (this.cambiarContrasena) {
+        this.actualizar();
+      }
     }
   }
 
@@ -178,6 +251,7 @@ export class PersonalEditComponent implements OnInit {
           });
         } else {
           this.almacenes = res.lstAlmacenes;
+
         }
       })
 
@@ -191,5 +265,87 @@ export class PersonalEditComponent implements OnInit {
     ]);
   }
 
+
+
+  
+  actualizar(){
+    const passnuevo = this.proveedoresForm.value!.password ?? "";
+    const passconfirm = this.proveedoresForm.value!.confirmarPassword ?? "";
+
+    if (!this.proveedoresForm.valid) {
+      this.proveedoresForm.markAllAsTouched();
+      console.log("Error");
+    } else {
+      
+      if ( passconfirm !== passnuevo) {
+        
+        Swal.fire({
+          icon: 'error',
+          title: 'Las contraseñas no coinciden.',
+          text: 'Ingrese contraseñas validas',
+          showConfirmButton: false,
+        });
+      }else{
+        if (passnuevo == passconfirm) {
+          var salt = CryptoJS.enc.Base64.parse("SXZhbiBNZWR2ZWRldg==");
+          var iv = CryptoJS.enc.Hex.parse("69135769514102d0eded589ff874cacd");
+          var key564Bits10000Iterations = CryptoJS.PBKDF2("Venus21!", salt, {keySize: 256/32 + 128/32, iterations: 10000, hasher: CryptoJS.algo.SHA512});
+
+          var encrypted = CryptoJS.AES.encrypt(passnuevo, key564Bits10000Iterations, {
+            iv: iv,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7
+          });
+
+          this.encPass= encrypted.toString();
+
+          const userEntity: SociedadesEntity = {
+            idGrupo: '',
+            nombre_comercial: '',
+            tipo_ambienteid: '',
+            id_fiscal: '',
+            email: '',
+            telefono: '',
+            password: this.encPass,
+            funcion: '',
+            idSociedad: this.idPersonal,
+            razon_social: ''
+          }
+
+          this.httpServiceSociedad.actualizarPass(userEntity).subscribe(res => {
+            if (res.codigoError == "OK") {
+              Swal.fire({
+                icon: 'success',
+                title: 'Actualizado Correctamente.',
+                text: `Se ha actualizado la información`,
+                showConfirmButton: true,
+                confirmButtonText: "Ok"
+              }).finally(() => {
+                localStorage.setItem('passwa',passnuevo);
+                this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['personal'] } }]);
+              }
+            );
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Ha ocurrido un error.',
+                text: res.descripcionError,
+                showConfirmButton: false,
+              });
+            }
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'No coinciden las contreseñas',
+            text: 'Contraseña nueva y confirmacion no coinciden',
+            showConfirmButton: false,
+          });
+        }
+
+      }
+      
+    }
+  }
 }
 
