@@ -12,14 +12,14 @@
             </div>
         </div>
         <div class="card-body ">
-            <form [formGroup]="proveedoresForm" (ngSubmit)="onSubmit()">
+            <form [formGroup]="personalForm" (ngSubmit)="onSubmit()">
                 <div class="form-group ">
                     <label for="nombre" style="margin: 0;">Nombre</label>
                     <input type="text " class="form-control " id="nombre" placeholder="Ingrese el nombre del proveedor."
                         formControlName="nombre">
                     <small
-                        *ngIf="proveedoresForm.controls['nombre'].invalid && (proveedoresForm.controls['nombre'].dirty || proveedoresForm.controls['nombre'].touched)">
-                        <small *ngIf="proveedoresForm.controls['nombre'].errors?.['required']" style="color: red;">
+                        *ngIf="personalForm.controls['nombre'].invalid && (personalForm.controls['nombre'].dirty || personalForm.controls['nombre'].touched)">
+                        <small *ngIf="personalForm.controls['nombre'].errors?.['required']" style="color: red;">
                             Debe ingresar el nombre del proveedor.
                         </small>
                     </small>
@@ -30,8 +30,8 @@
                     <input type="text " class="form-control " id="correo" placeholder="Ingrese el correo del proveedor."
                         formControlName="correo">
                     <small
-                        *ngIf="proveedoresForm.controls['correo'].invalid && (proveedoresForm.controls['correo'].dirty || proveedoresForm.controls['correo'].touched)">
-                        <small *ngIf="proveedoresForm.controls['correo'].errors?.['required']" style="color: red;">
+                        *ngIf="personalForm.controls['correo'].invalid && (personalForm.controls['correo'].dirty || personalForm.controls['correo'].touched)">
+                        <small *ngIf="personalForm.controls['correo'].errors?.['required']" style="color: red;">
                             Debe ingresar el correo del proveedor.
                         </small>
                     </small>
@@ -41,8 +41,8 @@
                     <input type="text " class="form-control " id="telefono" placeholder="Ingrese el telefono del proveedor."
                         formControlName="telefono">
                     <small
-                        *ngIf="proveedoresForm.controls['telefono'].invalid && (proveedoresForm.controls['telefono'].dirty || proveedoresForm.controls['telefono'].touched)">
-                        <small *ngIf="proveedoresForm.controls['telefono'].errors?.['required']" style="color: red;">
+                        *ngIf="personalForm.controls['telefono'].invalid && (personalForm.controls['telefono'].dirty || personalForm.controls['telefono'].touched)">
+                        <small *ngIf="personalForm.controls['telefono'].errors?.['required']" style="color: red;">
                             Debe ingresar el telefono del proveedor.
                         </small>
                     </small>
@@ -66,6 +66,7 @@
                 <button type="button" class="btn btn-primary" (click)="toggleCambiarContrasena()">
                   <span>{{ cambiarContrasena ? 'Cancelar Cambiar Contraseña' : 'Cambiar Contraseña' }}</span>
                 </button>
+                
                 <br>
                 <br>
                 

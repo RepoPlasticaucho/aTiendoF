@@ -60,11 +60,24 @@ export class LoginComponent {
         idSociedad: '',
         razon_social: ''
       }
+      console.log("IDSOCIEDAD1: ", userEntity);
 
-      // console.log(userEntity);
 
       this.httpService.obtenerUsuario(userEntity).subscribe(res => {
+
+        //Si la sociedad es undefined se notifica y se retorna al login
+        if (res.lstSociedades[0] == undefined) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Credenciales Incorrectas.'
+          }).finally(() => {
+            this.router.navigate(['/login-nav']);
+          });
+        }
+
         const idsociedad = res.lstSociedades[0].idSociedad;
+
+
         localStorage.setItem('sociedadid', idsociedad);
         if (res.codigoError == "OK") {
           var salt = CryptoJS.enc.Base64.parse("SXZhbiBNZWR2ZWRldg==");
@@ -103,7 +116,7 @@ export class LoginComponent {
                 } else{
                   Swal.fire({
                     icon: 'error',
-                    title: 'Contraseña Incorrecta.'
+                    title: 'Credenciales Incorrectas.'
                   }).finally(() => {
                     this.router.navigate(['/login-nav']);
                   });
@@ -120,7 +133,7 @@ export class LoginComponent {
                 } else {
                   Swal.fire({
                     icon: 'error',
-                    title: 'Contraseña Incorrecta.'
+                    title: 'Credenciales Incorrectas.'
                   }).finally(() => {
                     this.router.navigate(['/login-nav']);
                   });
@@ -129,11 +142,12 @@ export class LoginComponent {
               break;
 
             default:
+
+    
               this.httpService.obtenerSociedadL(sociedadEntity).subscribe(res => {
                 if (res.codigoError == "OK") {
                   const rol = res.lstSociedades[0].funcion;
                   const passwa = this.passwre;
-                  // console.log(passwa);
                   localStorage.setItem('passwa', passwa);
                   switch (rol) {
                     case "admin":
@@ -167,11 +181,12 @@ export class LoginComponent {
                 } else {
                   Swal.fire({
                     icon: 'error',
-                    title: 'Contraseña Incorrecta.'
+                    title: 'Credenciales Incorrectas.'
                   }).finally(() => {
                     this.router.navigate(['/login-nav']);
                   });
                 }
+              
 
               });
               break;

@@ -37,7 +37,7 @@ export class PersonalEditComponent implements OnInit {
   idPersonal: string = '';
   idAlmacenActual: string = '';
   //Creación de la variable para formulario
-  proveedoresForm = new FormGroup({
+  personalForm = new FormGroup({
     nombre: new FormControl(''),
     correo: new FormControl('', [Validators.required]),
     telefono: new FormControl('', [Validators.required]),
@@ -85,12 +85,12 @@ export class PersonalEditComponent implements OnInit {
         this.idAlmacenPersonal = res.almacen_personal_id ?? '';
 
         this.codigo = res.idSociedad ?? '';
-        this.proveedoresForm.get('nombre')?.setValue(res.nombre_personal);
-        this.proveedoresForm.get('correo')?.setValue(res.email);
-        this.proveedoresForm.get('telefono')?.setValue(res.telefono);
+        this.personalForm.get('nombre')?.setValue(res.nombre_personal);
+        this.personalForm.get('correo')?.setValue(res.email);
+        this.personalForm.get('telefono')?.setValue(res.telefono);
         this.almacenSeleccionado = res.almacen_personal_id ?? '';
-        this.proveedoresForm.get('almacenes')?.setValue(this.almacenSeleccionado);
-        this.proveedoresForm.get('almacen')?.setValue(res.almacen_personal_id!);
+        this.personalForm.get('almacenes')?.setValue(this.almacenSeleccionado);
+        this.personalForm.get('almacen')?.setValue(res.almacen_personal_id!);
         this.nombreAlmacenSeleccionado = this.almacenes.find(x => x.idAlmacen == this.almacenSeleccionado)?.nombre_almacen ?? '';
         this.idPersonal = res.idSociedad ?? '';
         
@@ -138,7 +138,7 @@ export class PersonalEditComponent implements OnInit {
   
     if(this.cambiarContrasena){
       //Si las contraseñas no coinciden
-      if(this.proveedoresForm.value.password != this.proveedoresForm.value.confirmarPassword){
+      if(this.personalForm.value.password != this.personalForm.value.confirmarPassword){
         Swal.fire({
           icon: 'error',
           title: 'Las contraseñas no coinciden.',
@@ -149,7 +149,7 @@ export class PersonalEditComponent implements OnInit {
       }
 
       //Verificar que la contraseña tenga al menos 8 caracteres
-      if(this.proveedoresForm.value.password!.length < 8){
+      if(this.personalForm.value.password!.length < 8){
         Swal.fire({
           icon: 'error',
           title: 'La contraseña debe tener al menos 8 caracteres.',
@@ -161,32 +161,32 @@ export class PersonalEditComponent implements OnInit {
     }
     
 
-    if (!this.proveedoresForm.valid) {
-      this.proveedoresForm.markAllAsTouched();
+    if (!this.personalForm.valid) {
+      this.personalForm.markAllAsTouched();
       console.log("Error");
     } else {
-      console.log("Alamacen: ", this.proveedoresForm.value.almacenes);
-      console.log("Almacenes: ", this.proveedoresForm.value.almacen);
+      console.log("Alamacen: ", this.personalForm.value.almacenes);
+      console.log("Almacenes: ", this.personalForm.value.almacen);
 
 
-      if(this.proveedoresForm.value.almacenes == this.proveedoresForm.value.almacen){
-        this.proveedoresForm.value.almacenes = this.idAlmacenActual;
+      if(this.personalForm.value.almacenes == this.personalForm.value.almacen){
+        this.personalForm.value.almacenes = this.idAlmacenActual;
         console.log("Entro aca");
 
         console.log("Almacen personal: ", this.idAlmacenActual);
       }
 
       const proveedorDatos: PersonalEntity = {
-        nombre_personal: this.proveedoresForm.value!.nombre ?? "",
-        telefono: this.proveedoresForm.value!.telefono ?? "",
-        email: this.proveedoresForm.value!.correo ?? "",
+        nombre_personal: this.personalForm.value!.nombre ?? "",
+        telefono: this.personalForm.value!.telefono ?? "",
+        email: this.personalForm.value!.correo ?? "",
         password: "",
         idSociedad: this.idPersonal,
         sociedad_pertenece : "",
         funcion: '',
         tipo_ambienteid: '',
         idGrupo: '',
-        almacen_personal_id: this.proveedoresForm.value!.almacenes ?? ""
+        almacen_personal_id: this.personalForm.value!.almacenes ?? ""
       }
 
 
@@ -195,7 +195,7 @@ export class PersonalEditComponent implements OnInit {
           Swal.fire({
             icon: 'success',
             title: 'Guardado Exitosamente.',
-            text: `Se ha actualizado el proveedor ${this.proveedoresForm.value.nombre}`,
+            text: `Se ha actualizado el proveedor ${this.personalForm.value.nombre}`,
             showConfirmButton: true,
             confirmButtonText: "Ok"
           }).finally(() => {
@@ -269,11 +269,11 @@ export class PersonalEditComponent implements OnInit {
 
   
   actualizar(){
-    const passnuevo = this.proveedoresForm.value!.password ?? "";
-    const passconfirm = this.proveedoresForm.value!.confirmarPassword ?? "";
+    const passnuevo = this.personalForm.value!.password ?? "";
+    const passconfirm = this.personalForm.value!.confirmarPassword ?? "";
 
-    if (!this.proveedoresForm.valid) {
-      this.proveedoresForm.markAllAsTouched();
+    if (!this.personalForm.valid) {
+      this.personalForm.markAllAsTouched();
       console.log("Error");
     } else {
       

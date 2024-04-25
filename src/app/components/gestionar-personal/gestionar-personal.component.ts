@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { faList, faEdit, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faUserFriends } from '@fortawesome/free-solid-svg-icons';
+
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
@@ -31,7 +33,6 @@ export class GestionarPersonalComponent implements OnInit {
 
   constructor(private readonly httpService: PersonalService,
     private readonly httpServiceSociedades: SociedadesService,
-    private readonly httpServiceAlmacen: AlmacenesService,
     private router: Router) { }
 
 
@@ -41,36 +42,19 @@ export class GestionarPersonalComponent implements OnInit {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
       },
       paging: true,
-      pageLength: 100,
       search: false,
       searching: true,
       ordering: true,
       info: true,
-      responsive: true
+      responsive:true
     }
+
     Swal.fire({
       title: 'CARGANDO...',
       html: 'Se están cargando los proveedores.',
-      timer: 1000000,
+      timer: 30000,
       didOpen: () => {
         Swal.showLoading();
-
-        const sociedad : PersonalEntity ={
-          idGrupo: '',
-          idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
-          razon_social: '',
-          nombre_comercial: '',
-          id_fiscal: '',
-          email: '',
-          telefono: '',
-          tipo_ambienteid: '',
-          password: '',
-          funcion: '',
-          nombre_personal: '',
-          sociedad_pertenece: ''
-        }
-        
-
         this.httpService.obtenerPersonal(localStorage.getItem('sociedadid') || "").subscribe(res => {
           if (res.codigoError != "OK") {
             Swal.fire({
@@ -80,13 +64,7 @@ export class GestionarPersonalComponent implements OnInit {
               showConfirmButton: false,
             });
           } else {
-            console.log("res aca"+res);
             this.lstProveedores = res.lstSociedades;
-            console.log("aqui");
-            console.log(this.lstProveedores);
-            //Agregar solo los que tiene sociedad_pertenece igual a la sociedadid del localstorage, el campo sociedad_pertenece no esta en la entidad 
-            console.log(this.lstProveedores);
-
             this.dtTrigger.next('');
             Swal.close();
           }
