@@ -140,6 +140,7 @@ export class GestionarPersonalComponent implements OnInit {
 
 
   editarPersonal(proveedor: PersonalEntity): void {
+
     this.httpService.asignarPersonal(proveedor);
     // console.log(producto);
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['personal-edit'] } }]);

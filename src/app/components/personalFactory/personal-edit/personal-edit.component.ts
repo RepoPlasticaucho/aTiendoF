@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { faList, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faList, faSave, faTimes, faUnlock } from '@fortawesome/free-solid-svg-icons';
 import { AlmacenesEntity } from 'src/app/models/almacenes';
 import { CiudadesEntity } from 'src/app/models/ciudades';
 import { PersonalEntity } from 'src/app/models/personal';
@@ -26,6 +26,7 @@ export class PersonalEditComponent implements OnInit {
   faList = faList;
   faTimes = faTimes;
   faSave = faSave;
+  faUnlock = faUnlock;
   encPass: string | undefined;
 
   //Variables para ejecucion del Form
@@ -81,8 +82,16 @@ export class PersonalEditComponent implements OnInit {
           showConfirmButton: false,
         });
       } else {
-        console.log("Res:", res);
         this.idAlmacenPersonal = res.almacen_personal_id ?? '';
+
+        
+        Swal.fire({
+          title: 'Cargando...',
+          didOpen: () => {
+            Swal.showLoading()
+          }
+        });
+        
 
         this.codigo = res.idSociedad ?? '';
         this.personalForm.get('nombre')?.setValue(res.nombre_personal);
@@ -93,14 +102,15 @@ export class PersonalEditComponent implements OnInit {
         this.personalForm.get('almacen')?.setValue(res.almacen_personal_id!);
         this.nombreAlmacenSeleccionado = this.almacenes.find(x => x.idAlmacen == this.almacenSeleccionado)?.nombre_almacen ?? '';
         this.idPersonal = res.idSociedad ?? '';
-        
-
         //Obtener el almacen en el que esta el personal
-        this.httpServiceSociedad.obtenerAlmacenPertenece(this.idPersonal).subscribe(res => {
+        this.httpServiceSociedad.obtenerAlmacenPertenece(res.idSociedad).subscribe(res => {
           this.idAlmacenActual = res
-      })    
+          Swal.close();
+    
+        })
+
     };
-    });
+  });
 
 
     
