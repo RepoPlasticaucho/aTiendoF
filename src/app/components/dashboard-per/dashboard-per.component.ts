@@ -19,7 +19,7 @@ export class DashboardPerComponent {
     map(({ matches }) => {
       if (matches) {
         return [
-          { title: 'Ventas', cols: 1, rows: 1, name: "las ventas", figure: "payment" ,  dir: "navegation-facturador/(contentPersonal:almacenegresos)"},
+          { title: 'Ventas', cols: 1, rows: 1, name: "las ventas", figure: "payment" ,  dir: "navegation-facturador/(contentPersonal:ventaprov)"},
           { title: 'Cuadre de Caja', cols: 1, rows: 1, name: "las cuentas", figure: "monetization_on" , dir: "navegation-facturador/(contentPersonal:cuadre-caja)"},
           { title: 'Productos', cols: 1, rows: 1, name: "los productos", figure: "apps" , dir: "navegation-facturador/(contentPersonal:inventarios-productos)"},
           { title: 'Inventarios', cols: 1, rows: 1, name: "los inventarios", figure: "apps" , dir: "navegation-facturador/(contentPersonal:inventarios-almacen)"},
@@ -30,7 +30,7 @@ export class DashboardPerComponent {
       }
 
       return [
-        { title: 'Ventas', cols: 1, rows: 1, name: "las ventas", figure: "payment" ,  dir: "navegation-facturador/(contentPersonal:almacenegresos)"},
+        { title: 'Ventas', cols: 1, rows: 1, name: "las ventas", figure: "payment" ,  dir: "navegation-facturador/(contentPersonal:ventaprov)"},
         { title: 'Cuadre de Caja', cols: 1, rows: 1, name: "las cuentas", figure: "monetization_on" , dir: "navegation-facturador/(contentPersonal:cuadre-caja)"},
         { title: 'Productos', cols: 1, rows: 1, name: "los productos", figure: "apps" , dir: "navegation-facturador/(contentPersonal:inventarios-productos)"},
         { title: 'Inventarios', cols: 1, rows: 1, name: "los inventarios", figure: "apps" , dir: "navegation-facturador/(contentPersonal:inventarios-almacen)"},
@@ -47,7 +47,10 @@ export class DashboardPerComponent {
     private readonly httpService: AlmacenesService,
     private authService: AuthenticationService,
     private location: Location,
-    private router: Router) {}
+    private router: Router) {
+      console.log(localStorage.getItem('sociedadid'));
+      console.log(localStorage.getItem('idalmacenPertenece'));
+    }
     
     logout() {
       this.authService.logout();

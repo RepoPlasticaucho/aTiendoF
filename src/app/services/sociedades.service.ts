@@ -21,7 +21,9 @@ const initCorporation: SociedadesEntity = {
   dir1: '',
   direccion: '',
   clave_certificado: '',
-  nombreGrupo: ''
+  nombreGrupo: '',
+  sociedad_pertenece: '',
+  almacen_personal_id: ''
 }
 
 @Injectable({

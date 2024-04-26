@@ -24,5 +24,7 @@ export interface SociedadesEntity {
     ambiente?: string;
     email_certificado?: string;
     pass_certificado?: string;
+    sociedad_pertenece?: string;
+    almacen_personal_id?: string;
     
 }

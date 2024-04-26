@@ -58,7 +58,9 @@ export class LoginComponent {
         password: '',
         funcion: '',
         idSociedad: '',
-        razon_social: ''
+        razon_social: '',
+        sociedad_pertenece: '',
+        almacen_personal_id: ''
       }
       console.log("IDSOCIEDAD1: ", userEntity);
 
@@ -76,7 +78,8 @@ export class LoginComponent {
         }
 
         const idsociedad = res.lstSociedades[0].idSociedad;
-
+        const idsociedad2 = res.lstSociedades[0].sociedad_pertenece;
+        const idalmacenPertenece = res.lstSociedades[0].almacen_personal_id;
 
         localStorage.setItem('sociedadid', idsociedad);
         if (res.codigoError == "OK") {
@@ -174,6 +177,8 @@ export class LoginComponent {
                           title: 'Bienvenido!!!'
                         }).finally(() => {
                           this.router.navigate(['/navegation-facturador']);
+                          localStorage.setItem('sociedadid', idsociedad2!);
+                          localStorage.setItem('almacenid', idalmacenPertenece!);
                         })
                         break;
 
