@@ -21,8 +21,8 @@ export class DashboardPerComponent {
         return [
           { title: 'Ventas', cols: 1, rows: 1, name: "las ventas", figure: "payment" ,  dir: "navegation-facturador/(contentPersonal:ventaprov)"},
           { title: 'Cuadre de Caja', cols: 1, rows: 1, name: "las cuentas", figure: "monetization_on" , dir: "navegation-facturador/(contentPersonal:cuadre-caja)"},
-          { title: 'Productos', cols: 1, rows: 1, name: "los productos", figure: "apps" , dir: "navegation-facturador/(contentPersonal:inventarios-productos)"},
-          { title: 'Inventarios', cols: 1, rows: 1, name: "los inventarios", figure: "apps" , dir: "navegation-facturador/(contentPersonal:inventarios-almacen)"},
+          { title: 'Productos', cols: 1, rows: 1, name: "los productos", figure: "apps" , dir: "navegation-facturador/(contentPersonal:inventarios)"},
+          { title: 'Inventarios', cols: 1, rows: 1, name: "los inventarios", figure: "apps" , dir: "navegation-facturador/(contentPersonal:inventarios-pedido)"},
           { title: 'Pedido Sugerido', cols: 1, rows: 1, name: "los pedidos sugeridos a Platicaucho", figure: "widgets", dir: "navegation-facturador/(contentPersonal:pedido-sugeridos)"},
           { title: 'Movimientos', cols: 1, rows: 1, name: "los movimientos", figure: "monitor" ,  dir: "navegation-facturador/(contentPersonal:movimientos)"},
 
@@ -32,8 +32,8 @@ export class DashboardPerComponent {
       return [
         { title: 'Ventas', cols: 1, rows: 1, name: "las ventas", figure: "payment" ,  dir: "navegation-facturador/(contentPersonal:ventaprov)"},
         { title: 'Cuadre de Caja', cols: 1, rows: 1, name: "las cuentas", figure: "monetization_on" , dir: "navegation-facturador/(contentPersonal:cuadre-caja)"},
-        { title: 'Productos', cols: 1, rows: 1, name: "los productos", figure: "apps" , dir: "navegation-facturador/(contentPersonal:inventarios-productos)"},
-        { title: 'Inventarios', cols: 1, rows: 1, name: "los inventarios", figure: "apps" , dir: "navegation-facturador/(contentPersonal:inventarios-almacen)"},
+        { title: 'Productos', cols: 1, rows: 1, name: "los productos", figure: "apps" , dir: "navegation-facturador/(contentPersonal:inventarios)"},
+        { title: 'Inventarios', cols: 1, rows: 1, name: "los inventarios", figure: "apps" , dir: "navegation-facturador/(contentPersonal:inventarios-pedido)"},
         { title: 'Pedido Sugerido', cols: 1, rows: 1, name: "los pedidos sugeridos a Platicaucho", figure: "widgets", dir: "navegation-facturador/(contentPersonal:pedido-sugeridos)"},
         { title: 'Movimientos', cols: 1, rows: 1, name: "los movimientos", figure: "monitor" ,  dir: "navegation-facturador/(contentPersonal:movimientos)"},
 

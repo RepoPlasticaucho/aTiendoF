@@ -57,6 +57,65 @@ export class MovimientosComponent implements OnInit {
       info: true,
       responsive: true
     }
+
+    //Si es un facturador solo se carga del almacen al que pertenece
+    if (this.router.url.includes('facturador')) {
+
+      console.log("entro a facturador")
+      console.log(localStorage.getItem('almacenid'));
+      const almacen: AlmacenesEntity = {
+        idAlmacen: localStorage.getItem('almacenid')!,
+        sociedad_id: '',
+        nombresociedad: '',
+        nombre_almacen: '',
+        direccion: '',
+        telefono: '',
+        codigo: '',
+        pto_emision: ''
+      }
+
+      //Obtener el nombre del almacen segun el id
+      this.httpServiceAlm.obtenerAlmacenId(almacen).subscribe(res => {
+        if (res.codigoError != "OK") {
+          Swal.fire({
+            icon: 'error',
+            title: 'No se pudo obtener el nombre del almacen.',
+            text: res.descripcionError,
+            showConfirmButton: false,
+          });
+        } else {
+          almacen.nombre_almacen = res.lstAlmacenes[0].nombre_almacen;
+        }
+      });
+
+      
+
+
+      this.httpService.obtenerDetalleMovimientoAlm(almacen).subscribe(res => {
+        if (res.codigoError != "OK") {
+          Swal.fire({
+            icon: 'error',
+            title: 'No se pudo obtener movimientos.',
+            text: res.descripcionError,
+            showConfirmButton: false,
+          });
+        } else {
+          this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+          this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            // Destruye la tabla existente y elimina los datos
+            dtInstance.destroy();
+
+            // Renderiza la tabla con los nuevos datos
+            this.dtTrigger.next('');
+
+            // Opcional: Reinicia la página a la primera página
+            dtInstance.page('first').draw('page');
+          });
+        }
+      });
+      return
+    }
+
     const sociedadNew: SociedadesEntity = {
       idGrupo: '',
       idSociedad: localStorage.getItem('sociedadid')!,

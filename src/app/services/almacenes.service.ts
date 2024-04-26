@@ -38,6 +38,10 @@ export class AlmacenesService {
     return this.http.get<Almacenes>(`${environment.apiUrl}almacenes/ObtenerAlmacenes`);
   }
 
+  obtenerAlmacenId(idAlmacen: AlmacenesEntity): Observable<Almacenes> {
+    return this.http.get<Almacenes>(`${environment.apiUrl}almacenes/ObtenerAlmacenId/${idAlmacen}`);
+  }
+
   obtenerAlmacenesSociedad(almacen: SociedadesEntity): Observable<Almacenes> {
     return this.http.post<Almacenes>(`${environment.apiUrl}almacenes/ObtenerAlmacenesSociedad`, almacen );
   }

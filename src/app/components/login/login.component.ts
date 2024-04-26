@@ -176,9 +176,12 @@ export class LoginComponent {
                           icon: 'success',
                           title: 'Bienvenido!!!'
                         }).finally(() => {
+
+
                           this.router.navigate(['/navegation-facturador']);
                           localStorage.setItem('sociedadid', idsociedad2!);
                           localStorage.setItem('almacenid', idalmacenPertenece!);
+                          
                         })
                         break;
 

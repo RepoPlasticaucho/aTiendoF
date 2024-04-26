@@ -150,8 +150,23 @@ export class VentaprovComponent implements OnInit {
         console.log(res1)
         if (res1.codigoError == "OK") {
           localStorage.setItem('movimiento_id', res1.lstMovimientos[0].id);
-          localStorage.setItem('estab', res1.lstMovimientos[0].estab!);
-          this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['menuvent'] } }]);
+          localStorage.setItem('estab', res1.lstMovimientos[0].estab!);       
+          
+          //Obtener la ruta actual y segun la ruta redirigir a la pagina de menu de ventas
+          let ruta = this.router.url;
+
+          if(ruta.includes('navegation-cl')){
+            this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['menuvent'] } }]);
+          }
+
+          if(ruta.includes('navegation-facturador')){
+            this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['menuvent'] } }]);
+          }
+
+          
+
+          
+
         }
       })
     })

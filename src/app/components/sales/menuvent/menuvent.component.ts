@@ -742,10 +742,18 @@ export class MenuventComponent implements OnInit {
           confirmButtonText: 'Ok',
         }).finally(() => {
           // this.groupForm.reset();
-          this.router.navigate([
-            '/navegation-cl',
-            { outlets: { contentClient: ['ver-factura'] } },
-          ]);
+
+          let ruta = this.router.url;
+
+          if(ruta.includes('navegation-cl')){
+            this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ver-factura'] } }]);
+          }
+
+          if(ruta.includes('navegation-facturador')){
+            this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['ver-factura'] } }]);
+          }
+
+
         });
       } else if (result.isDenied) {
         Swal.fire('No se finalizó el proceso de venta', '', 'info');

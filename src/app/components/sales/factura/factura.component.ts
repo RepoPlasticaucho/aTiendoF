@@ -319,7 +319,16 @@ export class FacturaComponent implements OnInit {
           confirmButtonText: "Ok"
         }).finally(() => {
           // this.groupForm.reset();
-          this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ventaprov'] } }]);
+          let ruta = this.router.url;
+
+          if(ruta.includes('navegation-cl')){
+            this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ventaprov'] } }]);
+          }
+
+          if(ruta.includes('navegation-facturador')){
+            this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['ventaprov'] } }]);
+          }
+          
         });
       } else {
         console.log(res);

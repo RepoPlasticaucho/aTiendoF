@@ -2,10 +2,10 @@
     <div class="card">
         <br>
         <div class="card-header">
-            <div class="row mx-3">
+            <div class="row mx-3"  >
                 <fa-icon [icon]="faUserFriends" [size]="'3x'" style="color: #636363;"></fa-icon>
                 <h1 class="mx-5 " style="color: #636363;">Inventarios</h1>
-                <div style="position: absolute;right:200px;" class="mx-3">
+                <div style="position: absolute;right:200px;" class="mx-3" *ngIf="mostrarDiv">
                     <a class="btn btn-success" (click)="abrirMovInv()"
                         style=" border-radius: 5px;
                             font-size: 12px; width:150px;
@@ -16,7 +16,7 @@
                     > MOVER INVENTARIO
                     </a>
                 </div>
-                <div style="position: absolute;right:0;" class="mx-3">
+                <div style="position: absolute;right:0;" class="mx-3" *ngIf="mostrarDiv">
                     <a class="btn btn-success" (click)="buscarPortafolioLineaSugerido(lstCategorias[0])"
                         style=" border-radius: 5px; 
                             font-size: 12px; width:150px; 
@@ -33,7 +33,7 @@
             <div>
                 <mat-grid-list cols="6" rowHeight="50px">
                     <mat-grid-tile>
-                        <a class="btn button" href="./navegation-cl/(contentClient:inventarios-almacen)"
+                        <a class="btn button" (click)="navegar()"
                             style="text-align:center;
                                     font-size: 15px; width:140px; 
                                        height:35px;

@@ -31,9 +31,18 @@ export class InventariosPedidoComponent implements OnInit {
   cat: string | undefined;
   sumaTotal: any;
   totalRegistros: number = 0;
+  mostrarDiv: boolean = false;
 
+  
   constructor(private readonly httpService: InventariosService,
     private router: Router) { }
+
+
+  verificarRutaCliente(): void {
+    const ruta = this.router.url;
+    this.mostrarDiv = ruta.includes('navegation-cl');
+  }
+  
 
   ngOnInit(): void {
     this.dtOptions = {
@@ -56,6 +65,8 @@ export class InventariosPedidoComponent implements OnInit {
       codigo: '',
       pto_emision: ''
     }
+
+    this.verificarRutaCliente();
     console.log(almacen);
 
     this.httpService.obtenerCategoria().subscribe(res => {
@@ -116,6 +127,18 @@ export class InventariosPedidoComponent implements OnInit {
     }, 0).toFixed(2);
 
     this.totalRegistros = this.lstInventarios.length;
+  }
+
+  navegar(){
+    let ruta = this.router.url;
+
+    if(ruta.includes('navegation-cl')){
+      this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-almacen'] } }]);
+    }
+
+    if(ruta.includes('navegation-facturador')){
+      this.router.navigate(['/navegation-facturador']);
+    }
   }
 
   buscarPortafolioLinea(card: CategoriasEntity) {
