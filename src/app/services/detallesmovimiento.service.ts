@@ -64,6 +64,7 @@ export class DetallesmovimientoService {
     return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ObtenerDetalleMovimientoAlm`, almacen );
   }
 
+
   obtenerDetalleMovimientoAlmF(almacen: string, fechadesde: string, fechahasta: string): Observable<DetallesMovimiento> {
     return this.http.get<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ObtenerDetalleMovimientoAlmF?almacen=`+almacen+`&fechadesde=`+fechadesde+`&fechahasta=`+fechahasta);
   }

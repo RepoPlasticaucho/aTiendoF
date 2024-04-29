@@ -8,7 +8,12 @@
     <div class="d-flex">
         <form [formGroup]="filtroForm">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-3" *ngIf="esFacturador">
+                    <label for="fechaDesde">Almacén:</label>
+
+                    <h2 style="color: #636363;">{{nombreAlmacenFacturador}}</h2>
+                </div>
+                <div class="col-md-3"  *ngIf="!esFacturador">
                     <div class="form-group">
                         <label for="fechaDesde">Almacén:</label>
                         <select class="form-control" style="width: 210px;" (change)="changeGroup($event)" formControlName="almacen">

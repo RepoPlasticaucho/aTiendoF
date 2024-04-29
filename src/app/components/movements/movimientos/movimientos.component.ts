@@ -28,8 +28,11 @@ export class MovimientosComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
   lstDetalleMovimientos: DetallesMovimientoEntity[] = [];
+  lstAuxDetalleMovimientos: DetallesMovimientoEntity[] = [];
   lstAlmacenes: AlmacenesEntity[] = [];
   fechaActual: string = '';
+  esFacturador: boolean = false;
+  nombreAlmacenFacturador: string = '';
 
   constructor(private readonly httpService: DetallesmovimientoService,
     private readonly httpServiceAlm: AlmacenesService,
@@ -43,8 +46,10 @@ export class MovimientosComponent implements OnInit {
   });
 
 
+
   ngOnInit(): void {
-    
+
+    this.rutaFacturador();
     this.dtOptions = {
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
@@ -58,16 +63,28 @@ export class MovimientosComponent implements OnInit {
       responsive: true
     }
 
+    const almacen: AlmacenesEntity = {
+      idAlmacen: localStorage.getItem('almacenid')!,
+      sociedad_id: '',
+      nombresociedad: '',
+      nombre_almacen: '',
+      direccion: '',
+      telefono: '',
+      codigo: '',
+      pto_emision: ''
+    }
     //Si es un facturador solo se carga del almacen al que pertenece
-    if (this.router.url.includes('facturador')) {
+    if (this.esFacturador) {
 
       console.log("entro a facturador")
       console.log(localStorage.getItem('almacenid'));
-      const almacen: AlmacenesEntity = {
-        idAlmacen: localStorage.getItem('almacenid')!,
+
+      //Almacen solo con el nombre
+      const almacen2: AlmacenesEntity = {
+        idAlmacen: '',
         sociedad_id: '',
         nombresociedad: '',
-        nombre_almacen: '',
+        nombre_almacen: "",
         direccion: '',
         telefono: '',
         codigo: '',
@@ -84,37 +101,60 @@ export class MovimientosComponent implements OnInit {
             showConfirmButton: false,
           });
         } else {
-          almacen.nombre_almacen = res.lstAlmacenes[0].nombre_almacen;
-        }
-      });
 
+          almacen2.nombre_almacen = res.lstAlmacenes[0].nombre_almacen;
+          this.nombreAlmacenFacturador = almacen2.nombre_almacen!;
+
+          this.httpService.obtenerDetalleMovimientoAlm(almacen2).subscribe(res => {
+            if (res.codigoError != "OK") {
+              Swal.fire({
+                icon: 'error',
+                title: 'No se pudo obtener movimientos.',
+                text: res.descripcionError,
+                showConfirmButton: false,
+              });
+            } else {
+            
+              this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+              this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+                // Destruye la tabla existente y elimina los datos
+                dtInstance.destroy();
       
-
-
-      this.httpService.obtenerDetalleMovimientoAlm(almacen).subscribe(res => {
-        if (res.codigoError != "OK") {
-          Swal.fire({
-            icon: 'error',
-            title: 'No se pudo obtener movimientos.',
-            text: res.descripcionError,
-            showConfirmButton: false,
-          });
-        } else {
-          this.lstDetalleMovimientos = res.lstDetalleMovimientos;
-          this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
-            // Destruye la tabla existente y elimina los datos
-            dtInstance.destroy();
-
-            // Renderiza la tabla con los nuevos datos
-            this.dtTrigger.next('');
-
-            // Opcional: Reinicia la página a la primera página
-            dtInstance.page('first').draw('page');
+                // Renderiza la tabla con los nuevos datos
+                this.dtTrigger.next('');
+      
+                // Opcional: Reinicia la página a la primera página
+                dtInstance.page('first').draw('page');
+              });
+            }
           });
         }
       });
-      return
     }
+
+    this.httpService.obtenerDetalleMovimientoAlm(almacen).subscribe(res => {
+      if (res.codigoError != "OK") {
+        Swal.fire({
+          icon: 'error',
+          title: 'Nombre del alamcen' + almacen.nombre_almacen,
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      } else {
+
+        this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+        this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+          // Destruye la tabla existente y elimina los datos
+          dtInstance.destroy();
+
+          // Renderiza la tabla con los nuevos datos
+          this.dtTrigger.next('');
+
+          // Opcional: Reinicia la página a la primera página
+          dtInstance.page('first').draw('page');
+        });
+      }
+    });
 
     const sociedadNew: SociedadesEntity = {
       idGrupo: '',
@@ -128,6 +168,7 @@ export class MovimientosComponent implements OnInit {
       password: '',
       funcion: ''
     }
+
     this.httpServiceAlm.obtenerAlmacenesSociedad(sociedadNew).subscribe(res => {
       if (res.codigoError != 'OK') {
         Swal.fire({
@@ -168,6 +209,15 @@ export class MovimientosComponent implements OnInit {
       }
     });
     this.fechaActual = new Date().toISOString().split('T')[0];
+  }
+
+
+  
+  //Verificar si la ruta es facturador
+  rutaFacturador() {
+    if (this.router.url.includes('facturador')) {
+      this.esFacturador = true;
+    }
   }
 
   changeGroup(tipoC: any): void {
@@ -256,6 +306,37 @@ export class MovimientosComponent implements OnInit {
     const fechaDesde = fechaDesdeControl?.value;
     const fechaHasta = fechaHastaControl?.value;
     const almacen = this.filtroForm.get('almacen')?.value!;
+    //if es facturador el nombre es nombreAlmacenFacturador
+    if(this.esFacturador){
+ 
+      this.httpService.obtenerDetalleMovimientoAlmF(this.nombreAlmacenFacturador, fechaDesde, fechaHasta).subscribe(res => {
+        console.log(res)
+        if (res.codigoError != "OK") {
+          this.filtroForm.get('almacen')?.enable();
+          Swal.fire({
+            icon: 'error',
+            title: 'No se pudo obtener movimientos.',
+            text: res.descripcionError,
+            showConfirmButton: false,
+          });
+        } else {
+          this.filtroForm.get('almacen')?.disable();
+          this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+          this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            // Destruye la tabla existente y elimina los datos
+            dtInstance.destroy();
+  
+            // Renderiza la tabla con los nuevos datos
+            this.dtTrigger.next('');
+  
+            // Opcional: Reinicia la página a la primera página
+            dtInstance.page('first').draw('page');
+          });
+        }
+      });
+      return;
+    }
+
     this.httpService.obtenerDetalleMovimientoAlmF(almacen, fechaDesde, fechaHasta).subscribe(res => {
       console.log(res)
       if (res.codigoError != "OK") {
@@ -289,10 +370,13 @@ export class MovimientosComponent implements OnInit {
     const fechaHastaControl = this.filtroForm.get('fechaHasta');
     const fechaDesde = fechaDesdeControl?.value;
     const fechaHasta = fechaHastaControl?.value;
-    const almacen = this.filtroForm.get('almacen')?.value!;
+
+    //Si es facturador toma nombreAlmacenFacturador si no el valor del select
+    const almacen = this.esFacturador ? this.nombreAlmacenFacturador : this.filtroForm.get('almacen')?.value!;
     const tipo = this.filtroForm.get('tipo')?.value!;
-    if(fechaDesde == null || almacen == null){
-      this.httpService.obtenerDetalleMovimientoAlmTipo(almacen,tipo).subscribe(res => {
+    
+    if (fechaDesde == null || almacen == null) {
+      this.httpService.obtenerDetalleMovimientoAlmTipo(almacen, tipo).subscribe(res => {
         if (res.codigoError != "OK") {
           Swal.fire({
             icon: 'error',
@@ -305,17 +389,17 @@ export class MovimientosComponent implements OnInit {
           this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
             // Destruye la tabla existente y elimina los datos
             dtInstance.destroy();
-  
+
             // Renderiza la tabla con los nuevos datos
             this.dtTrigger.next('');
-  
+
             // Opcional: Reinicia la página a la primera página
             dtInstance.page('first').draw('page');
           });
         }
       });
-    } else if (fechaDesde != null || almacen == null){
-      this.httpService.obtenerDetalleMovimientoAlmFTipo(almacen,fechaDesde, fechaHasta, tipo).subscribe(res => {
+    } else if (fechaDesde != null || almacen == null) {
+      this.httpService.obtenerDetalleMovimientoAlmFTipo(almacen, fechaDesde, fechaHasta, tipo).subscribe(res => {
         if (res.codigoError != "OK") {
           Swal.fire({
             icon: 'error',
@@ -328,22 +412,22 @@ export class MovimientosComponent implements OnInit {
           this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
             // Destruye la tabla existente y elimina los datos
             dtInstance.destroy();
-  
+
             // Renderiza la tabla con los nuevos datos
             this.dtTrigger.next('');
-  
+
             // Opcional: Reinicia la página a la primera página
             dtInstance.page('first').draw('page');
           });
         }
       });
     } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Ha ocurrido un error.',
-          text: 'Seleccione un almacén',
-          showConfirmButton: false,
-        });
+      Swal.fire({
+        icon: 'error',
+        title: 'Ha ocurrido un error.',
+        text: 'Seleccione un almacén',
+        showConfirmButton: false,
+      });
     }
 
   }
@@ -357,6 +441,72 @@ export class MovimientosComponent implements OnInit {
     this.filtroForm.get('fechaHasta')?.enable();
     this.filtroForm.get('almacen')?.enable();
     this.filtroForm.get('tipo')?.enable();
+
+    //SI ES FACTURADOR SOLO SE CARGA EL ALMACEN DEL FACTURADOR
+    if(this.esFacturador){
+      if (this.esFacturador) {
+
+        console.log("entro a facturador")
+        console.log(localStorage.getItem('almacenid'));
+  
+        //Almacen solo con el nombre
+        const almacen2: AlmacenesEntity = {
+          idAlmacen: localStorage.getItem('almacenid')!,
+          sociedad_id: '',
+          nombresociedad: '',
+          nombre_almacen: "",
+          direccion: '',
+          telefono: '',
+          codigo: '',
+          pto_emision: ''
+        }
+  
+        //Obtener el nombre del almacen segun el id
+        this.httpServiceAlm.obtenerAlmacenId(almacen2).subscribe(res => {
+          if (res.codigoError != "OK") {
+            Swal.fire({
+              icon: 'error',
+              title: 'No se pudo obtener el nombre del almacen.',
+              text: res.descripcionError,
+              showConfirmButton: false,
+            });
+          } else {
+  
+            almacen2.nombre_almacen = res.lstAlmacenes[0].nombre_almacen;
+            this.nombreAlmacenFacturador = almacen2.nombre_almacen!;
+  
+            this.httpService.obtenerDetalleMovimientoAlm(almacen2).subscribe(res => {
+              if (res.codigoError != "OK") {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'No se pudo obtener movimientos.',
+                  text: res.descripcionError,
+                  showConfirmButton: false,
+                });
+              } else {
+              
+                this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+                this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+                  // Destruye la tabla existente y elimina los datos
+                  dtInstance.destroy();
+        
+                  // Renderiza la tabla con los nuevos datos
+                  this.dtTrigger.next('');
+        
+                  // Opcional: Reinicia la página a la primera página
+                  dtInstance.page('first').draw('page');
+                });
+              }
+            });
+          }
+        });
+      }
+      return
+    }
+      
+    
+    
+
     const sociedadNew: SociedadesEntity = {
       idGrupo: '',
       idSociedad: localStorage.getItem('sociedadid')!,

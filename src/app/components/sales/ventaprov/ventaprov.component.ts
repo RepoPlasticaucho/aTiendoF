@@ -40,6 +40,8 @@ export class VentaprovComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog) { }
     
+  
+  
     
   openModal(): void {
     const dialogRef = this.dialog.open(VentaCreateComponent, {
