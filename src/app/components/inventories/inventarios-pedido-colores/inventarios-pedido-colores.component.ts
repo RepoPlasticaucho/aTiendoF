@@ -121,6 +121,10 @@ export class InventariosPedidoColoresComponent implements OnInit {
         });
 
       } else {
+        if(this.router.url.includes('navegation-facturador')){
+          this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['inventarios-pedido'] } }]);
+          return
+        }
         this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido'] } }]);
 
       }
@@ -167,7 +171,24 @@ export class InventariosPedidoColoresComponent implements OnInit {
     }
     console.log(inventario);
     this.httpService.asignarCategoria(inventario);
+
+    if(this.router.url.includes('navegation-facturador')){
+      this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['inventarios-pedido-categoria'] } }]);
+      return
+    }
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido-categoria'] } }]);
+  }
+
+  navegar(){
+    let ruta = this.router.url;
+
+    if(ruta.includes('navegation-cl')){
+      this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido'] } }]);
+    }
+
+    if(ruta.includes('navegation-facturador')){
+      this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['inventarios-pedido'] } }]);
+    }
   }
 
   returnLinea() {
@@ -195,6 +216,10 @@ export class InventariosPedidoColoresComponent implements OnInit {
     }
     console.log(inventario);
     this.httpService.asignarCategoria(inventario);
+    if(this.router.url.includes('navegation-facturador')){
+      this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['inventarios-pedido-lineas'] } }]);
+      return
+    }
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido-lineas'] } }]);
   }
 
@@ -224,6 +249,10 @@ export class InventariosPedidoColoresComponent implements OnInit {
     }
     console.log(inventario);
     this.httpService.asignarCategoria(inventario);
+    if(this.router.url.includes('navegation-facturador')){
+      this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['inventarios-pedido-modelos'] } }]);
+      return
+    }
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido-modelos'] } }]);
   }
 }

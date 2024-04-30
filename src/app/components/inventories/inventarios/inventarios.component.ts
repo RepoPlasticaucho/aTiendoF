@@ -134,6 +134,18 @@ export class InventariosComponent implements OnInit {
     })
   }
 
+  navegar(){
+    let ruta = this.router.url;
+
+    if(ruta.includes('navegation-cl')){
+      this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-productos'] } }]);
+    }
+
+    if(ruta.includes('navegation-facturador')){
+      this.router.navigate(['/navegation-facturador']);
+    }
+  }
+
   deshabilitarInventarios(inventario: InventariosEntity): void {
     Swal.fire({
       icon: 'question',

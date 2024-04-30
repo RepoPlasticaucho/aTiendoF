@@ -176,10 +176,32 @@ export class InventariosPedidoCategoriaComponent implements OnInit {
       color: '',
       modelo: ''
     }
-    console.log(inventario);
+  
     this.httpService.asignarLinea(inventario);
+    console.log("Entro aca a en linea");
+    if(this.router.url.includes('navegation-facturador')){
+      console.log('facturador');
+      this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['inventarios-pedido-lineas'] } }]);
+      return
+    }
+    console.log('cliente');
+
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido-lineas'] } }]);
   }
+
+
+  navegar(){
+    let ruta = this.router.url;
+
+    if(ruta.includes('navegation-cl')){
+      this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido'] } }]);
+    }
+
+    if(ruta.includes('navegation-facturador')){
+      this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['inventarios-pedido'] } }]);
+    }
+  }
+
 
   buscarPortafolioLineaSugerida(card: LineasEntity) {
     this.codigolinea = card["linea"];

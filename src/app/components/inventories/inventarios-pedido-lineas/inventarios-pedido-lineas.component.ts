@@ -156,6 +156,19 @@ export class InventariosPedidoLineasComponent implements OnInit {
     })
   }
 
+  navegar(){
+    let ruta = this.router.url;
+
+    if(ruta.includes('navegation-cl')){
+      this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido'] } }]);
+    }
+
+    if(ruta.includes('navegation-facturador')){
+      this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['inventarios-pedido'] } }]);
+    }
+  }
+
+
 
   buscarPortafolioLineaModelo(card: ModelosEntity) {
     this.codigomodel = card["modelo"];
@@ -184,6 +197,12 @@ export class InventariosPedidoLineasComponent implements OnInit {
     }
     console.log(inventario);
     this.httpService.asignarModelo(inventario);
+    if(this.router.url.includes('navegation-facturador')){
+      console.log('facturador');
+      this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['inventarios-pedido-modelos'] } }]);
+      return
+    }
+
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido-modelos'] } }]);
   }
 

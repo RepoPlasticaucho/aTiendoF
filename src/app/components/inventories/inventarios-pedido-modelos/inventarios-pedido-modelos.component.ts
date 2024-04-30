@@ -55,6 +55,8 @@ export class InventariosPedidoModelosComponent implements OnInit {
       info: true,
       responsive: true
     }
+    
+
 
     this.httpService.obtenerInventario$.subscribe(res => {
 
@@ -153,10 +155,26 @@ export class InventariosPedidoModelosComponent implements OnInit {
         });
 
       } else {
+        if(this.router.url.includes('navegation-facturador')){
+          this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['inventarios-pedido'] } }]);
+          return
+        }
         this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido'] } }]);
 
       }
     })
+  }
+
+  navegar(){
+    let ruta = this.router.url;
+
+    if(ruta.includes('navegation-cl')){
+      this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido'] } }]);
+    }
+
+    if(ruta.includes('navegation-facturador')){
+      this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['inventarios-pedido'] } }]);
+    }
   }
 
   isStockBelowOptimal(stock: string, stockOptimo: string): boolean {
@@ -198,6 +216,11 @@ export class InventariosPedidoModelosComponent implements OnInit {
     }
     //console.log(inventario);
     this.httpService.asignarColor(inventario);
+
+    if(this.router.url.includes('navegation-facturador')){
+      this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['inventarios-pedido-colores'] } }]);
+      return
+    }
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido-colores'] } }]);
   }
 
@@ -227,6 +250,10 @@ export class InventariosPedidoModelosComponent implements OnInit {
     }
     console.log(inventario);
     this.httpService.asignarCategoria(inventario);
+    if(this.router.url.includes('navegation-facturador')){
+      this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['inventarios-pedido-categoria'] } }]);
+      return
+    }
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido-categoria'] } }]);
   }
 
@@ -256,6 +283,10 @@ export class InventariosPedidoModelosComponent implements OnInit {
     }
     console.log(inventario);
     this.httpService.asignarCategoria(inventario);
+    if(this.router.url.includes('navegation-facturador')){
+      this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['inventarios-pedido-lineas'] } }]);
+      return
+    }
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido-lineas'] } }]);
   }
 }

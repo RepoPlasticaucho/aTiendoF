@@ -174,6 +174,19 @@ export class VentaprovComponent implements OnInit {
     })
   }
 
+  navegar(){
+    let ruta = this.router.url;
+
+    if(ruta.includes('navegation-cl')){
+      this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-productos'] } }]);
+    }
+
+    if(ruta.includes('navegation-facturador')){
+      this.router.navigate(['/navegation-facturador']);
+    }
+  }
+  
+
   filterByDate(): void {
     const fechaDesdeControl = this.filtroForm.get('fechaDesde');
     const fechaHastaControl = this.filtroForm.get('fechaHasta');

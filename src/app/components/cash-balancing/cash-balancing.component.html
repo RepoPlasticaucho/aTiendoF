@@ -9,7 +9,7 @@
         <form [formGroup]="filtroForm">
             <div class="row">
                 <div class="col-md-4">
-                    <div class="form-group">
+                    <div class="form-group" *ngIf="!mostrarDiv">
                         <label for="fechaDesde">Almacén:</label>
                         <select class="form-control" style="width: 210px;" (change)="changeGroup($event)" formControlName="almacen">
                             <option [value]=" 0 " selected>Seleccione un almacen</option>
@@ -18,6 +18,12 @@
                             </option>
                         </select>
                     </div>
+                    <div class="form-group" *ngIf="mostrarDiv">
+                        <label for="fechaDesde">Almacén:</label>
+                        <h2 style="color: #636363;">{{nombreAlmacen}}</h2>
+                    </div>
+ 
+
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">

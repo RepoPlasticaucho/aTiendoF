@@ -168,8 +168,14 @@ export class InventariosPedidoComponent implements OnInit {
     }
     // console.log(inventario);
     this.httpService.asignarCategoria(inventario);
+    if(this.router.url.includes('navegation-facturador')){
+      this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['inventarios-pedido-categoria'] } }]);
+      return
+    }
+
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido-categoria'] } }]);
   }
+
   buscarPortafolioLineaSugerido(card: CategoriasEntity) {
     console.log(card);
     this.cat = card["id"];
@@ -195,8 +201,12 @@ export class InventariosPedidoComponent implements OnInit {
       color: '',
       modelo: ''
     }
-    // console.log(inventario);
     this.httpService.asignarCategoria(inventario);
+    if(this.router.url.includes('navegation-facturador')){
+      this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['pedido-sugeridos'] } }]);
+      return
+    }
+    console.log('cliente');
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['pedido-sugeridos'] } }]);
   }
 

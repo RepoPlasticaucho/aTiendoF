@@ -35,6 +35,8 @@ export class CashBalancingComponent implements OnInit {
   lstAlmacenes: AlmacenesEntity[] = [];
   fechaActual: string = '';
   sumaTotal: any;
+  nombreAlmacen: string = '';
+  mostrarDiv: boolean = false;
 
   constructor(private readonly httpServiceAlm: AlmacenesService,
     private dialog: MatDialog,
@@ -49,9 +51,13 @@ export class CashBalancingComponent implements OnInit {
 
 
   ngOnInit(): void {
+
+    this.esFacturador();
+
     localStorage.setItem('nombrealmacen','')
     localStorage.setItem('fechadesde','')
     localStorage.setItem('fechahasta','')
+
     this.dtOptions = {
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
@@ -64,6 +70,132 @@ export class CashBalancingComponent implements OnInit {
       info: true,
       responsive: true
     }
+
+       //Si es facturador obtener el nombre del almacen con su id
+       if(this.router.url.includes('navegation-facturador')){
+
+        
+        const almacenid: AlmacenesEntity = {
+          idAlmacen: localStorage.getItem('almacenid')!,
+          sociedad_id: '',
+          nombresociedad: '',
+          nombre_almacen: '',
+          direccion: '',
+          telefono: '',
+          codigo: '',
+          pto_emision: ''
+        }
+        this.httpServiceAlm.obtenerAlmacenId(almacenid).subscribe(res => {
+          if (res.codigoError != 'OK') {
+            Swal.fire({
+              icon: 'error',
+              title: 'Ha ocurrido un error.',
+              text: res.descripcionError,
+              showConfirmButton: false,
+            });
+          } else {
+            this.nombreAlmacen = res.lstAlmacenes[0]?.nombre_almacen!;
+            localStorage.setItem('nombrealmacen', this.nombreAlmacen);
+            this.filtroForm.get('almacen')?.setValue(res.lstAlmacenes[0]?.nombre_almacen!);
+            this.filtroForm.get('almacen')?.disable();
+        
+             
+        //Crear un tipo event
+  /////////////////////////////////
+  const forma1: FormasPagoEntity = {
+    id: '1',
+    nombre: '',
+    codigo: '',
+    fecha_inicio: '',
+    fecha_fin: '',
+    created_at: '',
+    updated_at: ''
+  }
+  const forma2: FormasPagoEntity = {
+    id: '2',
+    nombre: '',
+    codigo: '',
+    fecha_inicio: '',
+    fecha_fin: '',
+    created_at: '',
+    updated_at: ''
+  }
+  const forma3: FormasPagoEntity = {
+    id: '3',
+    nombre: '',
+    codigo: '',
+    fecha_inicio: '',
+    fecha_fin: '',
+    created_at: '',
+    updated_at: ''
+  }
+  
+  const almacen: AlmacenesEntity = {
+    idAlmacen: '',
+    sociedad_id: '',
+    nombresociedad: '',
+    nombre_almacen: this.nombreAlmacen,
+    direccion: '',
+    telefono: '',
+    codigo: '',
+    pto_emision: ''
+  }
+
+  
+  
+  this.httpService.obtenerDetallePagoAlm(almacen, forma1).subscribe(res => {
+    if (res.codigoError != "OK") {
+      this.filtroForm.get('almacen')?.enable();
+      Swal.fire({
+        icon: 'error',
+        title: 'No se pudo obtener movimientos.',
+        text: res.descripcionError,
+        showConfirmButton: false,
+      });
+    } else {
+      this.filtroForm.get('almacen')?.disable();
+      this.efectivo = res.lstDetallePagos[0].valor!;
+      console.log("AQUI EFECTIVO ",  res)
+      this.httpService.obtenerDetallePagoAlm(almacen, forma2).subscribe(res => {
+        if (res.codigoError != "OK") {
+          this.filtroForm.get('almacen')?.enable();
+          Swal.fire({
+            icon: 'error',
+            title: 'No se pudo obtener movimientos.',
+            text: res.descripcionError,
+            showConfirmButton: false,
+          });
+        } else {
+          this.filtroForm.get('almacen')?.disable();
+          this.tar_deb = res.lstDetallePagos[0].valor!;
+  
+          this.httpService.obtenerDetallePagoAlm(almacen, forma3).subscribe(res => {
+            if (res.codigoError != "OK") {
+              this.filtroForm.get('almacen')?.enable();
+              Swal.fire({
+                icon: 'error',
+                title: 'No se pudo obtener movimientos.',
+                text: res.descripcionError,
+                showConfirmButton: false,
+              });
+            } else {
+              this.filtroForm.get('almacen')?.disable();
+              this.tar_cre = res.lstDetallePagos[0].valor!;
+              console.log("AQUI TARJETA CREDITO ",  res)
+              this.calcularSumaTotal();
+            }
+          });
+        }
+      });
+    }
+  });
+  
+  this.fechaActual = new Date().toISOString().split('T')[0];
+          }
+        });
+        return;
+ 
+}
     const sociedadNew: SociedadesEntity = {
       idGrupo: '',
       idSociedad: localStorage.getItem('sociedadid')!,
@@ -157,6 +289,12 @@ export class CashBalancingComponent implements OnInit {
     
   }
 
+  esFacturador() {
+    if(this.router.url.includes('navegation-facturador')){
+      this.mostrarDiv = true;
+    }
+  }
+
   calcularSumaTotal() {
     if(this.efectivo == ''){
       this.efectivo = '0';
@@ -167,6 +305,7 @@ export class CashBalancingComponent implements OnInit {
     if(this.tar_cre == ''){
       this.tar_cre = '0';
     }
+
     const suma = parseFloat(this.efectivo) + parseFloat(this.tar_deb) + parseFloat(this.tar_cre)
     console.log(this.efectivo)
     this.sumaTotal = suma
@@ -190,7 +329,7 @@ export class CashBalancingComponent implements OnInit {
     this.filtroForm.get('fechaDesde')?.setValue(null);
     this.filtroForm.get('fechaHasta')?.enable();
     this.filtroForm.get('fechaDesde')?.enable();
-    const almacen: AlmacenesEntity = {
+      const almacen: AlmacenesEntity = {
       idAlmacen: '',
       sociedad_id: '',
       nombresociedad: '',
@@ -200,7 +339,7 @@ export class CashBalancingComponent implements OnInit {
       codigo: '',
       pto_emision: ''
     }
-    localStorage.setItem('nombrealmacen', tipoC.target.value);
+      localStorage.setItem('nombrealmacen', tipoC.target.value);
     const forma1: FormasPagoEntity = {
       id: '1',
       nombre: '',
@@ -427,10 +566,22 @@ export class CashBalancingComponent implements OnInit {
   reiniciarFiltros() {
     this.filtroForm.get('fechaDesde')?.setValue(null);
     this.filtroForm.get('fechaHasta')?.setValue(null);
-    this.filtroForm.get('almacen')?.setValue('0');
+
+    //Si es facturador no se activa el select
+
+
+    !this.router.url.includes('navegation-facturador') ? this.filtroForm.get('almacen')?.setValue(this.nombreAlmacen) : this.filtroForm.get('almacen')?.setValue('0');
     this.filtroForm.get('fechaDesde')?.enable();
     this.filtroForm.get('fechaHasta')?.enable();
-    this.filtroForm.get('almacen')?.enable();
+    //Si es facturador no se activa el select
+    if(this.router.url.includes('navegation-facturador')){
+      this.filtroForm.get('almacen')?.disable();
+      return
+    }else{
+      this.filtroForm.get('almacen')?.enable();
+    }
+
+
     localStorage.setItem('nombrealmacen','')
     localStorage.setItem('fechadesde','')
     localStorage.setItem('fechahasta','')

@@ -105,6 +105,8 @@ export class MovimientosComponent implements OnInit {
           almacen2.nombre_almacen = res.lstAlmacenes[0].nombre_almacen;
           this.nombreAlmacenFacturador = almacen2.nombre_almacen!;
 
+          console.log("Este es el almacen 2 " + almacen2.nombre_almacen);
+
           this.httpService.obtenerDetalleMovimientoAlm(almacen2).subscribe(res => {
             if (res.codigoError != "OK") {
               Swal.fire({
@@ -114,6 +116,7 @@ export class MovimientosComponent implements OnInit {
                 showConfirmButton: false,
               });
             } else {
+              
             
               this.lstDetalleMovimientos = res.lstDetalleMovimientos;
               this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
@@ -136,12 +139,12 @@ export class MovimientosComponent implements OnInit {
       if (res.codigoError != "OK") {
         Swal.fire({
           icon: 'error',
-          title: 'Nombre del alamcen' + almacen.nombre_almacen,
+          title: 'No se pudo obtener movimientos.',
           text: res.descripcionError,
           showConfirmButton: false,
         });
       } else {
-
+        
         this.lstDetalleMovimientos = res.lstDetalleMovimientos;
         this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
           // Destruye la tabla existente y elimina los datos
@@ -444,7 +447,6 @@ export class MovimientosComponent implements OnInit {
 
     //SI ES FACTURADOR SOLO SE CARGA EL ALMACEN DEL FACTURADOR
     if(this.esFacturador){
-      if (this.esFacturador) {
 
         console.log("entro a facturador")
         console.log(localStorage.getItem('almacenid'));
@@ -500,7 +502,6 @@ export class MovimientosComponent implements OnInit {
             });
           }
         });
-      }
       return
     }
       
