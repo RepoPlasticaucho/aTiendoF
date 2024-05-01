@@ -117,48 +117,26 @@ export class MovimientosComponent implements OnInit {
               });
             } else {
               
+        console.log("ENTRO 120")
             
               this.lstDetalleMovimientos = res.lstDetalleMovimientos;
-              this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
-                // Destruye la tabla existente y elimina los datos
-                dtInstance.destroy();
-      
-                // Renderiza la tabla con los nuevos datos
-                this.dtTrigger.next('');
-      
-                // Opcional: Reinicia la página a la primera página
-                dtInstance.page('first').draw('page');
-              });
+              
+              
+              this.dtTrigger.next('');
+
             }
+            
           });
+          
         }
       });
+      this.fechaActual = new Date().toISOString().split('T')[0];
+
+      return
+      
     }
-
-    this.httpService.obtenerDetalleMovimientoAlm(almacen).subscribe(res => {
-      if (res.codigoError != "OK") {
-        Swal.fire({
-          icon: 'error',
-          title: 'No se pudo obtener movimientos.',
-          text: res.descripcionError,
-          showConfirmButton: false,
-        });
-      } else {
-        
-        this.lstDetalleMovimientos = res.lstDetalleMovimientos;
-        this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
-          // Destruye la tabla existente y elimina los datos
-          dtInstance.destroy();
-
-          // Renderiza la tabla con los nuevos datos
-          this.dtTrigger.next('');
-
-          // Opcional: Reinicia la página a la primera página
-          dtInstance.page('first').draw('page');
-        });
-      }
-    });
-
+    
+    
     const sociedadNew: SociedadesEntity = {
       idGrupo: '',
       idSociedad: localStorage.getItem('sociedadid')!,
@@ -181,7 +159,12 @@ export class MovimientosComponent implements OnInit {
           showConfirmButton: false,
         });
       } else {
-        this.lstAlmacenes = res.lstAlmacenes;
+        console.log("ENTRO 161")
+        
+        if(!this.esFacturador){
+          this.lstAlmacenes = res.lstAlmacenes;
+        }
+
       }
     });
     Swal.fire({
@@ -199,7 +182,13 @@ export class MovimientosComponent implements OnInit {
               showConfirmButton: false,
             });
           } else {
-            this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+            console.log("ENTRO 180")
+
+            if(!this.esFacturador){
+              this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+            }
+
+        
             this.dtTrigger.next('');
             Swal.close();
           }
@@ -224,6 +213,7 @@ export class MovimientosComponent implements OnInit {
   }
 
   changeGroup(tipoC: any): void {
+    console.log("SE EJECUTO CHANGEGROUP")
     this.filtroForm.get('fechaDesde')?.setValue(null);
     this.filtroForm.get('tipo')?.setValue('0');
     this.filtroForm.get('fechaHasta')?.enable();
@@ -303,6 +293,8 @@ export class MovimientosComponent implements OnInit {
   }
 
   filterByDate(): void {
+    console.log("SE EJECUTO FILTERBYDATE")
+
     this.filtroForm.get('tipo')?.setValue('0');
     const fechaDesdeControl = this.filtroForm.get('fechaDesde');
     const fechaHastaControl = this.filtroForm.get('fechaHasta');
@@ -369,6 +361,8 @@ export class MovimientosComponent implements OnInit {
   }
 
   changeGroup2(): void {
+    console.log("SE EJECUTO CHANGEGROUP2")
+
     const fechaDesdeControl = this.filtroForm.get('fechaDesde');
     const fechaHastaControl = this.filtroForm.get('fechaHasta');
     const fechaDesde = fechaDesdeControl?.value;
@@ -436,6 +430,8 @@ export class MovimientosComponent implements OnInit {
   }
 
   reiniciarFiltros() {
+    console.log("SE EJECUTO FILTROSREINI")
+
     this.filtroForm.get('fechaDesde')?.setValue(null);
     this.filtroForm.get('fechaHasta')?.setValue(null);
     this.filtroForm.get('almacen')?.setValue('0');
@@ -481,7 +477,7 @@ export class MovimientosComponent implements OnInit {
               if (res.codigoError != "OK") {
                 Swal.fire({
                   icon: 'error',
-                  title: 'No se pudo obtener movimientos.',
+                  title: 'No se pudo obtener movimientos. 6',
                   text: res.descripcionError,
                   showConfirmButton: false,
                 });
