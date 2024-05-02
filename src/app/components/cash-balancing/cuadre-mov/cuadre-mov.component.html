@@ -23,7 +23,7 @@
                 </thead>
                 <tbody style="color: #767695;">
                     <tr *ngFor="let movimientos of lstMovimientos" class="table-row">
-                        <td>{{movimientos.id}}</td>
+                        <td>{{movimientos.nroFactura}}</td>
                         <td>{{movimientos.updated_at}}</td>
                         <td *ngIf="showValorAgregado">{{movimientos.detalle_pago}}</td>
                         <td>{{movimientos.importe_total}}</td>

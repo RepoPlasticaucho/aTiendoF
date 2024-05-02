@@ -52,7 +52,15 @@
                         </select>
                     </div>
                 </div>
+
+         
             </div>
+            <div class="boton_derecha">
+                <button class="btn btn-success"  (click)="exportarAXLSX()">
+                    <fa-icon [icon]="faTable" style="color: white;"></fa-icon>
+                    <span style="color: white"> Exportar a Excel</span>
+                </button>
+        </div>
             <div class="button-container">
                 <button class="btn btn-primary" (click)="reiniciarFiltros()">
                     <span style="color: white"> Reiniciar Filtros</span>

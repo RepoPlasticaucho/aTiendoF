@@ -7,3 +7,24 @@
 .card-body {
     overflow-x: auto
 }
+
+.boton_derecha {
+    float: right;
+    margin-right: 10px;
+  
+  
+  }
+
+  .boton{
+    background-color: #00B050;
+
+  }
+
+  .boton:hover{
+    background-color: #049e49;
+  }
+
+
+    .boton:active{
+        background-color: #049e49;
+    }

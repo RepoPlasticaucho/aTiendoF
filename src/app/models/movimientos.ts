@@ -42,4 +42,5 @@ export interface MovimientosEntity {
     pto_emision?: string;
     url_factura?: string;
     comprobante_compra_id?: string;
+    nroFactura?: string
 }

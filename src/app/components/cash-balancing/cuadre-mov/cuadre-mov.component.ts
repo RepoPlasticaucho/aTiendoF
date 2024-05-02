@@ -74,6 +74,19 @@ export class CuadreMovComponent implements OnInit {
                 });
               } else {
                 this.lstMovimientos = res1.lstMovimientos;
+                console.log("Aqui lstMovimientos", this.lstMovimientos)
+
+                this.lstMovimientos.forEach((movimiento, index) => {
+                  // Generar el número de factura
+                  const numeroFactura = `${movimiento.pto_emision}-${movimiento.estab}-${movimiento.secuencial}`;
+                  console.log("Aqui numero factura" , numeroFactura)
+                  // Asignar el número de factura al objeto de movimiento
+                  movimiento.nroFactura = numeroFactura;
+              
+                  // Opcional: también puedes asignar el número de factura directamente a la lista
+                  // this.lstMovimientos[index].numeroFactura = numeroFactura;
+              });
+              
                 this.dtTrigger.next('');
                 Swal.close();
               }
@@ -89,6 +102,19 @@ export class CuadreMovComponent implements OnInit {
                 });
               } else {
                 this.lstMovimientos = res1.lstMovimientos;
+                console.log("Aqui lstMovimientos", this.lstMovimientos)
+
+                this.lstMovimientos.forEach((movimiento, index) => {
+                  // Generar el número de factura
+                  const numeroFactura = `${movimiento.pto_emision}-${movimiento.estab}-${movimiento.secuencial}`;
+                  console.log("Aqui numero factura" , numeroFactura)
+                  // Asignar el número de factura al objeto de movimiento
+                  movimiento.nroFactura = numeroFactura;
+              
+                  // Opcional: también puedes asignar el número de factura directamente a la lista
+                  // this.lstMovimientos[index].numeroFactura = numeroFactura;
+              });
+              
                 this.dtTrigger.next('');
                 Swal.close();
               }
@@ -104,6 +130,19 @@ export class CuadreMovComponent implements OnInit {
                 });
               } else {
                 this.lstMovimientos = res1.lstMovimientos;
+                console.log("Aqui lstMovimientos", this.lstMovimientos)
+
+                this.lstMovimientos.forEach((movimiento, index) => {
+                  // Generar el número de factura
+                  const numeroFactura = `${movimiento.pto_emision}-${movimiento.estab}-${movimiento.secuencial}`;
+                  console.log("Aqui numero factura" , numeroFactura)
+                  // Asignar el número de factura al objeto de movimiento
+                  movimiento.nroFactura = numeroFactura;
+              
+                  // Opcional: también puedes asignar el número de factura directamente a la lista
+                  // this.lstMovimientos[index].numeroFactura = numeroFactura;
+              });
+              
                 this.dtTrigger.next('');
                 Swal.close();
               }
@@ -119,6 +158,19 @@ export class CuadreMovComponent implements OnInit {
                 });
               } else {
                 this.lstMovimientos = res1.lstMovimientos;
+                console.log("Aqui lstMovimientos", this.lstMovimientos)
+
+                this.lstMovimientos.forEach((movimiento, index) => {
+                  // Generar el número de factura
+                  const numeroFactura = `${movimiento.pto_emision}-${movimiento.estab}-${movimiento.secuencial}`;
+                  console.log("Aqui numero factura" , numeroFactura)
+                  // Asignar el número de factura al objeto de movimiento
+                  movimiento.nroFactura = numeroFactura;
+              
+                  // Opcional: también puedes asignar el número de factura directamente a la lista
+                  // this.lstMovimientos[index].numeroFactura = numeroFactura;
+              });
+              
                 this.dtTrigger.next('');
                 Swal.close();
               }
@@ -161,6 +213,21 @@ export class CuadreMovComponent implements OnInit {
                 });
               } else {
                 this.lstMovimientos = res1.lstMovimientos;
+                console.log("Aqui lstMovimientos", this.lstMovimientos)
+
+                //res1.lstMovimientos[0].pto_emision + '-' + res1.lstMovimientos[0].estab! + '-' + res1.lstMovimientos[0].secuencial, Asginar el numero de factura a cada factura
+                this.lstMovimientos.forEach((movimiento, index) => {
+                  // Generar el número de factura
+                  const numeroFactura = `${movimiento.pto_emision}-${movimiento.estab}-${movimiento.secuencial}`;
+                  console.log("Aqui numero factura" , numeroFactura)
+                  // Asignar el número de factura al objeto de movimiento
+                  movimiento.nroFactura = numeroFactura;
+              
+                  // Opcional: también puedes asignar el número de factura directamente a la lista
+                  // this.lstMovimientos[index].numeroFactura = numeroFactura;
+              });
+              
+
                 this.dtTrigger.next('');
                 Swal.close();
               }
@@ -191,6 +258,18 @@ export class CuadreMovComponent implements OnInit {
                 });
               } else {
                 this.lstMovimientos = res1.lstMovimientos;
+                console.log("Aqui lstMovimientos", this.lstMovimientos)
+                this.lstMovimientos.forEach((movimiento, index) => {
+                  // Generar el número de factura
+                  const numeroFactura = `${movimiento.pto_emision}-${movimiento.estab}-${movimiento.secuencial}`;
+                  console.log("Aqui numero factura" , numeroFactura)
+                  // Asignar el número de factura al objeto de movimiento
+                  movimiento.nroFactura = numeroFactura;
+              
+                  // Opcional: también puedes asignar el número de factura directamente a la lista
+                  // this.lstMovimientos[index].numeroFactura = numeroFactura;
+              });
+              
                 this.dtTrigger.next('');
                 Swal.close();
               }

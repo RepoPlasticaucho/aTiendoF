@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { faList, faEdit, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faList, faEdit, faTrashAlt, faPlus, faTable } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
@@ -10,6 +10,7 @@ import { DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AlmacenesService } from 'src/app/services/almacenes.service';
 import { AlmacenesEntity } from 'src/app/models/almacenes';
+import * as XLSX from 'xlsx';
 
 
 @Component({
@@ -24,6 +25,7 @@ export class MovimientosComponent implements OnInit {
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;
   faPlus = faPlus;
+  faTable = faTable;
   //Declaración de variables
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
@@ -543,6 +545,72 @@ export class MovimientosComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
+  }
+
+  
+  exportarAXLSX() {
+    const movimientosSinProductId = this.lstDetalleMovimientos.map(movimiento => {
+        // Crear un nuevo objeto que excluya la columna product_id
+        const { producto_id, modelo_producto_nombre, inventario_id, movimiento_id, tamanio, color, tarifa, desc_add, costo, url_image, created_at, unidad_medida, cod_tarifa, ...movimientoSinProductId } = movimiento;
+        return movimientoSinProductId;
+    });
+
+    const renombrar = movimientosSinProductId.map(movimiento => {
+        // Renombrar las propiedades del objeto
+        return {
+            'ID': movimiento.id,
+            'Nombre Producto': movimiento.producto_nombre,
+            'Punto De Emision': movimiento.pto_emision,
+            'Tipo De Movimiento': movimiento.tipo_movimiento,
+            'Valor Total': movimiento.tipo_movimiento, // Revisar este valor, no parece correcto
+            'Cantidad': movimiento.cantidad,
+        };
+    });
+
+    // Crear un nuevo libro de Excel
+    const wb = XLSX.utils.book_new();
+
+    // Convertir los datos de la tabla a una hoja de Excel
+    const wsData = XLSX.utils.json_to_sheet(renombrar);
+
+    // Agregar estilos y colores
+    wsData['!cols'] = [
+        { width: 10 },
+        { width: 20 },
+        { width: 20 },
+        { width: 20 },
+        { width: 15 },
+        { width: 15 }
+    ];
+
+    // Establecer los colores de fondo para las celdas de encabezado
+    wsData['A1'].s = { fill: { fgColor: { rgb: 'FFFF0000' } } }; // Rojo
+    wsData['B1'].s = { fill: { fgColor: { rgb: 'FF00FF00' } } }; // Verde
+    wsData['C1'].s = { fill: { fgColor: { rgb: 'FF0000FF' } } }; // Azul
+    wsData['D1'].s = { fill: { fgColor: { rgb: 'FFFFFF00' } } }; // Amarillo
+    wsData['E1'].s = { fill: { fgColor: { rgb: 'FFFF00FF' } } }; // Magenta
+    wsData['F1'].s = { fill: { fgColor: { rgb: 'FF00FFFF' } } }; // Cian
+
+    // Agregar la hoja de Excel al libro
+    XLSX.utils.book_append_sheet(wb, wsData, 'Movimientos');
+
+    // Generar el archivo Excel y guardarlo
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    this.saveExcelFile(excelBuffer, 'movimientos.xlsx');
+}
+
+
+
+  private saveExcelFile(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], { type: 'application/octet-stream' });
+    const url: string = window.URL.createObjectURL(data);
+    const link: HTMLAnchorElement = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    link.click();
+    setTimeout(() => {
+      window.URL.revokeObjectURL(url);
+    }, 1000);
   }
 
 }
