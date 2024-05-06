@@ -140,6 +140,13 @@ background-color: #555; /* Color del thumb del scrollbar al pasar el cursor por 
 
 .label-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   margin-bottom: 20px; /* Ajusta este valor según necesites */
+}
+
+
+/* Flotar boton a la derecha */
+.boton_derecha {
+  float: right;
+  margin-right: 10px;
 }

@@ -44,6 +44,7 @@ export class VerCompraComponent implements OnInit {
   secuencial: any;
   inputColor: string = '';
   totalF: number = 0;
+  comprobanteFormato: string = '';
 
 
 
@@ -116,6 +117,11 @@ export class VerCompraComponent implements OnInit {
             this.direccionProv = res1.lstProveedores[0].direccionprov!;
             this.telefonoProv = res1.lstProveedores[0].telefono!;
             this.compVenta = localStorage.getItem('compventa')!;
+            //Cada 3 digitos agregar un guion en compVenta solo hasta el 7mo digito
+            if(this.compVenta.length>6){
+              this.comprobanteFormato = this.compVenta.substring(0, 3) + '-' + this.compVenta.substring(3, 6) + '-' + this.compVenta.substring(6);
+            }
+
             this.autVenta = localStorage.getItem('autorizacion')!;
           }
         })

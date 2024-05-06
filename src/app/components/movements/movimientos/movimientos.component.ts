@@ -596,7 +596,15 @@ export class MovimientosComponent implements OnInit {
 
     // Generar el archivo Excel y guardarlo
     const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-    this.saveExcelFile(excelBuffer, 'movimientos.xlsx');
+    const date = new Date();
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const fecha = `${day}-${month}-${year}`;
+
+
+    this.saveExcelFile(excelBuffer, `Movimientos_${fecha}.xlsx`);
+
 }
 
 

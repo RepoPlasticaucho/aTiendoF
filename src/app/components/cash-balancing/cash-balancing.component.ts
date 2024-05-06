@@ -54,9 +54,9 @@ export class CashBalancingComponent implements OnInit {
 
     this.esFacturador();
 
-    localStorage.setItem('nombrealmacen','')
-    localStorage.setItem('fechadesde','')
-    localStorage.setItem('fechahasta','')
+    localStorage.setItem('nombrealmacen', '')
+    localStorage.setItem('fechadesde', '')
+    localStorage.setItem('fechahasta', '')
 
     this.dtOptions = {
       language: {
@@ -71,105 +71,79 @@ export class CashBalancingComponent implements OnInit {
       responsive: true
     }
 
-       //Si es facturador obtener el nombre del almacen con su id
-       if(this.router.url.includes('navegation-facturador')){
+    //Si es facturador obtener el nombre del almacen con su id
+    if (this.router.url.includes('navegation-facturador')) {
 
-        
-        const almacenid: AlmacenesEntity = {
-          idAlmacen: localStorage.getItem('almacenid')!,
-          sociedad_id: '',
-          nombresociedad: '',
-          nombre_almacen: '',
-          direccion: '',
-          telefono: '',
-          codigo: '',
-          pto_emision: ''
-        }
-        this.httpServiceAlm.obtenerAlmacenId(almacenid).subscribe(res => {
-          if (res.codigoError != 'OK') {
-            Swal.fire({
-              icon: 'error',
-              title: 'Ha ocurrido un error.',
-              text: res.descripcionError,
-              showConfirmButton: false,
-            });
-          } else {
-            this.nombreAlmacen = res.lstAlmacenes[0]?.nombre_almacen!;
-            localStorage.setItem('nombrealmacen', this.nombreAlmacen);
-            this.filtroForm.get('almacen')?.setValue(res.lstAlmacenes[0]?.nombre_almacen!);
-            this.filtroForm.get('almacen')?.disable();
-        
-             
-        //Crear un tipo event
-  /////////////////////////////////
-  const forma1: FormasPagoEntity = {
-    id: '1',
-    nombre: '',
-    codigo: '',
-    fecha_inicio: '',
-    fecha_fin: '',
-    created_at: '',
-    updated_at: ''
-  }
-  const forma2: FormasPagoEntity = {
-    id: '2',
-    nombre: '',
-    codigo: '',
-    fecha_inicio: '',
-    fecha_fin: '',
-    created_at: '',
-    updated_at: ''
-  }
-  const forma3: FormasPagoEntity = {
-    id: '3',
-    nombre: '',
-    codigo: '',
-    fecha_inicio: '',
-    fecha_fin: '',
-    created_at: '',
-    updated_at: ''
-  }
-  
-  const almacen: AlmacenesEntity = {
-    idAlmacen: '',
-    sociedad_id: '',
-    nombresociedad: '',
-    nombre_almacen: this.nombreAlmacen,
-    direccion: '',
-    telefono: '',
-    codigo: '',
-    pto_emision: ''
-  }
 
-  
-  
-  this.httpService.obtenerDetallePagoAlm(almacen, forma1).subscribe(res => {
-    if (res.codigoError != "OK") {
-      this.filtroForm.get('almacen')?.enable();
-      Swal.fire({
-        icon: 'error',
-        title: 'No se pudo obtener movimientos.',
-        text: res.descripcionError,
-        showConfirmButton: false,
-      });
-    } else {
-      this.filtroForm.get('almacen')?.disable();
-      this.efectivo = res.lstDetallePagos[0].valor!;
-      console.log("AQUI EFECTIVO ",  res)
-      this.httpService.obtenerDetallePagoAlm(almacen, forma2).subscribe(res => {
-        if (res.codigoError != "OK") {
-          this.filtroForm.get('almacen')?.enable();
+      const almacenid: AlmacenesEntity = {
+        idAlmacen: localStorage.getItem('almacenid')!,
+        sociedad_id: '',
+        nombresociedad: '',
+        nombre_almacen: '',
+        direccion: '',
+        telefono: '',
+        codigo: '',
+        pto_emision: ''
+      }
+      this.httpServiceAlm.obtenerAlmacenId(almacenid).subscribe(res => {
+        if (res.codigoError != 'OK') {
           Swal.fire({
             icon: 'error',
-            title: 'No se pudo obtener movimientos.',
+            title: 'Ha ocurrido un error.',
             text: res.descripcionError,
             showConfirmButton: false,
           });
         } else {
+          this.nombreAlmacen = res.lstAlmacenes[0]?.nombre_almacen!;
+          localStorage.setItem('nombrealmacen', this.nombreAlmacen);
+          this.filtroForm.get('almacen')?.setValue(res.lstAlmacenes[0]?.nombre_almacen!);
           this.filtroForm.get('almacen')?.disable();
-          this.tar_deb = res.lstDetallePagos[0].valor!;
-  
-          this.httpService.obtenerDetallePagoAlm(almacen, forma3).subscribe(res => {
+
+
+          //Crear un tipo event
+          /////////////////////////////////
+          const forma1: FormasPagoEntity = {
+            id: '1',
+            nombre: '',
+            codigo: '',
+            fecha_inicio: '',
+            fecha_fin: '',
+            created_at: '',
+            updated_at: ''
+          }
+          const forma2: FormasPagoEntity = {
+            id: '2',
+            nombre: '',
+            codigo: '',
+            fecha_inicio: '',
+            fecha_fin: '',
+            created_at: '',
+            updated_at: ''
+          }
+          const forma3: FormasPagoEntity = {
+            id: '3',
+            nombre: '',
+            codigo: '',
+            fecha_inicio: '',
+            fecha_fin: '',
+            created_at: '',
+            updated_at: ''
+          }
+
+          const almacen: AlmacenesEntity = {
+            idAlmacen: '',
+            sociedad_id: '',
+            nombresociedad: '',
+            nombre_almacen: this.nombreAlmacen,
+            direccion: '',
+            telefono: '',
+            codigo: '',
+            pto_emision: ''
+          }
+
+
+
+          this.httpService.obtenerDetallePagoAlm(almacen, forma1).subscribe(res => {
             if (res.codigoError != "OK") {
               this.filtroForm.get('almacen')?.enable();
               Swal.fire({
@@ -180,22 +154,48 @@ export class CashBalancingComponent implements OnInit {
               });
             } else {
               this.filtroForm.get('almacen')?.disable();
-              this.tar_cre = res.lstDetallePagos[0].valor!;
-              console.log("AQUI TARJETA CREDITO ",  res)
-              this.calcularSumaTotal();
+              this.efectivo = res.lstDetallePagos[0].valor!;
+              console.log("AQUI EFECTIVO ", res)
+              this.httpService.obtenerDetallePagoAlm(almacen, forma2).subscribe(res => {
+                if (res.codigoError != "OK") {
+                  this.filtroForm.get('almacen')?.enable();
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'No se pudo obtener movimientos.',
+                    text: res.descripcionError,
+                    showConfirmButton: false,
+                  });
+                } else {
+                  this.filtroForm.get('almacen')?.disable();
+                  this.tar_deb = res.lstDetallePagos[0].valor!;
+
+                  this.httpService.obtenerDetallePagoAlm(almacen, forma3).subscribe(res => {
+                    if (res.codigoError != "OK") {
+                      this.filtroForm.get('almacen')?.enable();
+                      Swal.fire({
+                        icon: 'error',
+                        title: 'No se pudo obtener movimientos.',
+                        text: res.descripcionError,
+                        showConfirmButton: false,
+                      });
+                    } else {
+                      this.filtroForm.get('almacen')?.disable();
+                      this.tar_cre = res.lstDetallePagos[0].valor!;
+                      console.log("AQUI TARJETA CREDITO ", res)
+                      this.calcularSumaTotal();
+                    }
+                  });
+                }
+              });
             }
           });
+
+          this.fechaActual = new Date().toISOString().split('T')[0];
         }
       });
+      return;
+
     }
-  });
-  
-  this.fechaActual = new Date().toISOString().split('T')[0];
-          }
-        });
-        return;
- 
-}
     const sociedadNew: SociedadesEntity = {
       idGrupo: '',
       idSociedad: localStorage.getItem('sociedadid')!,
@@ -257,7 +257,7 @@ export class CashBalancingComponent implements OnInit {
                 });
               } else {
                 this.tar_deb = res.lstDetallePagos[0].valorTD!;
-    
+
                 this.httpService.obtenerDetallePagoTC(almacen).subscribe(res => {
                   if (res.codigoError != "OK") {
                     Swal.fire({
@@ -277,7 +277,7 @@ export class CashBalancingComponent implements OnInit {
             });
           }
         });
-         
+
       },
     }).then((result) => {
       /* Read more about handling dismissals below */
@@ -286,23 +286,23 @@ export class CashBalancingComponent implements OnInit {
       }
     });
     this.fechaActual = new Date().toISOString().split('T')[0];
-    
+
   }
 
   esFacturador() {
-    if(this.router.url.includes('navegation-facturador')){
+    if (this.router.url.includes('navegation-facturador')) {
       this.mostrarDiv = true;
     }
   }
 
   calcularSumaTotal() {
-    if(this.efectivo == ''){
+    if (this.efectivo == '') {
       this.efectivo = '0';
     }
-    if(this.tar_deb == '') {
+    if (this.tar_deb == '') {
       this.tar_deb = '0';
     }
-    if(this.tar_cre == ''){
+    if (this.tar_cre == '') {
       this.tar_cre = '0';
     }
 
@@ -329,7 +329,7 @@ export class CashBalancingComponent implements OnInit {
     this.filtroForm.get('fechaDesde')?.setValue(null);
     this.filtroForm.get('fechaHasta')?.enable();
     this.filtroForm.get('fechaDesde')?.enable();
-      const almacen: AlmacenesEntity = {
+    const almacen: AlmacenesEntity = {
       idAlmacen: '',
       sociedad_id: '',
       nombresociedad: '',
@@ -339,7 +339,7 @@ export class CashBalancingComponent implements OnInit {
       codigo: '',
       pto_emision: ''
     }
-      localStorage.setItem('nombrealmacen', tipoC.target.value);
+    localStorage.setItem('nombrealmacen', tipoC.target.value);
     const forma1: FormasPagoEntity = {
       id: '1',
       nombre: '',
@@ -478,7 +478,7 @@ export class CashBalancingComponent implements OnInit {
     const forma3 = '3';
     const sociedadid = localStorage.getItem('sociedadid');
 
-    if(almacen == '0'){
+    if (almacen == '0') {
       this.httpService.obtenerDetallePagoF(sociedadid!, forma1, fechaDesde, fechaHasta).subscribe(res => {
         if (res.codigoError != "OK") {
           this.filtroForm.get('almacen')?.enable();
@@ -518,7 +518,7 @@ export class CashBalancingComponent implements OnInit {
             }
           });
         }
-      }); 
+      });
     } else {
       this.httpService.obtenerDetallePagoAlmF(almacen, forma1, fechaDesde, fechaHasta).subscribe(res => {
         if (res.codigoError != "OK") {
@@ -574,17 +574,140 @@ export class CashBalancingComponent implements OnInit {
     this.filtroForm.get('fechaDesde')?.enable();
     this.filtroForm.get('fechaHasta')?.enable();
     //Si es facturador no se activa el select
-    if(this.router.url.includes('navegation-facturador')){
+    if (this.router.url.includes('navegation-facturador')) {
       this.filtroForm.get('almacen')?.disable();
+
+      //Obtener la data
+      const almacenid: AlmacenesEntity = {
+        idAlmacen: localStorage.getItem('almacenid')!,
+        sociedad_id: '',
+        nombresociedad: '',
+        nombre_almacen: '',
+        direccion: '',
+        telefono: '',
+        codigo: '',
+        pto_emision: ''
+      }
+      this.httpServiceAlm.obtenerAlmacenId(almacenid).subscribe(res => {
+        if (res.codigoError != 'OK') {
+          Swal.fire({
+            icon: 'error',
+            title: 'Ha ocurrido un error.',
+            text: res.descripcionError,
+            showConfirmButton: false,
+          });
+        } else {
+          this.nombreAlmacen = res.lstAlmacenes[0]?.nombre_almacen!;
+          localStorage.setItem('nombrealmacen', this.nombreAlmacen);
+          this.filtroForm.get('almacen')?.setValue(res.lstAlmacenes[0]?.nombre_almacen!);
+          this.filtroForm.get('almacen')?.disable();
+
+
+          //Crear un tipo event
+          /////////////////////////////////
+          const forma1: FormasPagoEntity = {
+            id: '1',
+            nombre: '',
+            codigo: '',
+            fecha_inicio: '',
+            fecha_fin: '',
+            created_at: '',
+            updated_at: ''
+          }
+          const forma2: FormasPagoEntity = {
+            id: '2',
+            nombre: '',
+            codigo: '',
+            fecha_inicio: '',
+            fecha_fin: '',
+            created_at: '',
+            updated_at: ''
+          }
+          const forma3: FormasPagoEntity = {
+            id: '3',
+            nombre: '',
+            codigo: '',
+            fecha_inicio: '',
+            fecha_fin: '',
+            created_at: '',
+            updated_at: ''
+          }
+
+          const almacen: AlmacenesEntity = {
+            idAlmacen: '',
+            sociedad_id: '',
+            nombresociedad: '',
+            nombre_almacen: this.nombreAlmacen,
+            direccion: '',
+            telefono: '',
+            codigo: '',
+            pto_emision: ''
+          }
+
+
+
+          this.httpService.obtenerDetallePagoAlm(almacen, forma1).subscribe(res => {
+            if (res.codigoError != "OK") {
+              this.filtroForm.get('almacen')?.enable();
+              Swal.fire({
+                icon: 'error',
+                title: 'No se pudo obtener movimientos.',
+                text: res.descripcionError,
+                showConfirmButton: false,
+              });
+            } else {
+              this.filtroForm.get('almacen')?.disable();
+              this.efectivo = res.lstDetallePagos[0].valor!;
+              console.log("AQUI EFECTIVO ", res)
+              this.httpService.obtenerDetallePagoAlm(almacen, forma2).subscribe(res => {
+                if (res.codigoError != "OK") {
+                  this.filtroForm.get('almacen')?.enable();
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'No se pudo obtener movimientos.',
+                    text: res.descripcionError,
+                    showConfirmButton: false,
+                  });
+                } else {
+                  this.filtroForm.get('almacen')?.disable();
+                  this.tar_deb = res.lstDetallePagos[0].valor!;
+
+                  this.httpService.obtenerDetallePagoAlm(almacen, forma3).subscribe(res => {
+                    if (res.codigoError != "OK") {
+                      this.filtroForm.get('almacen')?.enable();
+                      Swal.fire({
+                        icon: 'error',
+                        title: 'No se pudo obtener movimientos.',
+                        text: res.descripcionError,
+                        showConfirmButton: false,
+                      });
+                    } else {
+                      this.filtroForm.get('almacen')?.disable();
+                      this.tar_cre = res.lstDetallePagos[0].valor!;
+                      console.log("AQUI TARJETA CREDITO ", res)
+                      this.calcularSumaTotal();
+                    }
+                  });
+                }
+              });
+            }
+          });
+
+          this.fechaActual = new Date().toISOString().split('T')[0];
+        }
+      });
+
+
+
       return
-    }else{
+    } else {
       this.filtroForm.get('almacen')?.enable();
     }
 
 
-    localStorage.setItem('nombrealmacen','')
-    localStorage.setItem('fechadesde','')
-    localStorage.setItem('fechahasta','')
+    localStorage.setItem('nombrealmacen', '')
+    localStorage.setItem('fechadesde', '')
+    localStorage.setItem('fechahasta', '')
     const almacen: AlmacenesEntity = {
       idAlmacen: '',
       sociedad_id: localStorage.getItem('sociedadid')!,

@@ -542,6 +542,30 @@ export class MenucomprComponent implements OnInit {
     }
   }
 
+  //Metodo que agrega guion cada tres digitos y su maximo es 15
+  keyPressNumbers2(event: any) {
+    var charCode = (event.which) ? event.which : event.keyCode;
+    // Only Numbers 0-9
+
+      //Si ya se llego a 15 ya no deja escribir mas
+      if (event.target.value.length == 17) {
+        event.preventDefault();
+        return false;
+      }
+
+    if ((charCode < 48 || charCode > 57)) {
+      event.preventDefault();
+      return false;
+    } else {
+      var value = event.target.value;
+      if (value.length == 3 || value.length == 7) {
+        event.target.value = value + '-';
+      }
+
+      return true;
+    }
+  }
+
   // Función para verificar si se cumplen todas las condiciones
   checkAllConditions(): boolean {
     return (
@@ -560,7 +584,11 @@ export class MenucomprComponent implements OnInit {
 
   finalizarPedido() {
     this.fechaFormateada = this.datePipe.transform(this.fechaSeleccionada, 'yyyy-MM-dd');
+
+    //Eliminar guiones de comprobante
+    this.comprobante = this.comprobante.replace(/-/g, '');
     localStorage.setItem('compventa', this.comprobante);
+
     localStorage.setItem('autorizacion', this.autorizacion);
     Swal.fire({
       title: '¿Deseas continuar?',
