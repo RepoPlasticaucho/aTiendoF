@@ -58,7 +58,7 @@
                                 [disabled]="disableProveedor">
                                 <option value="0" selected>Seleccione un sustento</option>
                                 <option *ngFor="let sustento of lstSustentos" [value]="sustento.sustento">
-                                    {{sustento.sustento}}
+                                   {{sustento.codigo}} - {{sustento.sustento}}
                                 </option>
                             </select>
                         </div>

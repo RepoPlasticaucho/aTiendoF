@@ -241,15 +241,20 @@ export class MenuventComponent implements OnInit {
           this.telefono !== ''
       );
     } else if (selectedOption === 'CLIENTE') {
+      console.log("CLIENTE ACA 22")
       const dialogRef = this.dialog.open(VerClienteComponent, {
         width: '900px',
         height: '600px',
+        //Despues de que se cierre
+
 
         // Agrega cualquier configuración adicional del modal aquí
       });
 
+
+
       dialogRef.afterClosed().subscribe((result) => {
-        // Lógica para manejar el resultado después de cerrar el modal
+        this.verDatos()
       });
       // Verificar si los campos del cliente están completos
       this.clienteDatosCompletos = (
@@ -260,6 +265,8 @@ export class MenuventComponent implements OnInit {
         this.direccion !== '' &&
         this.telefono !== ''
       );
+
+
     } else {
       console.log('ERROR');
     }
@@ -286,9 +293,12 @@ export class MenuventComponent implements OnInit {
       provincia: '',
       ciudadid: '',
     };
+
+
     this.httpServiceTer.obtenerTerceroCedula(terceroNew).subscribe((res) => {
       console.log(res)
       if (res.codigoError == 'OK') {
+        console.log("ENTRO AQUIII", this.nombre, this.identificacion)
         this.nombre = res.lstTerceros[0].nombre;
         this.identificacion = res.lstTerceros[0].id_fiscal;
         this.correo = res.lstTerceros[0].correo;
@@ -296,6 +306,8 @@ export class MenuventComponent implements OnInit {
         this.direccion = res.lstTerceros[0].direccion;
         this.ciudad = res.lstTerceros[0].ciudad;
       }
+
+      
     });
     this.clienteDatosCompletos = (
       this.identificacion !== '' &&
