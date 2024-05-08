@@ -76,6 +76,8 @@ export class NuevoProductoComponent implements OnInit {
   lstTarifas: TarifasEntity[] = [];
   lstTarifasICE: TarifasEntity[] = [];
   lstTarifas2: TarifasEntity[] = [];
+  lstTarifas3: TarifasEntity[] = [];
+
   selectTarifa: boolean = false;
   // lstModelos: ModelosEntity[] = [];
   // lstLineas: LineasEntity[] = [];
@@ -238,9 +240,20 @@ export class NuevoProductoComponent implements OnInit {
           modelo_producto: '',
           categoria: '',
           linea: '',
-          tarifa_ice_iva_id1: this.modelProductForm.value!.tarifaICE ?? "",
-
+          tarifa_ice_iva_id1: this.lstTarifas3[0].id,
+          costo: this.modelProductForm.value!.costo ?? ""
         };
+
+
+        console.log("LOS PRODUCTOS ",productEntity);
+
+        let fecha = new Date();
+        let fechaFormateada = fecha.getFullYear() + '-' + 
+                              ('0' + (fecha.getMonth() + 1)).slice(-2) + '-' + 
+                              ('0' + fecha.getDate()).slice(-2) + ' ' + 
+                              ('0' + fecha.getHours()).slice(-2) + ':' + 
+                              ('0' + fecha.getMinutes()).slice(-2) + ':' + 
+                              ('0' + fecha.getSeconds()).slice(-2);
         this.httpService.obtenerProductosNomEti(productEntity).subscribe(res => {
           if (res.codigoError == "OK") {
             const newProdProv: ProveedoresProductosEntity = {
@@ -249,7 +262,7 @@ export class NuevoProductoComponent implements OnInit {
               producto_id: res.lstProductos[0].id,
               nombre_producto: this.modelProductForm.value!.producto ?? "",
               precio: this.modelProductForm.value!.precio ?? "",
-              created_at: new Date().toISOString(),
+              created_at: fechaFormateada,
               costo: this.modelProductForm.value!.costo ?? "",
               updated_at: ''
             }
@@ -262,6 +275,8 @@ export class NuevoProductoComponent implements OnInit {
                   showConfirmButton: true,
                   confirmButtonText: "Ok"
                 })
+
+                console.log("entro a agregar producto prov")
                 this.cerrarDialog();
               } else {
                 Swal.fire({
@@ -283,7 +298,7 @@ export class NuevoProductoComponent implements OnInit {
                     producto_id: res2.lstProductos[0].id,
                     nombre_producto: this.modelProductForm.value!.producto ?? "",
                     precio: this.modelProductForm.value!.precio ?? "",
-                    created_at: new Date().toISOString(),
+                    created_at: fechaFormateada,
                     costo: this.modelProductForm.value!.costo ?? "",
                     updated_at: ''
                   }
@@ -556,6 +571,42 @@ export class NuevoProductoComponent implements OnInit {
           });
         } else {
           this.lstTarifas2 = res.lstTarifas;
+        }
+      });
+    }
+  }
+
+
+  changeGroup5(event: any): void {
+    if (event.target.value == 0) {
+      this.selectTarifa = true;
+    } else {
+      this.selectTarifa = false;
+
+      // Obtener ID de la tarifa ICE
+      const tarifanew: TarifasEntity = {
+        id: '',
+        impuesto_id: '',
+        codigo: '',
+        porcentaje: '',
+        descripcion: event.target.value,
+        tarifa_ad_valorem_e_d_2020: '',
+        tarifa_esp_e_d_2020: '',
+        tarifa_esp_9_mayo_diciembre_2020: '',
+        created_at: '',
+        updated_at: ''
+      }
+      this.httpServiceTarifas.obtenerTarifasN(tarifanew).subscribe((res) => {
+        console.log(res);
+        if (res.codigoError != 'OK') {
+          Swal.fire({
+            icon: 'error',
+            title: 'No se pudo obtener Tarifas.',
+            text: res.descripcionError,
+            showConfirmButton: false,
+          });
+        } else {
+          this.lstTarifas3 = res.lstTarifas;
         }
       });
     }

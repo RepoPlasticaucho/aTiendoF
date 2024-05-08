@@ -189,7 +189,7 @@
         </div>
         <div class="form-group">
             <label for="tarifaICE" style="margin: 0;">Tarifa ICE</label>
-            <select class="form-control" formControlName="tarifaICE" (change)="changeGroup4($event)">
+            <select class="form-control" formControlName="tarifaICE" (change)="changeGroup5($event)">
                 <option [value]=" 0 " selected>Seleccione una tarifa ICE</option>
                 <option *ngFor="let tarifa of lstTarifasICE" [value]="tarifa.descripcion">
                     {{tarifa.descripcion}}
