@@ -31,4 +31,6 @@ export interface ProducAdmEntity {
     categoria?: string;
     linea?: string;
     url_image? :string;
+    tarifa_ice_iva_nombre?: string;
+    tarifa_ice_iva_id1?: string;
 }

@@ -231,6 +231,8 @@ export class VerClienteComponent implements OnInit {
         ciudadid: this.TercerosForm.value!.ciudad_id ?? ''
       }
       localStorage.setItem('idfiscalCl', this.TercerosForm.value!.id_fiscal!);
+
+      console.log("Este es el id fiscal en ver cliente", this.TercerosForm.value!.id_fiscal!);
       this.httpService.obtenerTerceroCedula(tercerodatos).subscribe(res1 => {
         if (res1.codigoError == "NEXISTE") {
           this.httpService.agregarTerceros(tercerodatos).pipe(finalize(() => {
@@ -263,7 +265,10 @@ export class VerClienteComponent implements OnInit {
                     text: 'Se ha elegido al Cliente',
                     showConfirmButton: true,
                     // timer: 3000
-                  });
+                  }).then(() => {
+                    this.cerrarDialog();
+                  }
+                  );
                 }
               });
             });
@@ -349,7 +354,10 @@ export class VerClienteComponent implements OnInit {
                       text: 'Se ha elegido al Cliente',
                       showConfirmButton: true,
                       // timer: 3000
-                    });
+                    }).then(() => {
+                      this.cerrarDialog();
+                    }
+                    );
                   }
                 });
               }
@@ -397,13 +405,17 @@ export class VerClienteComponent implements OnInit {
                   text: 'Se ha elegido al Cliente',
                   showConfirmButton: true,
                   // timer: 3000
-                });
+                }).then(() => {
+                  this.cerrarDialog();
+                }
+                );
               }
+
             });
           }
         }
       });
-      this.cerrarDialog();
+
     }
   }
 

@@ -76,9 +76,16 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="cedula">Autorización de venta:</label>
-                            <input type="text" [disabled]="disableProveedor" (keypress)="keyPressNumbers($event)"
+                            <input type="text" [disabled]="disableProveedor" (input)="keyPressValidator49or10($event)"
+                                (keypress)="keyPressNumbers($event)"
                                 [(ngModel)]="autorizacion" class="form-control input-1"
                                 placeholder="Autorización de venta" (input)="onInputAutorizacion($event)">
+                            <small *ngIf="errorAutorizacion">
+                                <small  *ngIf="errorAutorizacion" style="color: red;">
+                                    La autorización debe tener 10 (impresa) o 49 (electrónica) dígitos.
+                                </small >
+                            </small >
+                            
                         </div>
                     </div>
                     <div class="col-md-4">

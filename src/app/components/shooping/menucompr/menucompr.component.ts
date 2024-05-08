@@ -8,7 +8,7 @@ import { DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
 import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service';
 import { CompraNuevoComponent } from '../compra-nuevo/compra-nuevo.component';
 import '../../../../../src/disable-alerts';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { MovimientosService } from 'src/app/services/movimientos.service';
 import { MovimientosEntity } from 'src/app/models/movimientos';
 import { ProveedoresEntity } from 'src/app/models/proveedores';
@@ -27,6 +27,8 @@ import { DetalleImpuestosService } from 'src/app/services/detalle-impuestos.serv
 import { ComprobanteComprasEntity } from 'src/app/models/comprobante_compras';
 import { ComprobanteComprasService } from 'src/app/services/comprobante-compras.service';
 import { environment } from 'src/environments/environment.prod';
+
+
 
 @Component({
   selector: 'app-menucompr',
@@ -50,6 +52,7 @@ export class MenucomprComponent implements OnInit {
   faTrashAlt = faTrashAlt;
   faMoneyBillAlt = faMoneyBillAlt;
   faShoppingBag = faShoppingBag;
+  errorAutorizacion: boolean = false;
   public buttonsDisabled = true;
 
   public proveedorSeleccionado = false;
@@ -57,6 +60,42 @@ export class MenucomprComponent implements OnInit {
   public comprobanteCompraSeleccionado = false;
   public comprobanteLleno = false;
   public autorizacionLlena = false;
+
+
+  attributeForm = new FormGroup({
+    autorizacion: new FormControl('', [Validators.required, this.autorizacionLengthValidator()])
+  });
+  
+
+  autorizacionLengthValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const value: string = control.value;
+      if (value && (value.length === 10 || value.length === 49)) {
+        return null; // La longitud es válida, así que no hay error
+      }
+      return { 'autorizacion': true }; // La longitud no es válida, devolvemos un error
+    };
+  }
+
+  keyPressValidator49or10(event: any){
+    //Validar que sea numero
+    var charCode = (event.which) ? event.which : event.keyCode;
+    // Only Numbers 0-9
+    if ((charCode < 48 || charCode > 57)) {
+      event.preventDefault();
+      return false;
+    } else {
+        //Validar que autorizacion tenga 10 o 49 digitos
+      if (event.target.value.length !== 10 || event.target.value.length !== 49) {
+        this.errorAutorizacion = true
+      }
+      if (event.target.value.length == 10 || event.target.value.length == 49) {
+        this.errorAutorizacion = false
+      }
+      return true;
+    }
+  }
+  
 
   //Declaración de variables
   dtOptions: DataTables.Settings = {};
@@ -525,7 +564,7 @@ export class MenucomprComponent implements OnInit {
   }
 
   onInputAutorizacion(event: any) {
-    this.autorizacionLlena = event.target.value.trim() !== "";
+    this.autorizacionLlena = event.target.value.trim() !== "" && event.target.value.length == 10 || event.target.value.length == 49
     this.buttonsDisabled = !this.checkAllConditions();
     localStorage.setItem('autorizacion', JSON.stringify(event.target.value.trim()));
 
@@ -584,6 +623,18 @@ export class MenucomprComponent implements OnInit {
 
   finalizarPedido() {
     this.fechaFormateada = this.datePipe.transform(this.fechaSeleccionada, 'yyyy-MM-dd');
+
+    //Comprobar y validar que la autorizacion tenga 10 o 49 numeros
+    if (this.autorizacion.length != 10 && this.autorizacion.length != 49) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'La autorización debe tener 10 (impreso) o 49 (electronico) números',
+        showConfirmButton: true,
+        confirmButtonText: "Ok"
+      });
+      return;
+    }
 
     //Eliminar guiones de comprobante
     this.comprobante = this.comprobante.replace(/-/g, '');
@@ -759,6 +810,20 @@ export class MenucomprComponent implements OnInit {
 
   crearProveedor() {
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['nuevo-proveedor'] } }]);
+  }
+
+  //Metodo keyPress que muestre una alerta debajo del input que diga que solo se pueden ingresar numeros 10 o 49
+  keyPressNumbers3(event: any) {
+    var charCode = (event.which) ? event.which : event.keyCode;
+    // Only Numbers 0-9
+    if ((charCode < 48 || charCode > 57)) {
+      event.preventDefault();
+      //Si no tiene 10 o 49 digitos
+    
+      return false;
+    } else {
+      return true;
+    }
   }
 
 }

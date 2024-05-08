@@ -45,7 +45,7 @@ export class MenuventComponent implements OnInit {
   faMoneyBillAlt = faMoneyBillAlt;
   faShoppingBag = faShoppingBag;
 
-  iva= environment.iva;
+  iva = environment.iva;
 
   //Declaración de variables
   dtOptions: DataTables.Settings = {};
@@ -185,7 +185,7 @@ export class MenuventComponent implements OnInit {
           this.ciudad !== '' &&
           this.direccion !== '' &&
           this.telefono !== ''
-      );
+        );
       }
     });
   }
@@ -232,30 +232,69 @@ export class MenuventComponent implements OnInit {
             });
           }
         });
-        this.clienteDatosCompletos = (
-          this.identificacion !== '' &&
-          this.nombre !== '' &&
-          this.correo !== '' &&
-          this.ciudad !== '' &&
-          this.direccion !== '' &&
-          this.telefono !== ''
+      this.clienteDatosCompletos = (
+        this.identificacion !== '' &&
+        this.nombre !== '' &&
+        this.correo !== '' &&
+        this.ciudad !== '' &&
+        this.direccion !== '' &&
+        this.telefono !== ''
       );
     } else if (selectedOption === 'CLIENTE') {
       console.log("CLIENTE ACA 22")
       const dialogRef = this.dialog.open(VerClienteComponent, {
         width: '900px',
         height: '600px',
-        //Despues de que se cierre
-
-
         // Agrega cualquier configuración adicional del modal aquí
-      });
+      }).afterClosed().subscribe((result) => {
+        //Despued de 10 segundos ejecutar verDatos
+        this.verDatos();
+
+        //If para verificar si el cliente no se cargo en los input
+        if (this.identificacion === '' && this.nombre === '' && this.correo === '' && this.ciudad === '' && this.direccion === '' && this.telefono === '') {
+        const terceroEntity: TercerosEntity = {
+          almacen_id: '',
+          sociedad_id: '',
+          tipotercero_id: '',
+          tipousuario_id: '',
+          nombresociedad: '',
+          nombrealmacen: '',
+          nombretercero: '',
+          tipousuario: '',
+          nombre: '',
+          id_fiscal: localStorage.getItem('idfiscalCl')!,
+          direccion: '',
+          telefono: '',
+          correo: '',
+          fecha_nac: '',
+          ciudad: '',
+          provincia: '',
+          ciudadid: '',
+        };
+
+        //Si los datos siguen vacios obtener a partir de la cedula
+        this.httpServiceTer.obtenerTerceroCedula(terceroEntity).subscribe((res) => {
+          if (res.codigoError == 'OK') {
+            this.nombre = res.lstTerceros[0].nombre;
+            this.identificacion = res.lstTerceros[0].id_fiscal;
+            this.correo = res.lstTerceros[0].correo;
+            this.telefono = res.lstTerceros[0].telefono;
+            this.direccion = res.lstTerceros[0].direccion;
+            this.ciudad = res.lstTerceros[0].ciudad;
+          }
+        }
+        );
+        }
+        
 
 
 
-      dialogRef.afterClosed().subscribe((result) => {
-        this.verDatos()
-      });
+      })
+
+
+
+
+
       // Verificar si los campos del cliente están completos
       this.clienteDatosCompletos = (
         this.identificacion !== '' &&
@@ -273,7 +312,10 @@ export class MenuventComponent implements OnInit {
   }
 
   verDatos() {
+    //1. Si ya existe, carga con obtener tercero cedula
     console.log(this.lstDetalleMovimientos.length);
+
+
     const terceroNew: TercerosEntity = {
       almacen_id: '',
       sociedad_id: '',
@@ -295,10 +337,12 @@ export class MenuventComponent implements OnInit {
     };
 
 
+    console.log("TERCERO NEW ", terceroNew)
+
+
     this.httpServiceTer.obtenerTerceroCedula(terceroNew).subscribe((res) => {
       console.log(res)
       if (res.codigoError == 'OK') {
-        console.log("ENTRO AQUIII", this.nombre, this.identificacion)
         this.nombre = res.lstTerceros[0].nombre;
         this.identificacion = res.lstTerceros[0].id_fiscal;
         this.correo = res.lstTerceros[0].correo;
@@ -306,8 +350,10 @@ export class MenuventComponent implements OnInit {
         this.direccion = res.lstTerceros[0].direccion;
         this.ciudad = res.lstTerceros[0].ciudad;
       }
-
+      //2. Si no existe, carga con obtener tercero cedula
       
+
+
     });
     this.clienteDatosCompletos = (
       this.identificacion !== '' &&
@@ -316,7 +362,7 @@ export class MenuventComponent implements OnInit {
       this.ciudad !== '' &&
       this.direccion !== '' &&
       this.telefono !== ''
-  );
+    );
   }
   verCarrito() {
     const dialogRef = this.dialog.open(VerCarritoComponent, {
@@ -341,9 +387,9 @@ export class MenuventComponent implements OnInit {
         costo: '',
         precio: '',
       };
-  
+
       this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe((res) => {
-      console.log(res)
+        console.log(res)
 
         if (res.codigoError != 'OK') {
           Swal.fire({
@@ -426,7 +472,7 @@ export class MenuventComponent implements OnInit {
 
   calcularTotalTarifa15P(): number {
     const totalTarifa15 = this.lstDetalleMovimientos
-      .filter((detalleMovimientos) => detalleMovimientos.tarifa === this.iva+'%')
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === this.iva + '%')
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
@@ -436,22 +482,22 @@ export class MenuventComponent implements OnInit {
 
   calcularTotalTarifa15(): number {
     const totalTarifa15 = this.lstDetalleMovimientos
-      .filter((detalleMovimientos) => detalleMovimientos.tarifa === this.iva+'%')
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === this.iva + '%')
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
-    const porcen = totalTarifa15 * (this.iva/100)
+    const porcen = totalTarifa15 * (this.iva / 100)
 
     return totalTarifa15 + porcen;
   }
 
   calcularIva15(): number {
     const totalTarifa15 = this.lstDetalleMovimientos
-      .filter((detalleMovimientos) => detalleMovimientos.tarifa === this.iva+'%')
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === this.iva + '%')
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
-    const porcen = totalTarifa15 * (this.iva/100)
+    const porcen = totalTarifa15 * (this.iva / 100)
 
     return porcen;
   }
@@ -618,8 +664,66 @@ export class MenuventComponent implements OnInit {
       confirmButtonText: 'SÍ',
       denyButtonText: `NO`,
     }).then((result) => {
-      
+
+
       if (result.isConfirmed) {
+
+        console.log("ENTRO ACA IS CONFIRMED")
+        console.log(this.clienteForm.get('tipo')!.value)
+        console.log(this.sumaTotal)
+
+
+        //Tipo de dato de sumaTotal
+        console.log(typeof this.sumaTotal)
+
+        const totalNumber = parseFloat(this.sumaTotal)
+        console.log("Total number ", totalNumber)
+        console.log(typeof totalNumber)
+
+        //Controlar si el TOTAL es mas de 50 y es consumidor final, entonces es obligatorio facturar
+
+        if (totalNumber >= 2 && this.clienteForm.get('tipo')!.value === 'CONSUMIDOR FINAL') {
+
+
+          console.log("ENTRO SEGUNDO IF")
+
+          Swal.fire({
+            icon: 'warning',
+            title: 'Cliente Obligatorio',
+            text: 'El total de la venta es mayor que 50. Por favor, seleccione un cliente.',
+            showConfirmButton: true,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // Abre el modal para seleccionar un cliente
+              const dialogRef = this.dialog.open(VerClienteComponent, {
+                width: '900px',
+                height: '600px',
+                // Agrega cualquier configuración adicional del modal aquí
+              });
+
+              //Asignar el valor Cliente al input
+             
+              this.clienteForm.get('tipo')!.setValue("CLIENTE")
+
+              dialogRef.afterClosed().subscribe((result) => {
+                this.verDatos()
+              });
+              // Verificar si los campos del cliente están completos
+              this.clienteDatosCompletos = (
+                this.identificacion !== '' &&
+                this.nombre !== '' &&
+                this.correo !== '' &&
+                this.ciudad !== '' &&
+                this.direccion !== '' &&
+                this.telefono !== ''
+              );
+
+            }
+          });
+
+          return
+        }
+
         //
         console.log(this.lstDetalleMovimientos[0].id)
         for (let i = 0; i < this.lstDetalleMovimientos.length; i++) {
@@ -638,14 +742,14 @@ export class MenuventComponent implements OnInit {
             };
             this.httpServiceDet.obtenerDetalleImpuesto(newDetalleImp).subscribe(res => {
               if (res.codigoError == 'OK') {
-                if (res.lstDetalleImpuestos[0].porcentaje == this.iva+'%') {
+                if (res.lstDetalleImpuestos[0].porcentaje == this.iva + '%') {
                   const newDetalleImp2: DetalleImpuestosEntity = {
                     id: '',
                     detalle_movimiento_id: detalleMovimiento.id ?? '',
                     cod_impuesto: '',
                     porcentaje: detalleMovimiento.tarifa ?? '',
                     base_imponible: '',
-                    valor: (parseFloat(res.lstDetalleImpuestos[0].base_imponible) * (this.iva/100)).toString(),
+                    valor: (parseFloat(res.lstDetalleImpuestos[0].base_imponible) * (this.iva / 100)).toString(),
                     movimiento_id: detalleMovimiento.movimiento_id ?? '',
                     created_at: '',
                     updated_at: ''
@@ -667,7 +771,7 @@ export class MenuventComponent implements OnInit {
                             cod_impuesto: '',
                             porcentaje: detalleMovimiento.tarifa ?? '',
                             base_imponible: '',
-                            valor: (parseFloat(res3.lstDetalleImpuestos[0].base_imponible) * (this.iva/100)).toString(),
+                            valor: (parseFloat(res3.lstDetalleImpuestos[0].base_imponible) * (this.iva / 100)).toString(),
                             movimiento_id: detalleMovimiento.movimiento_id ?? '',
                             created_at: '',
                             updated_at: ''
@@ -684,7 +788,7 @@ export class MenuventComponent implements OnInit {
                     })
                   ).subscribe(res1 => {
                     if (res1.codigoError == 'OK') {
-                      
+
                     } else {
                       console.log('ERROR')
                     }
@@ -718,7 +822,7 @@ export class MenuventComponent implements OnInit {
                             cod_impuesto: '',
                             porcentaje: detalleMovimiento.tarifa ?? '',
                             base_imponible: '',
-                            valor: (parseFloat(res3.lstDetalleImpuestos[0].base_imponible) * (this.iva/100)).toString(),
+                            valor: (parseFloat(res3.lstDetalleImpuestos[0].base_imponible) * (this.iva / 100)).toString(),
                             movimiento_id: detalleMovimiento.movimiento_id ?? '',
                             created_at: '',
                             updated_at: ''
@@ -757,11 +861,11 @@ export class MenuventComponent implements OnInit {
 
           let ruta = this.router.url;
 
-          if(ruta.includes('navegation-cl')){
+          if (ruta.includes('navegation-cl')) {
             this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ver-factura'] } }]);
           }
 
-          if(ruta.includes('navegation-facturador')){
+          if (ruta.includes('navegation-facturador')) {
             this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['ver-factura'] } }]);
           }
 

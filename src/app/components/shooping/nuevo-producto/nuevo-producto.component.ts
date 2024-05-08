@@ -54,7 +54,10 @@ export class NuevoProductoComponent implements OnInit {
     etiquetas: new FormControl('', [Validators.required]),
     tamanio: new FormControl('', [Validators.required]),
     tarifa: new FormControl('0', [Validators.required]),
-    precio: new FormControl('', [Validators.required])
+    tarifaICE: new FormControl('0', [Validators.required]),
+    precio: new FormControl('', [Validators.required]),
+    costo: new FormControl('', [Validators.required])
+
   });
   //Variables para listas desplegables
   lstModeloProductos: ModeloProductosEntity[] = [];
@@ -71,6 +74,7 @@ export class NuevoProductoComponent implements OnInit {
   selectModelo: boolean = false;
 
   lstTarifas: TarifasEntity[] = [];
+  lstTarifasICE: TarifasEntity[] = [];
   lstTarifas2: TarifasEntity[] = [];
   selectTarifa: boolean = false;
   // lstModelos: ModelosEntity[] = [];
@@ -146,6 +150,20 @@ export class NuevoProductoComponent implements OnInit {
         });
       } else {
         this.lstTarifas = res.lstTarifas;
+
+        //Filtrar solo las tarifas que contenga ICE
+        this.lstTarifasICE = this.lstTarifas.filter((tarifa) => tarifa.descripcion?.includes('ICE'));
+        //Buscar y mover la que contenga "No aplica ICE" al inicio
+        let index = this.lstTarifasICE.findIndex((tarifa) => tarifa.descripcion?.includes('No aplica ICE'));
+        let tarifa = this.lstTarifasICE[index];
+        this.lstTarifasICE.splice(index, 1);
+        this.lstTarifasICE.unshift(tarifa);
+
+
+        //Eliminar todoas las que tenga ICE de lstTarifas
+        this.lstTarifas = this.lstTarifas.filter((tarifa) => !tarifa.descripcion?.includes('ICE'));
+        //Ordenar y poner primeros los que contenga un %
+        this.lstTarifas.sort((a, b) => (a.descripcion?.includes('%') ? -1 : 1));
       }
     });
 
@@ -219,7 +237,9 @@ export class NuevoProductoComponent implements OnInit {
           modelo_nombre: '',
           modelo_producto: '',
           categoria: '',
-          linea: ''
+          linea: '',
+          tarifa_ice_iva_id1: this.modelProductForm.value!.tarifaICE ?? "",
+
         };
         this.httpService.obtenerProductosNomEti(productEntity).subscribe(res => {
           if (res.codigoError == "OK") {
@@ -229,7 +249,8 @@ export class NuevoProductoComponent implements OnInit {
               producto_id: res.lstProductos[0].id,
               nombre_producto: this.modelProductForm.value!.producto ?? "",
               precio: this.modelProductForm.value!.precio ?? "",
-              created_at: '',
+              created_at: new Date().toISOString(),
+              costo: this.modelProductForm.value!.costo ?? "",
               updated_at: ''
             }
             this.httpServiceProveedoresProd.agregarProductosProv(newProdProv).subscribe(res1 => {
@@ -262,7 +283,8 @@ export class NuevoProductoComponent implements OnInit {
                     producto_id: res2.lstProductos[0].id,
                     nombre_producto: this.modelProductForm.value!.producto ?? "",
                     precio: this.modelProductForm.value!.precio ?? "",
-                    created_at: '',
+                    created_at: new Date().toISOString(),
+                    costo: this.modelProductForm.value!.costo ?? "",
                     updated_at: ''
                   }
                   this.httpServiceProveedoresProd.agregarProductosProv(newProdProv).subscribe(res3 => {
