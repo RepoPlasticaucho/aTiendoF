@@ -7,6 +7,7 @@ import { SociedadesEntity } from 'src/app/models/sociedades';
 import { GruposService } from 'src/app/services/grupos.service';
 import { SociedadesService } from 'src/app/services/sociedades.service';
 import Swal from 'sweetalert2';
+import * as CryptoJS from 'crypto-js';
 
 @Component({
   selector: 'app-sociedades-create',
@@ -19,6 +20,10 @@ export class SociedadesCreateComponent implements OnInit {
   faTimes = faTimes;
   faUserFriends = faUserFriends;
   faSave = faSave;
+  encPass2: string | undefined;
+  encPass!: string;
+  passwre!: string;
+
   //Creación de la variable para formulario
   corporationForm = new FormGroup({
     grupo: new FormControl('0', Validators.required),
@@ -27,7 +32,8 @@ export class SociedadesCreateComponent implements OnInit {
     nombreComercial: new FormControl('', Validators.required),
     correoElectronico: new FormControl('', [Validators.required, Validators.email]),
     telefono: new FormControl('', [Validators.required, Validators.minLength(9)]),
-    tipoamb: new FormControl('0', Validators.required)
+    tipoamb: new FormControl('0', Validators.required),
+    contrasenia: new FormControl('', Validators.required),
   });
   //Variables para listas desplegables
   lstGrupos: GruposEntity[] = [];
@@ -75,17 +81,31 @@ export class SociedadesCreateComponent implements OnInit {
         this.selectGrupo = true;
       }
       else {
+
+        var salt = CryptoJS.enc.Base64.parse("SXZhbiBNZWR2ZWRldg==");
+        var iv = CryptoJS.enc.Hex.parse("69135769514102d0eded589ff874cacd");
+        var key564Bits10000Iterations = CryptoJS.PBKDF2("Venus21!", salt, { keySize: 256 / 32 + 128 / 32, iterations: 10000, hasher: CryptoJS.algo.SHA512 });
+        const pass = this.corporationForm.value!.contrasenia ?? ""
+        var encrypted = CryptoJS.AES.encrypt(pass, key564Bits10000Iterations, {
+          iv: iv,
+          mode: CryptoJS.mode.CBC,
+          padding: CryptoJS.pad.Pkcs7
+        });
+
+        this.passwre = pass;
+        this.encPass = encrypted.toString();
+
         const sociedadEntity: SociedadesEntity = {
           idGrupo: this.corporationForm.value!.grupo ?? "",
           id_fiscal: this.corporationForm.value!.idFiscal ?? "",
           nombre_comercial: this.corporationForm.value!.nombreComercial ?? "",
           email: this.corporationForm.value!.correoElectronico ?? "",
           telefono: this.corporationForm.value!.telefono ?? "",
-          password: '',
           funcion: this.corporationForm.value!.rol ?? "",
           idSociedad: '',
           tipo_ambienteid: this.corporationForm.value!.tipoamb ?? "",
-          razon_social: ''
+          razon_social: '',
+          password: this.encPass,
         };
         this.httpService.agregarSociedad(sociedadEntity).subscribe(res => {
           if (res.codigoError == "OK") {

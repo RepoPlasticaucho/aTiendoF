@@ -72,6 +72,19 @@
                         </small>
                     </small>
                 </div>
+
+                <div class="form-group">
+                    <label for="contrasenia">Contraseña</label>
+                    <input type="password" class="form-control" id="contrasenia" placeholder="Ingrese su contraseña"
+                        formControlName="contrasenia">
+                    <small
+                        *ngIf="corporationForm.controls['contrasenia'].invalid && (corporationForm.controls['contrasenia'].dirty || corporationForm.controls['contrasenia'].touched)">
+                        <small *ngIf="corporationForm.controls['contrasenia'].errors?.['required']"
+                            style="color: red;">
+                            Debe ingresar su contraseña.
+                        </small>
+                    </small>
+                </div>
                 <div class="form-group ">
                     <label for="telefono ">Teléfono</label>
                     <input type="text " class="form-control " id="telefono "
