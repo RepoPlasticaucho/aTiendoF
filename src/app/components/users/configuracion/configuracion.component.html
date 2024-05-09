@@ -41,9 +41,14 @@
                                 </small>
                             </small>
                         </div>
-                        <div class="form-group">
-                            <label for="razonSocial">Clave Actual</label>
-                            <div class="input-group">
+                        <div class="form-group" *ngIf="razonSocialInclude">
+                            <label for="razonSocial"
+                              
+                            >Clave Actual</label>
+                            <div class="input-group"
+                            
+
+                            >
                                 <input type="{{ showPassword['razonSocial'] ? 'text' : 'password' }}"
                                     class="form-control" id="razonSocial" placeholder="Ingrese la contraseña Actual "
                                     formControlName="razonSocial">
@@ -56,7 +61,7 @@
                                 </div>
                             </div>
                             <small
-                                *ngIf="corporationForm.controls['razonSocial'].invalid && (corporationForm.controls['razonSocial'].dirty || corporationForm.controls['razonSocial'].touched)">
+                                *ngIf=" corporationForm.controls['razonSocial'].invalid && (corporationForm.controls['razonSocial'].dirty || corporationForm.controls['razonSocial'].touched)">
                                 <small *ngIf="corporationForm.controls['razonSocial'].errors?.['required']"
                                     style="color: red;">
                                     Debe ingresar la contraseña actual

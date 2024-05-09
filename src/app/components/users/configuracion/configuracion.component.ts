@@ -19,6 +19,19 @@ export class ConfiguracionComponent implements OnInit {
   faTimes = faTimes;
   faCopy = faCopy;
   faSave = faSave;
+  emailAux: string = "";
+  //Campo para ver si tiene razon social o no
+  razonSocialInclude: boolean = false;
+
+  //Funcion para ver si tiene
+  comprobarRazonSocial(){
+    if(this.corporationForm.get("razonSocial")?.value != "" && this.corporationForm.get("razonSocial")?.value != null){
+      this.razonSocialInclude = true;
+    }else{
+      this.razonSocialInclude = false;
+    }
+  }
+
   //Creación de la variable para formulario
   corporationForm = new FormGroup({
     nombreComercial2: new FormControl('', Validators.required),
@@ -48,6 +61,8 @@ export class ConfiguracionComponent implements OnInit {
 
   ngOnInit(): void {
 
+    
+
     const sociedad: SociedadesEntity = {
       idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
       idGrupo: '',
@@ -68,7 +83,7 @@ export class ConfiguracionComponent implements OnInit {
       if (res.codigoError != "OK") {
         Swal.fire({
           icon: 'error',
-          title: 'Ha ocurrido un error.',
+          title: 'Ha ocurrido un error1.',
           text: res.descripcionError,
           showConfirmButton: false,
           // timer: 3000
@@ -86,7 +101,11 @@ export class ConfiguracionComponent implements OnInit {
       }
       // console.log(res);
       this.fun = res.lstSociedades[0].funcion;
+    this.comprobarRazonSocial();
+
     })
+
+
   }
 
   onPass(): void {
@@ -102,13 +121,27 @@ export class ConfiguracionComponent implements OnInit {
   }
 
   actualizarCert() {
+
+    console.log("entro al metodo")
     const passnuevo = this.corporationForm.value!.nombreComercial2 ?? "";
     const passactual = this.corporationForm.value!.razonSocial ?? "";
     const emailCert = this.emailForm.value!.email ?? "";
 
-    if (!this.corporationForm.valid) {
+    console.log(passnuevo + " - " + passactual + " - " + emailCert)
+
+
+
+    if (!this.corporationForm.valid && this.razonSocialInclude) {
+      console.log("entro al if principal")
       this.corporationForm.markAllAsTouched();
     } else {
+
+      if (!this.razonSocialInclude){
+        console.log("entro al if principal2")
+        //Agregar el certificado y la clave
+        console.log("asdsd")
+
+      }
 
       if (passactual == passnuevo) {
         Swal.fire({
@@ -128,6 +161,7 @@ export class ConfiguracionComponent implements OnInit {
           }
         });
       } else {
+        console.log("entro al else")
         const imageEntity: ImagenesEntity = {
           imageBase64: this.certificadoBase64,
           nombreArchivo: this.certificadoName,
@@ -135,6 +169,18 @@ export class ConfiguracionComponent implements OnInit {
           descripcionError: '',
           nombreArchivoEliminar: '',
         };
+
+
+        //Obtener el email de la sociedad
+        this.httpService.obtenerEmailPorIdSociedad(JSON.parse(localStorage.getItem('sociedadid') || "")).subscribe(res => {
+          if(res != null || res != undefined || res != ""){
+            this.emailAux = res;
+          }
+        }
+        )
+
+
+        console.log("Esta es la imagen ", imageEntity);
         this.httpServiceImage
           .agregarCertificado(imageEntity).subscribe(res1 => {
             if (res1.codigoError == 'OK') {
@@ -143,7 +189,7 @@ export class ConfiguracionComponent implements OnInit {
                 nombre_comercial: '',
                 tipo_ambienteid: '',
                 id_fiscal: '',
-                email: '',
+                email: this.emailAux || "",
                 telefono: '',
                 password: '',
                 funcion: '',
@@ -154,6 +200,8 @@ export class ConfiguracionComponent implements OnInit {
                 pass_certificado: '',// activar validacion
                 email_certificado: emailCert
               }
+
+              console.log("entro al OK")
               this.httpService.actualizarCertificado(userEntity).subscribe(res => {
                 if (res.codigoError == "OK") {
                   Swal.fire({
@@ -178,7 +226,7 @@ export class ConfiguracionComponent implements OnInit {
                 } else {
                   Swal.fire({
                     icon: 'error',
-                    title: 'Ha ocurrido un error.',
+                    title: 'Ha ocurrido un error2.',
                     text: res.descripcionError,
                     showConfirmButton: false,
                   });
@@ -239,7 +287,7 @@ export class ConfiguracionComponent implements OnInit {
                 } else {
                   Swal.fire({
                     icon: 'error',
-                    title: 'Ha ocurrido un error.',
+                    title: 'Ha ocurrido un error3.',
                     text: res.descripcionError,
                     showConfirmButton: false,
                   });
