@@ -7,7 +7,9 @@
           </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <mat-menu #menu="matMenu">
               <a [routerLink]="[{ outlets: { contentPersonal: ['usuario'] } }]" class="mat-menu-item">Perfil</a>
-              <a [routerLink]="[{ outlets: { contentPersonal: ['cofiguracion-user'] } }]" class="mat-menu-item">Configuracion</a>
+              <a [routerLink]="[{ outlets: { contentPersonal: ['cofiguracion-user'] } }]" class="mat-menu-item"
+                *ngIf="!rol"
+              >Configuracion</a>
               <a class="mat-menu-item" (click)="logout()">Salir</a>
           
           </mat-menu>                   

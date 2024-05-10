@@ -23,6 +23,17 @@ export class ConfiguracionComponent implements OnInit {
   //Campo para ver si tiene razon social o no
   razonSocialInclude: boolean = false;
 
+  rol: boolean = false;
+
+
+
+  //Funcion para ver si es facturador
+  comprobarRol(){
+    if(this.router.url.includes("facturador")){
+      this.rol = true;
+    }
+  }
+
   //Funcion para ver si tiene
   comprobarRazonSocial(){
     if(this.corporationForm.get("razonSocial")?.value != "" && this.corporationForm.get("razonSocial")?.value != null){
@@ -61,7 +72,7 @@ export class ConfiguracionComponent implements OnInit {
 
   ngOnInit(): void {
 
-    
+    this.comprobarRol();
 
     const sociedad: SociedadesEntity = {
       idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
@@ -171,71 +182,93 @@ export class ConfiguracionComponent implements OnInit {
         };
 
 
+        console.log("ESTE ES EL EMAIL AUX ", localStorage.getItem('sociedadid'))
+
+        //Sociedad con el id
+
+        const sociedad: SociedadesEntity = {
+          idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
+          idGrupo: '',
+          nombre_comercial: '',
+          id_fiscal: '',
+          email: '',
+          tipo_ambienteid: '',
+          telefono: '',
+          password: '',
+          funcion: '',
+          razon_social: '',
+          url_certificado: '',
+          clave_certificado: ''
+        }
+
+
+
+
         //Obtener el email de la sociedad
-        this.httpService.obtenerEmailPorIdSociedad(JSON.parse(localStorage.getItem('sociedadid') || "")).subscribe(res => {
+        this.httpService.obtenerEmailPorIdSociedad(sociedad).subscribe(res => {
           if(res != null || res != undefined || res != ""){
             this.emailAux = res;
+            this.httpServiceImage
+            .agregarCertificado(imageEntity).subscribe(res1 => {
+              if (res1.codigoError == 'OK') {
+                const userEntity: SociedadesEntity = {
+                  idGrupo: '',
+                  nombre_comercial: '',
+                  tipo_ambienteid: '',
+                  id_fiscal: '',
+                  email: this.emailAux || "",
+                  telefono: '',
+                  password: '',
+                  funcion: '',
+                  idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
+                  razon_social: '',
+                  url_certificado: this.certificadoName == '' ? this.certificadoUrl : this.certificadoName,
+                  clave_certificado: passnuevo, // cambiar por new
+                  pass_certificado: '',// activar validacion
+                  email_certificado: emailCert
+                }
+  
+                console.log("entro al OK")
+                this.httpService.actualizarCertificado(userEntity).subscribe(res => {
+                  if (res.codigoError == "OK") {
+                    Swal.fire({
+                      icon: 'success',
+                      title: 'Actualizado Correctamente.',
+                      text: `Se ha actualizado la información`,
+                      showConfirmButton: true,
+                      confirmButtonText: "Ok"
+                    }).finally(() => {
+                      switch (this.fun) {
+                        case "admin":
+                          this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['cofiguracion-user'] } }]);
+                          break;
+                        case "client":
+                          this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['cofiguracion-user'] } }]);
+                          break;
+                      }
+  
+                    });
+  
+  
+                  } else {
+                    Swal.fire({
+                      icon: 'error',
+                      title: 'Ha ocurrido un error2.',
+                      text: res.descripcionError,
+                      showConfirmButton: false,
+                    });
+                  }
+                });
+              }
+            })
+  
+  
           }
         }
         )
+        console.log("ESTE ES EL EMAIL AUX ", this.emailAux)
 
-
-        console.log("Esta es la imagen ", imageEntity);
-        this.httpServiceImage
-          .agregarCertificado(imageEntity).subscribe(res1 => {
-            if (res1.codigoError == 'OK') {
-              const userEntity: SociedadesEntity = {
-                idGrupo: '',
-                nombre_comercial: '',
-                tipo_ambienteid: '',
-                id_fiscal: '',
-                email: this.emailAux || "",
-                telefono: '',
-                password: '',
-                funcion: '',
-                idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
-                razon_social: '',
-                url_certificado: this.certificadoName == '' ? this.certificadoUrl : this.certificadoName,
-                clave_certificado: passnuevo, // cambiar por new
-                pass_certificado: '',// activar validacion
-                email_certificado: emailCert
-              }
-
-              console.log("entro al OK")
-              this.httpService.actualizarCertificado(userEntity).subscribe(res => {
-                if (res.codigoError == "OK") {
-                  Swal.fire({
-                    icon: 'success',
-                    title: 'Actualizado Correctamente.',
-                    text: `Se ha actualizado la información`,
-                    showConfirmButton: true,
-                    confirmButtonText: "Ok"
-                  }).finally(() => {
-                    switch (this.fun) {
-                      case "admin":
-                        this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['cofiguracion-user'] } }]);
-                        break;
-                      case "client":
-                        this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['cofiguracion-user'] } }]);
-                        break;
-                    }
-
-                  });
-
-
-                } else {
-                  Swal.fire({
-                    icon: 'error',
-                    title: 'Ha ocurrido un error2.',
-                    text: res.descripcionError,
-                    showConfirmButton: false,
-                  });
-                }
-              });
-            }
-          })
-
-
+      
       }
     }
   }

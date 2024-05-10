@@ -202,7 +202,6 @@ const routes: Routes = [
       { path: "movimientos", component: MovimientosComponent , outlet:"contentPersonal"},
       { path: "cuadre-caja", component: CashBalancingComponent, outlet: "contentPersonal" },
       { path: "ver-compra", component: VerCompraComponent, outlet: "contentPersonal" },
-      { path: "cofiguracion-user", component: ConfiguracionComponent , outlet: "contentPersonal" },
       { path: "factura", component: FacturaComponent , outlet: "contentPersonal" },
       { path: "nuevo-proveedor", component: NuevoProveedorComponent , outlet: "contentPersonal" },
       { path: "movimiento-inventario", component: MovimientoInventariosComponent , outlet: "contentPersonal" },

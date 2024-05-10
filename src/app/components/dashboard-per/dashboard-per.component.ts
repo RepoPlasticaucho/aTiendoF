@@ -14,6 +14,14 @@ import { Location } from '@angular/common';
   styleUrls: ['./dashboard-per.component.css']
 })
 export class DashboardPerComponent {
+
+
+  //nGONInit
+  ngOnInit(): void {
+    this.comprobarRol();
+  }
+
+  rol: boolean = false;
   /** Based on the screen size, switch from standard to one column per row */
   cards = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
     map(({ matches }) => {
@@ -40,6 +48,13 @@ export class DashboardPerComponent {
       ];
     })
   );
+
+
+  comprobarRol(){
+    if(this.router.url.includes("facturador")){
+      this.rol = true;
+    }
+  }
 
   lstAlmacenes: AlmacenesEntity[] = [];
 

@@ -473,6 +473,9 @@ export class MenucomprComponent implements OnInit {
                   });
                 } else {
                   this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+
+                  console.log("MOvimientos ", this.lstDetalleMovimientos);
+
                   this.disableProveedor = this.lstDetalleMovimientos.length > 0;
                   // this.groupForm.reset();
                   this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {

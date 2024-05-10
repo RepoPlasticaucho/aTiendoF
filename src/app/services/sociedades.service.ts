@@ -87,8 +87,8 @@ export class SociedadesService {
     return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/ObtenerSociedadesN`, nombre);
   }
 
-  obtenerEmailPorIdSociedad(idSociedad: string): Observable<string> {
-    return this.http.get<string>(`${environment.apiUrl}sociedades/ObtenerSociedadesE?idSociedad=${idSociedad}`);
+  obtenerEmailPorIdSociedad(sociedad: SociedadesEntity): Observable<string> {
+    return this.http.post<string>(`${environment.apiUrl}sociedades/ObtenerSociedadEmail`, sociedad);
   }
 
 }

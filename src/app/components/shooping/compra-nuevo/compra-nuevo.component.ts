@@ -175,6 +175,7 @@ export class CompraNuevoComponent implements OnInit {
 
 
   crearDetalle(proveedorProducto: ProveedoresProductosEntity): void {
+    console.log("CREO DETALLE")
     this.httpServiceProvProd.asignarProveedorProducto(proveedorProducto);
     this.httpServiceProvProd.obtenerProveedorProducto$.pipe(take(1)).subscribe((res) => {
       this.botonBloqueado=true;
@@ -192,9 +193,9 @@ export class CompraNuevoComponent implements OnInit {
         });
       } else {
         //Asignamos los valores a los campos
-        this.costo = res.precio;
+        this.costo = res.costo;
         this.costo2 = res.costo;
-        this.precio = parseFloat(res.precio!) * parseFloat(proveedorProducto.cantidad!);
+        this.precio = parseFloat(res.costo!) * parseFloat(proveedorProducto.cantidad!);
 
         const newInventario: InventariosEntity = {
           categoria_id: '',
@@ -350,6 +351,8 @@ export class CompraNuevoComponent implements OnInit {
               costo: this.costo,
               precio: this.precio
             }
+
+
             if (!proveedorProducto.productoExistente){
               if(proveedorProducto.cantidad=="0"){
                 Swal.fire({
@@ -415,6 +418,9 @@ export class CompraNuevoComponent implements OnInit {
               });
             } else {
               if(proveedorProducto.cantidad! != '0'){
+                newDetalle.precio = (parseFloat(proveedorProducto.cantidad!) * parseFloat(proveedorProducto.costo!)).toString();
+
+
                 this.httpServiceDetalle.modificarDetallePedidoVenta(newDetalle).subscribe(res => {
                   console.log(res.codigoError)
                   if(res.codigoError == 'OK'){

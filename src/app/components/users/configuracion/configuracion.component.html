@@ -8,7 +8,9 @@
         </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <mat-menu #menu="matMenu">
             <a class="mat-menu-item" (click)="onPass()">Perfil</a>
-            <a (click)="onPass1()" class="mat-menu-item">Configuracion</a>
+            <a (click)="onPass1()" class="mat-menu-item"
+                *ngIf="!rol"
+            >sd</a>
             <a (click)="logout()" class="mat-menu-item">Salir</a>
         </mat-menu>
     </div>
