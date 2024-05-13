@@ -143,6 +143,24 @@
                         </small>
                     </small>
                 </div>
+
+                <div class="form-group">
+                    <label for="grupo">Obligatorio Contabilidad</label>
+                    <select class="form-control" (change)="changeGroup5($event)" formControlName="obligatorioContabilidad">
+                        <option [value]=" 0 " selected>Seleccione un valor obligatorio contabilidad</option>
+                        <option [value]="si">
+                            Si
+                        </option>
+                        <option [value]="no">
+                            No
+                        </option>
+                    </select>
+                    <small *ngIf="selectRol">
+                        <small *ngIf="selectRol" style="color: red; ">
+                            Debe seleccionar un valor obligatorio contabilidad.
+                        </small>
+                    </small>
+                </div>
                 <button type="submit" class="btn btn-primary">
                     <!--[disabled]="!this.corporationForm.valid"-->
                     <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>

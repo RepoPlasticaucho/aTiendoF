@@ -686,9 +686,9 @@ export class MenuventComponent implements OnInit {
 
         //Controlar si el TOTAL es mas de 50 y es consumidor final, entonces es obligatorio facturar
 
-        if (totalNumber >= 50 && this.clienteForm.get('tipo')!.value === 'CONSUMIDOR FINAL' || this.identificacion === 'CONSUMIDOR FINAL') {
+        if (totalNumber >= 50 && this.clienteForm.get('tipo')!.value === 'CONSUMIDOR FINAL' && this.identificacion === 'CONSUMIDOR FINAL') {
 
-        
+        console.log("ESTE ES EL TOTAL DE LA COMPRA ", totalNumber)
 
           Swal.fire({
             icon: 'warning',

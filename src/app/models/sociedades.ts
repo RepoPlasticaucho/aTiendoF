@@ -27,5 +27,6 @@ export interface SociedadesEntity {
     sociedad_pertenece?: string;
     almacen_personal_id?: string;
     emite_retencion?: string;
+    obligado_contabilidad?: string;
     
 }

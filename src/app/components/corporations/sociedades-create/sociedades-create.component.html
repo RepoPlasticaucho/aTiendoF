@@ -137,6 +137,26 @@
                         </small>
                     </small>
                 </div>
+
+
+                <div class="form-group">
+                    <label for="obligadoContabilidad">Obligado a llevar contabilidad</label>
+                    <select class="form-control" (change)="changeGroup5($event)" formControlName="obligadoContabilidad">
+                        <option [value]="0" selected>Seleccione un valor para contabilidad</option>
+                        <option [value]="si">
+                            Si
+                        </option>
+                        <option [value]="no">
+                            No
+                        </option>
+
+                    </select>
+                    <small *ngIf="selectObligadoContabilidad">
+                        <small *ngIf="selectObligadoContabilidad" style="color: red; ">
+                            Debe seleccionar un valor para contabilidad.
+                        </small>
+                    </small>
+                </div>
                
 
                 <div class="form-group">

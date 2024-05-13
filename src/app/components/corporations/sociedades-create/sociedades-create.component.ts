@@ -35,6 +35,7 @@ export class SociedadesCreateComponent implements OnInit {
     tipoamb: new FormControl('0', Validators.required),
     contrasenia: new FormControl('', Validators.required),
     emiteRetencion: new FormControl('0', Validators.required),
+    obligadoContabilidad: new FormControl('0', Validators.required),
   });
   //Variables para listas desplegables
   lstGrupos: GruposEntity[] = [];
@@ -42,6 +43,7 @@ export class SociedadesCreateComponent implements OnInit {
   selectRol: boolean = false;
   selectTipoAmb: boolean = false;
   selectEmiteRetencion: boolean = false;
+  selectObligadoContabilidad: boolean = false;
 
   admin: string = 'admin';
   pruebas: string = '1';
@@ -77,6 +79,11 @@ export class SociedadesCreateComponent implements OnInit {
   onSubmit(): void {
     if (!this.corporationForm.valid) {
       this.corporationForm.markAllAsTouched();
+      if (this.corporationForm.get("obligadoContabilidad")?.value == "0") {
+        this.selectObligadoContabilidad = true;
+        return
+      }
+
       if (this.corporationForm.get("emiteRetencion")?.value == "0") {
         this.selectEmiteRetencion = true;
         return
@@ -117,6 +124,7 @@ export class SociedadesCreateComponent implements OnInit {
           razon_social: '',
           password: this.encPass,
           emite_retencion: this.corporationForm.value!.emiteRetencion ?? "",
+          obligado_contabilidad: this.corporationForm.value!.obligadoContabilidad ?? "",
         };
         this.httpService.agregarSociedad(sociedadEntity).subscribe(res => {
           if (res.codigoError == "OK") {
@@ -186,6 +194,15 @@ export class SociedadesCreateComponent implements OnInit {
     } else {
       this.selectEmiteRetencion = false;
       this.corporationForm.get("emiteRetencion")?.setValue(emiteRetencion.target.value);
+    }
+  }
+
+  changeGroup5(obligadoConta: any): void {
+    if (obligadoConta.target.value == "0" ) {
+      this.selectObligadoContabilidad = true;
+    } else {
+      this.selectObligadoContabilidad = false;
+      this.corporationForm.get("obligadoContabilidad")?.setValue(obligadoConta.target.value);
     }
   }
 

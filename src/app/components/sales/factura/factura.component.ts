@@ -48,6 +48,7 @@ export class FacturaComponent implements OnInit {
   cliente: string = '';
   idFiscalCliente: string = '';
   email: string = '';
+  emiteRetencion: string = '';
   telefono: string = '';
   direccionCl: string = '';
   facturaUrl: any = "https://calidad.atiendo.ec/eojgprlg/FacturasPDF/ejemplo.pdf";
@@ -175,6 +176,8 @@ export class FacturaComponent implements OnInit {
             this.direccionAlm = res1.lstSociedades[0].direccion!;
             this.dir1 = res1.lstSociedades[0].dir1!;
             this.ambiente = res1.lstSociedades[0].ambiente!;
+            this.emiteRetencion = res1.lstSociedades[0].emite_retencion! == '2' ? 'SI' : 'NO';
+
           }
         });
 
