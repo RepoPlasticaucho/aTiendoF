@@ -178,6 +178,9 @@ searchText: string = '';
             costo: '',
             precio: ''
           }
+
+          newDetalle.precio = (parseFloat(inventario.cantidad!) * parseFloat(res.pvp2!)).toString();
+          
           if(inventario.cantidad! != '0'){
             this.httpServiceDetalle.modificarDetallePedidoVenta(newDetalle).subscribe(res => {
               console.log(res.codigoError)

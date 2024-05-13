@@ -418,8 +418,11 @@ export class CompraNuevoComponent implements OnInit {
               });
             } else {
               if(proveedorProducto.cantidad! != '0'){
-                newDetalle.precio = (parseFloat(proveedorProducto.cantidad!) * parseFloat(proveedorProducto.costo!)).toString();
 
+                newDetalle.precio = (parseFloat(newDetalle.cantidad!) * parseFloat(newDetalle.costo!)).toString();
+
+                console.log("ESTE ES EL nuevo precio ", newDetalle.precio)
+                console.log(newDetalle)
 
                 this.httpServiceDetalle.modificarDetallePedidoVenta(newDetalle).subscribe(res => {
                   console.log(res.codigoError)
