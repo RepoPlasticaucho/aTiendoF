@@ -505,7 +505,7 @@ export class MenuventComponent implements OnInit {
   calcularDescuento(): number {
     const descuento = this.lstDetalleMovimientos
       .filter((detalleMovimientos) => detalleMovimientos.desc_add)
-      .reduce((total, detalleMovimientos) => {
+      .reduce((total, detalleMovimientos) => {        
         return total + parseFloat(detalleMovimientos.desc_add!.replace(',', '.'));
       }, 0);
 
@@ -636,16 +636,20 @@ export class MenuventComponent implements OnInit {
     const detalleMovimientos = this.lstDetalleMovimientos[index];
     const cantidad = parseFloat(detalleMovimientos.cantidad);
     const costo = parseFloat(detalleMovimientos.costo);
-    const desc = parseFloat(detalleMovimientos.desc_add!);
-
+    let desc = parseFloat(detalleMovimientos.desc_add!);
+  
+    // Si desc es null o undefined, establecerlo como 0
+    desc = isNaN(desc) ? 0 : desc;
+  
     if (!isNaN(cantidad) && !isNaN(costo)) {
       detalleMovimientos.precio = (cantidad * costo - desc).toFixed(2);
     } else {
       detalleMovimientos.precio = '';
     }
-
+  
     this.calcularSumaTotal();
   }
+  
 
   onInput(event: any) {
     const inputValue = event.target.value;
