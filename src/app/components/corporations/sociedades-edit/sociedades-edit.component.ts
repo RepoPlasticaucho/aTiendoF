@@ -27,13 +27,15 @@ export class SociedadesEditComponent implements OnInit {
     nombreComercial: new FormControl('', Validators.required),
     correoElectronico: new FormControl('', [Validators.required, Validators.email]),
     telefono: new FormControl('', [Validators.required, Validators.minLength(9)]),
-    tipoamb: new FormControl('0', Validators.required)
+    tipoamb: new FormControl('0', Validators.required),
+    emiteRetencion: new FormControl('0', Validators.required),
   });
   //Variables para listas desplegables
   lstGrupos: GruposEntity[] = [];
   selectGrupo: boolean = false;
   selectRol: boolean = false;
   selectTipoAmb: boolean = false;
+  selectEmiteRetencion: boolean = false;
   //Declaracion de variables
   private codigo: string = "";
   admin: string = 'admin';
@@ -41,6 +43,8 @@ export class SociedadesEditComponent implements OnInit {
   produccion: string = '2';
   client: string = 'client';
   bo: string = 'bo';
+  si: string = '2';
+  no: string = '1';
 
   constructor(private readonly httpService: SociedadesService,
     private readonly httpServiceGrupos: GruposService,
@@ -83,6 +87,7 @@ export class SociedadesEditComponent implements OnInit {
         this.corporationForm.get("nombreComercial")?.setValue(res.nombre_comercial);
         this.corporationForm.get("correoElectronico")?.setValue(res.email);
         this.corporationForm.get("telefono")?.setValue(res.telefono);
+        this.corporationForm.get("emiteRetencion")?.setValue(res.emite_retencion!);
       }
     });
   }
@@ -114,7 +119,8 @@ export class SociedadesEditComponent implements OnInit {
           password: '',
           tipo_ambienteid: this.corporationForm.value!.tipoamb ?? "",
           funcion: this.corporationForm.value!.rol ?? "",
-          razon_social: ''
+          razon_social: '',
+          emite_retencion: this.corporationForm.value!.emiteRetencion ?? "",
         };
         this.httpService.actualizarSociedad(sociedadEntity).subscribe(res => {
           if (res.codigoError == "OK") {
@@ -175,6 +181,15 @@ export class SociedadesEditComponent implements OnInit {
     } else {
       this.selectTipoAmb = false;
       this.corporationForm.get("tipoamb")?.setValue(tipoamb.target.value);
+    }
+  }
+
+  changeGroup4(emiteRetencion: any): void {
+    if (emiteRetencion.target.value == 0) {
+      this.selectEmiteRetencion = true;
+    } else {
+      this.selectEmiteRetencion = false;
+      this.corporationForm.get("emiteRetencion")?.setValue(emiteRetencion.target.value);
     }
   }
 

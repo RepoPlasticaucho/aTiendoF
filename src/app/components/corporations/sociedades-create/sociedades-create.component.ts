@@ -34,12 +34,14 @@ export class SociedadesCreateComponent implements OnInit {
     telefono: new FormControl('', [Validators.required, Validators.minLength(9)]),
     tipoamb: new FormControl('0', Validators.required),
     contrasenia: new FormControl('', Validators.required),
+    emiteRetencion: new FormControl('0', Validators.required),
   });
   //Variables para listas desplegables
   lstGrupos: GruposEntity[] = [];
   selectGrupo: boolean = false;
   selectRol: boolean = false;
   selectTipoAmb: boolean = false;
+  selectEmiteRetencion: boolean = false;
 
   admin: string = 'admin';
   pruebas: string = '1';
@@ -47,6 +49,8 @@ export class SociedadesCreateComponent implements OnInit {
   client: string = 'client';
   bo: string = 'bo';
   personal: string = 'personal';
+  no: string = '1';
+  si: string = '2';
 
 
   constructor(private readonly httpService: SociedadesService,
@@ -73,8 +77,14 @@ export class SociedadesCreateComponent implements OnInit {
   onSubmit(): void {
     if (!this.corporationForm.valid) {
       this.corporationForm.markAllAsTouched();
+      if (this.corporationForm.get("emiteRetencion")?.value == "0") {
+        this.selectEmiteRetencion = true;
+        return
+      }
+
       if (this.corporationForm.get("grupo")?.value == "0") {
         this.selectGrupo = true;
+        return
       }
     } else {
       if (this.corporationForm.get("grupo")?.value == "0") {
@@ -106,6 +116,7 @@ export class SociedadesCreateComponent implements OnInit {
           tipo_ambienteid: this.corporationForm.value!.tipoamb ?? "",
           razon_social: '',
           password: this.encPass,
+          emite_retencion: this.corporationForm.value!.emiteRetencion ?? "",
         };
         this.httpService.agregarSociedad(sociedadEntity).subscribe(res => {
           if (res.codigoError == "OK") {
@@ -166,6 +177,15 @@ export class SociedadesCreateComponent implements OnInit {
     } else {
       this.selectTipoAmb = false;
       this.corporationForm.get("tipoamb")?.setValue(tipoamb.target.value);
+    }
+  }
+
+  changeGroup4(emiteRetencion: any): void {
+    if (emiteRetencion.target.value == "0" ) {
+      this.selectEmiteRetencion = true;
+    } else {
+      this.selectEmiteRetencion = false;
+      this.corporationForm.get("emiteRetencion")?.setValue(emiteRetencion.target.value);
     }
   }
 

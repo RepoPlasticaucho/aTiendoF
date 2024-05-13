@@ -26,5 +26,6 @@ export interface SociedadesEntity {
     pass_certificado?: string;
     sociedad_pertenece?: string;
     almacen_personal_id?: string;
+    emite_retencion?: string;
     
 }

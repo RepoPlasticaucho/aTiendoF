@@ -125,6 +125,24 @@
                         </small>
                     </small>
                 </div>
+
+                <div class="form-group">
+                    <label for="grupo">Emite Retencion</label>
+                    <select class="form-control" (change)="changeGroup4($event)" formControlName="emiteRetencion">
+                        <option [value]=" 0 " selected>Seleccione un valor retencion</option>
+                        <option [value]="si">
+                            Si
+                        </option>
+                        <option [value]="no">
+                            No
+                        </option>
+                    </select>
+                    <small *ngIf="selectRol">
+                        <small *ngIf="selectRol" style="color: red; ">
+                            Debe seleccionar un valor retencion.
+                        </small>
+                    </small>
+                </div>
                 <button type="submit" class="btn btn-primary">
                     <!--[disabled]="!this.corporationForm.valid"-->
                     <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>

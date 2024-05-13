@@ -118,6 +118,27 @@
                         </small>
                     </small>
                 </div>
+
+                <div class="form-group">
+                    <label for="emiteRetencion">Emite Retencion</label>
+                    <select class="form-control" (change)="changeGroup4($event)" formControlName="emiteRetencion">
+                        <option [value]="0" selected>Seleccione un valor para retención</option>
+                        <option [value]="si">
+                            Si
+                        </option>
+                        <option [value]="no">
+                            No
+                        </option>
+
+                    </select>
+                    <small *ngIf="selectEmiteRetencion">
+                        <small *ngIf="selectEmiteRetencion" style="color: red; ">
+                            Debe seleccionar un valor para retención.
+                        </small>
+                    </small>
+                </div>
+               
+
                 <div class="form-group">
                     <label for="grupo">Rol</label>
                     <select class="form-control" (change)="changeGroup2($event)" formControlName="rol">
