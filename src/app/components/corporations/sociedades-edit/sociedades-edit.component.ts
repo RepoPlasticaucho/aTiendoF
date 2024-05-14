@@ -29,7 +29,7 @@ export class SociedadesEditComponent implements OnInit {
     telefono: new FormControl('', [Validators.required, Validators.minLength(9)]),
     tipoamb: new FormControl('0', Validators.required),
     emiteRetencion: new FormControl('0', Validators.required),
-    obligatorioContabilidad: new FormControl('0', Validators.required),
+    obligadoContabilidad: new FormControl('0', Validators.required),
   });
   //Variables para listas desplegables
   lstGrupos: GruposEntity[] = [];
@@ -90,7 +90,11 @@ export class SociedadesEditComponent implements OnInit {
         this.corporationForm.get("correoElectronico")?.setValue(res.email);
         this.corporationForm.get("telefono")?.setValue(res.telefono);
         this.corporationForm.get("emiteRetencion")?.setValue(res.emite_retencion!);
-        this.corporationForm.get("obligatorioContabilidad")?.setValue(res.obligado_contabilidad!);
+        this.corporationForm.get("obligadoContabilidad")?.setValue(res.obligado_contabilidad!);
+
+        console.log("Obligatorio Contabilidad: " + res.obligado_contabilidad!);
+        console.log("Emite Retencion: " + res.emite_retencion!);
+        console.log("impresion todo el res y contenido: " + JSON.stringify(res));
       }
     });
   }
@@ -124,7 +128,7 @@ export class SociedadesEditComponent implements OnInit {
           funcion: this.corporationForm.value!.rol ?? "",
           razon_social: '',
           emite_retencion: this.corporationForm.value!.emiteRetencion ?? "",
-          obligado_contabilidad: this.corporationForm.value!.obligatorioContabilidad ?? "",
+          obligado_contabilidad: this.corporationForm.value!.obligadoContabilidad ?? "",
         };
         this.httpService.actualizarSociedad(sociedadEntity).subscribe(res => {
           if (res.codigoError == "OK") {
@@ -203,7 +207,7 @@ export class SociedadesEditComponent implements OnInit {
       this.selectObligadoContabilidad = true;
     } else {
       this.selectObligadoContabilidad = false;
-      this.corporationForm.get("obligatorioContabilidad")?.setValue(obligatorioConta.target.value);
+      this.corporationForm.get("obligadoContabilidad")?.setValue(obligatorioConta.target.value);
     }
   }
 
