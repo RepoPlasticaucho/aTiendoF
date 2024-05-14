@@ -28,5 +28,6 @@ export interface SociedadesEntity {
     almacen_personal_id?: string;
     emite_retencion?: string;
     obligado_contabilidad?: string;
+    url_logo?: string;
     
 }

@@ -19,6 +19,10 @@ export class ImagenesService {
         return this.http.post<ImagenesEntity>(`${environment.apiUrl}adicionales/ProcesarImagenModeloProducto`, image);
     }
 
+    agregarImagenLS(image: ImagenesEntity): Observable<ImagenesEntity> {
+        return this.http.post<ImagenesEntity>(`${environment.apiUrl}adicionales/ProcesarImagenLogoSociedad`, image);
+    }
+
     agregarCertificado(image: ImagenesEntity): Observable<ImagenesEntity> {
         return this.http.post<ImagenesEntity>(`${environment.apiUrl}adicionales/ProcesarCertificado`, image);
     }

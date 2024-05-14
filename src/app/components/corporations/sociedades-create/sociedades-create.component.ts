@@ -8,6 +8,9 @@ import { GruposService } from 'src/app/services/grupos.service';
 import { SociedadesService } from 'src/app/services/sociedades.service';
 import Swal from 'sweetalert2';
 import * as CryptoJS from 'crypto-js';
+import { ImagenesService } from 'src/app/services/imagenes.service';
+import { ImagenesEntity } from 'src/app/models/imagenes';
+import { image } from 'html2canvas/dist/types/css/types/image';
 
 @Component({
   selector: 'app-sociedades-create',
@@ -36,6 +39,8 @@ export class SociedadesCreateComponent implements OnInit {
     contrasenia: new FormControl('', Validators.required),
     emiteRetencion: new FormControl('0', Validators.required),
     obligadoContabilidad: new FormControl('0', Validators.required),
+    urlImagen: new FormControl(''),
+
   });
   //Variables para listas desplegables
   lstGrupos: GruposEntity[] = [];
@@ -55,9 +60,22 @@ export class SociedadesCreateComponent implements OnInit {
   si: string = '2';
 
 
+  //Variables para imagen
+  fileToUpload: any;
+  imageUrl: any =
+    'https://calidad.atiendo.ec/eojgprlg/ModeloProducto/producto.png';
+  imageBase64: string = '';
+  imageName: string = '';
+  codigoError: string = '';
+  descripcionError: string = '';
+
+
   constructor(private readonly httpService: SociedadesService,
     private readonly httpServiceGrupos: GruposService,
-    private router: Router) { }
+    private httpServiceImage: ImagenesService,
+    private router: Router
+  
+  ) { }
 
   ngOnInit(): void {
     //Obtener Grupos
@@ -96,8 +114,11 @@ export class SociedadesCreateComponent implements OnInit {
     } else {
       if (this.corporationForm.get("grupo")?.value == "0") {
         this.selectGrupo = true;
+        return
       }
       else {
+
+        
 
         var salt = CryptoJS.enc.Base64.parse("SXZhbiBNZWR2ZWRldg==");
         var iv = CryptoJS.enc.Hex.parse("69135769514102d0eded589ff874cacd");
@@ -125,7 +146,34 @@ export class SociedadesCreateComponent implements OnInit {
           password: this.encPass,
           emite_retencion: this.corporationForm.value!.emiteRetencion ?? "",
           obligado_contabilidad: this.corporationForm.value!.obligadoContabilidad ?? "",
+          url_logo: this.imageName,
         };
+        if (this.imageName != '') {
+          const imageEntity: ImagenesEntity = {
+            imageBase64: this.imageBase64,
+            nombreArchivo: this.imageName,
+            codigoError: '',
+            descripcionError: '',
+            nombreArchivoEliminar: '',
+          };
+
+          this.httpServiceImage
+          .agregarImagenLS(imageEntity)
+          .subscribe((res) => {
+            if (res.codigoError == "OK") {
+              console.log("Se agrego la imagen")
+              sociedadEntity.url_logo = imageEntity.nombreArchivo;
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Ha ocurrido un error.',
+                text: res.descripcionError,
+                showConfirmButton: false,
+              });
+            }
+          });
+
+        }
         this.httpService.agregarSociedad(sociedadEntity).subscribe(res => {
           if (res.codigoError == "OK") {
             Swal.fire({
@@ -208,6 +256,19 @@ export class SociedadesCreateComponent implements OnInit {
 
   visualizarSociedades() {
     this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['sociedades'] } }]);
+  }
+
+  onChangeFile(target: any): void {
+    if (target.value != "") {
+      this.fileToUpload = target.files[0];
+      let reader = new FileReader();
+      reader.onload = (event: any) => {
+        this.imageUrl = event.target.result;
+        this.imageBase64 = this.imageUrl.split(',')[1];
+        this.imageName = this.fileToUpload.name;
+      }
+      reader.readAsDataURL(this.fileToUpload);
+    }
   }
 
 }

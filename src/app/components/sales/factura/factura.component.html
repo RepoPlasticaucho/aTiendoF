@@ -4,7 +4,12 @@
       <div class="info-comercial">
         <div class="comercial">
           <br><br>
-          <div class="encabezado">NO TIENE LOGO</div>
+       
+          <div class="encabezado" *ngIf="url_logo == ''">
+              NO TIENE LOGO
+          </div>
+          <img src="{{url_logo}}"  *ngIf="url_logo != ''" alt="Logo"   style="width: 35%; height: auto">
+
           <br><br>
           <div>Razón Social:{{razonSocial}}</div>
           <div>Nombre Comercial: {{nombreComercial}}</div>

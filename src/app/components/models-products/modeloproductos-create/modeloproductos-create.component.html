@@ -168,10 +168,10 @@
                                 <input type="file" accept="image/*" (change)="onChangeFile($event.target)"
                                     class="form-control" style="padding: 0px" formControlName="urlImagen" />
                                 <small *ngIf="
-                    modelProductForm.controls['urlImagen'].invalid &&
-                    (modelProductForm.controls['urlImagen'].dirty ||
-                      modelProductForm.controls['urlImagen'].touched)
-                  ">
+                                                modelProductForm.controls['urlImagen'].invalid &&
+                                                (modelProductForm.controls['urlImagen'].dirty ||
+                                                modelProductForm.controls['urlImagen'].touched)
+                                ">
                                     <small *ngIf="modelProductForm.controls['urlImagen'].errors" style="color: red">
                                         Debe seleccionar imágen
                                     </small>

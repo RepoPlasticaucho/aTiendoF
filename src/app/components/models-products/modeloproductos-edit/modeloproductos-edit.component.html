@@ -145,10 +145,10 @@
                                     placeholder="Ingrese la descripción del Modelo Producto."
                                     formControlName="modeloProducto" />
                                 <small *ngIf="
-                    modelProductForm.controls['modeloProducto'].invalid &&
-                    (modelProductForm.controls['modeloProducto'].dirty ||
-                      modelProductForm.controls['modeloProducto'].touched)
-                  ">
+                        modelProductForm.controls['modeloProducto'].invalid &&
+                        (modelProductForm.controls['modeloProducto'].dirty ||
+                        modelProductForm.controls['modeloProducto'].touched)
+                    ">
                                     <small *ngIf="modelProductForm.controls['modeloProducto'].errors?.['required']"
                                         style="color: red">
                                         Debe ingresar la descripción del Modelo Producto
@@ -173,10 +173,10 @@
                                     class="form-control" style="padding: 0px" formControlName="urlImagen"
                                     id="imageUpload" name="imageUpload" />
                                 <small *ngIf="
-                    modelProductForm.controls['urlImagen'].invalid &&
-                    (modelProductForm.controls['urlImagen'].dirty ||
-                      modelProductForm.controls['urlImagen'].touched)
-                  ">
+                        modelProductForm.controls['urlImagen'].invalid &&
+                        (modelProductForm.controls['urlImagen'].dirty ||
+                        modelProductForm.controls['urlImagen'].touched)
+                    ">
                                     <small *ngIf="modelProductForm.controls['urlImagen'].errors" style="color: red">
                                         Debe seleccionar imágen
                                     </small>

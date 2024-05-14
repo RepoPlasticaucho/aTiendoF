@@ -12,6 +12,9 @@
             </div>
         </div>
         <div class="card-body ">
+            <table style="width: 100%">
+                <tr>
+                    <td style="width: 60%">
             <form [formGroup]="corporationForm" (ngSubmit)="onSubmit()">
                 <div class="form-group">
                     <label for="grupo">Grupo</label>
@@ -161,12 +164,43 @@
                         </small>
                     </small>
                 </div>
+
+                <div class="form-group">
+                    <label for="etiquetas">Imagen Marca</label>
+                    <br />
+                    <!-- <input type="text" class="form-control" id="etiquetas" placeholder="Ingrese las etiquetas" formControlName="etiquetas"> -->
+                    <input type="file" accept="image/*" (change)="onChangeFile($event.target)"
+                        class="form-control" style="padding: 0px" formControlName="urlImagen"
+                        id="imageUpload" name="imageUpload" />
+                    <small *ngIf="
+            corporationForm.controls['urlImagen'].invalid &&
+            (corporationForm.controls['urlImagen'].dirty ||
+            corporationForm.controls['urlImagen'].touched)
+        ">
+                        <small *ngIf="corporationForm.controls['urlImagen'].errors" style="color: red">
+                            Debe seleccionar imágen
+                        </small>
+                    </small>
+                </div>
+
                 <button type="submit" class="btn btn-primary">
                     <!--[disabled]="!this.corporationForm.valid"-->
                     <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
                     Guardar
                 </button>
             </form>
+            </td>
+            <td style="width: 5%"></td>
+                    <td style="width: 30%; text-align: center">
+                        <img src="{{ imageUrl }}" alt="Imágen Marca" class="img-thumbnail" />
+                        <br />
+                        <button class="btn btn-danger" style="margin-top: 5px" (click)="eliminarImagen()">
+                            Eliminar Imagen
+                        </button>
+                    </td>
+                    <td style="width: 5%"></td>
+            </tr>
+            </table>
         </div>
     </div>
 </div>

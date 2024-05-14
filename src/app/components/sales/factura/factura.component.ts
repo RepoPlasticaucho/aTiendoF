@@ -65,6 +65,7 @@ export class FacturaComponent implements OnInit {
   iva: number = environment.iva;
   ivaCalculado: number = 0;
   obligadoContabilidad: string = '';
+  url_logo: string = "";
 
 
 
@@ -179,6 +180,7 @@ export class FacturaComponent implements OnInit {
             this.ambiente = res1.lstSociedades[0].ambiente!;
             this.emiteRetencion = res1.lstSociedades[0].emite_retencion! == '2' ? 'SI' : 'NO';
             this.obligadoContabilidad = res1.lstSociedades[0].obligado_contabilidad! == '2' ? 'SI' : 'NO';
+            this.url_logo = res1.lstSociedades[0].url_logo!;
 
           }
         });

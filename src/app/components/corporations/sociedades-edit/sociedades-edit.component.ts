@@ -3,8 +3,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { faSave, faTimes, faUserFriends } from '@fortawesome/free-solid-svg-icons';
 import { GruposEntity } from 'src/app/models/grupos';
+import { ImagenesEntity } from 'src/app/models/imagenes';
 import { SociedadesEntity } from 'src/app/models/sociedades';
 import { GruposService } from 'src/app/services/grupos.service';
+import { ImagenesService } from 'src/app/services/imagenes.service';
 import { SociedadesService } from 'src/app/services/sociedades.service';
 import Swal from 'sweetalert2';
 
@@ -30,6 +32,7 @@ export class SociedadesEditComponent implements OnInit {
     tipoamb: new FormControl('0', Validators.required),
     emiteRetencion: new FormControl('0', Validators.required),
     obligadoContabilidad: new FormControl('0', Validators.required),
+    urlImagen: new FormControl(''),
   });
   //Variables para listas desplegables
   lstGrupos: GruposEntity[] = [];
@@ -47,9 +50,17 @@ export class SociedadesEditComponent implements OnInit {
   bo: string = 'bo';
   si: string = '2';
   no: string = '1';
+  imageUrl: string = '';
+  imageUrlAux: any =
+  'https://calidad.atiendo.ec/eojgprlg/ModeloProducto/producto.png';
+imageBase64: string = '';
+imageName: string = '';
+fileToUpload: any;
+imageNameOriginal: string = '';
 
   constructor(private readonly httpService: SociedadesService,
     private readonly httpServiceGrupos: GruposService,
+    private httpServiceImage: ImagenesService,
     private router: Router) { }
 
   ngOnInit(): void {
@@ -91,6 +102,9 @@ export class SociedadesEditComponent implements OnInit {
         this.corporationForm.get("telefono")?.setValue(res.telefono);
         this.corporationForm.get("emiteRetencion")?.setValue(res.emite_retencion!);
         this.corporationForm.get("obligadoContabilidad")?.setValue(res.obligado_contabilidad!);
+        this.imageUrl = res.url_logo!;
+
+        console.log("Esta es la image del logo ", this.imageUrl);
 
         console.log("Obligatorio Contabilidad: " + res.obligado_contabilidad!);
         console.log("Emite Retencion: " + res.emite_retencion!);
@@ -116,6 +130,36 @@ export class SociedadesEditComponent implements OnInit {
         this.selectRol = true;
       }
       else {
+        if (this.imageName != '') {
+          const imageEntity: ImagenesEntity = {
+            imageBase64: this.imageBase64,
+            nombreArchivo: this.imageName,
+            codigoError: '',
+            descripcionError: '',
+            nombreArchivoEliminar: this.imageNameOriginal,
+          };
+
+          this.httpServiceImage
+          .agregarImagenLS(imageEntity)
+          .subscribe((res) => {
+            if (res.codigoError == "OK") {
+              console.log("Se agrego la imagen")
+              sociedadEntity.url_logo = imageEntity.nombreArchivo;
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Ha ocurrido un error.',
+                text: res.descripcionError,
+                showConfirmButton: false,
+              });
+            }
+          });
+        }
+
+
+
+
+
         const sociedadEntity: SociedadesEntity = {
           idSociedad: this.codigo,
           idGrupo: this.corporationForm.value!.grupo ?? "",
@@ -129,6 +173,7 @@ export class SociedadesEditComponent implements OnInit {
           razon_social: '',
           emite_retencion: this.corporationForm.value!.emiteRetencion ?? "",
           obligado_contabilidad: this.corporationForm.value!.obligadoContabilidad ?? "",
+          url_logo:this.imageName == '' ? this.imageUrl : this.imageName
         };
         this.httpService.actualizarSociedad(sociedadEntity).subscribe(res => {
           if (res.codigoError == "OK") {
@@ -213,6 +258,24 @@ export class SociedadesEditComponent implements OnInit {
 
   visualizarSociedades() {
     this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['sociedades'] } }]);
+  }
+
+  eliminarImagen() {
+    this.imageUrl = this.imageUrlAux;
+    this.imageName = this.imageUrl;
+  }
+
+  onChangeFile(target: any): void {
+    if (target.value != "") {
+      this.fileToUpload = target.files[0];
+      let reader = new FileReader();
+      reader.onload = (event: any) => {
+        this.imageUrl = event.target.result;
+        this.imageBase64 = this.imageUrl.split(',')[1];
+        this.imageName = this.fileToUpload.name;
+      }
+      reader.readAsDataURL(this.fileToUpload);
+    }
   }
 
 }
