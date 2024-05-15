@@ -24,7 +24,13 @@ export class ConfiguracionComponent implements OnInit {
   razonSocialInclude: boolean = false;
 
   rol: boolean = false;
+  imageNameOriginal: string = '';
 
+  imageUrl: string = "";
+  imageUrlAux: any =
+  'https://calidad.atiendo.ec/eojgprlg/ModeloProducto/producto.png';
+imageBase64: string = '';
+imageName: string = '';
 
 
   //Funcion para ver si es facturador
@@ -48,6 +54,7 @@ export class ConfiguracionComponent implements OnInit {
     nombreComercial2: new FormControl('', Validators.required),
     razonSocial: new FormControl('', Validators.required),
     urlCertificado: new FormControl(''),
+    urlImagen: new FormControl(''),
   });
 
   emailForm = new FormGroup({
@@ -107,7 +114,7 @@ export class ConfiguracionComponent implements OnInit {
         this.corporationForm.get("razonSocial")?.setValue(razonSocialValue !== undefined ? razonSocialValue : null);
         this.emailForm.get("email")?.setValue(email !== undefined ? email : null);
         this.emailForm.get("passmail")?.setValue(passemail !== undefined ? passemail : null);
-
+        this.imageUrl = res.lstSociedades[0].url_logo?.toString() ?? "";
 
       }
       // console.log(res);
@@ -337,9 +344,9 @@ export class ConfiguracionComponent implements OnInit {
       this.fileToUpload = target.files[0];
       let reader = new FileReader();
       reader.onload = (event: any) => {
-        this.certificadoUrl = event.target.result;
-        this.certificadoBase64 = this.certificadoUrl.split(',')[1];
-        this.certificadoName = this.fileToUpload.name;
+        this.imageUrl = event.target.result;
+        this.imageBase64 = this.imageUrl.split(',')[1];
+        this.imageName = this.fileToUpload.name;
       }
       reader.readAsDataURL(this.fileToUpload);
     }
@@ -361,4 +368,97 @@ export class ConfiguracionComponent implements OnInit {
 togglePassword(field: string) {
     this.showPassword[field] = !this.showPassword[field];
 }
+
+actualizarImagen(){
+
+  console.log("entro al metodo")
+
+  if (this.imageName != '') {
+
+    console.log("entro al metodo2")
+
+    const imageEntity: ImagenesEntity = {
+      imageBase64: this.imageBase64,
+      nombreArchivo: this.imageName,
+      codigoError: '',
+      descripcionError: '',
+      nombreArchivoEliminar: this.imageNameOriginal,
+    };
+
+    const sociedadEntity: SociedadesEntity = {
+      idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
+      idGrupo: '',
+      nombre_comercial: '',
+      id_fiscal: '',
+      email: '',
+      tipo_ambienteid: '',
+      telefono: '',
+      password: '',
+      funcion: '',
+      razon_social: '',
+      url_certificado: '',
+      clave_certificado: '',
+      url_logo:this.imageName == '' ? this.imageUrl : this.imageName
+    };
+
+    this.httpServiceImage
+    .agregarImagenLS(imageEntity)
+    .subscribe((res) => {
+      if (res.codigoError == "OK") {
+        console.log("Se agrego la imagen")
+        sociedadEntity.url_logo = imageEntity.nombreArchivo;
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Ha ocurrido un error.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      }
+    });
+
+    this.httpService.actualizarSociedadImagen(sociedadEntity).subscribe((res) => {
+      if (res.codigoError == "OK") {
+        Swal.fire({
+          icon: 'success',
+          title: 'Actualizado Correctamente.',
+          text: `Se ha actualizado la información`,
+          showConfirmButton: true,
+          confirmButtonText: "Ok"
+        }).finally(() => {
+          switch (this.fun) {
+            case "admin":
+              this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['cofiguracion-user'] } }]);
+              break;
+            case "client":
+              this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['cofiguracion-user'] } }]);
+              break;
+          }
+
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Ha ocurrido un error.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      }
+    });
+    
+  }
+
+
+
+
+
+}
+eliminarImagen() {
+  this.imageUrl = this.imageUrlAux;
+  this.imageName = this.imageUrl;
+}
+
+
+
+
 }

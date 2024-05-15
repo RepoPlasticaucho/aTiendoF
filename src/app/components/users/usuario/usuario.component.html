@@ -10,11 +10,10 @@
             <a class="mat-menu-item" (click)="onPass1()">Perfil</a>
             <a class="mat-menu-item" (click)="onConfiguracion()">Configuracion</a>
             <a class="mat-menu-item" (click)="logout()">Salir</a>
-        
         </mat-menu>           
     </div>
     <br>
-    <mat-grid-list cols="1" rowHeight="720px">
+    <mat-grid-list cols="1" rowHeight="1100px">
             <mat-grid-tile >
                 <div class="col-md-8">
                     <mat-card class="dashboard-card" 
@@ -102,11 +101,54 @@
                                         </small>
                                     </small>
                                 </div>
+
+                                
                                 <button type="submit" class="btn btn-primary">
                                     <!--[disabled]="!this.corporationForm.valid"-->
                                     <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
                                     Guardar
                                 </button>
+
+
+                                
+                    <form [formGroup]="corporationForm">
+                        <div align="left">
+                            <br>
+                            <h5 class="title"  *ngIf="tienePermisos">Cambiar Imagen</h5>
+                            <h5 class="title"  *ngIf="!tienePermisos">Logo</h5>
+
+                        </div>
+                        <img src="{{ imageUrl }}" alt="Imágen Marca" style="width: 30%; height: auto"
+                            class="img-thumbnail">
+                        <br />
+                  
+
+                        <div class="form-group"  *ngIf="tienePermisos">
+                            <br />
+                            <!-- <input type="text" class="form-control" id="etiquetas" placeholder="Ingrese las etiquetas" formControlName="etiquetas"> -->
+                            <input type="file" accept="image/*" (change)="onChangeFile($event.target)"
+                                class="form-control" style="padding: 0px" formControlName="urlImagen"
+                                id="imageUpload" name="imageUpload" />
+                            <small *ngIf="
+                                corporationForm.controls['urlImagen'].invalid &&
+                                (corporationForm.controls['urlImagen'].dirty ||
+                                corporationForm.controls['urlImagen'].touched)
+                            ">
+                                <small *ngIf="corporationForm.controls['urlImagen'].errors" style="color: red">
+                                    Debe seleccionar imágen
+                                </small>
+                            </small>
+                        </div>
+         
+                        <div align="center"  *ngIf="tienePermisos">
+                            <button (click)="actualizarImagen()" class="btn btn-primary">
+                                <!--[disabled]="!this.corporationForm.valid"-->
+                                <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
+                                Actualizar Imagen
+                            </button>
+                        </div>
+                    </form>
+
                             </form>   
                             <br>
                         </mat-card>

@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { Subject, finalize } from 'rxjs';
-import { faShoppingBag, faSave, faList, faTimes, faCartPlus, faEdit, faTrashAlt, faMoneyBillAlt, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faShoppingBag, faSave, faList, faTimes, faCartPlus, faEdit, faTrashAlt, faMoneyBillAlt, faCheck, faPlus, faFolderPlus } from '@fortawesome/free-solid-svg-icons';
 import { DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
 import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service';
 import { CompraNuevoComponent } from '../compra-nuevo/compra-nuevo.component';
@@ -29,7 +29,6 @@ import { ComprobanteComprasService } from 'src/app/services/comprobante-compras.
 import { environment } from 'src/environments/environment.prod';
 
 
-
 @Component({
   selector: 'app-menucompr',
   templateUrl: './menucompr.component.html',
@@ -52,6 +51,7 @@ export class MenucomprComponent implements OnInit {
   faTrashAlt = faTrashAlt;
   faMoneyBillAlt = faMoneyBillAlt;
   faShoppingBag = faShoppingBag;
+  faFolderPlus = faFolderPlus;
   errorAutorizacion: boolean = false;
   public buttonsDisabled = true;
 
@@ -828,6 +828,8 @@ export class MenucomprComponent implements OnInit {
       return true;
     }
   }
+
+  
 
 }
 

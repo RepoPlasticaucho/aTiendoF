@@ -180,7 +180,7 @@ export class PersonalEditComponent implements OnInit {
 
 
       if(this.personalForm.value.almacenes == this.personalForm.value.almacen){
-        this.personalForm.value.almacenes = this.idAlmacenActual;
+        this.personalForm.value.almacen = this.idAlmacenActual;
         console.log("Entro aca");
 
         console.log("Almacen personal: ", this.idAlmacenActual);
@@ -196,7 +196,7 @@ export class PersonalEditComponent implements OnInit {
         funcion: '',
         tipo_ambienteid: '',
         idGrupo: '',
-        almacen_personal_id: this.personalForm.value!.almacenes ?? ""
+        almacen_personal_id: this.personalForm.value!.almacen ?? ""
       }
 
 

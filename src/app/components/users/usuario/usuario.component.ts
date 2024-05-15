@@ -7,6 +7,8 @@ import { SociedadesService } from 'src/app/services/sociedades.service';
 import Swal from 'sweetalert2';
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { Location } from '@angular/common';
+import { ImagenesEntity } from 'src/app/models/imagenes';
+import { ImagenesService } from 'src/app/services/imagenes.service';
 
 @Component({
   selector: 'app-usuario',
@@ -17,11 +19,24 @@ export class UsuarioComponent implements OnInit {
   faTimes = faTimes;
   faCopy = faCopy;
   faSave = faSave;
+  imageNameOriginal: string = '';
+  fileToUpload: any;
+  certificadoUrl: any = "https://calidad.atiendo.ec/eojgprlg/Certificados/certificate.pfx";
+  certificadoBase64: string = "";
+  certificadoName: string = "";
+  tienePermisos: boolean = false;
+  imageUrl: string = "";
+  imageUrlAux: any =
+  'https://calidad.atiendo.ec/eojgprlg/ModeloProducto/producto.png';
+imageBase64: string = '';
+imageName: string = '';
+
   //Creación de la variable para formulario
   corporationForm = new FormGroup({
     idFiscal: new FormControl('', [
       Validators.required,
       Validators.minLength(10),
+      
     ]),
     nombreComercial: new FormControl('', Validators.required),
     razonSocial: new FormControl('', Validators.required),
@@ -33,6 +48,8 @@ export class UsuarioComponent implements OnInit {
       Validators.required,
       Validators.minLength(9),
     ]),
+    urlImagen: new FormControl(''),
+
   });
   encPass: string | undefined;
   codigo: any;
@@ -41,7 +58,8 @@ export class UsuarioComponent implements OnInit {
     private readonly httpService: SociedadesService,
     private router: Router,
     private authService: AuthenticationService,
-    private location: Location
+    private location: Location,
+    private httpServiceImage: ImagenesService
   ) {
   }
 
@@ -86,6 +104,7 @@ export class UsuarioComponent implements OnInit {
         this.corporationForm
           .get('telefono')
           ?.setValue(res.lstSociedades[0].telefono);
+        this.imageUrl = res.lstSociedades[0].url_logo!;
       }
 
       this.fun = res.lstSociedades[0].funcion;
@@ -186,4 +205,114 @@ export class UsuarioComponent implements OnInit {
       break;
     }
   }
+
+  
+actualizarImagen(){
+
+  //Si la ruta no contiene admin o client, redirige a la pagina de inicio
+  if (this.fun != "admin" && this.fun != "client") {
+    this.router.navigate(['/']);
+  }
+
+  if (this.imageName != '') {
+
+    console.log("entro al metodo2")
+
+    const imageEntity: ImagenesEntity = {
+      imageBase64: this.imageBase64,
+      nombreArchivo: this.imageName,
+      codigoError: '',
+      descripcionError: '',
+      nombreArchivoEliminar: this.imageNameOriginal,
+    };
+
+    const sociedadEntity: SociedadesEntity = {
+      idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
+      idGrupo: '',
+      nombre_comercial: '',
+      id_fiscal: '',
+      email: '',
+      tipo_ambienteid: '',
+      telefono: '',
+      password: '',
+      funcion: '',
+      razon_social: '',
+      url_certificado: '',
+      clave_certificado: '',
+      url_logo:this.imageName == '' ? this.imageUrl : this.imageName
+    };
+
+    this.httpServiceImage
+    .agregarImagenLS(imageEntity)
+    .subscribe((res) => {
+      if (res.codigoError == "OK") {
+        console.log("Se agrego la imagen")
+        sociedadEntity.url_logo = imageEntity.nombreArchivo;
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Ha ocurrido un error.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      }
+    });
+
+    this.httpService.actualizarSociedadImagen(sociedadEntity).subscribe((res) => {
+      if (res.codigoError == "OK") {
+        Swal.fire({
+          icon: 'success',
+          title: 'Actualizado Correctamente.',
+          text: `Se ha actualizado la información`,
+          showConfirmButton: true,
+          confirmButtonText: "Ok"
+        }).finally(() => {
+          switch (this.fun) {
+            case "admin":
+              this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['usuario'] } }]);
+              break;
+            case "client":
+              this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['usuario'] } }]);
+              break;
+          }
+
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Ha ocurrido un error.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      }
+    });
+    
+  }
+}
+
+onChangeFile(target: any): void {
+  if (target.value != "") {
+    this.fileToUpload = target.files[0];
+    let reader = new FileReader();
+    reader.onload = (event: any) => {
+      this.imageUrl = event.target.result;
+      this.imageBase64 = this.imageUrl.split(',')[1];
+      this.imageName = this.fileToUpload.name;
+    }
+    reader.readAsDataURL(this.fileToUpload);
+  }
+}
+
+eliminarImagen() {
+  this.imageUrl = this.imageUrlAux;
+  this.imageName = this.imageUrl;
+}
+
+
+//Comprobar si es admin o client
+comprobarAdminClient() {
+  if (this.fun == "admin" || this.fun == "client") {
+    this.tienePermisos = true;
+  }
+}
 }
