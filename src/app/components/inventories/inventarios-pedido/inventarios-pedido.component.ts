@@ -214,6 +214,10 @@ export class InventariosPedidoComponent implements OnInit {
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['movimiento-inventario'] } }]);
   }
 
+  filtrarCantidadesNoOptimas(): void {
+   
+  }
+
 
 
   /*eliminarAlmacenes(almacen: AlmacenesEntity): void {
@@ -265,8 +269,3 @@ export class InventariosPedidoComponent implements OnInit {
   }*/
 
 }
-
-function obtenerCategorias() {
-  throw new Error('Function not implemented.');
-}
-

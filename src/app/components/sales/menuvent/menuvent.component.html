@@ -118,7 +118,8 @@
                     <th style="width: 10%; ">Precio Uni.</th>
                     <th style="width: 10%; ">Precio Total</th>
                     <th style="width: 10%; ">Descuento</th>
-                    <th style="width: 10%; ">Tarifa</th>
+                    <th style="width: 10%; ">IVA</th>
+                    <th style="width: 10%; ">ICE</th>
                     <th style="width: 10%; ">Tamaño</th>
                     <th style="width: 10%; ">Color</th>
                     <th style="width: 20%; "></th>
@@ -153,6 +154,7 @@
                             [(ngModel)]="detalleMovimientos.desc_add" (ngModelChange)="calcularPrecio(i)">
                     </td>
                     <td>{{detalleMovimientos.tarifa}}</td>
+                    <td>{{detalleMovimientos.ice}}</td>
                     <td>{{detalleMovimientos.tamanio}}</td>
                     <td>{{detalleMovimientos.color}}</td>
                     <td style="text-align: center;">

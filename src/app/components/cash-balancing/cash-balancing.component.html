@@ -18,13 +18,12 @@
                             </option>
                         </select>
                     </div>
-                    <div class="form-group" *ngIf="mostrarDiv">
+                    <div class="form-group" *ngIf="mostrarDiv"  style="width: 210px;">
                         <label for="fechaDesde">Almacén:</label>
                         <h2 style="color: #636363;">{{nombreAlmacen}}</h2>
                     </div>
- 
-
                 </div>
+
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="fechaDesde">Fecha Desde:</label>
@@ -32,6 +31,7 @@
                             (change)="filterByDate()">
                     </div>
                 </div>
+
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="fechaHasta">Fecha Hasta:</label>

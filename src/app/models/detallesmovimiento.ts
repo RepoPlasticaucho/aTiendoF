@@ -24,4 +24,5 @@ export interface DetallesMovimientoEntity {
     url_image?: string;
     created_at?: string;
     tipo_movimiento?: string;
+    ice?: string;
 }

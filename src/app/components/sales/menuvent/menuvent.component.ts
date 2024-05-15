@@ -400,6 +400,12 @@ export class MenuventComponent implements OnInit {
             // timer: 3000
           });
         } else {
+          //Imprimir 
+
+          console.log("AQUI EN DATALLE MOVIMIENTO")
+
+          console.log(res.lstDetalleMovimientos)
+
           this.lstDetalleMovimientos = res.lstDetalleMovimientos;
           this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
             // Destruye la tabla existente y elimina los datos
@@ -440,6 +446,9 @@ export class MenuventComponent implements OnInit {
           // timer: 3000
         });
       } else {
+
+        console.log("AQUI EN DATALLE MOVIMIENTO")
+        
         this.lstDetalleMovimientos = res.lstDetalleMovimientos;
         this.dtTrigger.next('');
         this.calcularSumaTotal();

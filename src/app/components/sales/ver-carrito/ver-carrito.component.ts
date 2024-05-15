@@ -188,7 +188,7 @@ searchText: string = '';
                 Swal.fire({
                   icon: 'success',
                   title: 'Actualizado',
-                  text: `Se ha cambiado la cantidad2`,
+                  text: `Se ha cambiado la cantidad`,
                   showConfirmButton: true,
                   confirmButtonText: 'Ok',
                 }).then((result) => {

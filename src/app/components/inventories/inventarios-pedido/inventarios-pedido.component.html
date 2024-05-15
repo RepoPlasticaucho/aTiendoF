@@ -69,13 +69,22 @@
                 </mat-grid-list>
             </div>
             <br><br>
+            
+            <button class="btn btn-primary" (click)="filtrarCantidadesNoOptimas()">
+                <span style="color: white">Cantidades No Optimas</span>
+            </button>
+
+
             <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                 <thead style="color: #636363;">
                     <tr>
                         <th style="width: 55%; ">PRODUCTO</th>
                         <th style="width: 15%; ">CANTIDAD OPTIMO</th>
                         <th style="width: 15%; ">STOCK</th>
+                        <th style="width: 15%; ">COSTO</th>
+
                         <th style="width: 15%; ">PRECIO</th>
+
                     </tr>
                 </thead>
                 <tbody style="color: #767695;">
@@ -85,6 +94,8 @@
                         <td [class.text-danger]="isStockBelowOptimal(inventario.stock!, inventario.stock_optimo)">
                             {{ inventario.stock }}
                         </td>
+                        <td>{{inventario.costo}}</td>
+
                         <td>{{inventario.pvp2}}</td>
                     </tr>
                 </tbody>

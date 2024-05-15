@@ -228,7 +228,7 @@ export class MovimientoInventariosComponent implements OnInit {
                       Swal.fire({
                         icon: 'success',
                         title: 'Se han movido los productos al almacén',
-                        text: `Se ha cambiado la cantidad1`,
+                        text: `Se ha cambiado la cantidad`,
                         showConfirmButton: true,
                         confirmButtonText: 'Ok',
                       }).then((result) => {
@@ -322,7 +322,7 @@ export class MovimientoInventariosComponent implements OnInit {
                       Swal.fire({
                         icon: 'success',
                         title: 'Se han movido los productos al almacén',
-                        text: `Se ha cambiado la cantidad3`,
+                        text: `Se ha cambiado la cantidad`,
                         showConfirmButton: true,
                         confirmButtonText: 'Ok',
                       }).then((result) => {
