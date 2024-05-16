@@ -1,121 +1,73 @@
-<div class="grid-container" style="color: grey;">
-  <mat-grid-list cols="2" rowHeight="600px">
-    <mat-grid-tile>
-      <mat-card class="dashboard-card1" style="
-                        padding: 15px;
-                        border-radius: 10px;">
-        <div align="center">
-          <br>
-          <a rel="noopener noreferrer">
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <style>
+      body {
+          background-color: #5061c267; /* Cambia #f0f0f0 al color de fondo que desees */
+      }
+
+      .error-message {
+          font-size: 10px; /* Tamaño de la fuente reducido */
+          margin-top: 2px; /* Margen superior reducido */
+          margin-bottom: 2px; /* Margen inferior aumentado */
+          letter-spacing: 0.5px; /* Espaciado entre letras ajustado */
+      }
+
+      .input-div {
+          margin-bottom: 8px; /* Margen inferior de los campos de entrada */
+      }
+  </style>
+</head>
+<body>
+    <img class="wave" src="../../../assets/img/wave.svg">
+    <div class="container">
+        <div class="img">
             <img src="https://atiendo.ec/black/img/logo.png">
-          </a>
         </div>
-        <br><br><br><br><br><br><br><br><br>
-        <div align="left">
-          <p style="font-size: 2.5em;
-                        letter-spacing: 0.5pt;
-                        line-height: 0.75em;
-                        color: whitesmoke;">
-            <a class="button" style="color: white;">
-              ¿No tienes una cuenta?
-            </a>
-          </p><br><br>
-
-          <p style="color: white;">
-            Regístrate para acceder a todos nuestros beneficios. <br>
-            Conoce los detalles y promociones de nuestros productos
-          </p>
-        </div>
-      </mat-card>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <mat-card class="dashboard-card" style="
-                                      padding: 15px;
-                                      border-radius: 10px;">
-        <span>
-          <h1>
-            Accede
-          </h1>
-        </span><br><br><br>
-
-        <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" *ngIf="mostrarIni">
-          <div class="form-group">
-            <input type="text" class="form-control" id="email" placeholder="Correo Electronico"
-              formControlName="categoria">
-            <small
-              *ngIf="categoryForm.controls['categoria'].invalid && (categoryForm.controls['categoria'].dirty || categoryForm.controls['categoria'].touched)">
-              <small *ngIf="categoryForm.controls['categoria'].errors" style="color: red;">
-                Debe ingresar el correo electronico
-              </small>
-            </small>
-          </div>
-          <div class="form-group">
-            <input type="password" class="form-control" id="passw" placeholder="Contraseña" formControlName="codigoSAP">
-            <small
-              *ngIf="categoryForm.controls['codigoSAP'].invalid && (categoryForm.controls['codigoSAP'].dirty || categoryForm.controls['codigoSAP'].touched)">
-              <small *ngIf="categoryForm.controls['codigoSAP'].errors" style="color: red;">
-                Debe ingresar la contraseña.
-              </small>
-            </small>
-          </div>
-          <div align="center">
-
-            <label>
-              <input type="checkbox"> Recordarme
-            </label>
-
-            <br>
-
-            <button type="submit" class="btn btn-primary"><!--[disabled]="!this.groupForm.valid"-->
-              Entrar
-            </button>
-            <br><br>
-
-            <a href="#" class="btn btn-link">
-              <span>Olvidaste tu contraseña?</span>
-            </a>
-
-          </div>
-
-        </form>
-
-        <form [formGroup]="corporationForm" (ngSubmit)="onSubmit2()" *ngIf="mostrarAct">
-          <div class="form-group">
-            <label for="passwnew">Nueva Contraseña</label>
-            <input type="password" class="form-control" id="passwnew"
-                placeholder="Ingrese la nueva contraseña " formControlName="passwnew">
-            <small
-                *ngIf="corporationForm.controls['passwnew'].invalid && (corporationForm.controls['passwnew'].dirty || corporationForm.controls['passwnew'].touched)">
-                <small *ngIf="corporationForm.controls['passwnew'].errors?.['required']"
-                    style="color: red;">
-                    Debe ingresar la nueva contraseña.
+        
+        <div class="login-container">
+            <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" *ngIf="mostrarIni">
+                <h2>Iniciar Sesión</h2>
+                <p>Accede a todos nuestros beneficios.</p>
+                <div class="input-div one">
+                    <div class="i">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <input class="input" type="text" placeholder="Correo Electronico" id="email" formControlName="categoria">
+                    </div>
+                </div>
+                <small *ngIf="categoryForm.controls['categoria'].invalid && (categoryForm.controls['categoria'].dirty || categoryForm.controls['categoria'].touched)" class="error-message" style="color: red;">
+                    Debe ingresar el correo electronico
                 </small>
-            </small>
-        </div>
-        <div class="form-group">
-            <label for="passconfirm">Confirmacion de la Nueva Contraseña</label>
-            <input type="password" class="form-control" id="passconfirm"
-                placeholder="Ingrese la nueva contraseña " formControlName="passconfirm">
-            <small
-                *ngIf="corporationForm.controls['passconfirm'].invalid && (corporationForm.controls['passconfirm'].dirty || corporationForm.controls['passconfirm'].touched)">
-                <small *ngIf="corporationForm.controls['passconfirm'].errors?.['required']"
-                    style="color: red;">
-                    Debe confirmar la nueva contraseña.
+                <div class="input-div two">
+                    <div class="i">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <div>
+                        <input class="input" type="password" placeholder="Contraseña" id="passw" formControlName="codigoSAP">
+                    </div>
+                </div>
+                <small *ngIf="categoryForm.controls['codigoSAP'].invalid && (categoryForm.controls['codigoSAP'].dirty || categoryForm.controls['codigoSAP'].touched)" class="error-message" style="color: red;">
+                    Debe ingresar la contraseña.
                 </small>
-            </small>
+                <button type="submit" class="btn"> Entrar </button>
+                <a class="forgot" href="forgotPassword.html">Olvido su contraseña ?</a>
+                <div class="others">
+                    <hr>
+                    <p>O</p>
+                    <hr>
+                </div>
+
+                <div class="account">
+                    <p>No tienes una cuenta?</p>
+                    <a href="register.html">¡Registrate Ahora!</a>
+                </div>
+            </form>
         </div>
-          <div align="center">
-            <br>
-            <button type="submit" class="btn btn-primary">
-              <!--[disabled]="!this.corporationForm.valid"-->
-              <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
-              Actualizar
-          </button>
-            <br><br>
-          </div>
-        </form>
-        <br><br><br><br><br>
-      </mat-card>
-    </mat-grid-tile>
-  </mat-grid-list>
-</div>
+    </div>
+
+</body>
+
+</html>

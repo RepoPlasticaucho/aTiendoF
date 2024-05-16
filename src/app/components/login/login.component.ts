@@ -45,7 +45,12 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
+
+    console.log("entro1");
+
     if (!this.categoryForm.valid) {
+    console.log("entro2");
+
       this.categoryForm.markAllAsTouched();
     } else {
       const userEntity: SociedadesEntity = {

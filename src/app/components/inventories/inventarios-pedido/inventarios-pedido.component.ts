@@ -216,6 +216,17 @@ export class InventariosPedidoComponent implements OnInit {
 
   filtrarCantidadesNoOptimas(): void {
    
+    const aux = this.lstInventarios;
+
+    this.lstInventarios = this.lstInventarios.filter(inventario => {
+      return this.isStockBelowOptimal(inventario.stock!, inventario.stock_optimo);
+    });
+
+    this.calculateTotalSum();
+    this.dtTrigger.next('');
+
+    this.lstInventarios = aux;
+
   }
 
 

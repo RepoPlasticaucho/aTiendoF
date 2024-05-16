@@ -70,12 +70,10 @@
             </div>
             <br><br>
             
-            <button class="btn btn-primary" (click)="filtrarCantidadesNoOptimas()">
-                <span style="color: white">Cantidades No Optimas</span>
-            </button>
 
 
-            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" id="table_id" >
                 <thead style="color: #636363;">
                     <tr>
                         <th style="width: 55%; ">PRODUCTO</th>
