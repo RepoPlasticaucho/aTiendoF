@@ -12,7 +12,7 @@
         
         </mat-menu>                   
     </div>
-  <mat-grid-list cols="3" rowHeight="225px">
+    <mat-grid-list [cols]="getGridCols()" [rowHeight]="getRowHeight()">
     <mat-grid-tile *ngFor="let card of cards | async" [colspan]="card.cols" [rowspan]="card.rows">
         <mat-card class="dashboard-card" [ngClass]="{ 'disabled-card': card.title === 'Pedido Sugerido' }">
             <mat-card-header>

@@ -8,12 +8,25 @@ import { SociedadesEntity } from 'src/app/models/sociedades';
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { Location } from '@angular/common';
 
+
 @Component({
   selector: 'app-dashboard-cl',
   templateUrl: './dashboard-cl.component.html',
   styleUrls: ['./dashboard-cl.component.css']
 })
 export class DashboardClComponent {
+
+  getGridCols(): number {
+    return this.breakpointObserver.isMatched('(min-width: 1200px)') ? 3 : // Si la pantalla es de al menos 1200px de ancho, mostrar 3 columnas
+           this.breakpointObserver.isMatched('(min-width: 700px)') ? 2 : // Si la pantalla es de al menos 900px de ancho, mostrar 2 columnas
+           1; // De lo contrario, mostrar solo 1 columna
+  }
+
+  getRowHeight(): string {
+    return this.breakpointObserver.isMatched('(min-width: 1200px)') ? '225px' : // Si la pantalla es de al menos 1200px de ancho, usar una altura de fila de 225px
+           this.breakpointObserver.isMatched('(min-width: 700px)') ? '225px' : // Si la pantalla es de al menos 900px de ancho, usar una altura de fila de 200px
+           '200px'; // De lo contrario, usar una altura de fila de 150px
+  }
   /** Based on the screen size, switch from standard to one column per row */
   cards = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
     map(({ matches }) => {
