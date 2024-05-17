@@ -8,6 +8,16 @@
   
 }
 
+.no-float {
+  float: left !important;
+
+}
+
+.float {
+  float: none !important;
+  z-index: 999;
+}
+
 .disabled-link {
   pointer-events: none;
   background-color: rgba(80, 101, 224, 1);
