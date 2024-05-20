@@ -7,32 +7,45 @@
             <a routerLink="/navegation-facturador" rel="noopener noreferrer">
                 <img src="https://atiendo.ec/black/img/logo.png">
             </a>
+            <button mat-list-item (click)="drawer.toggle()" style="background-color: #ffffff00; color: white; border: none; padding: 0 15px; width: 25%; float: right;" (click)="toggleNavbar()">
+                <span class="material-icons-outlined" style="font-size: 24px">menu</span>
+            </button>
         </div>
         <p align="center" style="color:aliceblue">_________________________________</p>
         <mat-nav-list>
-            <a mat-list-item routerLink="/navegation-facturador" style="color: white">
+            <a mat-list-item routerLink="/navegation-facturador" style="color: white"
+            (click)="closeSidenavIfSmallScreen(drawer)"
+            >
                 <span class="material-icons-outlined" style="font-size: 24px">pie_chart</span>
                 <font style="font-size: 13px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dashboard</font>
             </a>
        
  
                 <a mat-list-item [routerLink]="[{ outlets: { contentPersonal: ['ventaprov'] } }]"
-                    style="color: white">
+                    style="color: white"
+                    (click)="closeSidenavIfSmallScreen(drawer)"
+                    >
                     <span class="material-icons-outlined" style="font-size: 20px">payment</span>
                     <font style="font-size: 12px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ventas</font>
                 </a>
 
-            <a mat-list-item style="color: white" [routerLink]="[{ outlets: { contentPersonal: ['cuadre-caja'] } }]">
+            <a mat-list-item style="color: white" [routerLink]="[{ outlets: { contentPersonal: ['cuadre-caja'] } }]"
+            (click)="closeSidenavIfSmallScreen(drawer)"
+            >
                 <span class="material-icons-outlined" style="font-size: 20px">monetization_on</span>
                 <font style="font-size: 12px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cuadre de Caja</font>
             </a>
             <a mat-list-item [routerLink]="[{ outlets: { contentPersonal: ['inventarios'] } }]"
-                style="color: white">
+                style="color: white"
+                (click)="closeSidenavIfSmallScreen(drawer)"
+                >
                 <span class="material-icons-outlined" style="font-size: 24px">apps</span>
                 <font style="font-size: 13px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Productos</font>
             </a>
             <a mat-list-item [routerLink]="[{ outlets: { contentPersonal: ['inventarios-pedido'] } }]"
-                style="color: white">
+                style="color: white"
+                (click)="closeSidenavIfSmallScreen(drawer)"
+                >
                 <span class="material-icons-outlined" style="font-size: 24px">apps</span>
                 <font style="font-size: 13px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inventarios</font>
             </a>
@@ -42,19 +55,25 @@
                 <font style="font-size: 13px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pedido Sugerido</font>
             </a>
             -->
-            <a mat-list-item href="#" class="disabled-link" style="color: white">
+            <a mat-list-item href="#" class="disabled-link" style="color: white"
+            (click)="closeSidenavIfSmallScreen(drawer)"
+            >
                 <span class="material-icons-outlined" style="font-size: 24px">widgets</span>
                 <font style="font-size: 13px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pedido Sugerido</font>
             </a>
 
-            <a mat-list-item [routerLink]="[{ outlets: { contentPersonal: ['movimientos'] } }]" style="color: white">
+            <a mat-list-item [routerLink]="[{ outlets: { contentPersonal: ['movimientos'] } }]" style="color: white"
+            (click)="closeSidenavIfSmallScreen(drawer)"
+            >
                 <span class="material-icons-outlined" style="font-size: 24px">monitor</span>
                 <font style="font-size: 13px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Movimientos</font>
             </a>
 
 
      
-            <a mat-list-item (click)="logout()" style="color: white">
+            <a mat-list-item (click)="logout()" style="color: white"
+            (click)="closeSidenavIfSmallScreen(drawer)"
+            >
                 <span class="material-icons-outlined" style="font-size: 24px">logout</span>
                 <font style="font-size: 13px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Salir</font>
             </a>
@@ -62,6 +81,16 @@
 
     </mat-sidenav>
     <mat-sidenav-content>
+        <button mat-list-item (click)="drawer.toggle()" (click)="toggleNavbar()" *ngIf="(isHandset$ | async) === true || !showNavbar "
+        style="background-color: #312d2d11; color: #5e72e4; border: none; padding: 0 15px; float: left; top: 20px; width: 10%; left: 15px;  display: flex; justify-content: center; align-items: center;"
+        [ngClass]="{
+            'no-float': (isHandset$ | async) === false,
+            'float': (isHandset$ | async) !== false
+        }"
+        >
+            <span class="material-icons-outlined" style="font-size: 24px"
+            >menu</span>
+        </button>
         <router-outlet name="contentPersonal"></router-outlet>
     </mat-sidenav-content>
 </mat-sidenav-container>

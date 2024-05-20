@@ -58,3 +58,14 @@
   .subitem-menu {
     margin-left: 20px; /* Ajusta el valor según la separación deseada */
   }
+
+  
+.no-float {
+  float: left !important;
+
+}
+
+.float {
+  float: none !important;
+  z-index: 999;
+}
