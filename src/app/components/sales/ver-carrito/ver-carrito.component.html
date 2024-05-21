@@ -8,8 +8,8 @@
     </div>
     <br>
     <br /><br />
-    <div class="table-container">
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+    <div  #responsiveContainer>
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" id="dataTable">
             <thead style="color: #636363;" class="fixed-header">
                 <tr>
                     <tr>
@@ -48,7 +48,7 @@
                     <td>{{inventario.atributo}}</td>
                     <td>{{inventario.genero}}</td>
                     <td>
-                        <input class="cool-input" (input)="onInput($event)" *ngIf="true" type="text"
+                        <input class="cool-input" (input)="onInput($event)" *ngIf="true" type="text" id="cantidad"
                             [(ngModel)]="inventario.cantidad" />
                     </td>
                     <td>{{inventario.pvp2}}</td>
@@ -60,13 +60,14 @@
                                 style="color: green; margin-right: 5px;"></i>
                     </td>
                     <td style="text-align: center;">
-                        <a class="btn button" (click)="crearDetalle(inventario)" 
+                        <button class="btn button" (click)="crearDetalle(inventario)"
                             [ngClass]="{'btn-success': inventario.productoExistente, 'btn-primary': !inventario.productoExistente}"
-                            style="border-radius: 5px; font-size: 15px; width:120px; height:35px; text-align:center; margin-top: 10px;">
+                            style="border-radius: 5px; font-size: 15px; width:120px; height:35px; text-align:center; margin-top: 10px;"
+                            >
                             <span style="color:white;">
                                 {{ inventario.productoExistente ? 'ACTUALIZAR' : 'AÑADIR' }}
                             </span>
-                        </a>
+                        </button>
                     </td>
                 </tr>
             </tbody>

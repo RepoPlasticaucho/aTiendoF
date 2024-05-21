@@ -46,7 +46,7 @@ export class MovimientoInventariosComponent implements OnInit {
       searching: true,
       ordering: false,
       info: true,
-      responsive: false
+      responsive: true
     }
     const almacenNew: AlmacenesEntity = {
       idAlmacen: localStorage.getItem('almacenid')!,

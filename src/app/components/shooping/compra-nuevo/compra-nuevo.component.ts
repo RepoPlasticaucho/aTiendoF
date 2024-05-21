@@ -70,7 +70,7 @@ export class CompraNuevoComponent implements OnInit {
       ordering: true,
       pageLength: 100,
       info: true,
-      responsive: false
+      responsive: true
     }
 
     const newProveedor: ProveedoresProductosEntity = {

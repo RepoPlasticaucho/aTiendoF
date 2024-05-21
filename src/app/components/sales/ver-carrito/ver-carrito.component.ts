@@ -13,6 +13,7 @@ import { InventariosService } from 'src/app/services/inventarios.service';
 import { DetalleImpuestosEntity } from 'src/app/models/detalle-impuestos';
 import { finalize } from 'rxjs';
 import { DetalleImpuestosService } from 'src/app/services/detalle-impuestos.service';
+import { Renderer } from 'html2canvas/dist/types/render/renderer';
 
 @Component({
   selector: 'app-ver-carrito',
@@ -45,16 +46,96 @@ searchText: string = '';
   ) { }
 
   ngOnInit(): void {
+    const component = this;
+    let cantidadAux = "";
+    let inventario: InventariosEntity = {
+      categoria_id: '',
+      categoria: '',
+      linea_id: '',
+      linea: '',
+      modelo_id: '',
+      modelo: '',
+      marca_id: '',
+      marca: '',
+      modelo_producto_id: '',
+      modelo_producto: '',
+      idProducto: '',
+      Producto: '',
+      productoExistente: false,
+      id: '',
+      dInventario: '',
+      producto_id: '',
+      tarifa_ice_iva: '',
+      tarifa_ice_iva_id: '',
+      almacen_id: '',
+      producto_nombre: '',
+      almacen: '',
+      stock: '',
+      etiquetas: '',
+      stock_optimo: '',
+      fav: '',
+      color: '',
+      costo: '',
+      cantidad: '',
+      pvp1: '',
+      pvp2: '',
+      pvp_sugerido: '',
+      cod_principal: '',
+      cod_secundario: '',
+      unidad_medidad: '',
+      url_image: '',
+      talla: '',
+      tarifa_ice_iva1: '',
+      tarifa_ice_iva_id1: '',
+      genero: '',
+      atributo: ''
+    };
+
     this.dtOptions = {
       language: {
-        url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+      url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
       },
       paging: true,
       search: false,
       searching: true,
       ordering: true,
       info: true,
-      responsive: false
+      responsive: {
+      details: {
+        renderer: function (api: any, rowIdx: any, columns: any) {
+        var data = $.map(columns, function (col, i) {
+          return col.hidden ?
+          '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+          '<td>' + col.title + ':' + '</td> ' +
+          '<td>' + col.data + '</td>' +
+          '</tr>' :
+          '';
+        }).join('');
+
+        inventario = component.lstInventarios[rowIdx];
+        return data ?
+          $('<table/>').append(data) :
+          false;
+        }
+      }
+      },
+
+
+      initComplete: function () {
+
+        $('#dataTable tbody').on('input', 'input', function () {
+          // Obtener el valor actual del input
+          cantidadAux = $(this).val() + ""
+      });
+
+      // Add click event listener to the table rows
+      $('#dataTable tbody').on('click', 'tr button', function () {
+        const cantidad = document.getElementById("cantidad") as HTMLInputElement;
+        if(cantidadAux=="0") return 
+        inventario.cantidad = cantidadAux
+        component.crearDetalle(inventario);
+      });
+      }
     }
     Swal.fire({
       title: 'CARGANDO...',
@@ -147,6 +228,8 @@ searchText: string = '';
 
 
   crearDetalle(inventario: InventariosEntity): void {
+
+
     this.httpServiceInventarios.asignarInventario(inventario);
     this.httpServiceInventarios.obtenerInventario$.pipe(take(1)).subscribe((res) => {
       if (res.id == '') {
@@ -162,6 +245,7 @@ searchText: string = '';
           ]);
         });
       } else {
+        console.log("DIO CLICK")
         //Asignamos los valores a los campos
         this.costo = res.pvp2;
         this.precio = parseFloat(res.pvp2!) * parseFloat(inventario.cantidad!);
@@ -200,7 +284,7 @@ searchText: string = '';
                 Swal.fire({
                   icon: 'error',
                   title: 'Ha ocurrido un error.',
-                  text: 'No existe suficiente stock.',
+                  text: 'No existe suficiente stock.1',
                   showConfirmButton: false
                 });
               }
@@ -261,7 +345,7 @@ searchText: string = '';
               Swal.fire({
                 icon: 'error',
                 title: 'Ha ocurrido un error.',
-                text: 'No existe suficiente stock.',
+                text: 'No existe suficiente stock.2',
                 showConfirmButton: false
               });
             } else {

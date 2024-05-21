@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { Subject, finalize } from 'rxjs';
 import { faShoppingBag, faSave, faList, faTimes, faShoppingCart, faEdit, faTrashAlt, faMoneyBillAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
-import { DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
+import { DetallesMovimiento, DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
 import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service';
 import { VerCarritoComponent } from '../ver-carrito/ver-carrito.component';
 import '../../../../../src/disable-alerts';
@@ -78,7 +78,19 @@ export class MenuventComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    let idAux: number;
+    let detalle: DetallesMovimientoEntity = {
+      id: '',
+      producto_nombre: '',
+      inventario_id: '',
+      producto_id: '',
+      movimiento_id: localStorage.getItem('movimiento_id')!,
+      cantidad: '',
+      costo: '',
+      precio: '',
+    };
 
+    const component = this;
     this.dtOptions = {
       language: {
         url: '//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json',
@@ -88,8 +100,47 @@ export class MenuventComponent implements OnInit {
       searching: true,
       ordering: true,
       info: false,
-      responsive: true,
-    };
+      responsive:  {
+        details: {
+          renderer: function (api: any, rowIdx: any, columns: any) {
+          var data = $.map(columns, function (col, i) {
+            return col.hidden ?
+            '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+            '<td>' + col.title + ':' + '</td> ' +
+            '<td>' + col.data + '</td>' +
+            '</tr>' :
+            '';
+          }).join('');
+
+          detalle = component.lstDetalleMovimientos[rowIdx];
+          idAux = parseInt(rowIdx);
+
+          return data ?
+          $('<table/>').append(data) :
+          false;
+        
+          }
+        },
+        },
+
+        initComplete: function () {
+          $('#dataTable tbody').on('click', '.editar-icon', function () {
+          //BOTON EDITAR
+          var index = $(this).closest('span').data('index');
+          console.log('Editar índice:', index);
+          component.editarDetalleMovimiento(index);
+          //Si los inputs estan habilitados 
+
+        });
+        $('#dataTable tbody').on('click', '.delete-icon', function () {
+          //BOTON ELIMINAR
+          console.log('Eliminar índice:');
+          var index = $(this).closest('span').data('index');
+          console.log('Eliminar', JSON.stringify(index));
+          component.eliminarDetalle(index);
+        });
+      }
+      }
 
     this.httpServiceCiudades.obtenerCiudadesAll().subscribe((res) => {
       if (res.codigoError != 'OK') {
