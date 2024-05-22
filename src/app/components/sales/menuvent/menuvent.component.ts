@@ -126,17 +126,19 @@ export class MenuventComponent implements OnInit {
         initComplete: function () {
           $('#dataTable tbody').on('click', '.editar-icon', function () {
           //BOTON EDITAR
+          if(component.editarDetalle){
+            component.aplicarCambiosDetalle(index);
+            return
+          }
           var index = $(this).closest('span').data('index');
-          console.log('Editar índice:', index);
           component.editarDetalleMovimiento(index);
-          //Si los inputs estan habilitados 
+          //Cambiar el icono  <fa-icon         
 
+            $(this).html('<fa-icon class="btn-success"></fa-icon>').removeClass('btn btn-info').addClass('btn btn-success fa-check')
         });
         $('#dataTable tbody').on('click', '.delete-icon', function () {
           //BOTON ELIMINAR
-          console.log('Eliminar índice:');
           var index = $(this).closest('span').data('index');
-          console.log('Eliminar', JSON.stringify(index));
           component.eliminarDetalle(index);
         });
       }
