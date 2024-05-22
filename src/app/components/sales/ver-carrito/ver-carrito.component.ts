@@ -134,6 +134,7 @@ searchText: string = '';
         if(cantidadAux=="0") return 
         inventario.cantidad = cantidadAux
         component.crearDetalle(inventario);
+        return;
       });
       }
     }
@@ -228,8 +229,6 @@ searchText: string = '';
 
 
   crearDetalle(inventario: InventariosEntity): void {
-
-
     this.httpServiceInventarios.asignarInventario(inventario);
     this.httpServiceInventarios.obtenerInventario$.pipe(take(1)).subscribe((res) => {
       if (res.id == '') {

@@ -249,69 +249,98 @@ export class FacturaComponent implements OnInit {
     return porcen;
   }
 
+ 
   generarPDF() {
-
     const DATA = document.getElementById('htmlData')!;
     const doc = new jsPDF('p', 'pt', 'a4');
     const options = {
-      background: 'white',
-      scale: 3
+        background: 'white',
+        scale: 2  // Ajusta la escala si es necesario
     };
-    html2canvas(DATA, options).then((canvas) => {
 
-      const img = canvas.toDataURL('image/PNG');
+    // Crear un contenedor para renderizar el contenido en tamaño fijo
+    const fixedContainer = document.createElement('div');
+    fixedContainer.style.width = '794px'; // Ancho en puntos para A4
+    fixedContainer.style.position = 'absolute';
+    fixedContainer.style.top = '0';
+    fixedContainer.style.left = '0';
+    fixedContainer.style.background = 'white';
 
+    // Clonar el contenido original y agregarlo al contenedor fijo
+    const contentClone = DATA.cloneNode(true) as HTMLElement;
+    fixedContainer.appendChild(contentClone);
+    document.body.appendChild(fixedContainer);
 
-      const bufferX = 15;
-      const bufferY = 15;
-      const imgProps = (doc as any).getImageProperties(img);
-      const pdfWidth = doc.internal.pageSize.getWidth() - 2 * bufferX;
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-      doc.addImage(img, 'PNG', bufferX, bufferY, pdfWidth, pdfHeight, undefined, 'FAST');
-      return doc;
-    }).then((docResult) => {
+    // Descargar la imagen del logo y convertirla a base64
+    const logoUrl = "https://i.ibb.co/sgLD0gf/logro-Comercial.png"
+    console.log("ESTE ES EL URL ", this.url_logo)
 
-      // Datos para guardar el pdf en remoto
+    this.getBase64Image(logoUrl).then((logoBase64) => {
+        // Asegúrate de que la imagen se haya descargado correctamente
+        if (logoBase64) {
+            html2canvas(fixedContainer, options).then((canvas) => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdfWidth = doc.internal.pageSize.getWidth();
+                const pdfHeight = doc.internal.pageSize.getHeight();
 
-      const pdfContent = doc.output('datauristring');
-      const pdfBase64 = pdfContent.split(',')[1];
-      const pdfBase64URL = `data:application/pdf;base64,${pdfBase64}`;
-      const pdfBase641 = pdfBase64URL.split(',')[1];
-      this.facturaBase64 = pdfBase641;
+                // Agregar la imagen del logo al PDF
+                doc.addImage(logoBase64, 'PNG', 10, 10, 100, 50); // Ajusta las coordenadas y el tamaño según sea necesario
+                // Agregar la imagen del contenido al PDF
+                doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
 
-      const newMov: MovimientosEntity = {
-        id: localStorage.getItem('movimiento_id')!,
-        tipo_id: '',
-        tipo_emision_cod: '',
-        estado_fact_id: '',
-        tipo_comprb_id: '',
-        almacen_id: '',
-        cod_doc: '',
-        secuencial: ''
-      }
-      this.httpServiceMovimiento.obtenerMovimientoCLAVEACCESO(newMov).subscribe(res => {
-        this.facturaName = `factura_${res.lstMovimientos[0].clave_acceso}.pdf`;
-        // Guardar pdf en local
-        docResult.save(this.facturaName);
-        const imageEntity: ImagenesEntity = {
-          imageBase64: this.facturaBase64,
-          nombreArchivo: this.facturaName,
-          codigoError: '',
-          descripcionError: '',
-          nombreArchivoEliminar: '',
-        };
-        this.httpServiceImage
-          .agregarPDF(imageEntity).subscribe(res1 => {
-            if (res1.codigoError == 'OK') {
-              console.log('CORRECTO')
-              this.pdfGenerado = true;
+                document.body.removeChild(fixedContainer); // Eliminar el contenedor fijo después de generar el PDF
+
+                // Guardar el PDF
+                const pdfName = `documento.pdf`;
+                doc.save(pdfName);
+
+                // Subir el PDF o realizar otras acciones necesarias
+                const imageEntity: ImagenesEntity = {
+                    imageBase64: imgData,
+                    nombreArchivo: pdfName,
+                    codigoError: '',
+                    descripcionError: '',
+                    nombreArchivoEliminar: '',
+                };
+
+                this.httpServiceImage.agregarPDF(imageEntity).subscribe(res1 => {
+                    if (res1.codigoError == 'OK') {
+                        console.log('PDF subido correctamente');
+                        this.pdfGenerado = true;
+                    } else {
+                        console.error('Error al subir el PDF:', res1.descripcionError);
+                    }
+                });
+            });
+        } else {
+            console.error('Error al descargar la imagen del logo.');
+        }
+    });
+}
+
+// Función para descargar la imagen y convertirla a base64
+getBase64Image(url: string): Promise<string | null> {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = 'Anonymous';
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+                ctx.drawImage(img, 0, 0);
+                const dataURL = canvas.toDataURL('image/png');
+                resolve(dataURL);
             } else {
-              console.log(res1.descripcionError)
+                reject(null);
             }
-          });
-      });
-    })
-  }
+        };
+        img.onerror = () => reject(null);
+        img.src = url;
+    });
+}
+
 
   enviarComprobante(){
     const movimientoID = localStorage.getItem('movimiento_id')!;

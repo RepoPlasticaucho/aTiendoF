@@ -150,3 +150,306 @@ body {
     align-items: center;
     text-align: center;
 }
+
+@media screen and (max-width: 768px) {
+    .factura {
+        flex-direction: column;
+    }
+    
+    .info-comercial,
+    .info-cliente {
+        margin-bottom: 10px;
+    }
+    
+    .custom-table2 {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .labelAdic {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .encabezado {
+        font-size: 24px;
+    }
+    
+    .encabezado2 {
+        font-size: 16px;
+    }
+    
+    .info-comercial,
+    .info-cliente {
+        flex-direction: column;
+    }
+    
+    .custom-table2 {
+        width: 100%;
+    }
+    
+    .labelAdic {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .encabezado {
+        font-size: 20px;
+    }
+    
+    .encabezado2 {
+        font-size: 14px;
+    }
+    
+    .info-comercial,
+    .info-cliente {
+        flex-direction: column;
+    }
+    
+    .custom-table2 {
+        width: 100%;
+    }
+    
+    .labelAdic {
+        width: 100%;
+        margin-left: 0;
+    }
+    
+    .table-container {
+        flex-direction: column;
+    }
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+.factura {
+    display: flex;
+    justify-content: space-between;
+}
+
+.encabezado {
+    text-align: left;
+    font-size: 30px;
+    font-weight: bold;
+    color: red;
+    margin-bottom: 20px;
+}
+
+.encabezado2 {
+    text-align: left;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.info-comercial {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    border: 1px solid #000;
+    border-radius: 10px;
+    overflow-wrap: break-word; /* Add this line */
+}
+
+.info-comercial,
+.info-cliente {
+    flex: 1;
+    padding: 10px;
+    /* Ajusta el padding según tus necesidades */
+    border: 1px solid #000000;
+    /* Añade un borde para visualizar mejor la separación */
+    box-sizing: border-box;
+    margin-inline: 10px;
+    overflow-wrap: break-word; /* Add this line */
+}
+
+.info-cliente {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    border: 1px solid #000;
+    border-radius: 10px;
+    overflow-wrap: break-word; /* Add this line */
+}
+
+.invoice-details {
+    border-radius: 20px;
+    padding: 10px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+}
+
+.invoice-details2 {
+    border-radius: 20px;
+    padding: 1px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #000000;
+    border-radius: 10px;
+}
+
+.custom-table th,
+.custom-table td {
+    border: 1px solid #000000;
+    padding: 8px;
+    text-align: center;
+}
+
+.custom-table th {
+    background-color: #f2f2f2;
+}
+
+.custom-table2 {
+    width: calc(50% - 10px);
+    /* Ajusta el ancho según tus necesidades */
+    border-collapse: collapse;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.aaa {
+    background-color: #f2f2f2;
+}
+
+.custom-table2 th,
+.custom-table2 td {
+    border: 1px solid #000000;
+    padding: 8px;
+    text-align: center;
+}
+
+.custom-table2 th {
+    background-color: #f2f2f2;
+}
+
+.custom-table3 {
+    width: 50%;
+    height: 50px;
+    margin-top: 50px;
+    margin-right: 40px;
+    border-collapse: collapse;
+    border: 1px solid #000000;
+    border-radius: 10px;
+}
+
+.custom-table3 th,
+.custom-table3 td {
+    border: 1px solid #000000;
+    padding: 8px;
+    text-align: center;
+}
+
+.custom-table3 th {
+    background-color: #f2f2f2;
+}
+
+.table-container {
+    display: flex;
+    margin-inline: 10px;
+    justify-content: space-between;
+}
+
+.labelAdic {
+    text-align: left;
+    width: 47.5%;
+    margin-left: 10px;
+    border: 1px solid #000;
+    padding: 10px;
+    overflow-wrap: break-word; /* Add this line */
+}
+
+.separ {
+    margin-right: 20px;
+}
+
+.botones {
+    align-items: center;
+    text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+    .factura {
+        flex-direction: column;
+    }
+    
+    .info-comercial,
+    .info-cliente {
+        margin-bottom: 10px;
+    }
+    
+    .custom-table2 {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .labelAdic {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .encabezado {
+        font-size: 24px;
+    }
+    
+    .encabezado2 {
+        font-size: 16px;
+    }
+    
+    .info-comercial,
+    .info-cliente {
+        flex-direction: column;
+    }
+    
+    .custom-table2 {
+        width: 100%;
+    }
+    
+    .labelAdic {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .encabezado {
+        font-size: 20px;
+    }
+    
+    .encabezado2 {
+        font-size: 14px;
+    }
+    
+    .info-comercial,
+    .info-cliente {
+        flex-direction: column;
+    }
+    
+    .custom-table2 {
+        width: 100%;
+    }
+    
+    .labelAdic {
+        width: 100%;
+        margin-left: 0;
+    }
+    
+    .table-container {
+        flex-direction: column;
+    }
+}
