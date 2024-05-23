@@ -28,6 +28,8 @@ import { DataTableDirective } from 'angular-datatables';
 export class CompraNuevoComponent implements OnInit {
 
   searchText: string = '';
+  
+  isResponsive: boolean = false; // Nueva propiedad
   faShoppingBag = faShoppingBag;
   faShoppingCart = faShoppingCart;
   faTimes = faTimes;
@@ -60,7 +62,11 @@ export class CompraNuevoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    let component = this;
+    let cantidadAux = "";
+
     this.dtOptions = {
+      
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
       },
@@ -70,7 +76,52 @@ export class CompraNuevoComponent implements OnInit {
       ordering: true,
       pageLength: 100,
       info: true,
-      responsive: true
+      responsive: {
+        details: {
+          renderer: function (api: any, rowIdx: any, columns: any) {
+            component.isResponsive = true; // Indicar que la tabla está en modo responsive
+
+            console.log("ENTRO A RESPOSIVE")
+          var data = $.map(columns, function (col, i) {
+            return col.hidden ?
+            '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+            '<td>' + col.title + ':' + '</td> ' +
+            '<td>' + col.data + '</td>' +
+            '</tr>' :
+            '';
+          }).join('');
+  
+          return data ?
+            $('<table/>').append(data) :
+            false;
+          }
+        }
+        },
+        initComplete: function () {
+
+          $('#dataTable tbody').on('input', 'input', function () {
+            // Obtener el valor actual del input
+            console.log("input")
+            cantidadAux = $(this).val() + ""
+            console.log(cantidadAux)
+        });
+  
+        // Add click event listener to the table rows
+        $('#dataTable tbody').on('click', 'tr a', function () {
+        
+          //Solo se ejecuta si esta en responsive
+          if (component.isResponsive == false) return
+
+          let data: ProveedoresProductosEntity = $(this).closest('a').data('proveedor');
+          data.cantidad = cantidadAux
+          console.log("Esta es la data", data)
+          if(cantidadAux=="0") return 
+          console.log("Se llamo en responsive")
+          component.crearDetalle(data);
+          return
+
+        });
+        }
     }
 
     const newProveedor: ProveedoresProductosEntity = {
@@ -175,7 +226,7 @@ export class CompraNuevoComponent implements OnInit {
 
 
   crearDetalle(proveedorProducto: ProveedoresProductosEntity): void {
-    console.log("CREO DETALLE")
+  
     this.httpServiceProvProd.asignarProveedorProducto(proveedorProducto);
     this.httpServiceProvProd.obtenerProveedorProducto$.pipe(take(1)).subscribe((res) => {
       this.botonBloqueado=true;
@@ -481,11 +532,5 @@ export class CompraNuevoComponent implements OnInit {
       this.ngOnInit();
     });
   }
-
-  
-
-
-
-  
 }
 

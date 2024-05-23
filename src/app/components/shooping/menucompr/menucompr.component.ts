@@ -134,6 +134,7 @@ export class MenucomprComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
+    let component = this;
     this.dtOptions = {
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
@@ -143,7 +144,48 @@ export class MenucomprComponent implements OnInit {
       searching: true,
       ordering: true,
       info: false,
-      responsive: true,
+      responsive:  {
+        details: {
+          renderer: function (api: any, rowIdx: any, columns: any) {
+          var data = $.map(columns, function (col, i) {
+            return col.hidden ?
+            '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+            '<td>' + col.title + ':' + '</td> ' +
+            '<td>' + col.data + '</td>' +
+            '</tr>' :
+            '';
+          }).join('');
+
+          return data ?
+          $('<table/>').append(data) :
+          false;
+        
+          }
+        },
+      
+        },
+        
+        initComplete: function () {
+          $('#dataTable tbody').on('click', '.editar-icon', function () {
+          console.log("editar")
+          //BOTON EDITAR
+          if(component.editarDetalle){
+            component.aplicarCambiosDetalle(index);
+            return
+          }
+          var index = $(this).closest('span').data('index');
+          component.editarDetalleMovimiento(index);
+          //Cambiar el icono  <fa-icon         
+            $(this).html('<fa-icon class="btn-success"></fa-icon>').removeClass('btn btn-info').addClass('btn btn-success fa-check')
+        });
+        $('#dataTable tbody').on('click', '.delete-icon', function () {
+          console.log("eliminar")
+
+          //BOTON ELIMINAR
+          var index = $(this).closest('span').data('index');
+          component.eliminarDetalle(index);
+        });
+      }
     }
     this.fechaSeleccionada = new Date();
     const sociedad: SociedadesEntity = {
