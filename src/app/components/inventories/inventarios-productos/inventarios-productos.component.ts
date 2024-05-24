@@ -27,6 +27,8 @@ constructor(private readonly httpService: AlmacenesService,
   private router: Router) { }
 
   ngOnInit(): void {
+    const component = this;
+
     this.dtOptions = {
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
@@ -36,7 +38,36 @@ constructor(private readonly httpService: AlmacenesService,
       searching: true,
       ordering: true,
       info: true,
-      responsive:true
+      responsive:  {
+        details: {
+          renderer: function (api: any, rowIdx: any, columns: any) {
+          var data = $.map(columns, function (col, i) {
+            return col.hidden ?
+            '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+            '<td>' + col.title + ':' + '</td> ' +
+            '<td>' + col.data + '</td>' +
+            '</tr>' :
+            '';
+          }).join('');
+
+          return data ?
+          $('<table/>').append(data) :
+          false;
+        
+          }
+        },
+        },
+
+        initComplete: function () {
+          $('#dtdt tbody').on('click', '.detallar-icon', function () {
+          //BOTON EDITAR
+          console.log('detalle');
+          const data = $(this).closest("span").data('almacen');
+          component.buscarInventario(data);
+          return;
+        });
+
+      }
     }
 
     const almacen: SociedadesEntity = {

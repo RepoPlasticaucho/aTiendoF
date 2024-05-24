@@ -31,7 +31,7 @@
                 </mat-grid-tile>
         </mat-grid-list><br>
         <div id="tabla-contenedor" class="card-body ">
-            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" id="dtdt">
                 <thead style="color: #636363;">
                     <tr>
                         <th style="width: 8%; ">IMAGEN</th>
@@ -81,7 +81,9 @@
 
                         <td>
                            <!-- <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'sm'"  style="margin-right: 5px;" data-placement="bottom" title="Editar Almacen" (click)="editarInventarios(inventario)"></fa-icon> -->
-                            <fa-icon [icon]="faTrashAlt" class="btn btn-danger" [size]="'lg'" data-placement="bottom" title="Eliminar Almacen" (click)="deshabilitarInventarios(inventario)"></fa-icon>
+                           <span [attr.data-inventario]="inventario | json">
+                            <fa-icon [icon]="faTrashAlt" class="btn btn-danger delete-icon" [size]="'lg'" data-placement="bottom" title="Eliminar Almacen" (click)="deshabilitarInventarios(inventario)"></fa-icon>
+                        </span>
                         </td>
                     </tr>
                 </tbody>
