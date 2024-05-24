@@ -166,11 +166,13 @@ export class MenucomprComponent implements OnInit {
         },
         
         initComplete: function () {
-          $('#dataTable tbody').on('click', '.editar-icon', function () {
+          $('#dtdt tbody').on('click', '.editar-icon', function () {
           console.log("editar")
           //BOTON EDITAR
           if(component.editarDetalle){
             component.aplicarCambiosDetalle(index);
+            //Despues de aplicar los cambios, cerrar el submenu que se abrio de la tabla en responsive
+            $(this).closest('tr').removeClass('dt-hasChild parent');
             return
           }
           var index = $(this).closest('span').data('index');
@@ -178,7 +180,7 @@ export class MenucomprComponent implements OnInit {
           //Cambiar el icono  <fa-icon         
             $(this).html('<fa-icon class="btn-success"></fa-icon>').removeClass('btn btn-info').addClass('btn btn-success fa-check')
         });
-        $('#dataTable tbody').on('click', '.delete-icon', function () {
+        $('#dtdt tbody').on('click', '.delete-icon', function () {
           console.log("eliminar")
 
           //BOTON ELIMINAR
