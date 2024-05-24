@@ -37,6 +37,7 @@ export class GestionarPersonalComponent implements OnInit {
 
 
   ngOnInit(): void {
+    const component = this;
     this.dtOptions = {
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
@@ -46,7 +47,43 @@ export class GestionarPersonalComponent implements OnInit {
       searching: true,
       ordering: true,
       info: true,
-      responsive:true
+      responsive:  {
+        details: {
+          renderer: function (api: any, rowIdx: any, columns: any) {
+          var data = $.map(columns, function (col, i) {
+            return col.hidden ?
+            '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+            '<td>' + col.title + ':' + '</td> ' +
+            '<td>' + col.data + '</td>' +
+            '</tr>' :
+            '';
+          }).join('');
+
+          return data ?
+          $('<table/>').append(data) :
+          false;
+        
+          }
+        },
+        },
+
+        initComplete: function () {
+          $('#dtdt tbody').on('click', '.editar-icon', function () {
+          //BOTON EDITAR
+
+          const data = $(this).closest('span').data('proveedor');
+          component.editarPersonal(data);
+          return;
+
+        });
+        $('#dtdt tbody').on('click', '.delete-icon', function () {
+          //BOTON ELIMINAR
+          const data = $(this).closest('span').data('proveedor');
+          component.eliminarSociedades(data);
+          return;
+
+        });
+      }
     }
 
     Swal.fire({
@@ -91,7 +128,7 @@ export class GestionarPersonalComponent implements OnInit {
   eliminarSociedades(p: PersonalEntity): void {
     Swal.fire({
       icon: 'question',
-      title: `¿Esta seguro de eliminar ${p.nombre_comercial}?`,
+      title: `¿Esta seguro de eliminar ${p.nombre_personal}?`,
       showDenyButton: true,
       confirmButtonText: 'Si',
       denyButtonText: 'No',

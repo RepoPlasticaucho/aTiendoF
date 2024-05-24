@@ -12,7 +12,7 @@
         </div>
     </div>
     <div class="card-body">
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" id="dtdt" >
             <thead style="color: #636363;">
                 <tr>
                     <th style="width: 15%; ">Nombre</th>
@@ -29,11 +29,14 @@
                     <td>{{proveedor.telefono}}</td>
                     <td>{{proveedor.almacen_personal_id}}</td>
                     <td style="text-align: center;">
-                            <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'lg'" style="margin-right: 5px;"
-                                data-placement="bottom" title="Editar Personañ"
+                        <span [attr.data-proveedor]="proveedor | json" >
+                            <fa-icon [icon]="faEdit" class="btn btn-info editar-icon" [size]="'lg'" style="margin-right: 5px;"
+                                data-placement="bottom" title="Editar Personal"
                                 (click)=" editarPersonal(proveedor) "></fa-icon>
-                            <fa-icon [icon]="faTrashAlt " class="btn btn-danger " [size]=" 'lg' " data-placement="bottom "
+                            <fa-icon [icon]="faTrashAlt " class="btn btn-danger delete-icon" [size]=" 'lg' " data-placement="bottom "
                                 title="Eliminar Personal" (click)="eliminarSociedades(proveedor)"></fa-icon>
+                        </span>
+
                     </td>
                 </tr>
             </tbody>
