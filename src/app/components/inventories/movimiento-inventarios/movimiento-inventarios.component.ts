@@ -129,7 +129,8 @@ export class MovimientoInventariosComponent implements OnInit {
   moverInventario(){
     for (const inventario of this.lstInventarios) {
       if(inventario.cantidad !== undefined && inventario.cantidad !== '' && inventario.cantidad != '0'){
-        if(Number(inventario.cantidad) <= Number(inventario.stock)){
+
+        if(this.parseInt(inventario.cantidad) <= this.parseInt(inventario.stock!)){
           const newInv: InventariosEntity = {
             categoria_id: '',
             categoria: '',
@@ -159,7 +160,7 @@ export class MovimientoInventariosComponent implements OnInit {
                 modelo: '',
                 marca_id: '',
                 marca: '',
-                stock: (Number(res.lstInventarios[0].stock!) + Number(inventario.cantidad!)).toString(),
+                stock: (this.parseInt(res.lstInventarios[0].stock!) + this.parseInt(inventario.cantidad!)).toString(),
                 modelo_producto_id: '',
                 idProducto: '',
                 Producto: '',
@@ -182,7 +183,7 @@ export class MovimientoInventariosComponent implements OnInit {
                     modelo: '',
                     marca_id: '',
                     marca: '',
-                    stock: (Number(inventario.stock) - Number(inventario.cantidad!)).toString(),
+                    stock: (this.parseInt(inventario.stock!) - this.parseInt(inventario.cantidad!)).toString(),
                     modelo_producto_id: '',
                     idProducto: '',
                     Producto: '',
@@ -198,7 +199,7 @@ export class MovimientoInventariosComponent implements OnInit {
                   this.httpServiceInventarios.actualizarInventarioEx(actInvRes).subscribe(res2 => {
                     console.log(res2)
                     if(res2.codigoError == 'OK'){
-                      if((Number(inventario.stock) - Number(inventario.cantidad!)).toString() == '0'){
+                      if((this.parseInt(inventario.stock!) - this.parseInt(inventario.cantidad!)).toString() == '0'){
                         const sinc: InventariosEntity = {
                           categoria_id: '',
                           categoria: '',
@@ -276,7 +277,7 @@ export class MovimientoInventariosComponent implements OnInit {
                     modelo: '',
                     marca_id: '',
                     marca: '',
-                    stock: (Number(inventario.stock) - Number(inventario.cantidad!)).toString(),
+                    stock: (this.parseInt(inventario.stock!) - this.parseInt(inventario.cantidad!)).toString(),
                     modelo_producto_id: '',
                     idProducto: '',
                     Producto: '',
@@ -292,7 +293,7 @@ export class MovimientoInventariosComponent implements OnInit {
                   this.httpServiceInventarios.actualizarInventarioEx(actInvRes).subscribe(res2 => {
                     if(res2.codigoError == 'OK'){
                       console.log('CORRECTO4')
-                      if((Number(inventario.stock) - Number(inventario.cantidad!)).toString() == '0'){
+                      if((this.parseInt(inventario.stock!) - this.parseInt(inventario.cantidad!)).toString() == '0'){
                         const sinc: InventariosEntity = {
                           categoria_id: '',
                           categoria: '',
