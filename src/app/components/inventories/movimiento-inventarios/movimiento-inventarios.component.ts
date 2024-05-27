@@ -26,6 +26,7 @@ export class MovimientoInventariosComponent implements OnInit {
   lstAlmacenes: AlmacenesEntity[] = [];
   lstInventarios: InventariosEntity[] = [];
   almacenMover: string = '';
+  
 
   filtroForm = new FormGroup({
     almacen: new FormControl('0')
@@ -36,6 +37,28 @@ export class MovimientoInventariosComponent implements OnInit {
               private readonly router:Router) { }
 
   ngOnInit(): void {
+    const component = this;
+    let cantidadAux = '';
+    let inventarioAux: InventariosEntity = {
+      categoria_id: '',
+      categoria: '',
+      linea: '',
+      modelo: '',
+      marca_id: '',
+      marca: '',
+      stock: '',
+      modelo_producto_id: '',
+      idProducto: '',
+      Producto: '',
+      id: '',
+      dInventario: '',
+      producto_id: '',
+      almacen_id: '',
+      almacen: '',
+      stock_optimo: '',
+      fav: '',
+      color: ''
+    }
     this.dtOptions = {
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
@@ -46,7 +69,38 @@ export class MovimientoInventariosComponent implements OnInit {
       searching: true,
       ordering: false,
       info: true,
-      responsive: true
+      responsive:  {
+        details: {
+          renderer: function (api: any, rowIdx: any, columns: any) {
+          var data = $.map(columns, function (col, i) {
+            return col.hidden ?
+            '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+            '<td>' + col.title + ':' + '</td> ' +
+            '<td>' + col.data + '</td>' +
+            '</tr>' :
+            '';
+          }).join('');
+
+          inventarioAux = component.lstInventarios[rowIdx];
+
+
+          return data ?
+          $('<table/>').append(data) :
+          false;
+        
+          }
+        },
+        },
+
+        initComplete: function () {
+          $('#dtdt tbody').on('input', 'input', function () {
+            // Obtener el valor actual del input
+            cantidadAux = $(this).val() + ""
+            inventarioAux.cantidad = cantidadAux;
+            component.lstInventarios.find(x => x.id === inventarioAux.id)!.cantidad = cantidadAux;
+            component.moverInventario();
+        });
+      }
     }
     const almacenNew: AlmacenesEntity = {
       idAlmacen: localStorage.getItem('almacenid')!,
@@ -224,14 +278,13 @@ export class MovimientoInventariosComponent implements OnInit {
                           if(res3.codigoError == 'OK'){
                             console.log('Bandera cambiada')
                           }
-                        });
+                        });   
                       }
                       Swal.fire({
                         icon: 'success',
                         title: 'Se han movido los productos al almacén',
                         text: `Se ha cambiado la cantidad`,
                         showConfirmButton: true,
-                        confirmButtonText: 'Ok',
                       }).then((result) => {
                         if (result.isConfirmed) {
                           this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['movimiento-inventario'] } }]);
