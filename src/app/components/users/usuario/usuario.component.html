@@ -1,204 +1,151 @@
-
 <div class="grid-container" style="color: grey;">
     <h1 class="mat-h1"></h1>
     <div style="text-align: right;">
         <button mat-button [matMenuTriggerFor]="menu" class="material-icons-outlined" style="font-size: 30px ;color: #3163ad">
-        <img  class="circular--square" src="https://atiendo.ec/black/img/anime3.png" 
-            width="35" height="35"><mat-icon class="mat-18">ligature</mat-icon>
+            <img class="circular--square" src="https://atiendo.ec/black/img/anime3.png" width="35" height="35">
+            <mat-icon class="mat-18">ligature</mat-icon>
         </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <mat-menu #menu="matMenu">
             <a class="mat-menu-item" (click)="onPass1()">Perfil</a>
             <a class="mat-menu-item" (click)="onConfiguracion()">Configuracion</a>
             <a class="mat-menu-item" (click)="logout()">Salir</a>
-        </mat-menu>           
+        </mat-menu>
     </div>
     <br>
-    <mat-grid-list cols="1" rowHeight="1100px">
-            <mat-grid-tile >
-                <div class="col-md-8">
-                    <mat-card class="dashboard-card" 
-                        style="
-                            padding: 15px;
-                            border-radius: 10px;">
-                             <div align="left">
-                                <h5 class="title">Editar Perfil</h5>
-                            </div>
-                            <div align="right">
-                                <a  class="btn btn-success" (click)="onPass()">Cambiar contraseña</a>                          
-                            </div>
-                            <br>
-                            <form [formGroup]="corporationForm" (ngSubmit)="onSubmit()">
-                                <div class="form-group">
-                                    <label for="razonSocial">Razon Social</label>
-                                    <input type="text" class="form-control" id="razonSocial"
-                                        placeholder="Ingrese la Razon Social " formControlName="razonSocial">
-                                    <small
-                                        *ngIf="corporationForm.controls['nombreComercial'].invalid && (corporationForm.controls['nombreComercial'].dirty || corporationForm.controls['nombreComercial'].touched)">
-                                        <small *ngIf="corporationForm.controls['nombreComercial'].errors?.['required']"
-                                            style="color: red;">
-                                            Debe ingresar la Razon Social.
-                                        </small>
-                                    </small>
-                                </div>
-                                <div class="form-group ">
-                                    <label for="idFiscal " style="margin: 0;">Identificación Fiscal</label>
-                                    <p style="font-size:0.75em; margin:0">Ingresar información sin guión</p>
-                                    <input type="text " class="form-control " id="idFiscal "
-                                        placeholder="Ingrese la identificación fiscal "
-                                        oninput="javascript: if (this.value.length> this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                                        maxlength="13" formControlName="idFiscal" (keypress)="keyPressNumbers($event)">
-                                    <small
-                                        *ngIf="corporationForm.controls['idFiscal'].invalid && (corporationForm.controls['idFiscal'].dirty || corporationForm.controls['idFiscal'].touched)">
-                                        <small *ngIf="corporationForm.controls['idFiscal'].errors?.['required']" style="color: red;">
-                                            Debe ingresar la identificación fiscal.
-                                        </small>
-                                        <small *ngIf="corporationForm.controls['idFiscal'].errors?.['minlength']" style="color: red;">
-                                            Mínimo 10 caracteres.
-                                        </small>
-                                    </small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="nombreComercial">Nombre Comercial</label>
-                                    <input type="text" class="form-control" id="nombreComercial"
-                                        placeholder="Ingrese el Nombre Comercial " formControlName="nombreComercial">
-                                    <small
-                                        *ngIf="corporationForm.controls['nombreComercial'].invalid && (corporationForm.controls['nombreComercial'].dirty || corporationForm.controls['nombreComercial'].touched)">
-                                        <small *ngIf="corporationForm.controls['nombreComercial'].errors?.['required']"
-                                            style="color: red;">
-                                            Debe ingresar el Nombre Comercial.
-                                        </small>
-                                    </small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="correoElectronico">Correo Electrónico</label>
-                                    <input type="text" class="form-control" id="email" placeholder="Ingrese su correo electrónico"
-                                        formControlName="correoElectronico">
-                                    <small
-                                        *ngIf="corporationForm.controls['correoElectronico'].invalid && (corporationForm.controls['correoElectronico'].dirty || corporationForm.controls['correoElectronico'].touched)">
-                                        <small *ngIf="corporationForm.controls['correoElectronico'].errors?.['required']"
-                                            style="color: red;">
-                                            Debe ingresar su correo electrónico.
-                                        </small>
-                                        <small *ngIf="corporationForm.controls['correoElectronico'].errors?.['email']"
-                                            style="color: red;">
-                                            Correo electrónico no valido.
-                                        </small>
-                                    </small>
-                                </div>
-                                <div class="form-group ">
-                                    <label for="telefono ">Teléfono</label>
-                                    <input type="text " class="form-control " id="telefono "
-                                        placeholder="Ingrese el número de teléfono "
-                                        oninput="javascript: if (this.value.length> this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                                        maxlength="10" formControlName="telefono" (keypress)="keyPressNumbers($event)">
-                                    <small
-                                        *ngIf="corporationForm.controls['telefono'].invalid && (corporationForm.controls['telefono'].dirty || corporationForm.controls['telefono'].touched)">
-                                        <small *ngIf="corporationForm.controls['telefono'].errors?.['required']" style="color: red;">
-                                            Debe ingresar el número de teléfono.
-                                        </small>
-                                        <small *ngIf="corporationForm.controls['telefono'].errors?.['minlength']" style="color: red;">
-                                            Mínimo 9 caracteres.
-                                        </small>
-                                    </small>
-                                </div>
-
-                                
-                                <button type="submit" class="btn btn-primary">
-                                    <!--[disabled]="!this.corporationForm.valid"-->
-                                    <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
-                                    Guardar
-                                </button>
-
-
-                                
-                    <form [formGroup]="corporationForm">
-                        <div align="left">
-                            <br>
-                            <h5 class="title"  *ngIf="tienePermisos">Cambiar Imagen</h5>
-                            <h5 class="title"  *ngIf="!tienePermisos">Logo</h5>
-
-                        </div>
-                        <img src="{{ imageUrl }}" alt="Imágen Marca" style="width: 30%; height: auto"
-                            class="img-thumbnail">
-                        <br />
-                  
-
-                        <div class="form-group"  *ngIf="tienePermisos">
-                            <br />
-                            <!-- <input type="text" class="form-control" id="etiquetas" placeholder="Ingrese las etiquetas" formControlName="etiquetas"> -->
-                            <input type="file" accept="image/*" (change)="onChangeFile($event.target)"
-                                class="form-control" style="padding: 0px" formControlName="urlImagen"
-                                id="imageUpload" name="imageUpload" />
-                            <small *ngIf="
-                                corporationForm.controls['urlImagen'].invalid &&
-                                (corporationForm.controls['urlImagen'].dirty ||
-                                corporationForm.controls['urlImagen'].touched)
-                            ">
-                                <small *ngIf="corporationForm.controls['urlImagen'].errors" style="color: red">
-                                    Debe seleccionar imágen
-                                </small>
+    <div class="responsive-grid">
+        <div class="col-md-8">
+            <mat-card class="dashboard-card" style="padding: 15px; border-radius: 10px;">
+                <div align="left">
+                    <h5 class="title">Editar Perfil</h5>
+                </div>
+                <div align="right">
+                    <a class="btn btn-success" (click)="onPass()">Cambiar contraseña</a>
+                </div>
+                <br>
+                <form [formGroup]="corporationForm" (ngSubmit)="onSubmit()">
+                    <div class="form-group">
+                        <label for="razonSocial">Razon Social</label>
+                        <input type="text" class="form-control" id="razonSocial" placeholder="Ingrese la Razon Social " formControlName="razonSocial">
+                        <small *ngIf="corporationForm.controls['nombreComercial'].invalid && (corporationForm.controls['nombreComercial'].dirty || corporationForm.controls['nombreComercial'].touched)">
+                            <small *ngIf="corporationForm.controls['nombreComercial'].errors?.['required']" style="color: red;">
+                                Debe ingresar la Razon Social.
                             </small>
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label for="idFiscal" style="margin: 0;">Identificación Fiscal</label>
+                        <p style="font-size:0.75em; margin:0">Ingresar información sin guión</p>
+                        <input type="text" class="form-control" id="idFiscal" placeholder="Ingrese la identificación fiscal" oninput="javascript: if (this.value.length> this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="13" formControlName="idFiscal" (keypress)="keyPressNumbers($event)">
+                        <small *ngIf="corporationForm.controls['idFiscal'].invalid && (corporationForm.controls['idFiscal'].dirty || corporationForm.controls['idFiscal'].touched)">
+                            <small *ngIf="corporationForm.controls['idFiscal'].errors?.['required']" style="color: red;">
+                                Debe ingresar la identificación fiscal.
+                            </small>
+                            <small *ngIf="corporationForm.controls['idFiscal'].errors?.['minlength']" style="color: red;">
+                                Mínimo 10 caracteres.
+                            </small>
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label for="nombreComercial">Nombre Comercial</label>
+                        <input type="text" class="form-control" id="nombreComercial" placeholder="Ingrese el Nombre Comercial " formControlName="nombreComercial">
+                        <small *ngIf="corporationForm.controls['nombreComercial'].invalid && (corporationForm.controls['nombreComercial'].dirty || corporationForm.controls['nombreComercial'].touched)">
+                            <small *ngIf="corporationForm.controls['nombreComercial'].errors?.['required']" style="color: red;">
+                                Debe ingresar el Nombre Comercial.
+                            </small>
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label for="correoElectronico">Correo Electrónico</label>
+                        <input type="text" class="form-control" id="email" placeholder="Ingrese su correo electrónico" formControlName="correoElectronico">
+                        <small *ngIf="corporationForm.controls['correoElectronico'].invalid && (corporationForm.controls['correoElectronico'].dirty || corporationForm.controls['correoElectronico'].touched)">
+                            <small *ngIf="corporationForm.controls['correoElectronico'].errors?.['required']" style="color: red;">
+                                Debe ingresar su correo electrónico.
+                            </small>
+                            <small *ngIf="corporationForm.controls['correoElectronico'].errors?.['email']" style="color: red;">
+                                Correo electrónico no valido.
+                            </small>
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono">Teléfono</label>
+                        <input type="text" class="form-control" id="telefono" placeholder="Ingrese el número de teléfono" oninput="javascript: if (this.value.length> this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="10" formControlName="telefono" (keypress)="keyPressNumbers($event)">
+                        <small *ngIf="corporationForm.controls['telefono'].invalid && (corporationForm.controls['telefono'].dirty || corporationForm.controls['telefono'].touched)">
+                            <small *ngIf="corporationForm.controls['telefono'].errors?.['required']" style="color: red;">
+                                Debe ingresar el número de teléfono.
+                            </small>
+                            <small *ngIf="corporationForm.controls['telefono'].errors?.['minlength']" style="color: red;">
+                                Mínimo 9 caracteres.
+                            </small>
+                        </small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
+                        Guardar
+                    </button>
+                </form>
+                <form [formGroup]="corporationForm">
+                    <div align="left">
+                        <br>
+                        <h5 class="title" *ngIf="tienePermisos">Cambiar Imagen</h5>
+                        <h5 class="title" *ngIf="!tienePermisos">Logo</h5>
+                    </div>
+                    <img src="{{ imageUrl }}" alt="Imágen Marca" style="width: 30%; height: auto" class="img-thumbnail">
+                    <br />
+                    <div class="form-group" *ngIf="tienePermisos">
+                        <br />
+                        <input type="file" accept="image/*" (change)="onChangeFile($event.target)" class="form-control" style="padding: 0px" formControlName="urlImagen" id="imageUpload" name="imageUpload" />
+                        <small *ngIf="corporationForm.controls['urlImagen'].invalid && (corporationForm.controls['urlImagen'].dirty || corporationForm.controls['urlImagen'].touched)">
+                            <small *ngIf="corporationForm.controls['urlImagen'].errors" style="color: red">
+                                Debe seleccionar imágen
+                            </small>
+                        </small>
+                    </div>
+                    <div align="center" *ngIf="tienePermisos">
+                        <button (click)="actualizarImagen()" class="btn btn-primary">
+                            <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
+                            Actualizar Imagen
+                        </button>
+                    </div>
+                </form>
+            </mat-card>
+        </div>
+        <div class="col-md-4">
+            <mat-card class="dashboard-card" style="padding: 15px; border-radius: 10px;">
+                <div class="card card-user">
+                    <div class="card-body">
+                        <p class="card-text">
+                            <div class="author" align="center">
+                                <div class="block block-one"></div>
+                                <div class="block block-two"></div>
+                                <div class="block block-three"></div>
+                                <div class="block block-four"></div>
+                                <a href="#">
+                                    <img class="avatar" src="https://atiendo.ec/black/img/anime3.png" alt="">
+                                </a>
+                                <p class="description" style="text-align: center;">
+                                    Ceo/Co-Founder
+                                </p>
+                            </div>
+                        <div class="card-description">
+                            <p>'Do not be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...</p>
                         </div>
-         
-                        <div align="center"  *ngIf="tienePermisos">
-                            <button (click)="actualizarImagen()" class="btn btn-primary">
-                                <!--[disabled]="!this.corporationForm.valid"-->
-                                <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
-                                Actualizar Imagen
+                    </div>
+                    <div class="card-footer">
+                        <div class="button-container" align="center">
+                            <button class="btn btn-icon btn-round btn-facebook">
+                                <i class="fab fa-facebook"></i>
+                            </button>
+                            <button class="btn btn-icon btn-round btn-twitter">
+                                <i class="fab fa-twitter"></i>
+                            </button>
+                            <button class="btn btn-icon btn-round btn-google">
+                                <i class="fab fa-google-plus"></i>
                             </button>
                         </div>
-                    </form>
-
-                            </form>   
-                            <br>
-                        </mat-card>
-                </div> 
-                <div class="col-md-4">
-                    <mat-card class="dashboard-card" 
-                            style="
-                                padding: 15px;
-                                border-radius: 10px;">
-                            <div class="card card-user">
-                                <div class="card-body">
-                                    <p class="card-text">
-                                        <div class="author"align="center">
-                                            <div class="block block-one"></div>
-                                            <div class="block block-two"></div>
-                                            <div class="block block-three"></div>
-                                            <div class="block block-four"></div>
-                                            <a href="#">
-                                                <img class="avatar" src="https://atiendo.ec/black/img/anime3.png" alt="">
-                                            </a>
-                                            <p class="description" style="text-align: center;">
-                                                Ceo/Co-Founder
-                                            </p>
-                                        </div>
-                                        
-                                    <div class="card-description">
-                                        <p>
-                                            'Do not be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
-                                        </p> 
-                                    </div>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="button-container" align="center">
-                                        <button class="btn btn-icon btn-round btn-facebook">
-                                            <i class="fab fa-facebook"></i>
-                                        </button>
-                                        <button class="btn btn-icon btn-round btn-twitter">
-                                            <i class="fab fa-twitter"></i>
-                                        </button>
-                                        <button class="btn btn-icon btn-round btn-google">
-                                            <i class="fab fa-google-plus"></i>
-                                        </button>
-                                        </div>
-                                </div>
-                            </div>                   
-                    
-                    </mat-card>
-                </div>    
-                        
-            </mat-grid-tile>
-    </mat-grid-list>
-   
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+    </div>
 </div>
+
