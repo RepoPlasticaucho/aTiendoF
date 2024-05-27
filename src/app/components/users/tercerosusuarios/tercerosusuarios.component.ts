@@ -36,7 +36,7 @@ export class TercerosusuariosComponent implements OnInit {
       searching: true,
       ordering: true,
       info: true,
-      responsive:true
+      responsive:  true
     }
 
     const tercero : TercerosEntity = {

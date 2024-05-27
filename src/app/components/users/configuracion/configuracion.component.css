@@ -81,3 +81,27 @@
   border-bottom-right-radius: 50% 50%;
   border-bottom-left-radius: 50% 50%;
 }
+
+.responsive-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.col-md-8, .col-md-4 {
+  flex: 1 1 100%;
+}
+
+@media (min-width: 768px) {
+  .col-md-8 {
+      flex: 2;
+  }
+
+  .col-md-4 {
+      flex: 1;
+  }
+}
+
+.dashboard-card {
+  margin: 0 auto;
+}
