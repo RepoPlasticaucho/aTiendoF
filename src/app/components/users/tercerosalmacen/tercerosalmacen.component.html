@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="card-body ">
-            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" id="dtdt">
                 <thead style="color: #636363;">
                     <tr>
                         <th style="width: 20%; ">Nombre</th>
@@ -29,7 +29,11 @@
                         <td>{{almacen.codigo}}</td>
                         <td>{{almacen.pto_emision}}</td>
                         <td>
-                           <a class="btn btn-info" (click)="buscarUsers(almacen)">Seleccionar</a>
+                         
+                           <a class="btn btn-info ver-icon" (click)="buscarUsers(almacen)"
+                                [attr.data-almacen]="almacen | json"
+                           >Seleccionar</a>
+                       
                         </td>
                     </tr>
                 </tbody>
