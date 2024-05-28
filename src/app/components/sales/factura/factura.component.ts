@@ -273,20 +273,20 @@ export class FacturaComponent implements OnInit {
     document.body.appendChild(fixedContainer);
 
     // Descargar la imagen del logo y convertirla a base64
-    const logoUrl =  "https://calidad.atiendo.ec/eojgprlg/LogoSociedad/logroComercial.png"
+    const logoUrl =  "https://i.ibb.co/sgLD0gf/logro-Comercial.png"
 
     this.getBase64Image(logoUrl).then((logoBase64) => {
         // Asegúrate de que la imagen se haya descargado correctamente
         if (logoBase64) {
-          
             html2canvas(fixedContainer, options).then((canvas) => {
                 const imgData = canvas.toDataURL('image/png');
                 const pdfWidth = doc.internal.pageSize.getWidth();
                 const pdfHeight = doc.internal.pageSize.getHeight();
 
-                // Agregar la imagen del logo al PDF
                 // Agregar la imagen del contenido al PDF
                 doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                
+                // Agregar la imagen del logo al PDF
                 doc.addImage(logoBase64, 'PNG', 10, 10, 100, 100); // Ajusta las coordenadas y el tamaño según sea necesario
 
                 document.body.removeChild(fixedContainer); // Eliminar el contenedor fijo después de generar el PDF

@@ -124,7 +124,7 @@ export class MenuventComponent implements OnInit {
         },
 
         initComplete: function () {
-          $('#dataTable tbody').on('click', '.editar-icon', function () {
+          $('#dtdt tbody').on('click', '.editar-icon', function () {
           //BOTON EDITAR
           if(component.editarDetalle){
             component.aplicarCambiosDetalle(index);
@@ -136,7 +136,7 @@ export class MenuventComponent implements OnInit {
 
             $(this).html('<fa-icon class="btn-success"></fa-icon>').removeClass('btn btn-info').addClass('btn btn-success fa-check')
         });
-        $('#dataTable tbody').on('click', '.delete-icon', function () {
+        $('#dtdt tbody').on('click', '.delete-icon', function () {
           //BOTON ELIMINAR
           var index = $(this).closest('span').data('index');
           component.eliminarDetalle(index);
