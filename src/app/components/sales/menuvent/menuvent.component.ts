@@ -712,7 +712,6 @@ export class MenuventComponent implements OnInit {
     this.calcularSumaTotal();
   }
   
-
   onInput(event: any) {
     const inputValue = event.target.value;
     event.target.value = inputValue.replace(/[^0-9]/g, ''); // Filtra solo números

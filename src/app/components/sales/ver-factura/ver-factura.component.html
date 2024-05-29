@@ -89,12 +89,12 @@
         </div>
         <br><br>
         <div class="icon-container">
-          <label for="total" class="label-input" style="font-size: 14px;">DESCUENTO DE PRODUCTOS :</label>
+          <label for="total" class="label-input" style="font-size: 14px;">Dto DE PRODUCTOS :</label>
           <input type="text" [value]="calcularDescuento() | number:'1.2-2'" class="cool-input resultado-input" readonly>
         </div>
         <br><br>
         <div class="icon-container">
-          <label for="total" class="label-input" style="font-size: 14px;">DESCUENTO NOMINAL :</label>
+          <label for="total" class="label-input" style="font-size: 14px;">Dto NOMINAL :</label>
           <input type="text" [(ngModel)]="descuentoN" class="cool-input resultado-input custom-input"
             [disabled]="deshabilitarIn" (input)="onInput2($event)">
         </div>

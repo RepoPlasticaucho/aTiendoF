@@ -186,6 +186,7 @@ export class MenucomprComponent implements OnInit {
           //BOTON ELIMINAR
           var index = $(this).closest('span').data('index');
           component.eliminarDetalle(index);
+          return
         });
       }
     }

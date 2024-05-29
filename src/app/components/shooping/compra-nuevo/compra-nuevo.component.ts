@@ -81,7 +81,6 @@ export class CompraNuevoComponent implements OnInit {
           renderer: function (api: any, rowIdx: any, columns: any) {
             component.isResponsive = true; // Indicar que la tabla está en modo responsive
 
-            console.log("ENTRO A RESPOSIVE")
           var data = $.map(columns, function (col, i) {
             return col.hidden ?
             '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +

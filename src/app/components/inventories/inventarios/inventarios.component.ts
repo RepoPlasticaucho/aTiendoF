@@ -62,7 +62,6 @@ export class InventariosComponent implements OnInit {
         initComplete: function () {
      
         $('#dtdt tbody').on('click', '.delete-icon', function () {
-
           const inventario: InventariosEntity = $(this).closest("span").data('inventario');
           component.eliminarInventarios(inventario);
           return;
