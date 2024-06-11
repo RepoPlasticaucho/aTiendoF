@@ -66,6 +66,13 @@ export class InventariosComponent implements OnInit {
           component.eliminarInventarios(inventario);
           return;
         });
+        $('#dtdt tbody').on('click', '.edit-icon', function () {
+          const inventario: InventariosEntity = $(this).closest("span").data('inventario');
+          component.editarInventarios(inventario);
+          return;
+        });
+
+
       }
 
     }

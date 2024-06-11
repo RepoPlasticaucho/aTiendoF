@@ -77,7 +77,7 @@ export class InventariosEditComponent implements OnInit {
       if (res.codigoError != "OK") {
         Swal.fire({
           icon: 'error',
-          title: 'No se pudo obtener la Sociedad.',
+          title: '1. No se pudo obtener la Sociedad.',
           text: res.descripcionError,
           showConfirmButton: false,
         });
@@ -258,7 +258,7 @@ export class InventariosEditComponent implements OnInit {
       if (res.codigoError != "OK") {
         Swal.fire({
           icon: 'error',
-          title: 'No se pudo obtener la Sociedad.',
+          title: '2. No se pudo obtener la Sociedad.',
           text: res.descripcionError,
           showConfirmButton: false,
         });
@@ -544,7 +544,7 @@ export class InventariosEditComponent implements OnInit {
         if (res.codigoError != "OK") {
           Swal.fire({
             icon: 'error',
-            title: 'No se pudo obtener la Sociedad.',
+            title: '3. No se pudo obtener la Sociedad.',
             text: res.descripcionError,
             showConfirmButton: false,
           });

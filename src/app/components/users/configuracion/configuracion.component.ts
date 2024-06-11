@@ -144,9 +144,10 @@ imageName: string = '';
     const passnuevo = this.corporationForm.value!.nombreComercial2 ?? "";
     const passactual = this.corporationForm.value!.razonSocial ?? "";
     const emailCert = this.emailForm.value!.email ?? "";
+    const urlCertificado = this.corporationForm.value!.urlCertificado ?? "";
+    
 
     console.log(passnuevo + " - " + passactual + " - " + emailCert)
-
 
 
     if (!this.corporationForm.valid && this.razonSocialInclude) {
@@ -180,6 +181,12 @@ imageName: string = '';
         });
       } else {
         console.log("entro al else")
+
+        this.certificadoBase64 = this.imageBase64;
+        this.certificadoName = this.imageName;
+        console.log("NOMBRE ", this.certificadoName)
+        console.log("CERTIFICADO ", this.certificadoBase64)
+
         const imageEntity: ImagenesEntity = {
           imageBase64: this.certificadoBase64,
           nombreArchivo: this.certificadoName,
@@ -188,6 +195,7 @@ imageName: string = '';
           nombreArchivoEliminar: '',
         };
 
+        console.log("CERTIFICADO ", imageEntity)
 
         console.log("ESTE ES EL EMAIL AUX ", localStorage.getItem('sociedadid'))
 
@@ -208,13 +216,11 @@ imageName: string = '';
           clave_certificado: ''
         }
 
-
-
-
         //Obtener el email de la sociedad
         this.httpService.obtenerEmailPorIdSociedad(sociedad).subscribe(res => {
           if(res != null || res != undefined || res != ""){
             this.emailAux = res;
+            console.log("ESTE ES EL CERTIFICADONAME ", this.certificadoName)
             this.httpServiceImage
             .agregarCertificado(imageEntity).subscribe(res1 => {
               if (res1.codigoError == 'OK') {
@@ -229,13 +235,14 @@ imageName: string = '';
                   funcion: '',
                   idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
                   razon_social: '',
-                  url_certificado: this.certificadoName == '' ? this.certificadoUrl : this.certificadoName,
+                  url_certificado: this.certificadoName == '' ? "" : this.certificadoName,
                   clave_certificado: passnuevo, // cambiar por new
                   pass_certificado: '',// activar validacion
                   email_certificado: emailCert
                 }
   
                 console.log("entro al OK")
+                console.log("Estees el userEntity ", userEntity)
                 this.httpService.actualizarCertificado(userEntity).subscribe(res => {
                   if (res.codigoError == "OK") {
                     Swal.fire({
