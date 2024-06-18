@@ -178,7 +178,7 @@ export class VentaprovComponent implements OnInit {
     let ruta = this.router.url;
 
     if(ruta.includes('navegation-cl')){
-      this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-productos'] } }]);
+      this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['almacenegresos'] } }]);
     }
 
     if(ruta.includes('navegation-facturador')){
