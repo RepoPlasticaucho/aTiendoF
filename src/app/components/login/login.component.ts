@@ -217,6 +217,7 @@ export class LoginComponent {
     }
   }
 
+
   onSubmit2() {
     const passnuevo = this.corporationForm.value!.passwnew ?? "";
     const passconfirm = this.corporationForm.value!.passconfirm ?? "";

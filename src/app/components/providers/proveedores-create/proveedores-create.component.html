@@ -13,6 +13,21 @@
         </div>
         <div class="card-body ">
             <form [formGroup]="proveedoresForm" (ngSubmit)="onSubmit()">
+
+                <div class="form-group ">
+                    <label for="id_fiscal" style="margin: 0;">RUC</label>
+                    <input type="text " class="form-control " id="id_fiscal" placeholder="Ingrese el ID fiscal."
+                        formControlName="id_fiscal"
+                        (keypress)="validarNumeros($event)"
+                    
+                        >
+                    <small
+                        *ngIf="proveedoresForm.controls['id_fiscal'].invalid && (proveedoresForm.controls['id_fiscal'].dirty || proveedoresForm.controls['id_fiscal'].touched)">
+                        <small *ngIf="proveedoresForm.controls['id_fiscal'].errors?.['required']" style="color: red;">
+                            Debe ingresar el ID Fiscal.
+                        </small>.
+                    </small>
+                </div>
                 <div class="form-group ">
                     <label for="nombre" style="margin: 0;">Nombre</label>
                     <input type="text " class="form-control " id="nombre" placeholder="Ingrese el nombre del proveedor."
@@ -24,17 +39,7 @@
                         </small>
                     </small>
                 </div>
-                <div class="form-group ">
-                    <label for="id_fiscal" style="margin: 0;">RUC</label>
-                    <input type="text " class="form-control " id="id_fiscal" placeholder="Ingrese el ID fiscal."
-                        formControlName="id_fiscal">
-                    <small
-                        *ngIf="proveedoresForm.controls['id_fiscal'].invalid && (proveedoresForm.controls['id_fiscal'].dirty || proveedoresForm.controls['id_fiscal'].touched)">
-                        <small *ngIf="proveedoresForm.controls['id_fiscal'].errors?.['required']" style="color: red;">
-                            Debe ingresar el ID Fiscal.
-                        </small>.
-                    </small>
-                </div>
+         
                 <div class="form-group ">
                     <label for="correo" style="margin: 0;">Correo</label>
                     <input type="text " class="form-control " id="correo" placeholder="Ingrese el correo del proveedor."

@@ -131,4 +131,19 @@ export class ProveedoresCreateComponent implements OnInit {
     ]);
   }
 
+  validarNumeros(event: any) {
+    //Maximo 13 y solo numeros
+    if (event.target.value.length > 12) {
+      event.preventDefault();
+    }
+
+    if (event.charCode < 48 || event.charCode > 57) {
+      event.preventDefault();
+    }
+
+  }
+
+
+
+
 }

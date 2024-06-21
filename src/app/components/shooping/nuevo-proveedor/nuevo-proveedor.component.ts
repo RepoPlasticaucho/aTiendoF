@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { faList, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faList, faSave, faTimes, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { CiudadesEntity } from 'src/app/models/ciudades';
 import { ProveedoresEntity } from 'src/app/models/proveedores';
 import { ProvinciasEntity } from 'src/app/models/provincias';
@@ -20,6 +20,7 @@ export class NuevoProveedorComponent implements OnInit {
 faList = faList;
 faTimes = faTimes;
 faSave = faSave;
+faSearch = faSearch;
 //Variables para ejecucion del Form
 lstCiudades: CiudadesEntity[] = [];
 lstCiudades2: CiudadesEntity[] = [];
@@ -27,11 +28,12 @@ selectCiudad: boolean = false;
 
 lstProvincias: ProvinciasEntity[] = [];
 selectProvincias2: boolean = false;
+errorAutorizacion: boolean = false;
 //Creación de la variable para formulario
 proveedoresForm = new FormGroup({
-  nombre: new FormControl(''),
+  nombre: new FormControl('', [Validators.required]),
   id_fiscal: new FormControl('', [Validators.required]),
-  correo: new FormControl('', [Validators.required]),
+  correo: new FormControl('', [Validators.email, Validators.required]),
   telefono: new FormControl('', [Validators.required]),
   ciudad: new FormControl('0', [Validators.required]),
   direccion: new FormControl('', [Validators.required]),
@@ -190,5 +192,90 @@ visualizarProveedores() {
     { outlets: { contentClient: ['menucompr'] } },
   ]);
 }
+keyPressNumbers(event: any) {
+  var charCode = (event.which) ? event.which : event.keyCode;
+  // Only Numbers 0-9
+  if ((charCode < 48 || charCode > 57)) {
+    event.preventDefault();
+    
+    return false;
+  } else {
+    return true;
+  }
+
+  //Si ya esta mas de 13 digitos ignorar
+
+}
+
+
+
+keyPressValidator13(event: any){
+  //Validar que sea numero
+  var charCode = (event.which) ? event.which : event.keyCode;
+  // Only Numbers 0-9
+  if ((charCode < 48 || charCode > 57)) {
+    event.preventDefault();
+    return false;
+  } else {
+      //Validar que autorizacion tenga 10 o 49 digitos
+    if (event.target.value.length !== 13) {
+      this.errorAutorizacion = true
+    }
+    if (event.target.value.length == 13) {
+      this.errorAutorizacion = false
+    }
+    return true;
+  }
+}
+
+
+obtenerProveedores() {
+  //Metodo para obtener los proveedores mediante el RUC
+  const proveedorDatos: ProveedoresEntity = {
+    id: '',
+    ciudadid: "0",
+    id_fiscal: this.proveedoresForm.value!.id_fiscal ?? "",
+    correo: '',
+    direccionprov: '',
+    nombre: '',
+    telefono: '',
+    sociedad_id : JSON.parse(localStorage.getItem('sociedadid') || "[]")
+  }
+
+  this.httpService.obtenerProveedoresID(proveedorDatos).subscribe(res => {
+    if (res.codigoError != "OK") {
+      Swal.fire({
+        icon: 'error',
+        title: 'No se pudo obtener el proveedor.',
+        text: res.descripcionError,
+        showConfirmButton: false,
+      });
+    } else {
+      if (res.lstProveedores.length > 0) {
+        this.proveedoresForm.patchValue({
+          nombre: res.lstProveedores[0].nombre,
+          correo: res.lstProveedores[0].correo,
+          telefono: res.lstProveedores[0].telefono,
+          direccion: res.lstProveedores[0].direccionprov,
+          ciudad: res.lstProveedores[0].ciudadid,
+          id_fiscal: res.lstProveedores[0].id_fiscal,
+        });
+        this.selectProvincias2 = false;
+        this.selectCiudad = false;
+        this.lstCiudades = [];
+        this.lstCiudades2 = [];
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'No se pudo obtener el proveedor.',
+          text: 'No se encontraron datos',
+          showConfirmButton: false,
+        });
+      }
+    }
+  });
+
+}
+//Ignorar si se escribio mas de 13 digitos
 
 }
