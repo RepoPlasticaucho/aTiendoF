@@ -53,6 +53,11 @@ export class ProveedoresService {
   obtenerProveedoresID(proveedor: ProveedoresEntity): Observable<Proveedores> {
     return this.http.post<Proveedores>(`${environment.apiUrl}proveedores/ObtenerProveedoresID`, proveedor);
   }
+  //proveedor ruc
+  obtenerProveedoresRUC(proveedor: ProveedoresEntity): Observable<Proveedores> {
+    return this.http.post<Proveedores>(`${environment.apiUrl}proveedores/ObtenerProveedoresRUC`, proveedor);
+  }
+
   agregarProveedores(proveedor: ProveedoresEntity): Observable<Proveedores> {
     return this.http.post<Proveedores>(`${environment.apiUrl}proveedores/InsertarProveedores`, proveedor);
   }

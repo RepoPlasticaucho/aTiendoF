@@ -61,6 +61,7 @@ export class NuevoProductoComponent implements OnInit {
   });
   //Variables para listas desplegables
   lstModeloProductos: ModeloProductosEntity[] = [];
+  lstCategoriasAutoComplete: CategoriasEntity[] = [];
   lstCategorias: CategoriasEntity[] = [];
   selectCategoria: boolean = false;
   lstMarcas: MarcasEntity[] = [];
@@ -81,22 +82,27 @@ export class NuevoProductoComponent implements OnInit {
   selectTarifa: boolean = false;
   // lstModelos: ModelosEntity[] = [];
   // lstLineas: LineasEntity[] = [];
-  
+
   //Variables para validar selección
   selectModeloProducto: boolean = false;
-  selectedModeloProducto: string | undefined = '' ;
-  selectedModeloProducto2: string | undefined = '' ;
-  tamanio: string | undefined = '' ;
- 
+  selectedModeloProducto: string | undefined = '';
+  selectedModeloProducto2: string | undefined = '';
+  tamanio: string | undefined = '';
+
   //Variables para Autocomplete
   keywordModelProduct = 'modelo_producto';
+  keywordCategoria = 'categoria';
+  keywordLinea = 'linea';
+  keywordMarca = 'marca';
+  keywordModelo = 'modelo';
 
+  disabled = true;
   // modelo: string = '';
   // linea: string = '';
   // categoria: string = '';
 
   constructor(
-    
+
     private readonly httpServiceModelosProductos: ModeloproductosService,
     private readonly httpServiceMarcas: MarcasService,
     private readonly httpServiceModelos: ModelosService,
@@ -108,38 +114,87 @@ export class NuevoProductoComponent implements OnInit {
     private readonly httpServiceProv: ProveedoresService,
     private dialogRef: MatDialogRef<MenucomprComponent>,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    
-    // Obtener Categorías
-    const newProveedor: ProveedoresEntity = {
-      id: '',
-      id_fiscal: '',
-      ciudadid: '',
-      correo: '',
-      direccionprov: '',
-      nombre: this.proveedor!,
-      telefono: ''
-    }
-    this.httpServiceCategorias.obtenerCategoriasPro(newProveedor).subscribe(res => {
+
+    // Obtener todas las categorias
+    this.httpServiceCategorias.obtenerCategorias().subscribe(res => {
       if (res.codigoError != "OK") {
-        this.httpServiceCategorias.obtenerCategorias().subscribe(res => {
-          if (res.codigoError != "OK") {
-            Swal.fire({
-              icon: 'error',
-              title: 'No se pudo obtener la Sociedad.',
-              text: res.descripcionError,
-              showConfirmButton: false,
-            });
-          } else {
-            this.lstCategorias = res.lstCategorias;
-          }
+        Swal.fire({
+          icon: 'error',
+          title: 'No se pudo obtener las categorías.',
+          text: res.descripcionError,
+          showConfirmButton: false,
         });
       } else {
         this.lstCategorias = res.lstCategorias;
       }
     });
+
+  //Obtener todas las lineas
+  this.httpServiceLineas.obtenerLineas().subscribe(res => {
+    if (res.codigoError != "OK") {
+      Swal.fire({
+        icon: 'error',
+        title: 'No se pudo obtener las líneas.',
+        text: res.descripcionError,
+        showConfirmButton: false,
+      });
+    } else {
+      this.lstLineas = res.lstLineas;
+      console.log("AQUI ESTAN LAS LINEAS", this.lstLineas);
+    }
+  });
+
+  //Obtener marcas
+  this.httpServiceMarcas.obtenerMarcas().subscribe(res => {
+    if (res.codigoError != "OK") {
+      Swal.fire({
+        icon: 'error',
+        title: 'No se pudo obtener las marcas.',
+        text: res.descripcionError,
+        showConfirmButton: false,
+      });
+    } else {
+      this.lstMarcas = res.lstMarcas;
+    }
+  }
+  );
+
+  //Obtener Modelos
+  this.httpServiceModelos.obtenerModelos().subscribe(res => {
+    if (res.codigoError != "OK") {
+      Swal.fire({
+        icon: 'error',
+        title: 'No se pudo obtener los modelos.',
+        text: res.descripcionError,
+        showConfirmButton: false,
+      });
+    } else {
+      this.lstModelos = res.lstModelos;
+    }
+  }
+  );
+
+  //Obtener ModelosProductos
+
+  this.httpServiceModelosProductos.obtenerModelosProductos().subscribe(res => {
+    if (res.codigoError != "OK") {
+      Swal.fire({
+        icon: 'error',
+        title: 'No se pudo obtener los modelos productos.',
+        text: res.descripcionError,
+        showConfirmButton: false,
+      });
+    } else {
+      this.lstModeloProductos = res.lstModelo_Productos;
+    }
+  }
+  );
+  
+
+
 
     // Obtener Tarifas
     this.httpServiceTarifas.obtenerTarifas().subscribe(res => {
@@ -197,7 +252,7 @@ export class NuevoProductoComponent implements OnInit {
       }
     })
     */
-    
+
   }
 
   cerrarDialog(): void {
@@ -209,14 +264,14 @@ export class NuevoProductoComponent implements OnInit {
     console.log(this.modelProductForm.valid);
     if (!this.modelProductForm.valid) {
       this.modelProductForm.markAllAsTouched();
-      
+
       if (this.modelProductForm.get('modelo_producto_id')?.value == '0') {
         this.selectModeloProducto = true;
       }
     } else {
       if (this.modelProductForm.get('modelo_producto_id')?.value == '0') {
         this.selectModeloProducto = true;
-      
+
       } else {
         const productEntity: ProducAdmEntity = {
           id: '',
@@ -245,15 +300,15 @@ export class NuevoProductoComponent implements OnInit {
         };
 
 
-        console.log("LOS PRODUCTOS ",productEntity);
+        console.log("LOS PRODUCTOS ", productEntity);
 
         let fecha = new Date();
-        let fechaFormateada = fecha.getFullYear() + '-' + 
-                              ('0' + (fecha.getMonth() + 1)).slice(-2) + '-' + 
-                              ('0' + fecha.getDate()).slice(-2) + ' ' + 
-                              ('0' + fecha.getHours()).slice(-2) + ':' + 
-                              ('0' + fecha.getMinutes()).slice(-2) + ':' + 
-                              ('0' + fecha.getSeconds()).slice(-2);
+        let fechaFormateada = fecha.getFullYear() + '-' +
+          ('0' + (fecha.getMonth() + 1)).slice(-2) + '-' +
+          ('0' + fecha.getDate()).slice(-2) + ' ' +
+          ('0' + fecha.getHours()).slice(-2) + ':' +
+          ('0' + fecha.getMinutes()).slice(-2) + ':' +
+          ('0' + fecha.getSeconds()).slice(-2);
         this.httpService.obtenerProductosNomEti(productEntity).subscribe(res => {
           if (res.codigoError == "OK") {
             const newProdProv: ProveedoresProductosEntity = {
@@ -287,11 +342,11 @@ export class NuevoProductoComponent implements OnInit {
                 });
               }
             });
-            
-          } else if (res.codigoError == 'NEXISTE'){
+
+          } else if (res.codigoError == 'NEXISTE') {
             this.httpService.agregarProducto(productEntity).pipe(finalize(() => {
               this.httpService.obtenerProductosNomEti(productEntity).subscribe(res2 => {
-                if(res2.codigoError == "OK"){
+                if (res2.codigoError == "OK") {
                   const newProdProv: ProveedoresProductosEntity = {
                     id: '',
                     provedor_id: localStorage.getItem('proveedorid')!,
@@ -324,7 +379,7 @@ export class NuevoProductoComponent implements OnInit {
                       });
                     }
                   });
-                }else{
+                } else {
                   Swal.fire({
                     icon: 'error',
                     title: 'Ha ocurrido un error.',
@@ -380,13 +435,44 @@ export class NuevoProductoComponent implements OnInit {
   }
 
   //Disparador cuando selecciona algún item de los combos
-  
+
   onChangeSearchModel(val: string) {
     if (val == '') {
       this.selectModeloProducto = true;
-      this.modelProductForm.controls['modeloproducto_id'].setValue('0');
+
     }
   }
+
+  onChangeSearchCategoria(val: string) {
+    if (val == '') {
+      this.selectCategoria = true;
+
+    }
+  }
+
+
+  onChangeSearchLinea(val: string) {
+    if (val == '') {
+      this.selectLinea = true;
+
+    }
+  }
+
+  onChangeSearchMarca(val: string) {
+    if (val == '') {
+      this.selectMarca = true;
+ 
+    }
+  }
+  
+
+  onChangeSearchModelo(val: string) {
+    if (val == '') {
+      this.selectModelo = true;
+
+    }
+  }
+
   //Modelo
   selectEventModel(item: ModeloProductosEntity) {
     this.selectModeloProducto = false;
@@ -396,12 +482,63 @@ export class NuevoProductoComponent implements OnInit {
 
   }
 
-  //Evento para cuando se limpia los cuadros de texto
+
+
+  //Categoria
+  selectEventCategoria(item: CategoriasEntity) {
+    this.selectCategoria = false;
+    this.modelProductForm.controls['categoria'].setValue(item.categoria!);
+
+
+  }
+
+  //Linea
+  selectEventLinea(item: LineasEntity) {
+    this.selectLinea = false;
+    this.modelProductForm.controls['linea'].setValue(item.linea!);
+  }
+
+  //Marca
+  selectEventMarca(item: MarcasEntity) {
+    this.selectMarca = false;
+    this.modelProductForm.controls['marca'].setValue(item.marca!);
+  }
+
+  //Modelo
+  selectEventModelo(item: ModelosEntity) {
+    this.selectModelo = false;
+    this.modelProductForm.controls['modelo'].setValue(item.modelo!);
+  }
   
+
+  //Evento para cuando se limpia los cuadros de texto
+
   onInputClearedModel() {
-    this.selectModeloProducto=true;
+    this.selectModeloProducto = true;
     this.modelProductForm.controls['modeloproducto_id'].setValue('0');
   }
+
+  onInputClearedCategoria() {
+    this.selectCategoria = true;
+
+  }
+
+  onInputClearedLinea() {
+    this.selectLinea = true;
+
+  }
+
+  onInputClearedMarca() {
+    this.selectMarca = true;
+ 
+  }
+
+  onInputClearedModelo() {
+    this.selectModelo = true;
+
+  }
+
+  
 
   changeGroup1(e: any) {
 
@@ -436,7 +573,7 @@ export class NuevoProductoComponent implements OnInit {
           this.lstLineas = res.lstLineas;
         }
       })
-    }   
+    }
   }
 
 
@@ -522,22 +659,28 @@ export class NuevoProductoComponent implements OnInit {
           this.lstModeloProductos = res.lstModelo_Productos;
         }
       });
-      /*
-      this.httpServiceModelosProductos.obtenerModeloProductosModelosAdm(modelonew).subscribe((res) => {
-        console.log(res);
-        if (res.codigoError != 'OK') {
+    }
+  }
+
+
+  changeGroupCategoria(modelo: any): void {
+    if (modelo.target.value == 0) {
+      this.selectModelo = true;
+    } else {
+      this.selectModelo = false;
+      //Obtener todas las categorias
+      this.httpServiceCategorias.obtenerCategorias().subscribe(res => {
+        if (res.codigoError != "OK") {
           Swal.fire({
             icon: 'error',
-            title: 'No se pudo obtener Modelos Productos.',
+            title: 'No se pudo obtener la Sociedad.',
             text: res.descripcionError,
             showConfirmButton: false,
           });
         } else {
-          this.lstModeloProductos = res.lstModelo_Productos;
-          console.log(this.lstModeloProductos)
+          this.lstCategorias = res.lstCategorias;
         }
       });
-      */
     }
   }
 
@@ -612,7 +755,7 @@ export class NuevoProductoComponent implements OnInit {
     }
   }
 
-  tamanioInp(){
+  tamanioInp() {
     this.selectedModeloProducto2 = this.selectedModeloProducto?.concat(' ' + this.tamanio!);
   }
 
@@ -635,7 +778,7 @@ export class NuevoProductoComponent implements OnInit {
           this.lstModelos = res1.lstModelos;
         }
       });
-      
+
     }
   }
 

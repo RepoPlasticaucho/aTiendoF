@@ -246,7 +246,6 @@ export class MenucomprComponent implements OnInit {
       localStorage.setItem('proveedor', '')
     } else {
       this.selectTipo = false;
-
     }
     const proveedores: ProveedoresEntity = {
       id: '',

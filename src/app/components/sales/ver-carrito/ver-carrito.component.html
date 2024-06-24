@@ -22,6 +22,7 @@
                         <th style="width: 10%; ">COLOR</th>
                         <th style="width: 8%; ">TAMAÑO</th>
                         <th style="width: 15%; ">CARACTERISTICA</th>
+                        <th style="width: 8%; ">ETIQUETA</th>
                         <th style="width: 8%; ">GENERO</th>
                         <th style="width: 15%; ">CANTIDAD</th>
                         <th style="width: 10%; ">PVP</th>
@@ -46,6 +47,7 @@
                     <td>{{inventario.color}}</td>
                     <td>{{inventario.talla}}</td>
                     <td>{{inventario.atributo}}</td>
+                    <td>{{inventario.etiquetas}}</td>
                     <td>{{inventario.genero}}</td>
                     <td>
                         <input class="cool-input" (input)="onInput($event)" *ngIf="true" type="text" id="cantidad"

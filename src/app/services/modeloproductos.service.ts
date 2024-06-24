@@ -45,6 +45,7 @@ export class ModeloproductosService {
     this.modelProduct$ = new BehaviorSubject<ModeloProductosEntity>(initModelProduct);
     this.modelProduct$.next(modeloProducto);
   }
+
   obtenerModelosProductos(): Observable<ModeloProductos> {
     return this.http.get<ModeloProductos>(`${environment.apiUrl}modeloProducto/ObtenerModeloProductos`);
   }

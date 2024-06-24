@@ -29,6 +29,7 @@ selectCiudad: boolean = false;
 lstProvincias: ProvinciasEntity[] = [];
 selectProvincias2: boolean = false;
 errorAutorizacion: boolean = false;
+auxCi = '';
 //Creación de la variable para formulario
 proveedoresForm = new FormGroup({
   nombre: new FormControl('', [Validators.required]),
@@ -63,8 +64,7 @@ ngOnInit(): void {
 }
 
 onSubmit() {
-  console.log(this.proveedoresForm.valid);
-  console.log(this.proveedoresForm.get('ciudad')?.value == '0')
+
   if (!this.proveedoresForm.valid) {
     this.proveedoresForm.markAllAsTouched();
     Swal.fire({
@@ -77,7 +77,7 @@ onSubmit() {
     if(this.proveedoresForm.get('ciudad')?.value != '0'){
       const proveedorDatos: ProveedoresEntity = {
         id: '',
-        ciudadid: this.lstCiudades2[0].idCiudad ?? 0,
+        ciudadid:  this.lstCiudades[0].idCiudad ?? '0',
         id_fiscal: this.proveedoresForm.value!.id_fiscal ?? "",
         correo: this.proveedoresForm.value!.correo ?? "",
         direccionprov: this.proveedoresForm.value!.direccion ?? "",
@@ -115,6 +115,8 @@ onSubmit() {
     }
   }
 }
+
+
 
 onSelect(e: any) {
 
@@ -228,9 +230,8 @@ keyPressValidator13(event: any){
   }
 }
 
-
 obtenerProveedores() {
-  //Metodo para obtener los proveedores mediante el RUC
+  // Metodo para obtener los proveedores mediante el RUC
   const proveedorDatos: ProveedoresEntity = {
     id: '',
     ciudadid: "0",
@@ -239,11 +240,11 @@ obtenerProveedores() {
     direccionprov: '',
     nombre: '',
     telefono: '',
-    sociedad_id : JSON.parse(localStorage.getItem('sociedadid') || "[]")
-  }
+    sociedad_id: JSON.parse(localStorage.getItem('sociedadid') || "[]")
+  };
 
-  this.httpService.obtenerProveedoresID(proveedorDatos).subscribe(res => {
-    if (res.codigoError != "OK") {
+  this.httpService.obtenerProveedoresRUC(proveedorDatos).subscribe(res => {
+    if (res.codigoError !== "OK") {
       Swal.fire({
         icon: 'error',
         title: 'No se pudo obtener el proveedor.',
@@ -252,18 +253,24 @@ obtenerProveedores() {
       });
     } else {
       if (res.lstProveedores.length > 0) {
-        this.proveedoresForm.patchValue({
-          nombre: res.lstProveedores[0].nombre,
-          correo: res.lstProveedores[0].correo,
-          telefono: res.lstProveedores[0].telefono,
-          direccion: res.lstProveedores[0].direccionprov,
-          ciudad: res.lstProveedores[0].ciudadid,
-          id_fiscal: res.lstProveedores[0].id_fiscal,
-        });
-        this.selectProvincias2 = false;
-        this.selectCiudad = false;
-        this.lstCiudades = [];
-        this.lstCiudades2 = [];
+        const proveedor = res.lstProveedores[0];
+        this.auxCi = proveedor.ciudad!;
+
+        // Primero, carga las ciudades de la provincia del proveedor
+        this.onSelect2(proveedor.nombre_sociedad!); // Llama a onSelect con la provincia
+
+        // Espera un momento para que las ciudades se carguen antes de actualizar el formulario
+        setTimeout(() => {
+          this.proveedoresForm.patchValue({
+            nombre: proveedor.nombre,
+            correo: proveedor.correo,
+            telefono: proveedor.telefono,
+            direccion: proveedor.direccionprov,
+            id_fiscal: proveedor.id_fiscal,
+            provincia: proveedor.nombre_sociedad,
+            ciudad: this.auxCi // Selecciona la ciudad
+          });
+        }, 1000); // Ajusta el tiempo de espera según sea necesario
       } else {
         Swal.fire({
           icon: 'error',
@@ -274,8 +281,39 @@ obtenerProveedores() {
       }
     }
   });
-
 }
+
+onSelect2(provincia: string) {
+  if (!provincia || provincia === '0') {
+    this.selectProvincias2 = true;
+    this.lstCiudades = [];
+  } else {
+    this.selectProvincias2 = false;
+    const provinciaEntity: ProvinciasEntity = {
+      id: '',
+      provincia: provincia,
+      codigo: '',
+      created_at: '',
+      update_at: ''
+    };
+
+    // Llama al servicio para obtener las ciudades de la provincia seleccionada
+    this.httpServiceCiudades.obtenerCiudades(provinciaEntity).subscribe(res => {
+      if (res.codigoError !== "OK") {
+        Swal.fire({
+          icon: 'error',
+          title: 'No se pudieron obtener las ciudades.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+        this.lstCiudades = [];
+      } else {
+        this.lstCiudades = res.lstCiudades;
+      }
+    });
+  }
+}
+
 //Ignorar si se escribio mas de 13 digitos
 
 }
