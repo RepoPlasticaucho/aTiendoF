@@ -1,19 +1,16 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { faShoppingBag, faTimes, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
-import { MatDialogRef } from '@angular/material/dialog';
-import { MenuventComponent } from '../menuvent/menuvent.component';
-import { DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
-import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service';
 import { Subject, forkJoin, take } from 'rxjs';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { AlmacenesEntity } from 'src/app/models/almacenes';
 import { InventariosEntity } from 'src/app/models/inventarios';
 import { InventariosService } from 'src/app/services/inventarios.service';
+import { DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
+import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service';
 import { DetalleImpuestosEntity } from 'src/app/models/detalle-impuestos';
-import { finalize } from 'rxjs';
 import { DetalleImpuestosService } from 'src/app/services/detalle-impuestos.service';
-import { Renderer } from 'html2canvas/dist/types/render/renderer';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-ver-carrito',
@@ -22,18 +19,17 @@ import { Renderer } from 'html2canvas/dist/types/render/renderer';
 })
 export class VerCarritoComponent implements OnInit {
 
-searchText: string = '';
+  searchText: string = '';
   faShoppingBag = faShoppingBag;
   faShoppingCart = faShoppingCart;
   faTimes = faTimes;
-  // Nueva propiedad para las tarjetas de la página actual
+
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
   lstInventarios: InventariosEntity[] = [];
 
   costo: any;
   precio: any;
-  //Variable contenedor id Modelo Producto
   codigo: string = '';
   productoAgregado: EventEmitter<any> = new EventEmitter<any>();
 
@@ -41,12 +37,10 @@ searchText: string = '';
     private readonly httpServiceInventarios: InventariosService,
     private readonly httpServiceDetalle: DetallesmovimientoService,
     private router: Router,
-    private readonly httpServiceDetalleImp: DetalleImpuestosService,
-    private dialogRef: MatDialogRef<MenuventComponent>
+    private readonly httpServiceDetalleImp: DetalleImpuestosService
   ) { }
 
   ngOnInit(): void {
-    const component = this;
     let cantidadAux = "";
     let inventario: InventariosEntity = {
       categoria_id: '',
@@ -93,51 +87,48 @@ searchText: string = '';
 
     this.dtOptions = {
       language: {
-      url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+        url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
       },
       paging: true,
       search: false,
       searching: true,
       ordering: true,
       info: true,
+      pageLength: 3,
       responsive: {
-      details: {
-        renderer: function (api: any, rowIdx: any, columns: any) {
-        var data = $.map(columns, function (col, i) {
-          return col.hidden ?
-          '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
-          '<td>' + col.title + ':' + '</td> ' +
-          '<td>' + col.data + '</td>' +
-          '</tr>' :
-          '';
-        }).join('');
+        details: {
+          renderer: (api: any, rowIdx: any, columns: any) => {
+            var data = $.map(columns, function (col, i) {
+              return col.hidden ?
+                `<tr data-dt-row="${col.rowIndex}" data-dt-column="${col.columnIndex}">
+                  <td>${col.title}:</td>
+                  <td>${col.data}</td>
+                </tr>` : '';
+            }).join('');
 
-        inventario = component.lstInventarios[rowIdx];
-        return data ?
-          $('<table/>').append(data) :
-          false;
+            inventario = this.lstInventarios[rowIdx];
+            return data ? $('<table/>').append(data) : false;
+          }
         }
-      }
       },
-
-
-      initComplete: function () {
-
+      initComplete: () => {
         $('#dataTable tbody').on('input', 'input', function () {
-          // Obtener el valor actual del input
-          cantidadAux = $(this).val() + ""
-      });
+          cantidadAux = $(this).val() + "";
+        });
 
-      // Add click event listener to the table rows
-      $('#dataTable tbody').on('click', 'tr button', function () {
-        const cantidad = document.getElementById("cantidad") as HTMLInputElement;
-        if(cantidadAux=="0") return 
-        inventario.cantidad = cantidadAux
-        component.crearDetalle(inventario);
-        return;
-      });
+        $('#dataTable tbody').on('click', 'tr button', () => {
+          const cantidad = document.getElementById("cantidad") as HTMLInputElement;
+          if (cantidadAux === "0") return;
+          inventario.cantidad = cantidadAux;
+          this.crearDetalle(inventario);
+        });
       }
-    }
+    };
+
+    this.loadInventarios();
+  }
+
+  loadInventarios(): void {
     Swal.fire({
       title: 'CARGANDO...',
       html: 'Se están cargando los productos.',
@@ -153,9 +144,8 @@ searchText: string = '';
           codigo: '',
           pto_emision: '',
         };
-        this.httpServiceInventarios.obtenerPortafolios(almacenNew).subscribe((res1) => {
-          console.log(res1)
-          if (res1.codigoError != 'OK') {
+        this.httpServiceInventarios.obtenerPortafolios(almacenNew).subscribe(res1 => {
+          if (res1.codigoError !== 'OK') {
             Swal.fire({
               icon: 'error',
               title: 'No se pudo obtener los productos.',
@@ -165,7 +155,7 @@ searchText: string = '';
           } else {
             this.lstInventarios = res1.lstInventarios;
             this.dtTrigger.next('');
-            const batchSize = 10; // Cantidad de productos por lote
+            const batchSize = 10;
             const totalProducts = this.lstInventarios.length;
 
             const processBatch = (startIndex: number) => {
@@ -190,7 +180,7 @@ searchText: string = '';
 
               forkJoin(batchObservables).subscribe(responses => {
                 responses.forEach((res2, i) => {
-                  if (res2.codigoError == 'OK') {
+                  if (res2.codigoError === 'OK') {
                     this.lstInventarios[startIndex + i].productoExistente = true;
                     this.lstInventarios[startIndex + i].cantidad = res2.lstDetalleMovimientos[0].cantidad;
                   } else {
@@ -198,58 +188,56 @@ searchText: string = '';
                   }
                 });
 
-                // Procesar el próximo lote si es necesario
                 if (endIndex < totalProducts) {
                   processBatch(endIndex);
                 } else {
-                  // Todos los lotes han sido procesados, cierra el indicador de carga aquí
                   Swal.close();
                 }
               });
             };
 
-            processBatch(0); // Comienza el procesamiento del primer lote
+            processBatch(0);
           }
         });
       },
-    }).then((result) => {
+    }).then(result => {
       if (result.dismiss === Swal.DismissReason.timer) {
         console.log('I was closed by the timer');
       }
     });
   }
 
-  cerrarDialog(): void {
-    this.dialogRef.close();
-  }
 
-  parseInt(value: string): number {
-    return parseInt(value, 10);
-  }
+
+  facturar(): void {
+    const nuevaLista = this.lstInventarios.filter(invent => invent.cantidad !== undefined && invent.cantidad !== '' && invent.cantidad !== '0');
+    //Crear el detalle de cada uno de la nueva lista
+    nuevaLista.forEach(invent => {
+      this.crearDetalle(invent)
+    })
+}
 
 
   crearDetalle(inventario: InventariosEntity): void {
+
     this.httpServiceInventarios.asignarInventario(inventario);
-    this.httpServiceInventarios.obtenerInventario$.pipe(take(1)).subscribe((res) => {
-      if (res.id == '') {
+    console.log("Aca 1");
+    this.httpServiceInventarios.obtenerInventario$.pipe(take(1)).subscribe(res => {
+      console.log("Aca 2");
+      if (res.id === '') {
         Swal.fire({
           icon: 'error',
           title: 'Ha ocurrido un error.',
           text: 'No se ha obtenido información.',
           showConfirmButton: false,
         }).finally(() => {
-          this.router.navigate([
-            '/navegation-cl',
-            { outlets: { contentClient: ['menuvent'] } },
-          ]);
+          this.router.navigate(['/navegation-cl', { outlets: { contentClient: ['menuvent'] } }]);
         });
       } else {
-        console.log("DIO CLICK")
-        //Asignamos los valores a los campos
         this.costo = res.pvp2;
         this.precio = parseFloat(res.pvp2!) * parseFloat(inventario.cantidad!);
         this.codigo = res.id!;
-        console.log(inventario.productoExistente)
+
         if (inventario.productoExistente) {
           const newDetalle: DetallesMovimientoEntity = {
             id: '',
@@ -260,45 +248,43 @@ searchText: string = '';
             cantidad: inventario.cantidad!,
             costo: '',
             precio: ''
-          }
+          };
 
           newDetalle.precio = (parseFloat(inventario.cantidad!) * parseFloat(res.pvp2!)).toString();
-          
-          if(inventario.cantidad! != '0'){
+
+          if (inventario.cantidad! !== '0') {
             this.httpServiceDetalle.modificarDetallePedidoVenta(newDetalle).subscribe(res => {
-              console.log(res.codigoError)
-              if(res.codigoError == 'OK'){
+              if (res.codigoError === 'OK') {
                 Swal.fire({
                   icon: 'success',
                   title: 'Actualizado',
                   text: `Se ha cambiado la cantidad`,
                   showConfirmButton: true,
                   confirmButtonText: 'Ok',
-                }).then((result) => {
+                }).then(result => {
                   if (result.isConfirmed) {
-                    this.cerrarDialog();
+                    this.cerrar();
                   }
                 });
               } else {
                 Swal.fire({
                   icon: 'error',
                   title: 'Ha ocurrido un error.',
-                  text: 'No existe suficiente stock.1',
+                  text: 'No existe suficiente stock.',
                   showConfirmButton: false
                 });
               }
             });
           } else {
             this.httpServiceDetalle.eliminarDetallePedidoVenta(newDetalle).subscribe(res => {
-              console.log(res)
               Swal.fire({
                 icon: 'success',
-                  title: 'Eliminado',
-                  text: `Se ha eliminado el producto del detalle`,
-                  showConfirmButton: true,
-                  confirmButtonText: 'Ok',
+                title: 'Eliminado',
+                text: `Se ha eliminado el producto del detalle`,
+                showConfirmButton: true,
+                confirmButtonText: 'Ok',
               }).then(() => {
-                this.cerrarDialog();
+                this.cerrar();
               });
             });
           }
@@ -312,10 +298,13 @@ searchText: string = '';
             cantidad: inventario.cantidad!,
             costo: this.costo,
             precio: this.precio
-          }
+          };
+
+          console.log("Aca el detalle" + JSON.stringify(newDetalle));
+
           this.httpServiceDetalle.agregarDetallePedido(newDetalle).pipe(finalize(() => {
             this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
-              if (res1.codigoError == 'OK') {
+              if (res1.codigoError === 'OK') {
                 const newDetalleImp: DetalleImpuestosEntity = {
                   id: '',
                   detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
@@ -325,9 +314,9 @@ searchText: string = '';
                   valor: res1.lstDetalleMovimientos[0].costo!,
                   created_at: '',
                   updated_at: ''
-                }
+                };
                 this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
-                  if (res2.codigoError != 'OK') {
+                  if (res2.codigoError !== 'OK') {
                     Swal.fire({
                       icon: 'error',
                       title: 'Ha ocurrido un error.',
@@ -338,13 +327,12 @@ searchText: string = '';
                 });
               }
             });
-          })
-          ).subscribe(res => {
-            if (res.codigoError != 'OK') {
+          })).subscribe(res => {
+            if (res.codigoError !== 'OK') {
               Swal.fire({
                 icon: 'error',
-                title: 'Ha ocurrido un error.',
-                text: 'No existe suficiente stock.2',
+                title: 'Ha ocurrido un error3.',
+                text: 'No existe suficiente stock.',
                 showConfirmButton: false
               });
             } else {
@@ -355,22 +343,27 @@ searchText: string = '';
                 showConfirmButton: true,
                 confirmButtonText: 'Ok',
               }).then(() => {
-                this.cerrarDialog();
+                this.cerrar();
               });
               this.productoAgregado.emit(inventario);
             }
           });
         }
       }
-    })
+    });
+  }
+
+  cerrar(): void {
+    // Simulación del cierre de un dialog sin depender de MatDialog
+    this.router.navigate(['/navegation-cl', { outlets: { contentClient: ['menuvent'] } }]);
+  }
+
+  parseInt(value: string): number {
+    return parseInt(value, 10);
   }
 
   onInput(event: any) {
     const inputValue = event.target.value;
     event.target.value = inputValue.replace(/[^0-9]/g, ''); // Filtra solo números
   }
-  
-
 }
-
-

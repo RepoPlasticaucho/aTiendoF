@@ -103,12 +103,13 @@
                 </div>
             </div>
         <br><br>
-        <div class="d-flex justify-content-left">
-            <button class="btn button carrito-button" (click)="verCarrito()">
-                <fa-icon [icon]="faShoppingCart" [size]="'lg'" style="color: #ffffff"></fa-icon>
-                - AÑADIR
-            </button>
-        </div>
+
+        <h2 style="color: #636363; text-align: center;">AGREGAR PRODUCTOS AL CARRITO</h2>
+
+        <app-ver-carrito></app-ver-carrito> 
+   
+        <h2 style="color: #636363; text-align: center;">PRODUCTOS AGREGADOS</h2>
+
         <br><br>
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" id="dtdt">
             <thead style="color: #636363;">

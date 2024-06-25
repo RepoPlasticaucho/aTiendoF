@@ -1,78 +1,71 @@
 <div style="max-width: 100%; margin: auto">
-    <div class="dialog-content">
-        <div class="btn-cerrar">
-            <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip" data-placement="bottom"
-                title="Regresar a pedidos" (click)="cerrarDialog()">
-            </fa-icon>
-        </div>
+
+    <div #responsiveContainer>
+      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" id="dataTable" style="font-size: 12px;"> <!-- Ajusta el tamaño según tus necesidades -->
+        <thead style="color: #636363;" class="fixed-header">
+          <tr>
+            <th style="width: 10%;">IMAGEN</th>
+            <th style="width: 10%;">PRODUCTO</th>
+            <th style="width: 5%;">CANTIDAD</th>
+            <th style="width: 10%;">PVP</th>
+
+            <th style="width: 8%;">CATEGORIA</th>
+            <th style="width: 8%;">TIPO</th>
+            <th style="width: 8%;">MARCA</th>
+            <th style="width: 8%;">MODELO</th>
+            <th style="width: 10%;">COLOR</th>
+            <th style="width: 8%;">TAMAÑO</th>
+            <th style="width: 15%;">CARACTERISTICA</th>
+            <th style="width: 8%;">ETIQUETA</th>
+            <th style="width: 8%;">GENERO</th>
+            <th style="width: 15%;">IVA</th>
+            <th style="width: 15%;">ICE</th>
+            <th style="width: 8%;">STOCK</th>
+            <th style="width: 1%;"></th>
+            <th style="width: 20%;"></th>
+          </tr>
+        </thead>
+        <tbody style="color: #767695;">
+          <tr *ngFor="let inventario of lstInventarios" class="table-row">
+            <td style="text-align: center;">
+              <img [src]="inventario.url_image" [alt]="inventario.marca" class="img-thumbnail" height="100px" width="100px" data-toggle="modal" data-target="#exampleModal">
+            </td>
+            <td>{{ inventario.Producto }}</td>
+            <td>
+              <input class="cool-input" (input)="onInput($event)" type="text" id="cantidad" [(ngModel)]="inventario.cantidad" style="max-width: 100%; width: 100%;">
+            </td>
+            <td>{{ inventario.pvp2 }}</td>
+
+            <td>{{ inventario.categoria }}</td>
+            <td>{{ inventario.linea }}</td>
+            <td>{{ inventario.marca }}</td>
+            <td>{{ inventario.modelo }}</td>
+            <td>{{ inventario.color }}</td>
+            <td>{{ inventario.talla }}</td>
+            <td>{{ inventario.atributo }}</td>
+            <td>{{ inventario.etiquetas }}</td>
+            <td>{{ inventario.genero }}</td>
+            <td>{{ inventario.tarifa_ice_iva }}</td>
+            <td>{{ inventario.tarifa_ice_iva1 }}</td>
+            <td>{{ parseInt(inventario.stock!) | number: '.0-0' }}</td>
+            <td>
+              <i *ngIf="inventario.productoExistente" class="fas fa-check-circle" style="color: green; margin-right: 5px;"></i>
+            </td>
+            <td style="text-align: center;">
+       
+            </td>
+          </tr>
+        </tbody>
+        
+      </table>
+      <button class="btn button btn-success"   style="border-radius: 5px; font-size: 15px; width:120px; height:35px; text-align:center; margin-top: 10px;" (click)="facturar()">
+        <span style="color: white;">
+            FACTURAR
+        </span>
+      </button>
+
     </div>
-    <br>
-    <br /><br />
-    <div  #responsiveContainer>
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" id="dataTable">
-            <thead style="color: #636363;" class="fixed-header">
-                <tr>
-                    <tr>
-                        <th style="width: 15%; ">IMAGEN</th>
-                        <th style="width: 15%; ">PRODUCTO</th>
-                        <th style="width: 8%; ">CATEGORIA</th>
-                        <th style="width: 8%; ">TIPO</th>
-                        <th style="width: 8%; ">MARCA</th>
-                        <th style="width: 8%; ">MODELO</th>
-                        <th style="width: 10%; ">COLOR</th>
-                        <th style="width: 8%; ">TAMAÑO</th>
-                        <th style="width: 15%; ">CARACTERISTICA</th>
-                        <th style="width: 8%; ">ETIQUETA</th>
-                        <th style="width: 8%; ">GENERO</th>
-                        <th style="width: 15%; ">CANTIDAD</th>
-                        <th style="width: 10%; ">PVP</th>
-                        <th style="width: 15%; ">IVA</th>
-                        <th style="width: 15%; ">ICE</th>
-                        <th style="width: 8%; ">STOCK</th>
-                    <th style="width: 1%; "></th>
-                    <th style="width: 20%; "></th>
-                </tr>
-            </thead>
-            <tbody style="color: #767695;">
-                <tr *ngFor="let inventario of lstInventarios" class="table-row">
-                    <td style="text-align: center;">
-                        <img src={{inventario.url_image}} alt={{inventario.marca}} class="img-thumbnail" height="100px"
-                            width="100px" data-toggle="modal" data-target="#exampleModal">
-                    </td>
-                    <td>{{inventario.Producto}}</td>
-                    <td>{{inventario.categoria}}</td>
-                    <td>{{inventario.linea}}</td>
-                    <td>{{inventario.marca}}</td>
-                    <td>{{inventario.modelo}}</td>
-                    <td>{{inventario.color}}</td>
-                    <td>{{inventario.talla}}</td>
-                    <td>{{inventario.atributo}}</td>
-                    <td>{{inventario.etiquetas}}</td>
-                    <td>{{inventario.genero}}</td>
-                    <td>
-                        <input class="cool-input" (input)="onInput($event)" *ngIf="true" type="text" id="cantidad"
-                            [(ngModel)]="inventario.cantidad" />
-                    </td>
-                    <td>{{inventario.pvp2}}</td>
-                    <td>{{inventario.tarifa_ice_iva}}</td>
-                    <td>{{inventario.tarifa_ice_iva1}}</td>
-                    <td>{{ parseInt(inventario.stock! ) | number: '.0-0' }}</td>
-                    <td>
-                        <i *ngIf="inventario.productoExistente" class="fas fa-check-circle"
-                                style="color: green; margin-right: 5px;"></i>
-                    </td>
-                    <td style="text-align: center;">
-                        <button class="btn button" (click)="crearDetalle(inventario)"
-                            [ngClass]="{'btn-success': inventario.productoExistente, 'btn-primary': !inventario.productoExistente}"
-                            style="border-radius: 5px; font-size: 15px; width:120px; height:35px; text-align:center; margin-top: 10px;"
-                            >
-                            <span style="color:white;">
-                                {{ inventario.productoExistente ? 'ACTUALIZAR' : 'AÑADIR' }}
-                            </span>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+  </div>
+
+
+  

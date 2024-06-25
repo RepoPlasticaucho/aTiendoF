@@ -6,6 +6,8 @@ import Swal from 'sweetalert2';
 import { AlmacenesEntity } from 'src/app/models/almacenes';
 import { SociedadesEntity } from 'src/app/models/sociedades';
 import { AlmacenesService } from 'src/app/services/almacenes.service';
+import { MovimientosEntity } from 'src/app/models/movimientos';
+import { MovimientosService } from 'src/app/services/movimientos.service';
 
 @Component({
   selector: 'app-almacenesegresos',
@@ -25,6 +27,7 @@ export class AlmacenesegresosComponent implements OnInit {
   lstAlmacenes: AlmacenesEntity[] = [];
 
   constructor(private readonly httpService: AlmacenesService,
+    private readonly httpServicemov: MovimientosService,
     private router: Router) { }
 
   ngOnInit(): void {
@@ -105,7 +108,53 @@ export class AlmacenesegresosComponent implements OnInit {
   abrirVista(almacen: AlmacenesEntity) {
 
     localStorage.setItem('almacenid', almacen.idAlmacen)
-    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ventaprov'] } }]);
+    const newMovimiento: MovimientosEntity = {
+      almacen_id: localStorage.getItem('almacenid')!,
+      id: '',
+      tipo_id: '2',
+      tipo_emision_cod: '',
+      estado_fact_id: '1',
+      tipo_comprb_id: '1',
+      cod_doc: '',
+      secuencial: ''
+    }
+    localStorage.setItem('idfiscalCl', '');
+    this.httpServicemov.agregarMovimiento(newMovimiento).subscribe(res => {
+      if (res.codigoError == "OK") {
+        
+        // localStorage.setItem('tipo', this.pedidoForm.value.tipo!)
+        // this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['menuvent'] } }]);
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Ha ocurrido un error.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      }
+      this.httpServicemov.obtenerMovimientoUno(newMovimiento).subscribe(res1 => {
+        console.log(res1)
+        if (res1.codigoError == "OK") {
+          localStorage.setItem('movimiento_id', res1.lstMovimientos[0].id);
+          localStorage.setItem('estab', res1.lstMovimientos[0].estab!);       
+          
+          //Obtener la ruta actual y segun la ruta redirigir a la pagina de menu de ventas
+          let ruta = this.router.url;
 
+          if(ruta.includes('navegation-cl')){
+            this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['menuvent'] } }]);
+          }
+
+          if(ruta.includes('navegation-facturador')){
+            this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['menuvent'] } }]);
+          }
+
+          
+
+          
+
+        }
+      })
+    })
   }
 }

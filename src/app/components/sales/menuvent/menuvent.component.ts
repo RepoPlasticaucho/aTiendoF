@@ -74,8 +74,13 @@ export class MenuventComponent implements OnInit {
     private readonly httpServiceMov: MovimientosService,
     private readonly httpServiceTer: TercerosService,
     private readonly httpServiceDet: DetalleImpuestosService,
-    private router: Router
-  ) { }
+    private router: Router,
+
+  ) { 
+
+  }
+
+
 
   ngOnInit(): void {
     let idAux: number;
