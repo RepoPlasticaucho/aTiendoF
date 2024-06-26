@@ -34,6 +34,9 @@ export class MenuventComponent implements OnInit {
     tipo: new FormControl('0', Validators.required),
   });
 
+
+
+
   //Iconos para la pagina de grupos
   faList = faList;
   faTimes = faTimes;
@@ -76,10 +79,21 @@ export class MenuventComponent implements OnInit {
     private readonly httpServiceDet: DetalleImpuestosService,
     private router: Router,
 
-  ) { 
+  ) {
 
   }
 
+  agregarProducto(event: any) {
+    //Asignar la lista de productos a la variable lstDetalleMovimientos los que ya estan cambia la cantidad por la nueva 
+    this.lstDetalleMovimientos.forEach((element) => {
+      if (element.producto_id === event.producto_id) {
+        element.cantidad = (parseFloat(element.cantidad) + 1).toString();
+        this.calcularPrecio(this.lstDetalleMovimientos.indexOf(element));
+        return;
+      }
+    }
+    );
+  }
 
 
   ngOnInit(): void {
@@ -100,38 +114,40 @@ export class MenuventComponent implements OnInit {
       language: {
         url: '//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json',
       },
-      paging: true,
+      paging: false,
       search: false,
       searching: true,
       ordering: true,
       info: false,
-      responsive:  {
+      scrollY: '50vh',
+
+      responsive: {
         details: {
           renderer: function (api: any, rowIdx: any, columns: any) {
-          var data = $.map(columns, function (col, i) {
-            return col.hidden ?
-            '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
-            '<td>' + col.title + ':' + '</td> ' +
-            '<td>' + col.data + '</td>' +
-            '</tr>' :
-            '';
-          }).join('');
+            var data = $.map(columns, function (col, i) {
+              return col.hidden ?
+                '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+                '<td>' + col.title + ':' + '</td> ' +
+                '<td>' + col.data + '</td>' +
+                '</tr>' :
+                '';
+            }).join('');
 
-          detalle = component.lstDetalleMovimientos[rowIdx];
-          idAux = parseInt(rowIdx);
+            detalle = component.lstDetalleMovimientos[rowIdx];
+            idAux = parseInt(rowIdx);
 
-          return data ?
-          $('<table/>').append(data) :
-          false;
-        
+            return data ?
+              $('<table/>').append(data) :
+              false;
+
           }
         },
-        },
+      },
 
-        initComplete: function () {
-          $('#dtdt tbody').on('click', '.editar-icon', function () {
+      initComplete: function () {
+        $('#dtdt tbody').on('click', '.editar-icon', function () {
           //BOTON EDITAR
-          if(component.editarDetalle){
+          if (component.editarDetalle) {
             component.aplicarCambiosDetalle(index);
             return
           }
@@ -139,7 +155,7 @@ export class MenuventComponent implements OnInit {
           component.editarDetalleMovimiento(index);
           //Cambiar el icono  <fa-icon         
 
-            $(this).html('<fa-icon class="btn-success"></fa-icon>').removeClass('btn btn-info').addClass('btn btn-success fa-check')
+          $(this).html('<fa-icon class="btn-success"></fa-icon>').removeClass('btn btn-info').addClass('btn btn-success fa-check')
         });
         $('#dtdt tbody').on('click', '.delete-icon', function () {
           //BOTON ELIMINAR
@@ -147,7 +163,7 @@ export class MenuventComponent implements OnInit {
           component.eliminarDetalle(index);
         });
       }
-      }
+    }
 
     this.httpServiceCiudades.obtenerCiudadesAll().subscribe((res) => {
       if (res.codigoError != 'OK') {
@@ -288,6 +304,7 @@ export class MenuventComponent implements OnInit {
               showConfirmButton: true,
               // timer: 3000
             });
+
           }
         });
       this.clienteDatosCompletos = (
@@ -310,40 +327,40 @@ export class MenuventComponent implements OnInit {
 
         //If para verificar si el cliente no se cargo en los input
         if (this.identificacion === '' && this.nombre === '' && this.correo === '' && this.ciudad === '' && this.direccion === '' && this.telefono === '') {
-        const terceroEntity: TercerosEntity = {
-          almacen_id: '',
-          sociedad_id: '',
-          tipotercero_id: '',
-          tipousuario_id: '',
-          nombresociedad: '',
-          nombrealmacen: '',
-          nombretercero: '',
-          tipousuario: '',
-          nombre: '',
-          id_fiscal: localStorage.getItem('idfiscalCl')!,
-          direccion: '',
-          telefono: '',
-          correo: '',
-          fecha_nac: '',
-          ciudad: '',
-          provincia: '',
-          ciudadid: '',
-        };
+          const terceroEntity: TercerosEntity = {
+            almacen_id: '',
+            sociedad_id: '',
+            tipotercero_id: '',
+            tipousuario_id: '',
+            nombresociedad: '',
+            nombrealmacen: '',
+            nombretercero: '',
+            tipousuario: '',
+            nombre: '',
+            id_fiscal: localStorage.getItem('idfiscalCl')!,
+            direccion: '',
+            telefono: '',
+            correo: '',
+            fecha_nac: '',
+            ciudad: '',
+            provincia: '',
+            ciudadid: '',
+          };
 
-        //Si los datos siguen vacios obtener a partir de la cedula
-        this.httpServiceTer.obtenerTerceroCedula(terceroEntity).subscribe((res) => {
-          if (res.codigoError == 'OK') {
-            this.nombre = res.lstTerceros[0].nombre;
-            this.identificacion = res.lstTerceros[0].id_fiscal;
-            this.correo = res.lstTerceros[0].correo;
-            this.telefono = res.lstTerceros[0].telefono;
-            this.direccion = res.lstTerceros[0].direccion;
-            this.ciudad = res.lstTerceros[0].ciudad;
+          //Si los datos siguen vacios obtener a partir de la cedula
+          this.httpServiceTer.obtenerTerceroCedula(terceroEntity).subscribe((res) => {
+            if (res.codigoError == 'OK') {
+              this.nombre = res.lstTerceros[0].nombre;
+              this.identificacion = res.lstTerceros[0].id_fiscal;
+              this.correo = res.lstTerceros[0].correo;
+              this.telefono = res.lstTerceros[0].telefono;
+              this.direccion = res.lstTerceros[0].direccion;
+              this.ciudad = res.lstTerceros[0].ciudad;
+            }
           }
+          );
         }
-        );
-        }
-        
+
 
 
 
@@ -409,7 +426,7 @@ export class MenuventComponent implements OnInit {
         this.ciudad = res.lstTerceros[0].ciudad;
       }
       //2. Si no existe, carga con obtener tercero cedula
-      
+
 
 
     });
@@ -506,7 +523,7 @@ export class MenuventComponent implements OnInit {
       } else {
 
         console.log("AQUI EN DATALLE MOVIMIENTO")
-        
+
         this.lstDetalleMovimientos = res.lstDetalleMovimientos;
         this.dtTrigger.next('');
         this.calcularSumaTotal();
@@ -572,7 +589,7 @@ export class MenuventComponent implements OnInit {
   calcularDescuento(): number {
     const descuento = this.lstDetalleMovimientos
       .filter((detalleMovimientos) => detalleMovimientos.desc_add)
-      .reduce((total, detalleMovimientos) => {        
+      .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.desc_add!.replace(',', '.'));
       }, 0);
 
@@ -590,73 +607,46 @@ export class MenuventComponent implements OnInit {
   }
 
   eliminarDetalle(detalle: DetallesMovimientoEntity): void {
-    Swal.fire({
-      icon: 'question',
-      title: `¿Esta seguro de eliminar ${detalle.producto_nombre}?`,
-      showDenyButton: true,
-      confirmButtonText: 'Si',
-      denyButtonText: 'No',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.httpService.eliminarDetallePedido(detalle).subscribe((res) => {
-          if (res.codigoError == 'OK') {
-            Swal.fire({
-              icon: 'success',
-              title: 'Eliminado Exitosamente.',
-              text: `Se ha eliminado el producto ${detalle.producto_nombre}`,
-              showConfirmButton: true,
-              confirmButtonText: 'Ok',
-            }).then(() => {
-              const newDetalle: DetallesMovimientoEntity = {
-                id: '',
-                producto_nombre: '',
-                inventario_id: '',
-                producto_id: '',
-                movimiento_id: localStorage.getItem('movimiento_id')!,
-                cantidad: '',
-                costo: '',
-                precio: ''
-              }
-              this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe(res => {
-                if (res.codigoError != "OK") {
-                  window.location.reload();
-                  Swal.fire({
-                    icon: 'info',
-                    title: 'Información',
-                    text: 'Empieza tu pedido en "AÑADIR".',
-                    showConfirmButton: true,
-                    // timer: 3000
-                  });
-                } else {
-                  this.lstDetalleMovimientos = res.lstDetalleMovimientos;
-                  // this.disableProveedor = this.lstDetalleMovimientos.length > 0;
-                  // this.groupForm.reset();
-                  this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
-                    // Destruye la tabla existente y elimina los datos
-                    dtInstance.destroy();
 
-                    // Renderiza la tabla con los nuevos datos
-                    this.dtTrigger.next('');
 
-                    // Opcional: Reinicia la página a la primera página
-                    dtInstance.page('first').draw('page');
-                  });
-                  this.calcularSumaTotal();
-                }
-              });
-            });
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Ha ocurrido un error.',
-              text: res.descripcionError,
-              showConfirmButton: false,
-            });
-          }
-        });
+    this.httpService.eliminarDetallePedido(detalle).subscribe((res) => {
+
+      const newDetalle: DetallesMovimientoEntity = {
+        id: '',
+        producto_nombre: '',
+        inventario_id: '',
+        producto_id: '',
+        movimiento_id: localStorage.getItem('movimiento_id')!,
+        cantidad: '',
+        costo: '',
+        precio: ''
       }
-    });
+      this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe(res => {
+        if (res.codigoError != "OK") {
+          //window.location.reload();
+          Swal.fire({
+            icon: 'info',
+            title: 'Información',
+            text: 'Empieza tu pedido en "AÑADIR".',
+            showConfirmButton: true,
+            // timer: 3000
+          });
+        } else {
+          this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+          // this.disableProveedor = this.lstDetalleMovimientos.length > 0;
+          // this.groupForm.reset();
+         
+          this.calcularSumaTotal();
+
+          //window.location.reload();
+          
+        }
+      })
+    }
+    )
   }
+
+
 
   editarDetalleMovimiento(index: number): void {
     this.detalleEditIndex = index;
@@ -704,19 +694,19 @@ export class MenuventComponent implements OnInit {
     const cantidad = parseFloat(detalleMovimientos.cantidad);
     const costo = parseFloat(detalleMovimientos.costo);
     let desc = parseFloat(detalleMovimientos.desc_add!);
-  
+
     // Si desc es null o undefined, establecerlo como 0
     desc = isNaN(desc) ? 0 : desc;
-  
+
     if (!isNaN(cantidad) && !isNaN(costo)) {
       detalleMovimientos.precio = (cantidad * costo - desc).toFixed(2);
     } else {
       detalleMovimientos.precio = '';
     }
-  
+
     this.calcularSumaTotal();
   }
-  
+
   onInput(event: any) {
     const inputValue = event.target.value;
     event.target.value = inputValue.replace(/[^0-9]/g, ''); // Filtra solo números
@@ -754,7 +744,7 @@ export class MenuventComponent implements OnInit {
 
         if (totalNumber >= 50 && this.clienteForm.get('tipo')!.value === 'CONSUMIDOR FINAL' && this.identificacion === 'CONSUMIDOR FINAL') {
 
-        console.log("ESTE ES EL TOTAL DE LA COMPRA ", totalNumber)
+          console.log("ESTE ES EL TOTAL DE LA COMPRA ", totalNumber)
 
           Swal.fire({
             icon: 'warning',
@@ -771,7 +761,7 @@ export class MenuventComponent implements OnInit {
               });
 
               //Asignar el valor Cliente al input
-             
+
               this.clienteForm.get('tipo')!.setValue("CLIENTE")
 
               dialogRef.afterClosed().subscribe((result) => {

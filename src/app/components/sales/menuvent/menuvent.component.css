@@ -111,3 +111,16 @@ text-align: center;
   display: flex;
   margin-top: 10px;
 }
+
+.contenedor {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.seccion {
+  border: 2px solid #ccc; /* Borde sólido de 2px de grosor y color gris claro */
+  padding: 15px;
+  width: 45%; /* Ancho del contenedor de cada sección */
+  box-sizing: border-box; /* Para incluir el padding dentro del ancho especificado */
+}

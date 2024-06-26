@@ -8,6 +8,7 @@
             <th style="width: 10%;">PRODUCTO</th>
             <th style="width: 5%;">CANTIDAD</th>
             <th style="width: 10%;">PVP</th>
+            <th style="width: 8%;">STOCK</th>
 
             <th style="width: 8%;">CATEGORIA</th>
             <th style="width: 8%;">TIPO</th>
@@ -20,23 +21,29 @@
             <th style="width: 8%;">GENERO</th>
             <th style="width: 15%;">IVA</th>
             <th style="width: 15%;">ICE</th>
-            <th style="width: 8%;">STOCK</th>
             <th style="width: 1%;"></th>
             <th style="width: 20%;"></th>
           </tr>
         </thead>
         <tbody style="color: #767695;">
-          <tr *ngFor="let inventario of lstInventarios" class="table-row">
+          <ng-container *ngFor="let inventario of lstInventarios">
+
+          <tr  class="table-row"
+              *ngIf="parseInt(inventario.stock!) > 0"
+          >
             <td style="text-align: center;">
               <img [src]="inventario.url_image" [alt]="inventario.marca" class="img-thumbnail" height="100px" width="100px" data-toggle="modal" data-target="#exampleModal">
             </td>
             <td>{{ inventario.Producto }}</td>
             <td>
-              <input class="cool-input" (input)="onInput($event)" type="text" id="cantidad" [(ngModel)]="inventario.cantidad" style="max-width: 100%; width: 100%;">
+              <input class="cool-input" (input)="onInput($event)" type="text" id="cantidad" [(ngModel)]="inventario.cantidad" style="max-width: 100%; width: 100%;"
+                (keyup.enter)="onEnter($event)">
+              
             </td>
             <td>{{ inventario.pvp2 }}</td>
-
+            <td>{{ parseInt(inventario.stock!) | number: '.0-0' }}</td>
             <td>{{ inventario.categoria }}</td>
+
             <td>{{ inventario.linea }}</td>
             <td>{{ inventario.marca }}</td>
             <td>{{ inventario.modelo }}</td>
@@ -47,7 +54,6 @@
             <td>{{ inventario.genero }}</td>
             <td>{{ inventario.tarifa_ice_iva }}</td>
             <td>{{ inventario.tarifa_ice_iva1 }}</td>
-            <td>{{ parseInt(inventario.stock!) | number: '.0-0' }}</td>
             <td>
               <i *ngIf="inventario.productoExistente" class="fas fa-check-circle" style="color: green; margin-right: 5px;"></i>
             </td>
@@ -55,6 +61,7 @@
        
             </td>
           </tr>
+        </ng-container>
         </tbody>
         
       </table>
@@ -63,7 +70,6 @@
             FACTURAR
         </span>
       </button>
-
     </div>
   </div>
 

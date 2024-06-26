@@ -232,6 +232,14 @@ export class VerClienteComponent implements OnInit {
       }
       localStorage.setItem('idfiscalCl', this.TercerosForm.value!.id_fiscal!);
 
+      //Guardar todos los datos en el local storage
+      localStorage.setItem('nombreCl', this.TercerosForm.value!.nombre!);
+      localStorage.setItem('apellidoCl', this.TercerosForm.value!.apellido!);
+      localStorage.setItem('correoCl', this.TercerosForm.value!.correo!);
+      localStorage.setItem('direccionCl', this.TercerosForm.value!.direccion!);
+      localStorage.setItem('telefonoCl', this.TercerosForm.value!.telefono!);
+      localStorage.setItem('ciudadCl', this.TercerosForm.value!.ciudad_id!);
+
       console.log("Este es el id fiscal en ver cliente", this.TercerosForm.value!.id_fiscal!);
       this.httpService.obtenerTerceroCedula(tercerodatos).subscribe(res1 => {
         if (res1.codigoError == "NEXISTE") {
