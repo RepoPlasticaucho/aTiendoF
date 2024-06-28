@@ -50,4 +50,5 @@ export interface InventariosEntity {
     tarifa_ice_iva_id1?: string;
     genero?: string;
     atributo?: string;
+    stock_auxiliar?: string;
 }

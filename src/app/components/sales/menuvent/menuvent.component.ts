@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -27,13 +28,16 @@ import { environment } from 'src/environments/environment.prod';
   styleUrls: ['./menuvent.component.css'],
 })
 export class MenuventComponent implements OnInit {
+
   editarDetalle: boolean = false;
   selectTipo: boolean = false;
+  @Output() emiteDesdeProductoAgregado = new EventEmitter<any>();
+ 
+
 
   clienteForm = new FormGroup({
     tipo: new FormControl('0', Validators.required),
   });
-
 
 
 
@@ -84,15 +88,14 @@ export class MenuventComponent implements OnInit {
   }
 
   agregarProducto(event: any) {
-    //Asignar la lista de productos a la variable lstDetalleMovimientos los que ya estan cambia la cantidad por la nueva 
-    this.lstDetalleMovimientos.forEach((element) => {
-      if (element.producto_id === event.producto_id) {
-        element.cantidad = (parseFloat(element.cantidad) + 1).toString();
-        this.calcularPrecio(this.lstDetalleMovimientos.indexOf(element));
-        return;
-      }
-    }
-    );
+  
+  
+
+
+    this.cargarTablaMenuvent();
+    
+
+
   }
 
 
@@ -121,48 +124,49 @@ export class MenuventComponent implements OnInit {
       info: false,
       scrollY: '50vh',
 
-      responsive: {
-        details: {
-          renderer: function (api: any, rowIdx: any, columns: any) {
-            var data = $.map(columns, function (col, i) {
-              return col.hidden ?
-                '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
-                '<td>' + col.title + ':' + '</td> ' +
-                '<td>' + col.data + '</td>' +
-                '</tr>' :
-                '';
-            }).join('');
+      // responsive: {
+      //   details: {
+      //     renderer: function (api: any, rowIdx: any, columns: any) {
+      //       var data = $.map(columns, function (col, i) {
+      //         return col.hidden ?
+      //           '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+      //           '<td>' + col.title + ':' + '</td> ' +
+      //           '<td>' + col.data + '</td>' +
+      //           '</tr>' :
+      //           '';
+      //       }).join('');
 
-            detalle = component.lstDetalleMovimientos[rowIdx];
-            idAux = parseInt(rowIdx);
+      //       detalle = component.lstDetalleMovimientos[rowIdx];
+      //       idAux = parseInt(rowIdx);
 
-            return data ?
-              $('<table/>').append(data) :
-              false;
+      //       return data ?
+      //         $('<table/>').append(data) :
+      //         false;
 
-          }
-        },
-      },
+      //     }
+      //   },
+      // },
 
-      initComplete: function () {
-        $('#dtdt tbody').on('click', '.editar-icon', function () {
-          //BOTON EDITAR
-          if (component.editarDetalle) {
-            component.aplicarCambiosDetalle(index);
-            return
-          }
-          var index = $(this).closest('span').data('index');
-          component.editarDetalleMovimiento(index);
-          //Cambiar el icono  <fa-icon         
+      // initComplete: function () {
+      //   $('#dtdt tbody').on('click', '.editar-icon', function () {
+      //     //BOTON EDITAR
+      //     if (component.editarDetalle) {
+      //       component.aplicarCambiosDetalle(index);
+      //       return
+      //     }
+      //     var index = $(this).closest('span').data('index');
+      //     component.editarDetalleMovimiento(index);
+      //     //Cambiar el icono  <fa-icon         
 
-          $(this).html('<fa-icon class="btn-success"></fa-icon>').removeClass('btn btn-info').addClass('btn btn-success fa-check')
-        });
-        $('#dtdt tbody').on('click', '.delete-icon', function () {
-          //BOTON ELIMINAR
-          var index = $(this).closest('span').data('index');
-          component.eliminarDetalle(index);
-        });
-      }
+      //     $(this).html('<fa-icon class="btn-success"></fa-icon>').removeClass('btn btn-info').addClass('btn btn-success fa-check')
+      //   });
+      //   $('#dtdt tbody').on('click', '.delete-icon', function () {
+      //     //BOTON ELIMINAR
+      //     var index = $(this).closest('span').data('index');
+      //     component.eliminarDetalle(index);
+      //   });
+      // }
+      responsive: false
     }
 
     this.httpServiceCiudades.obtenerCiudadesAll().subscribe((res) => {
@@ -608,6 +612,8 @@ export class MenuventComponent implements OnInit {
 
   eliminarDetalle(detalle: DetallesMovimientoEntity): void {
 
+    //Empezar a eliminar
+    this.emiteDesdeProductoAgregado.emit(detalle);
 
     this.httpService.eliminarDetallePedido(detalle).subscribe((res) => {
 
@@ -627,12 +633,27 @@ export class MenuventComponent implements OnInit {
           Swal.fire({
             icon: 'info',
             title: 'Información',
-            text: 'Empieza tu pedido en "AÑADIR".',
+            text: 'Empieza tu pedido en "AÑADIR1".',
             showConfirmButton: true,
             // timer: 3000
           });
+          this.lstDetalleMovimientos = res.lstDetalleMovimientos;
         } else {
           this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+          this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            // Destruye la tabla existente y elimina los datos
+            dtInstance.destroy();
+
+            // Renderiza la tabla con los nuevos datos
+            this.dtTrigger.next('');
+
+            // Opcional: Reinicia la página a la primera página
+            dtInstance.page('first').draw('page');
+          });
+
+
+          
+
           // this.disableProveedor = this.lstDetalleMovimientos.length > 0;
           // this.groupForm.reset();
          

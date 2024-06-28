@@ -8,17 +8,7 @@
             </div>
         </div>
         <div class="card-body">
-            <div class="row mx-3">
-                <a class="btn button" href="./navegation-cl/(contentClient:ventaprov)" style="text-align:center;
-                            font-size: 15px; width:140px; 
-                            height:35px;
-                            text-align:center; 
-                            margin-top: 10px;
-                            background: rgb(54,169,225,0.8);">
-                    <span style="color: white;">Volver</span>
-                </a>
-            </div>
-            <br><br>
+
             <form [formGroup]="clienteForm">
                 <div class="form-group">
                     <div class="d-flex">
@@ -90,7 +80,7 @@
                     style="border-right: 1px solid #e0e0e0; padding-right: 20px;">
                 
                     <h2 style="color: #636363; text-align: center;">AGREGAR PRODUCTOS AL CARRITO</h2>
-                    <app-ver-carrito (prAgregado)="agregarProducto($event)"></app-ver-carrito>
+                    <app-ver-carrito (prAgregado)="agregarProducto($event)"  ></app-ver-carrito>
                 </div>
                 <!-- Productos agregados -->
                 <div class="col-12 col-md-6">
@@ -103,10 +93,7 @@
                                 <th style="width: 40%;">UNITARIO</th>
                                 <th style="width: 40%;">TOTAL</th>
                                 <th style="width: 5%;">DCTO</th>
-                                <th style="width: 5%;">IVA</th>
-                                <th style="width: 10%;">ICE</th>
-                                <th style="width: 10%;">Tamaño</th>
-                                <th style="width: 10%;">Color</th>
+                             
                                 <th style="width: 20%;"></th>
                             </tr>
                         </thead>
@@ -132,10 +119,7 @@
                                     </ng-container>
                                     <input class="small-input" (input)="onInput2($event)" *ngIf="editarDetalle && i === detalleEditIndex" type="text" [(ngModel)]="detalleMovimientos.desc_add" (ngModelChange)="calcularPrecio(i)">
                                 </td>
-                                <td>{{detalleMovimientos.tarifa}}</td>
-                                <td>{{detalleMovimientos.ice}}</td>
-                                <td>{{detalleMovimientos.tamanio}}</td>
-                                <td>{{detalleMovimientos.color}}</td>
+                   
                                 <td style="text-align: center;">
                                     <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex" class="editar-detalle">
                                         <span [attr.data-index]="i">
