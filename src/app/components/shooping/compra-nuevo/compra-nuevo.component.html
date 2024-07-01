@@ -8,27 +8,33 @@
     </div>
     <br>
     <div class="d-flex justify-content-end">
-        <button class="btn button boton-adicional" (click)="nuevoProducto()">
+        <button class="btn button boton-adicional" (click)="nuevoProducto()"
+            style="margin-right: 10px; height: 40px;"
+        >
             <fa-icon [icon]="faFolderPlus" [size]="'lg'" style="color: #ffffff; margin-right: 10px;"></fa-icon>
             NUEVO PRODUCTO
         </button>
+        <button class="btn btn-success" (click)="anadirTodosProductos()"
+        style="height: 40px;">
+            <fa-icon [icon]="faShoppingCart" [size]="'lg'" style="color: #ffffff; margin-right: 10px;"></fa-icon>
+            TERMINAR COMPRA
+        </button>
     </div>
+
     <br /><br />
     <div class="table-container">
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" id="dataTable">
             <thead style="color: #636363;" class="fixed-header">
                 <tr>
-                    <th style="width: 10%; ">CÓDIGO</th>
-                    <th style="width: 10%; ">PRODUCTO</th>
-                    <th style="width: 10%; ">ETIQUETAS</th>
-                    <th style="width: 10%; ">TAMAÑO</th>
-                    <th style="width: 10%; ">U. MEDIDA</th>
-                    <th style="width: 10%; ">TARIFA</th>
-                    <th style="width: 10%; ">COSTO</th>
-                    <th style="width: 10%; ">CANTIDAD</th>
-                    <th style="width: 10%; ">PRECIO</th>
-                    <th style="width: 1%; "></th>
-                    <th style="width: 10%; "></th>
+                    <th style="width: 10%;">CÓDIGO</th>
+                    <th style="width: 10%;">PRODUCTO</th>
+                    <th style="width: 10%;">ETIQUETAS</th>
+                    <th style="width: 10%;">TAMAÑO</th>
+                    <th style="width: 10%;">U. MEDIDA</th>
+                    <th style="width: 10%;">TARIFA</th>
+                    <th style="width: 10%;">COSTO</th>
+                    <th style="width: 10%;">CANTIDAD</th>
+                    <th style="width: 10%;">PRECIO</th>
                 </tr>
             </thead>
             <tbody style="color: #767695;">
@@ -41,26 +47,10 @@
                     <td>{{proveedorProducto.descripcion_uni}}</td>
                     <td>{{proveedorProducto.costo}}</td>
                     <td>
-                        <input class="cool-input" (input)="onInput($event)" *ngIf="true" type="text"
-                            [(ngModel)]="proveedorProducto.cantidad" />
+                        <input class="cool-input" (input)="onInput($event)" (keyup.enter)="anadirTodosProductos()" 
+                            type="text" [(ngModel)]="proveedorProducto.cantidad" />
                     </td>
                     <td>{{proveedorProducto.precio}}</td>
-                    <td>
-                        <i *ngIf="proveedorProducto.productoExistente" class="fas fa-check-circle"
-                            style="color: green; margin-right: 5px;"></i>
-                    </td>
-                    <td style="text-align: center;">
-                        <a class="btn button" (click)="crearDetalle(proveedorProducto)" 
-                            [attr.data-proveedor]="proveedorProducto | json"
-                            [ngClass]="{'btn-success': proveedorProducto.productoExistente, 'btn-primary': !proveedorProducto.productoExistente}"
-                            style="border-radius: 5px; font-size: 15px; width:120px; height:35px; text-align:center; margin-top: 10px;"
-                            [class.disabled]="botonBloqueado"
-                            >
-                            <span style="color:white;">
-                                {{ proveedorProducto.productoExistente ? 'ACTUALIZAR' : 'AÑADIR' }}
-                            </span>
-                        </a>
-                    </td>
                 </tr>
             </tbody>
         </table>

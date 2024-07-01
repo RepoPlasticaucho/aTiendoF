@@ -61,21 +61,28 @@ export class CompraNuevoComponent implements OnInit {
     private dialogRef: MatDialogRef<MenucomprComponent>,
   ) { }
 
+  anadirTodosProductos(): void {
+    for (let producto of this.lstProveedoresProductos) {
+      if (parseInt(producto.cantidad!) > 0) {
+        this.crearDetalle(producto);
+      }
+    }
+  }
+
   ngOnInit(): void {
     let component = this;
     let cantidadAux = "";
 
     this.dtOptions = {
-      
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
       },
       paging: true,
-      search: false,
+      search: true,
       searching: true,
       ordering: true,
-      pageLength: 100,
-      info: true,
+      pageLength: 20,
+      info: false,
       responsive: {
         details: {
           renderer: function (api: any, rowIdx: any, columns: any) {
@@ -96,6 +103,7 @@ export class CompraNuevoComponent implements OnInit {
           }
         }
         },
+        
         initComplete: function () {
 
           $('#dataTable tbody').on('input', 'input', function () {
@@ -325,18 +333,10 @@ export class CompraNuevoComponent implements OnInit {
                         showConfirmButton: false
                       });
                     } else {
-                      Swal.fire({
-                        icon: 'success',
-                        title: 'Se ha agregado al inventario y detalle',
-                        text: `Se ha guardado con éxito el producto`,
-                        showConfirmButton: true,
-                        confirmButtonText: 'Ok',
-                      }).then((result) => {
-                        if (result.isConfirmed) {
+                      
                           this.productoAgregado.emit(proveedorProducto);
                           this.cerrarDialog();
-                        }
-                      });
+                     
                     }
                   });
                 });
@@ -451,19 +451,12 @@ export class CompraNuevoComponent implements OnInit {
                     showConfirmButton: false
                   });
                 } else {
-                  Swal.fire({
-                    icon: 'success',
-                    title: 'Se ha agregado al detalle',
-                    text: `Se ha guardado con éxito el producto`,
-                    showConfirmButton: true,
-                    confirmButtonText: 'Ok',
-                  }).then((result) => {
+               
                     this.botonBloqueado=false;
-                    if (result.isConfirmed) {
+                    
                       this.productoAgregado.emit(proveedorProducto);
                       this.cerrarDialog();
-                    }
-                  });
+
                 }
               });
             } else {
@@ -477,18 +470,11 @@ export class CompraNuevoComponent implements OnInit {
                 this.httpServiceDetalle.modificarDetallePedidoVenta(newDetalle).subscribe(res => {
                   console.log(res.codigoError)
                   if(res.codigoError == 'OK'){
-                    Swal.fire({
-                      icon: 'success',
-                      title: 'Actualizado',
-                      text: `Se ha cambiado la cantidad`,
-                      showConfirmButton: true,
-                      confirmButtonText: 'Ok',
-                    }).then((result) => {
-                      if (result.isConfirmed) {
+                  
                         this.cerrarDialog();
-                      }
+                      
                       this.productoAgregado.emit(proveedorProducto);
-                    });
+               
                   } else {
                     
                   }
@@ -496,15 +482,9 @@ export class CompraNuevoComponent implements OnInit {
               } else {
                 this.httpServiceDetalle.eliminarDetallePedidoVenta(newDetalle).subscribe(res => {
                   console.log("en este metodo"+res)
-                  Swal.fire({
-                    icon: 'success',
-                      title: 'Eliminado',
-                      text: `Se ha eliminado el producto del detalle`,
-                      showConfirmButton: true,
-                      confirmButtonText: 'Ok',
-                  }).then(() => {
+               
                     this.cerrarDialog();
-                  });
+                
                 });     
               }
             }

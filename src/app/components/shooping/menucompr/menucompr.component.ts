@@ -134,6 +134,11 @@ export class MenucomprComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
+
+    this.loadFormStateFromLocalStorage();
+
+
+    
     let component = this;
     this.dtOptions = {
       language: {
@@ -214,6 +219,10 @@ export class MenucomprComponent implements OnInit {
       } else {
         this.lstProveedores = res.lstProveedores;
       }
+    });
+
+    this.attributeForm.valueChanges.subscribe(() => {
+      this.saveFormStateToLocalStorage();
     });
 
     this.httpServiceComprobante.obtenerComprobantes().subscribe(res => {
@@ -352,6 +361,10 @@ export class MenucomprComponent implements OnInit {
 
 
   verCarrito() {
+
+    //Gaurdar todos los datos del formulario en el localstorage
+    this.saveFormStateToLocalStorage();
+
     const dialogRef = this.dialog.open(CompraNuevoComponent, {
       width: '1900px',
       height: '600px'
@@ -478,23 +491,10 @@ export class MenucomprComponent implements OnInit {
   }
 
   eliminarDetalle(detalle: DetallesMovimientoEntity): void {
-    Swal.fire({
-      icon: 'question',
-      title: `¿Esta seguro de eliminar ${detalle.producto_nombre}?`,
-      showDenyButton: true,
-      confirmButtonText: 'Si',
-      denyButtonText: 'No',
-    }).then((result) => {
-      if (result.isConfirmed) {
+
         this.httpService.eliminarDetalleCompra(detalle).subscribe(res => {
           if (res.codigoError == 'OK') {
-            Swal.fire({
-              icon: 'success',
-              title: 'Eliminado Exitosamente.',
-              text: `Se ha eliminado el producto ${detalle.producto_nombre}`,
-              showConfirmButton: true,
-              confirmButtonText: "Ok"
-            }).then(() => {
+        
               const newDetalle: DetallesMovimientoEntity = {
                 id: '',
                 producto_nombre: '',
@@ -535,7 +535,7 @@ export class MenucomprComponent implements OnInit {
                   this.calcularSumaTotal();
                 }
               });
-            });
+            ;
           } else {
             Swal.fire({
               icon: 'error',
@@ -545,8 +545,7 @@ export class MenucomprComponent implements OnInit {
             });
           }
         })
-      }
-    })
+      
   }
 
   editarDetalleMovimiento(index: number): void {
@@ -872,6 +871,18 @@ export class MenucomprComponent implements OnInit {
       return true;
     }
   }
+
+  saveFormStateToLocalStorage() {
+    // Guardar el estado del formulario en el local storage
+
+  }
+  loadFormStateFromLocalStorage() {
+    const formData = localStorage.getItem('formData');
+    if (formData) {
+      this.attributeForm.patchValue(JSON.parse(formData));
+    }
+  }
+    
 
   
 
