@@ -1,7 +1,7 @@
 
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { Subject, finalize } from 'rxjs';
 import { faShoppingBag, faSave, faList, faTimes, faShoppingCart, faEdit, faTrashAlt, faMoneyBillAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
@@ -21,6 +21,7 @@ import { DetalleImpuestosService } from 'src/app/services/detalle-impuestos.serv
 import { DetalleImpuestosEntity } from 'src/app/models/detalle-impuestos';
 import { DataTableDirective } from 'angular-datatables';
 import { environment } from 'src/environments/environment.prod';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-menuvent',
@@ -33,11 +34,13 @@ export class MenuventComponent implements OnInit {
   selectTipo: boolean = false;
   @Output() emiteDesdeProductoAgregado = new EventEmitter<any>();
  
-
+  ciudadSeleccionada: string = '';
 
   clienteForm = new FormGroup({
     tipo: new FormControl('0', Validators.required),
   });
+
+  private previousUrl: string = '';
 
 
 
@@ -84,6 +87,8 @@ export class MenuventComponent implements OnInit {
     private router: Router,
 
   ) {
+  
+    
 
   }
 
@@ -111,6 +116,9 @@ export class MenuventComponent implements OnInit {
       costo: '',
       precio: '',
     };
+
+
+    this.loadLocalStorage()
 
     const component = this;
     this.dtOptions = {
@@ -204,6 +212,8 @@ export class MenuventComponent implements OnInit {
       created_at: '',
       update_at: '',
     };
+
+    //Guardar la ciudad
 
     this.httpServiceCiudades.obtenerCiudadesN(newCiudad).subscribe((res) => {
       if (res.codigoError != 'OK') {
@@ -385,10 +395,23 @@ export class MenuventComponent implements OnInit {
       );
 
 
+
     } else {
       console.log('ERROR');
     }
   }
+
+
+  onCityChange(event: any): void {
+    // Obtener el texto de la opción seleccionada
+    this.ciudadSeleccionada = event.target.options[event.target.selectedIndex].text;
+
+    console.log("CIUDAD SELECCIONADA ", this.ciudadSeleccionada)
+    //Guardar en el local storage
+    localStorage.setItem('ciudadCl', this.ciudadSeleccionada);
+  }
+
+
 
   verDatos() {
     //1. Si ya existe, carga con obtener tercero cedula
@@ -801,6 +824,8 @@ export class MenuventComponent implements OnInit {
             }
           });
 
+          
+
           return
         }
 
@@ -956,4 +981,43 @@ export class MenuventComponent implements OnInit {
       }
     });
   }
+
+
+  loadLocalStorage() {
+
+    if (localStorage.getItem('idfiscalCl') != null) {
+      this.identificacion = localStorage.getItem('idfiscalCl')!;
+    }
+
+    if (localStorage.getItem('nombreCl') != null) {
+      this.nombre = localStorage.getItem('nombreCl')! +" "+ localStorage.getItem('apellidoCl')!
+    }
+
+    if (localStorage.getItem('correoCl') != null) {
+      this.correo = localStorage.getItem('correoCl')!;
+    }
+
+    if (localStorage.getItem('telefonoCl') != null) {
+      this.telefono = localStorage.getItem('telefonoCl')!;
+    }
+
+    if (localStorage.getItem('ciudadCl') != null) {
+      this.ciudad = localStorage.getItem('ciudadCl')!
+    }
+
+
+    if (localStorage.getItem('direccionCl') != null) {
+      this.direccion = localStorage.getItem('direccionCl')!;
+    }
+
+    if (localStorage.getItem('idClVenta') != null) {
+      this.clienteDatosCompletos = true;
+    }
+
+
+  
+  }
+
+
+  
 }

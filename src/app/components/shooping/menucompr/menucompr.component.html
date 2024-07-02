@@ -26,7 +26,9 @@
                         <div class="form-group">
                             <label for="cedula">Proveedor:</label>
                             <select class="form-control small-select" (change)="changeGroup($event)"
-                                [disabled]="disableProveedor">
+                                [disabled]="disableProveedor"
+                                [(ngModel)]="selectedProveedor"
+                                >
                                 <option value="0" selected>Seleccione un proveedor</option>
                                 <option *ngFor="let proveedor of lstProveedores" [value]="proveedor.nombre">
                                     {{proveedor.nombre}}
@@ -43,7 +45,8 @@
                         <div class="form-group">
                             <label for="cedula">Comprobante:</label>
                             <select class="form-control small-select" (change)="changeGroup3($event)"
-                                [disabled]="disableProveedor">
+                                [disabled]="disableProveedor"
+                                >
                                 <option value="0" selected>Seleccione un comprobante</option>
                                 <option *ngFor="let comprobante of lstComprobantes" [value]="comprobante.tipo">
                                     {{comprobante.tipo}}
@@ -55,7 +58,8 @@
                         <div class="form-group">
                             <label for="cedula">Sustento:</label>
                             <select class="form-control small-select" (change)="changeGroup2($event)"
-                                [disabled]="disableProveedor">
+                                [disabled]="disableProveedor"
+                                >
                                 <option value="0" selected>Seleccione un sustento</option>
                                 <option *ngFor="let sustento of lstSustentos" [value]="sustento.sustento">
                                    {{sustento.codigo}} - {{sustento.sustento}}

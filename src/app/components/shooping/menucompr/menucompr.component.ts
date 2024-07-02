@@ -54,6 +54,9 @@ export class MenucomprComponent implements OnInit {
   faFolderPlus = faFolderPlus;
   errorAutorizacion: boolean = false;
   public buttonsDisabled = true;
+  selectedProveedor: string = '';
+  selectedComprobante: string = '';
+  selectedSustento: string = '';
 
   public proveedorSeleccionado = false;
   public sustentoSeleccionado = false;
@@ -65,7 +68,7 @@ export class MenucomprComponent implements OnInit {
   attributeForm = new FormGroup({
     autorizacion: new FormControl('', [Validators.required, this.autorizacionLengthValidator()])
   });
-  
+
 
   autorizacionLengthValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
@@ -77,7 +80,7 @@ export class MenucomprComponent implements OnInit {
     };
   }
 
-  keyPressValidator49or10(event: any){
+  keyPressValidator49or10(event: any) {
     //Validar que sea numero
     var charCode = (event.which) ? event.which : event.keyCode;
     // Only Numbers 0-9
@@ -85,7 +88,7 @@ export class MenucomprComponent implements OnInit {
       event.preventDefault();
       return false;
     } else {
-        //Validar que autorizacion tenga 10 o 49 digitos
+      //Validar que autorizacion tenga 10 o 49 digitos
       if (event.target.value.length !== 10 || event.target.value.length !== 49) {
         this.errorAutorizacion = true
       }
@@ -95,7 +98,7 @@ export class MenucomprComponent implements OnInit {
       return true;
     }
   }
-  
+
 
   //Declaración de variables
   dtOptions: DataTables.Settings = {};
@@ -120,7 +123,7 @@ export class MenucomprComponent implements OnInit {
   fechaSeleccionada: Date | null = null;
   fechaFormateada: any = '';
 
-  iva=environment.iva
+  iva = environment.iva
 
   constructor(private dialog: MatDialog,
     private readonly httpService: DetallesmovimientoService,
@@ -138,7 +141,7 @@ export class MenucomprComponent implements OnInit {
     this.loadFormStateFromLocalStorage();
 
 
-    
+
     let component = this;
     this.dtOptions = {
       language: {
@@ -149,32 +152,32 @@ export class MenucomprComponent implements OnInit {
       searching: true,
       ordering: true,
       info: false,
-      responsive:  {
+      responsive: {
         details: {
           renderer: function (api: any, rowIdx: any, columns: any) {
-          var data = $.map(columns, function (col, i) {
-            return col.hidden ?
-            '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
-            '<td>' + col.title + ':' + '</td> ' +
-            '<td>' + col.data + '</td>' +
-            '</tr>' :
-            '';
-          }).join('');
+            var data = $.map(columns, function (col, i) {
+              return col.hidden ?
+                '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+                '<td>' + col.title + ':' + '</td> ' +
+                '<td>' + col.data + '</td>' +
+                '</tr>' :
+                '';
+            }).join('');
 
-          return data ?
-          $('<table/>').append(data) :
-          false;
-        
+            return data ?
+              $('<table/>').append(data) :
+              false;
+
           }
         },
-      
-        },
-        
-        initComplete: function () {
-          $('#dtdt tbody').on('click', '.editar-icon', function () {
+
+      },
+
+      initComplete: function () {
+        $('#dtdt tbody').on('click', '.editar-icon', function () {
           console.log("editar")
           //BOTON EDITAR
-          if(component.editarDetalle){
+          if (component.editarDetalle) {
             component.aplicarCambiosDetalle(index);
             //Despues de aplicar los cambios, cerrar el submenu que se abrio de la tabla en responsive
             $(this).closest('tr').removeClass('dt-hasChild parent');
@@ -183,7 +186,7 @@ export class MenucomprComponent implements OnInit {
           var index = $(this).closest('span').data('index');
           component.editarDetalleMovimiento(index);
           //Cambiar el icono  <fa-icon         
-            $(this).html('<fa-icon class="btn-success"></fa-icon>').removeClass('btn btn-info').addClass('btn btn-success fa-check')
+          $(this).html('<fa-icon class="btn-success"></fa-icon>').removeClass('btn btn-info').addClass('btn btn-success fa-check')
         });
         $('#dtdt tbody').on('click', '.delete-icon', function () {
           console.log("eliminar")
@@ -221,9 +224,6 @@ export class MenucomprComponent implements OnInit {
       }
     });
 
-    this.attributeForm.valueChanges.subscribe(() => {
-      this.saveFormStateToLocalStorage();
-    });
 
     this.httpServiceComprobante.obtenerComprobantes().subscribe(res => {
       if (res.codigoError != "OK") {
@@ -306,6 +306,8 @@ export class MenucomprComponent implements OnInit {
         });
       } else {
         localStorage.setItem('sustentoid', res.lstSustentos[0].id);
+        //Guardar el nombre del sustento seleccionado
+        localStorage.setItem('sustento', sustento.target.options[sustento.target.selectedIndex].text);
       }
     })
   }
@@ -324,6 +326,9 @@ export class MenucomprComponent implements OnInit {
       codigo: ''
     }
 
+    //Guardar el comprobante seleccionado
+
+
     this.httpServiceComprobante.obtenerComprobantesN(comprobanteCompras).subscribe(res => {
       if (res.codigoError != "OK") {
         Swal.fire({
@@ -334,6 +339,11 @@ export class MenucomprComponent implements OnInit {
         });
       } else {
         localStorage.setItem('comprobanteCompraid', res.lstComprobantes[0].id);
+
+        //Guardar el nombre del comprobante seleccionado
+        // comprobanteCompra.target.options[comprobanteCompra.target.selectedIndex].text;
+        localStorage.setItem('comprobanteCompra', comprobanteCompra.target.options[comprobanteCompra.target.selectedIndex].text);
+
         const sustento: SustentosTributariosEntity = {
           id: '',
           etiquetas: '',
@@ -354,7 +364,7 @@ export class MenucomprComponent implements OnInit {
             this.lstSustentos = res1.lstSustentos;
           }
         });
-        
+
       }
     })
   }
@@ -362,8 +372,7 @@ export class MenucomprComponent implements OnInit {
 
   verCarrito() {
 
-    //Gaurdar todos los datos del formulario en el localstorage
-    this.saveFormStateToLocalStorage();
+
 
     const dialogRef = this.dialog.open(CompraNuevoComponent, {
       width: '1900px',
@@ -460,18 +469,18 @@ export class MenucomprComponent implements OnInit {
 
   calcularTotalTarifa15(): number {
     const totalTarifa15 = this.lstDetalleMovimientos
-      .filter((detalleMovimientos) => detalleMovimientos.tarifa === this.iva+'%')
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === this.iva + '%')
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
-    const porcen = totalTarifa15 * (this.iva/100);
+    const porcen = totalTarifa15 * (this.iva / 100);
 
     return totalTarifa15 + porcen;
   }
 
   calcularTotalTarifa15P(): number {
     const totalTarifa15 = this.lstDetalleMovimientos
-      .filter((detalleMovimientos) => detalleMovimientos.tarifa === this.iva+'%')
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === this.iva + '%')
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
@@ -481,71 +490,71 @@ export class MenucomprComponent implements OnInit {
 
   calcularIva15(): number {
     const totalTarifa15 = this.lstDetalleMovimientos
-      .filter((detalleMovimientos) => detalleMovimientos.tarifa === this.iva+'%')
+      .filter((detalleMovimientos) => detalleMovimientos.tarifa === this.iva + '%')
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
-    const porcen = totalTarifa15 * (this.iva/100);
+    const porcen = totalTarifa15 * (this.iva / 100);
 
     return porcen;
   }
 
   eliminarDetalle(detalle: DetallesMovimientoEntity): void {
 
-        this.httpService.eliminarDetalleCompra(detalle).subscribe(res => {
-          if (res.codigoError == 'OK') {
-        
-              const newDetalle: DetallesMovimientoEntity = {
-                id: '',
-                producto_nombre: '',
-                inventario_id: '',
-                producto_id: '',
-                movimiento_id: localStorage.getItem('movimiento_id')!,
-                cantidad: '',
-                costo: '',
-                precio: ''
-              }
-              this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe(res => {
-                if (res.codigoError != "OK") {
-                  window.location.reload();
-                  Swal.fire({
-                    icon: 'info',
-                    title: 'Información',
-                    text: 'Empieza tu pedido en "AÑADIR".',
-                    showConfirmButton: true,
-                    // timer: 3000
-                  });
-                } else {
-                  this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+    this.httpService.eliminarDetalleCompra(detalle).subscribe(res => {
+      if (res.codigoError == 'OK') {
 
-                  console.log("MOvimientos ", this.lstDetalleMovimientos);
-
-                  this.disableProveedor = this.lstDetalleMovimientos.length > 0;
-                  // this.groupForm.reset();
-                  this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
-                    // Destruye la tabla existente y elimina los datos
-                    dtInstance.destroy();
-
-                    // Renderiza la tabla con los nuevos datos
-                    this.dtTrigger.next('');
-
-                    // Opcional: Reinicia la página a la primera página
-                    dtInstance.page('first').draw('page');
-                  });
-                  this.calcularSumaTotal();
-                }
-              });
-            ;
-          } else {
+        const newDetalle: DetallesMovimientoEntity = {
+          id: '',
+          producto_nombre: '',
+          inventario_id: '',
+          producto_id: '',
+          movimiento_id: localStorage.getItem('movimiento_id')!,
+          cantidad: '',
+          costo: '',
+          precio: ''
+        }
+        this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe(res => {
+          if (res.codigoError != "OK") {
+            window.location.reload();
             Swal.fire({
-              icon: 'error',
-              title: 'Ha ocurrido un error.',
-              text: res.descripcionError,
-              showConfirmButton: false,
+              icon: 'info',
+              title: 'Información',
+              text: 'Empieza tu pedido en "AÑADIR".',
+              showConfirmButton: true,
+              // timer: 3000
             });
+          } else {
+            this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+
+            console.log("MOvimientos ", this.lstDetalleMovimientos);
+
+            this.disableProveedor = this.lstDetalleMovimientos.length > 0;
+            // this.groupForm.reset();
+            this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+              // Destruye la tabla existente y elimina los datos
+              dtInstance.destroy();
+
+              // Renderiza la tabla con los nuevos datos
+              this.dtTrigger.next('');
+
+              // Opcional: Reinicia la página a la primera página
+              dtInstance.page('first').draw('page');
+            });
+            this.calcularSumaTotal();
           }
-        })
-      
+        });
+        ;
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Ha ocurrido un error.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      }
+    })
+
   }
 
   editarDetalleMovimiento(index: number): void {
@@ -632,11 +641,11 @@ export class MenucomprComponent implements OnInit {
     var charCode = (event.which) ? event.which : event.keyCode;
     // Only Numbers 0-9
 
-      //Si ya se llego a 15 ya no deja escribir mas
-      if (event.target.value.length == 17) {
-        event.preventDefault();
-        return false;
-      }
+    //Si ya se llego a 15 ya no deja escribir mas
+    if (event.target.value.length == 17) {
+      event.preventDefault();
+      return false;
+    }
 
     if ((charCode < 48 || charCode > 57)) {
       event.preventDefault();
@@ -726,14 +735,14 @@ export class MenucomprComponent implements OnInit {
             };
             this.httpServiceDet.obtenerDetalleImpuesto(newDetalleImp).subscribe(res => {
               if (res.codigoError == 'OK') {
-                if (res.lstDetalleImpuestos[0].porcentaje == this.iva+'%') {
+                if (res.lstDetalleImpuestos[0].porcentaje == this.iva + '%') {
                   const newDetalleImp2: DetalleImpuestosEntity = {
                     id: '',
                     detalle_movimiento_id: detalleMovimiento.id ?? '',
                     cod_impuesto: '',
                     porcentaje: detalleMovimiento.tarifa ?? '',
                     base_imponible: '',
-                    valor: (parseFloat(res.lstDetalleImpuestos[0].base_imponible) * (this.iva/100)).toString(),
+                    valor: (parseFloat(res.lstDetalleImpuestos[0].base_imponible) * (this.iva / 100)).toString(),
                     movimiento_id: detalleMovimiento.movimiento_id ?? '',
                     created_at: '',
                     updated_at: ''
@@ -755,7 +764,7 @@ export class MenucomprComponent implements OnInit {
                             cod_impuesto: '',
                             porcentaje: detalleMovimiento.tarifa ?? '',
                             base_imponible: '',
-                            valor: (parseFloat(res3.lstDetalleImpuestos[0].base_imponible) * (this.iva/100)).toString(),
+                            valor: (parseFloat(res3.lstDetalleImpuestos[0].base_imponible) * (this.iva / 100)).toString(),
                             movimiento_id: detalleMovimiento.movimiento_id ?? '',
                             created_at: '',
                             updated_at: ''
@@ -772,7 +781,7 @@ export class MenucomprComponent implements OnInit {
                     })
                   ).subscribe(res1 => {
                     if (res1.codigoError == 'OK') {
-                      
+
                     } else {
                       console.log('ERROR')
                     }
@@ -806,7 +815,7 @@ export class MenucomprComponent implements OnInit {
                             cod_impuesto: '',
                             porcentaje: detalleMovimiento.tarifa ?? '',
                             base_imponible: '',
-                            valor: (parseFloat(res3.lstDetalleImpuestos[0].base_imponible) * (this.iva/100)).toString(),
+                            valor: (parseFloat(res3.lstDetalleImpuestos[0].base_imponible) * (this.iva / 100)).toString(),
                             movimiento_id: detalleMovimiento.movimiento_id ?? '',
                             created_at: '',
                             updated_at: ''
@@ -834,6 +843,7 @@ export class MenucomprComponent implements OnInit {
               }
             });
           }
+
         }
         this.httpServiceMov.finalizarCompra(newMov).subscribe(res => {
           Swal.fire({
@@ -842,6 +852,7 @@ export class MenucomprComponent implements OnInit {
             text: `Se ha finalizado la compra`,
             showConfirmButton: true,
             confirmButtonText: "Ok"
+            
           }).finally(() => {
             // this.groupForm.reset();
             this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ver-compra'] } }]);
@@ -865,26 +876,71 @@ export class MenucomprComponent implements OnInit {
     if ((charCode < 48 || charCode > 57)) {
       event.preventDefault();
       //Si no tiene 10 o 49 digitos
-    
+
       return false;
     } else {
       return true;
     }
   }
 
-  saveFormStateToLocalStorage() {
-    // Guardar el estado del formulario en el local storage
-
-  }
   loadFormStateFromLocalStorage() {
-    const formData = localStorage.getItem('formData');
-    if (formData) {
-      this.attributeForm.patchValue(JSON.parse(formData));
+    //Trear el id y el nombre del proveedor seleccionado
+    const proveedorid = localStorage.getItem('proveedorid');
+    const proveedor = localStorage.getItem('proveedor');
+
+    const sustentoid = localStorage.getItem('sustentoid');
+    const comprobanteCompraid = localStorage.getItem('comprobanteCompraid');
+    const comprobante = localStorage.getItem('comprobanteCompra');
+    const sustento = localStorage.getItem('sustento');
+
+    // const sustentoid = localStorage.getItem('sustentoid');
+    // const comprobanteCompraid = localStorage.getItem('comprobanteCompraid');
+    // const compventa = localStorage.getItem('compventa');
+    // const autorizacion = localStorage.getItem('autorizacion');
+    // const fecha = localStorage.getItem('fecha');
+
+    console.log("proveedorid", proveedorid);
+    console.log("proveedor", proveedor);
+
+    if (proveedorid != null && proveedor != null) {
+      this.selectedProveedor = proveedor;
+      this.proveedorSeleccionado = true;
+      this.buttonsDisabled = !this.checkAllConditions();
     }
+
+
+
+    const c = localStorage.getItem('autorizacion') ?? '';
+    //eliminar comillas
+    this.autorizacion = c.replace(/['"]+/g, '');
+
+    const d = localStorage.getItem('comprobante') ?? '';
+
+    this.comprobante = d.replace(/['"]+/g, '');
+
+
+
+    //Activar boton
+    this.autorizacionLlena = this.autorizacion.trim() !== "" && this.autorizacion.length == 10 || this.autorizacion.length == 49;
+    this.comprobanteLleno = this.comprobante.trim() !== "";
+    this.buttonsDisabled = !this.checkAllConditions();
+
+ 
+
+
   }
-    
 
-  
 
+  //Limpiar el local storage los valores de los inputs
+  clearLocalStorage() {
+    localStorage.removeItem('proveedorid');
+    localStorage.removeItem('proveedor');
+    localStorage.removeItem('sustentoid');
+    localStorage.removeItem('comprobanteCompraid');
+    localStorage.removeItem('comprobanteCompra');
+    localStorage.removeItem('compventa');
+    localStorage.removeItem('autorizacion');
+    localStorage.removeItem('fecha');
+  }
 }
 

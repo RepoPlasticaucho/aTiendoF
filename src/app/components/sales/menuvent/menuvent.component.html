@@ -45,10 +45,11 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="ciudad">Ciudad:</label>
-                        <select class="form-control" [(ngModel)]="ciudad" id="ciudad" [disabled]="ciudad == ''">
+                        <select class="form-control" [(ngModel)]="ciudad" id="ciudad" (change)="onCityChange($event)">
                             <option *ngIf="ciudad == ''" value="0" selected>Ciudad</option>
                             <option *ngFor="let ciudad of lstCiudades" [value]="ciudad.ciudad">{{ciudad.ciudad}}</option>
                         </select>
+                        
                     </div>
                 </div>
             </div>

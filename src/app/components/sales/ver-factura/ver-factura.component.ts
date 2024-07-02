@@ -773,7 +773,7 @@ export class VerFacturaComponent implements OnInit {
       this.inputColor = '#9EF291';
       this.esRestoCero = true;
     } else {
-      this.inputColor = '#FF6262';
+      this.inputColor = '#F9ED95';
       this.esRestoCero = false;
     }
   }

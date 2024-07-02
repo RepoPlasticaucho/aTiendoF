@@ -118,7 +118,7 @@ export class AlmacenesegresosComponent implements OnInit {
       cod_doc: '',
       secuencial: ''
     }
-    localStorage.setItem('idfiscalCl', '');
+    //localStorage.setItem('idfiscalCl', '');
     this.httpServicemov.agregarMovimiento(newMovimiento).subscribe(res => {
       if (res.codigoError == "OK") {
         
