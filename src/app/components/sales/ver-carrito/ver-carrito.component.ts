@@ -54,6 +54,7 @@ export class VerCarritoComponent implements OnInit {
     this.menuvent.emiteDesdeProductoAgregado.subscribe((detalleMovimiento: DetallesMovimientoEntity) => {
       console.log("Detalle movimiento", detalleMovimiento);
 
+      
 
       this.lstInventarios.forEach(inventario => {
         if (inventario.producto_id === detalleMovimiento.producto_id) {
@@ -266,6 +267,19 @@ export class VerCarritoComponent implements OnInit {
       invent.cantidad !== undefined && invent.cantidad !== '' && invent.cantidad !== '0'
     );
 
+    //Si la cantidad es mayor a la del stock
+    const inventariosConStockInsuficiente = nuevos.filter(inventario => parseInt(inventario.cantidad!) > parseInt(inventario.stock!));
+
+    if (inventariosConStockInsuficiente.length > 0) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Ha ocurrido un error.',
+        text: 'No existe suficiente stock.',
+        showConfirmButton: false,
+      });
+      return;
+    }
+
     nuevos.forEach(nuevo => {
       // Busca si el detalle ya existe en auxlst
       const detalleExistente = this.auxlst.find(detalle => detalle.producto_id === nuevo.producto_id);
@@ -446,7 +460,7 @@ export class VerCarritoComponent implements OnInit {
                 Swal.fire({
                   icon: 'error',
                   title: 'Ha ocurrido un error3.',
-                  text: 'No existe suficiente stock.',
+                  text: 'No existe suficiente stock.2',
                   showConfirmButton: false
                 }).finally(() => resolve());
               } else {

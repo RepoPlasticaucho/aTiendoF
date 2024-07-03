@@ -717,12 +717,7 @@ export class VerFacturaComponent implements OnInit {
       }
       this.httpServiceDetallePago.agregarDetallePago(newDetallePago).subscribe(res => {
         if (res.codigoError == 'OK') {
-          Swal.fire({
-            icon: 'success',
-            title: 'Abonado',
-            text: 'Has abonado' + ' ' + '$' + ' ' + monto.value,
-            showConfirmButton: false,
-          });
+ 
           this.deshabilitarIn = true;
           const newMovimiento: MovimientosEntity = {
             id: localStorage.getItem('movimiento_id')!,

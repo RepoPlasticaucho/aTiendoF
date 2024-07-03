@@ -28,6 +28,7 @@ export class InventariosEditComponent implements OnInit {
   faTimes = faTimes;
   faSave = faSave;
   
+  idProducto = '';
   //Creación de la variable para formulario
   private codigo: string = "";
 
@@ -40,7 +41,7 @@ export class InventariosEditComponent implements OnInit {
     etiquetas: new FormControl('', Validators.required),
     stock: new FormControl('', [Validators.required]),
     precio: new FormControl('', [Validators.required]),
-
+    costo: new FormControl('', [Validators.required]),    
   });
 
   lstCategorias: CategoriasEntity[] = [];
@@ -72,6 +73,7 @@ export class InventariosEditComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
+
     // Cargar categorías
     this.httpServiceCategorias.obtenerCategorias().subscribe(res => {
       if (res.codigoError != "OK") {
@@ -95,6 +97,7 @@ export class InventariosEditComponent implements OnInit {
           showConfirmButton: false,
         });
       } else {
+
         this.codigo = res.id ?? "";
         this.inventarioForm.get("categoria")?.setValue(res.categoria);
         this.inventarioForm.get("linea")?.setValue(res.linea);
@@ -104,169 +107,18 @@ export class InventariosEditComponent implements OnInit {
         this.inventarioForm.get("etiquetas")?.setValue(res.etiquetas!);
         this.inventarioForm.get("stock")?.setValue(res.stock!);
         this.inventarioForm.get("precio")?.setValue(res.pvp2!);
-
+        this.inventarioForm.get("costo")?.setValue(res.costo!);
+        this.idProducto = res.producto_id ?? "";
       }
     });
 
-    // Obtener línea precargada
-    const categoria: CategoriasEntity = {
-      id: '',
-      categoria: this.inventarioForm.value!.categoria ?? "",
-      cod_sap: '',
-      etiquetas: '',
-      almacen_id: '',
-    }
-    this.httpServiceLineas.obtenerLineasCategoriaAdm(categoria).subscribe(res => {
-      if (res.codigoError != "OK") {
-        Swal.fire({
-          icon: 'error',
-          title: 'No se pudo obtener las líneas.',
-          text: res.descripcionError,
-          showConfirmButton: false,
-        });
-        this.lstLineas = [];
-        this.lstModelos = [];
-        this.lstModeloProductos = [];
-        this.lstProductos = [];
-      } else {
-        this.lstLineas = res.lstLineas;
-      }
-    })
+    //Bloquear despues de cargar
+    this.inventarioForm.get("categoria")?.disable();
+    this.inventarioForm.get("linea")?.disable();
+    this.inventarioForm.get("modelo")?.disable();
+    this.inventarioForm.get("modelo_producto")?.disable();
+    this.inventarioForm.get("producto")?.disable();
 
-    // Obtener modelo precargado
-
-    const linea: LineasEntity = {
-      id: '',
-      categoria_id: '',
-      categoria_nombre: '',
-      linea: this.inventarioForm.value!.linea ?? "",
-      etiquetas: '',
-      cod_sap: '',
-      almacen_id: ''
-    }
-    this.httpServiceModelos.obtenerModelosLineasAdm(linea).subscribe(res => {
-      if (res.codigoError != "OK") {
-        Swal.fire({
-          icon: 'error',
-          title: 'No se pudo obtener las líneas.',
-          text: res.descripcionError,
-          showConfirmButton: false,
-        });
-        this.lstModelos = [];
-        this.lstModeloProductos = [];
-        this.lstProductos = [];
-      } else {
-        this.lstModelos = res.lstModelos;
-      }
-    })
-
-    // Obtener modelo_producto precargado
-
-    const modelonew: ModeloProductosEntity = {
-      id: '',
-      marca_id: '',
-      marca: '',
-      modelo_id: '',
-      modelo: this.inventarioForm.value!.modelo ?? "",
-      categoria: '',
-      linea: '',
-      color_id: '',
-      color: '',
-      atributo_id: '',
-      atributo: '',
-      genero_id: '',
-      genero: '',
-      modelo_producto: '',
-      cod_sap: '',
-      cod_familia: '',
-      etiquetas: '',
-      url_image: ''
-    }
-    this.httpService.obtenerModeloProductosModelosAdm(modelonew).subscribe((res) => {
-      if (res.codigoError != 'OK') {
-        Swal.fire({
-          icon: 'error',
-          title: 'No se pudo obtener Modelos.',
-          text: res.descripcionError,
-          showConfirmButton: false,
-        });
-        this.lstModeloProductos = [];
-        this.lstProductos = [];
-      } else {
-        this.lstModeloProductos = res.lstModelo_Productos;
-      }
-    });
-
-    // Obtener producto precargado
-    const modelonew1: ModeloProductosEntity = {
-      id: '',
-      marca_id: '',
-      marca: '',
-      modelo_id: '',
-      modelo: '',
-      categoria: '',
-      linea: '',
-      color_id: '',
-      color: '',
-      atributo_id: '',
-      atributo: '',
-      genero_id: '',
-      genero: '',
-      modelo_producto: this.inventarioForm.value!.modelo_producto ?? "",
-      cod_sap: '',
-      cod_familia: '',
-      etiquetas: '',
-      url_image: ''
-    }
-    this.httpServiceProductos.obtenerProductosModeloProducto(modelonew1).subscribe((res) => {
-      if (res.codigoError != 'OK') {
-        Swal.fire({
-          icon: 'error',
-          title: 'No se pudo obtener Modelos.',
-          text: res.descripcionError,
-          showConfirmButton: false,
-        });
-        this.lstProductos = [];
-      } else {
-        this.lstProductos = res.lstProductos;
-      }
-    });
-
-    // Obtener ID del producto
-
-    const productonew: ProducAdmEntity = {
-      id: '',
-      tamanio: '',
-      nombre: this.inventarioForm.value!.producto ?? "",
-      etiquetas: '',
-      es_plasticaucho: '',
-      es_sincronizado: '',
-      modelo_producto_id: '',
-      cod_sap: '',
-      impuesto_id: '',
-      impuesto_nombre: '',
-      marca_nombre: '',
-      color_nombre: '',
-      atributo_nombre: '',
-      genero_nombre: '',
-      modelo_nombre: '',
-      modelo_producto: '',
-      categoria: '',
-      linea: ''
-    }
-    this.httpServiceProductos.obtenerProductosN(productonew).subscribe(res => {
-      if (res.codigoError != "OK") {
-        Swal.fire({
-          icon: 'error',
-          title: '2. No se pudo obtener la Sociedad.',
-          text: res.descripcionError,
-          showConfirmButton: false,
-        });
-      } else {
-        this.lstProductos2 = res.lstProductos;
-      }
-    })
-  
   }
 
   onSubmit(): void {
@@ -290,7 +142,7 @@ export class InventariosEditComponent implements OnInit {
         Producto : '',
         id : this.codigo,
         dInventario : '',
-        producto_id : this.lstProductos2[0].id ?? 0,
+        producto_id : this.idProducto,
         almacen_id : JSON.parse(localStorage.getItem('almacenid') || "[]"),
         almacen : '',
         stock : this.inventarioForm.value!.stock ?? "",
@@ -298,7 +150,8 @@ export class InventariosEditComponent implements OnInit {
         stock_optimo : '',
         fav : '',
         color : '',
-        pvp2 : this.inventarioForm.value!.precio ?? ""
+        pvp2 : this.inventarioForm.value!.precio ?? "",
+        costo : this.inventarioForm.value!.costo ?? ""
       }
       console.log(inventario);
 

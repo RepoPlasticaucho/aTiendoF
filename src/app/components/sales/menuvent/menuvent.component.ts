@@ -712,14 +712,21 @@ export class MenuventComponent implements OnInit {
             Swal.fire({
               icon: 'success',
               title: 'Guardado Exitosamente.',
-              text: `Se han guardado los cambios del detalle`,
+              text: `Se han guardado los cambios del detalle1`,
               showConfirmButton: true,
               confirmButtonText: 'Ok',
             }).then(() => {
+              //window.location.reload();
               this.cargarTablaMenuvent();
+              
               this.editarDetalle = false;
               this.detalleEditIndex = -1;
               this.detalleEditBackup = null;
+
+              //Emite el evento para actualizar el carrito
+              //this.emiteDesdeProductoAgregado.emit(this.lstDetalleMovimientos[index]);
+
+
             });
           } else {
             Swal.fire({
