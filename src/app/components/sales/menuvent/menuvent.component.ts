@@ -32,7 +32,7 @@ export class MenuventComponent implements OnInit {
 
   editarDetalle: boolean = false;
   selectTipo: boolean = false;
-  @Output() emiteDesdeProductoAgregado = new EventEmitter<any>();
+  @Output() emiteDesdeProductoAgregado = new EventEmitter<{ objeto: any, mensaje: string, valor?: any }>();
  
   ciudadSeleccionada: string = '';
 
@@ -636,7 +636,7 @@ export class MenuventComponent implements OnInit {
   eliminarDetalle(detalle: DetallesMovimientoEntity): void {
 
     //Empezar a eliminar
-    this.emiteDesdeProductoAgregado.emit(detalle);
+    this.emiteDesdeProductoAgregado.emit({objeto: detalle, mensaje: "eliminar"});
 
     this.httpService.eliminarDetallePedido(detalle).subscribe((res) => {
 
@@ -724,7 +724,9 @@ export class MenuventComponent implements OnInit {
               this.detalleEditBackup = null;
 
               //Emite el evento para actualizar el carrito
-              //this.emiteDesdeProductoAgregado.emit(this.lstDetalleMovimientos[index]);
+              //Imprime el nuevo valor
+
+              //this.emiteDesdeProductoAgregado.emit({objeto: this.lstDetalleMovimientos[index], mensaje: "editar", valor: this.lstDetalleMovimientos[index].cantidad});
 
 
             });

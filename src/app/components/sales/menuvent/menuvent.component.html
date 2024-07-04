@@ -102,10 +102,9 @@
                             <tr *ngFor="let detalleMovimientos of lstDetalleMovimientos; let i = index">
                                 <td>{{detalleMovimientos.producto_nombre}}</td>
                                 <td>
-                                    <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
+                                    <ng-container>
                                         {{detalleMovimientos.cantidad}}
                                     </ng-container>
-                                    <input class="small-input" (input)="onInput($event)" *ngIf="editarDetalle && i === detalleEditIndex" type="text" [(ngModel)]="detalleMovimientos.cantidad" (ngModelChange)="calcularPrecio(i)">
                                 </td>
                                 <td>
                                     <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">

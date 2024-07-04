@@ -51,11 +51,15 @@ export class VerCarritoComponent implements OnInit {
   ngOnInit(): void {
 
     //Suscribirse a los cambios de la lista de inventarios de menuvent
-    this.menuvent.emiteDesdeProductoAgregado.subscribe((detalleMovimiento: DetallesMovimientoEntity) => {
-      console.log("Detalle movimiento", detalleMovimiento);
+    this.menuvent.emiteDesdeProductoAgregado.subscribe((evento: { objeto: any, mensaje: string, valor?: any }) => {
 
-      
 
+      let detalleMovimiento = evento.objeto;
+      let mensaje = evento.mensaje;
+      let valor = evento.valor;
+
+
+      if(mensaje === "eliminar"){
       this.lstInventarios.forEach(inventario => {
         if (inventario.producto_id === detalleMovimiento.producto_id) {
           inventario.stock_auxiliar = (parseInt(inventario.stock_auxiliar!) + parseInt(detalleMovimiento.cantidad!)).toString();
@@ -63,8 +67,44 @@ export class VerCarritoComponent implements OnInit {
           inventario.cantidad = '';
         }
       });
+      }
+
+
+
+      // if(mensaje === "editar"){
+      //   this.lstInventarios.forEach(inventario => {
+      //     if (inventario.producto_id === detalleMovimiento.producto_id) {
+      //       //Modificar el stock auxiliar si el nuevo valor es mayor al anterior
+      //       if(valor > inventario.stock!){
+      //         return
+      //       }
+
+      //       //inventario.stock_auxiliar = (parseInt(inventario.stock!) + parseInt(inventario.cantidad!) - valor).toString();
+
+      //       //Si el valor es mayor que el inventario.calidad y menor que el stock se resta
+      //       if(valor > parseInt(inventario.cantidad!) && valor < parseInt(inventario.stock!)){
+      //         inventario.stock_auxiliar = (parseInt(inventario.stock!) - (valor - parseInt(inventario.cantidad!))).toString();
+      //       }
+
+      //       //Si el valor es menor que el inventario.calidad y menor que el stock se suma
+      //       if(valor < parseInt(inventario.cantidad!) && valor < parseInt(inventario.stock!)){
+      //         inventario.stock_auxiliar = (parseInt(inventario.stock!) + (parseInt(inventario.cantidad!) - valor)).toString();
+      //       }
+
+
+
+
+      //       inventario.cantidad = valor.toString();
+
+      //       console.log("Valor Input", valor);
+      //     }
+      //   });
+      //   }
     });
 
+
+
+    
     let cantidadAux = "";
     let inventario: InventariosEntity = {
       categoria_id: '',
@@ -269,7 +309,6 @@ export class VerCarritoComponent implements OnInit {
 
     //Si la cantidad es mayor a la del stock
     const inventariosConStockInsuficiente = nuevos.filter(inventario => parseInt(inventario.cantidad!) > parseInt(inventario.stock!));
-
     if (inventariosConStockInsuficiente.length > 0) {
       Swal.fire({
         icon: 'error',
@@ -288,6 +327,7 @@ export class VerCarritoComponent implements OnInit {
         console.log("Entra al if de detalle existenteeee");
         // Si el detalle ya existe, actualiza la cantidad
         detalleExistente.cantidad! == nuevo.cantidad;  // Asumiendo que cantidad es un número
+       //Volver a calcular  el valor unitario , el valor total y el stock auxiliar
        
         console.log("Cantidaaad1", detalleExistente.cantidad);
 
