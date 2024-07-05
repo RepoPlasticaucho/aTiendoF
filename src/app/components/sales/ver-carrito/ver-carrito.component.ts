@@ -60,13 +60,20 @@ export class VerCarritoComponent implements OnInit {
 
 
       if(mensaje === "eliminar"){
+        console.log("Entra al eliminar");
       this.lstInventarios.forEach(inventario => {
         if (inventario.producto_id === detalleMovimiento.producto_id) {
           inventario.stock_auxiliar = (parseInt(inventario.stock_auxiliar!) + parseInt(detalleMovimiento.cantidad!)).toString();
           //Vaciar el campo de cantidad
           inventario.cantidad = '';
+          inventario.productoExistente = false;
         }
-      });
+      })
+      
+      //Actualizar auxlst
+      this.auxlst = this.auxlst.filter(inventario => inventario.producto_id !== detalleMovimiento.producto_id);
+      console.log("Lista de inventarios", this.lstInventarios)
+      ;
       }
 
 
@@ -294,18 +301,19 @@ export class VerCarritoComponent implements OnInit {
 
   facturar(): void {
 
-
+  
     //Imprime lo que se va a facturar
     console.log("Se va a facturar:", this.lstInventarios
       .filter(invent => invent.cantidad !== undefined && invent.cantidad !== '' && invent.cantidad !== '0'));
 
 
-
+    
 
     // Filtra los nuevos detalles que tienen una cantidad definida y mayor a cero
     const nuevos = this.lstInventarios.filter(invent =>
       invent.cantidad !== undefined && invent.cantidad !== '' && invent.cantidad !== '0'
     );
+
 
     //Si la cantidad es mayor a la del stock
     const inventariosConStockInsuficiente = nuevos.filter(inventario => parseInt(inventario.cantidad!) > parseInt(inventario.stock!));
@@ -320,14 +328,15 @@ export class VerCarritoComponent implements OnInit {
     }
 
     nuevos.forEach(nuevo => {
+
+      //Comparar con lstInventarios 
+
       // Busca si el detalle ya existe en auxlst
       const detalleExistente = this.auxlst.find(detalle => detalle.producto_id === nuevo.producto_id);
 
       if (detalleExistente) {
-        console.log("Entra al if de detalle existenteeee");
         // Si el detalle ya existe, actualiza la cantidad
         detalleExistente.cantidad! == nuevo.cantidad;  // Asumiendo que cantidad es un número
-       //Volver a calcular  el valor unitario , el valor total y el stock auxiliar
        
         console.log("Cantidaaad1", detalleExistente.cantidad);
 
@@ -446,9 +455,14 @@ export class VerCarritoComponent implements OnInit {
                   showConfirmButton: true,
                   confirmButtonText: 'Ok',
                 }).then(() => {
+                  inventario.productoExistente = false;
+
+       
+
                   this.cerrar();
                   resolve();
                 });
+
               }, error => reject(error));
             }
           } else {

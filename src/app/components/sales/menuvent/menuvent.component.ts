@@ -661,6 +661,7 @@ export class MenuventComponent implements OnInit {
             // timer: 3000
           });
           this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+          
         } else {
           this.lstDetalleMovimientos = res.lstDetalleMovimientos;
           this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
