@@ -15,8 +15,13 @@ export class NavegationClComponent {
 
   transaccionesExpandidas = false;
   showNavbar = true; // Variable para controlar la visibilidad de la barra de navegación
-
+  nombre_comercial = this.obtenerNombreComercial();
   
+  obtenerNombreComercial() {
+    return localStorage.getItem('nombreComercial');
+  }
+
+
   toggleNavbar() {
     //Si la pantalla es pequeña, se oculta la barra de navegación
     this.showNavbar = !this.showNavbar;

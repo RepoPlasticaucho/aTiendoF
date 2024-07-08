@@ -108,6 +108,8 @@ export class AlmacenesegresosComponent implements OnInit {
   abrirVista(almacen: AlmacenesEntity) {
 
     localStorage.setItem('almacenid', almacen.idAlmacen)
+    localStorage.setItem('almacenNombreUsuario', almacen.nombre_almacen!)
+
     const newMovimiento: MovimientosEntity = {
       almacen_id: localStorage.getItem('almacenid')!,
       id: '',

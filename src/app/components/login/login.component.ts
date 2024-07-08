@@ -85,8 +85,10 @@ export class LoginComponent {
         const idsociedad = res.lstSociedades[0].idSociedad;
         const idsociedad2 = res.lstSociedades[0].sociedad_pertenece;
         const idalmacenPertenece = res.lstSociedades[0].almacen_personal_id;
+        const nombreComercial = res.lstSociedades[0].nombre_comercial;
 
         localStorage.setItem('sociedadid', idsociedad);
+        localStorage.setItem('nombreComercial', nombreComercial);
         if (res.codigoError == "OK") {
           var salt = CryptoJS.enc.Base64.parse("SXZhbiBNZWR2ZWRldg==");
           var iv = CryptoJS.enc.Hex.parse("69135769514102d0eded589ff874cacd");

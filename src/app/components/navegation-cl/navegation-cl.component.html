@@ -12,7 +12,14 @@
             </button>
         </div>
         <p align="center" style="color:aliceblue">_________________________________</p>
+        <a mat-list-item routerLink="/navegation-cl" style="color: white" >
+            <font style="font-size: 13px; text-align: right;">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Nombre Comercial:</strong>&nbsp;{{nombre_comercial}}
+            </font>
+                    </a>
         <mat-nav-list>
+          
+
             <a mat-list-item routerLink="/navegation-cl" style="color: white" (click)="closeSidenavIfSmallScreen(drawer)">
                 <span class="material-icons-outlined" style="font-size: 24px">pie_chart</span>
                 <font style="font-size: 13px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dashboard</font>

@@ -25,4 +25,5 @@ export interface DetallesMovimientoEntity {
     created_at?: string;
     tipo_movimiento?: string;
     ice?: string;
+    update_at?: string;
 }

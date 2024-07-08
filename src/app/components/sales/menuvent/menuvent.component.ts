@@ -32,6 +32,7 @@ export class MenuventComponent implements OnInit {
 
   editarDetalle: boolean = false;
   selectTipo: boolean = false;
+  nombreAlmacenUsuario: string = localStorage.getItem('almacenNombreUsuario')!;
   @Output() emiteDesdeProductoAgregado = new EventEmitter<{ objeto: any, mensaje: string, valor?: any }>();
  
   ciudadSeleccionada: string = '';
@@ -98,6 +99,7 @@ export class MenuventComponent implements OnInit {
 
 
     this.cargarTablaMenuvent();
+    console.log("lstDetalleMovimientos desde menuvent ", this.lstDetalleMovimientos)
     
 
 
@@ -526,6 +528,7 @@ export class MenuventComponent implements OnInit {
     });
   }
 
+
   cargarTablaMenuvent() {
     const newDetalle: DetallesMovimientoEntity = {
       id: '',
@@ -552,6 +555,24 @@ export class MenuventComponent implements OnInit {
         console.log("AQUI EN DATALLE MOVIMIENTO")
 
         this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+
+        //Unificar la lista updated_at y created_at
+        this.lstDetalleMovimientos.forEach((element) => {
+          if (element.update_at == "") {
+            element.update_at = element.created_at;
+          }
+        });
+
+        //Ordenar la lista por updated_at desde el mas reciente al mas antiguo
+        this.lstDetalleMovimientos.sort((a, b) => {
+          return a.update_at! < b.update_at! ? 1 : -1;
+        });
+
+        console.log("ESTA ES LA LISTA DE DETALLE MOVIMIENTO ORDENADA)", this.lstDetalleMovimientos)
+
+
+        this.emiteDesdeProductoAgregado.emit({objeto: this.lstDetalleMovimientos, mensaje: "agregar"});
+
         this.dtTrigger.next('');
         this.calcularSumaTotal();
         Swal.close();
@@ -664,6 +685,8 @@ export class MenuventComponent implements OnInit {
           
         } else {
           this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+          this.calcularSumaTotal();
+
           this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
             // Destruye la tabla existente y elimina los datos
             dtInstance.destroy();
@@ -681,7 +704,6 @@ export class MenuventComponent implements OnInit {
           // this.disableProveedor = this.lstDetalleMovimientos.length > 0;
           // this.groupForm.reset();
          
-          this.calcularSumaTotal();
 
           //window.location.reload();
           
@@ -727,7 +749,7 @@ export class MenuventComponent implements OnInit {
               //Emite el evento para actualizar el carrito
               //Imprime el nuevo valor
 
-              //this.emiteDesdeProductoAgregado.emit({objeto: this.lstDetalleMovimientos[index], mensaje: "editar", valor: this.lstDetalleMovimientos[index].cantidad});
+              this.emiteDesdeProductoAgregado.emit({objeto: this.lstDetalleMovimientos[index], mensaje: "editar", valor: this.lstDetalleMovimientos[index].cantidad});
 
 
             });

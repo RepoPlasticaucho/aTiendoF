@@ -33,6 +33,7 @@ export class VerCarritoComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
   lstInventarios: InventariosEntity[] = [];
+  lstDetalles: DetallesMovimientoEntity[] = [];
 
   costo: any;
   precio: any;
@@ -53,10 +54,21 @@ export class VerCarritoComponent implements OnInit {
     //Suscribirse a los cambios de la lista de inventarios de menuvent
     this.menuvent.emiteDesdeProductoAgregado.subscribe((evento: { objeto: any, mensaje: string, valor?: any }) => {
 
-
       let detalleMovimiento = evento.objeto;
+
+      console.log("Detalle Movimiento", detalleMovimiento);
+
       let mensaje = evento.mensaje;
       let valor = evento.valor;
+
+
+      //Agregar un nuevo producto
+      if(mensaje === "agregar"){
+        //Actualizar la lista de detalles
+        console.log("Entra al agregar");
+        this.lstDetalles = evento.objeto;
+        console.log("Lista de detalles desde vercarrito", this.lstDetalles);
+      }
 
 
       if(mensaje === "eliminar"){
@@ -301,18 +313,21 @@ export class VerCarritoComponent implements OnInit {
 
   facturar(): void {
 
-  
-    //Imprime lo que se va a facturar
-    console.log("Se va a facturar:", this.lstInventarios
-      .filter(invent => invent.cantidad !== undefined && invent.cantidad !== '' && invent.cantidad !== '0'));
-
-
     
-
     // Filtra los nuevos detalles que tienen una cantidad definida y mayor a cero
     const nuevos = this.lstInventarios.filter(invent =>
       invent.cantidad !== undefined && invent.cantidad !== '' && invent.cantidad !== '0'
     );
+
+    //Si el producto_id ya existe en auxlst y tiene la misma cantidad, no se agrega
+    this.lstDetalles.forEach(detalle => {
+      const detalleExistente = this.auxlst.find(det => det.producto_id === detalle.producto_id);
+      if (detalleExistente) {
+        if (detalleExistente.cantidad === detalle.cantidad) {
+          nuevos.splice(nuevos.findIndex(nuevo => nuevo.producto_id === detalle.producto_id), 1);
+        }
+      }
+    });
 
 
     //Si la cantidad es mayor a la del stock
@@ -338,18 +353,10 @@ export class VerCarritoComponent implements OnInit {
         // Si el detalle ya existe, actualiza la cantidad
         detalleExistente.cantidad! == nuevo.cantidad;  // Asumiendo que cantidad es un número
        
-        console.log("Cantidaaad1", detalleExistente.cantidad);
-
-
 
         detalleExistente.productoExistente = true;
         this.crearDetalle(detalleExistente).then(() => {
-          // Emitir el detalle modificado
-          console.log("Va a emitir el detalle modificado");
-
-
-          console.log("Este es el detalle modificado", detalleExistente);
-
+          console.log("Entra al if de detalle existente");
           this.prAgregado.emit([detalleExistente]);
 
           //Actualizar el stock de la lista de inventarios
@@ -447,6 +454,7 @@ export class VerCarritoComponent implements OnInit {
                 }
               }, error => reject(error));
             } else {
+
               this.httpServiceDetalle.eliminarDetallePedidoVenta(newDetalle).subscribe(res => {
                 Swal.fire({
                   icon: 'success',

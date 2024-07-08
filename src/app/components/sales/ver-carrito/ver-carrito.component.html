@@ -37,7 +37,7 @@
             <td>{{ inventario.Producto }}</td>
             <td>
               <input class="cool-input" (input)="onInput($event)" type="text" id="cantidad" [(ngModel)]="inventario.cantidad" style="max-width: 100%; width: 100%;"
-                (keyup.enter)="onEnter($event)">
+                (keyup.enter)="onEnter($event)"  autocomplete="off">
               
             </td>
             <td>{{ inventario.pvp2 }}</td>
