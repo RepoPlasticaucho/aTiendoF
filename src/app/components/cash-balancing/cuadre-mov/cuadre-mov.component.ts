@@ -9,7 +9,9 @@ import { MovimientosEntity } from 'src/app/models/movimientos';
 import { MenuventComponent } from '../../all_components';
 import { MovimientosService } from 'src/app/services/movimientos.service';
 import * as XLSX from 'xlsx';
-
+import { FormasPagoServiceSociedad } from 'src/app/services/formaspagosociedad.service';
+import { FormasPagoSociedadEntity } from 'src/app/models/formas-pago-sociedad';
+import { SociedadesEntity } from 'src/app/models/sociedades';
 
 @Component({
   selector: 'app-cuadre-mov',
@@ -32,11 +34,41 @@ export class CuadreMovComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<MenuventComponent>,
     private router: Router,
-    private httpsMovimientosService: MovimientosService) {
+    private httpsMovimientosService: MovimientosService,
+    private formasPagoServiceSociedad: FormasPagoServiceSociedad
+  ) {
     this.tipoPago = data.tipoPago;
   }
 
   ngOnInit(): void {
+
+    //1.Obtener las formas de pago de la sociedad
+    
+    const sociedadid: SociedadesEntity = {
+      idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
+      idGrupo: '',
+      nombre_comercial: '',
+      id_fiscal: '',
+      email: '',
+      tipo_ambienteid: '',
+      telefono: '',
+      password: '',
+      funcion: '',
+      razon_social: '',
+      url_certificado: '',
+      clave_certificado: ''
+    }
+
+
+    this.formasPagoServiceSociedad.obtenerFormasPago(sociedadid).subscribe((res) => {
+      if (res.codigoError != 'OK') {
+        
+      } else {
+        console.log("Aqui formas de pago", res.lstFormasPagoSociedad)
+      }
+    });
+
+
     this.dtOptions = {
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"

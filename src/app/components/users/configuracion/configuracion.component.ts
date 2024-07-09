@@ -87,8 +87,7 @@ export class ConfiguracionComponent implements OnInit {
 
   ngOnInit(): void {
 
-    //Obtener las formas de pago
-    console.log("entro al metodo")
+
     this.formasPagoService.obtenerFormasPago().subscribe(res => {
 
       try {
