@@ -9,6 +9,10 @@ import { ImagenesService } from 'src/app/services/imagenes.service';
 import { SociedadesService } from 'src/app/services/sociedades.service';
 import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
+import { FormasPagoService } from 'src/app/services/formas-pago.service';
+import { FormasPagoEntity } from 'src/app/models/formas-pago';
+import { FormasPagoServiceSociedad } from 'src/app/services/formaspagosociedad.service';
+import { FormasPagoSociedadEntity } from 'src/app/models/formas-pago-sociedad';
 
 @Component({
   selector: 'app-configuracion',
@@ -28,23 +32,23 @@ export class ConfiguracionComponent implements OnInit {
 
   imageUrl: string = "";
   imageUrlAux: any =
-  'https://calidad.atiendo.ec/eojgprlg/ModeloProducto/producto.png';
-imageBase64: string = '';
-imageName: string = '';
+    'https://calidad.atiendo.ec/eojgprlg/ModeloProducto/producto.png';
+  imageBase64: string = '';
+  imageName: string = '';
 
 
   //Funcion para ver si es facturador
-  comprobarRol(){
-    if(this.router.url.includes("facturador")){
+  comprobarRol() {
+    if (this.router.url.includes("facturador")) {
       this.rol = true;
     }
   }
 
   //Funcion para ver si tiene
-  comprobarRazonSocial(){
-    if(this.corporationForm.get("razonSocial")?.value != "" && this.corporationForm.get("razonSocial")?.value != null){
+  comprobarRazonSocial() {
+    if (this.corporationForm.get("razonSocial")?.value != "" && this.corporationForm.get("razonSocial")?.value != null) {
       this.razonSocialInclude = true;
-    }else{
+    } else {
       this.razonSocialInclude = false;
     }
   }
@@ -71,13 +75,70 @@ imageName: string = '';
   certificadoUrl: any = "https://calidad.atiendo.ec/eojgprlg/Certificados/certificate.pfx";
   certificadoBase64: string = "";
   certificadoName: string = "";
+  lstFormasPago: FormasPagoEntity[] = [];
+  lstFormasPagoSociedad: FormasPagoSociedadEntity[] = [];
 
   constructor(private readonly httpService: SociedadesService,
     private httpServiceImage: ImagenesService, private router: Router,
     private authService: AuthenticationService,
+    private formasPagoService: FormasPagoService,
+    private formasPagoSociedadService: FormasPagoServiceSociedad,
     private location: Location) { }
 
   ngOnInit(): void {
+
+    //Obtener las formas de pago
+    console.log("entro al metodo")
+    this.formasPagoService.obtenerFormasPago().subscribe(res => {
+
+      try {
+        this.lstFormasPago = res.lstFormasPago;
+
+        const sociedadid: SociedadesEntity = {
+          idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
+          idGrupo: '',
+          nombre_comercial: '',
+          id_fiscal: '',
+          email: '',
+          tipo_ambienteid: '',
+          telefono: '',
+          password: '',
+          funcion: '',
+          razon_social: '',
+          url_certificado: '',
+          clave_certificado: ''
+        }
+    
+        this.formasPagoSociedadService.obtenerFormasPago(sociedadid).subscribe(res => {
+          try {
+            this.lstFormasPagoSociedad = res.lstFormasPagoSociedad;
+            console.log("Formas de pago sociedadddddd: ", this.lstFormasPagoSociedad)
+    
+            //Despues de obtener las formas de pago tanto de la sociedad como las generales, se debe comparar y marcar las que ya tiene asignadas
+            this.lstFormasPago.forEach(element => {
+              this.lstFormasPagoSociedad.forEach(element2 => {
+                if (parseInt(element.codigo) == parseInt(element2.forma_pago_id)) {
+                  element.checked = true;
+                }
+              });
+            });
+    
+          } catch (error) {
+            console.log("Error en la asignación de la forma de pago")
+          }
+        })
+        console.log("Formas de pago: ", this.lstFormasPago)
+      }
+      catch (error) {
+        console.log("Error en la asignación de la forma de pago")
+      }
+      console.log("Formas de pago: ", this.lstFormasPago)
+    })
+
+   
+
+
+
 
     this.comprobarRol();
 
@@ -119,7 +180,7 @@ imageName: string = '';
       }
       // console.log(res);
       this.fun = res.lstSociedades[0].funcion;
-    this.comprobarRazonSocial();
+      this.comprobarRazonSocial();
 
     })
 
@@ -145,7 +206,7 @@ imageName: string = '';
     const passactual = this.corporationForm.value!.razonSocial ?? "";
     const emailCert = this.emailForm.value!.email ?? "";
     const urlCertificado = this.corporationForm.value!.urlCertificado ?? "";
-    
+
 
     console.log(passnuevo + " - " + passactual + " - " + emailCert)
 
@@ -155,7 +216,7 @@ imageName: string = '';
       this.corporationForm.markAllAsTouched();
     } else {
 
-      if (!this.razonSocialInclude){
+      if (!this.razonSocialInclude) {
         console.log("entro al if principal2")
         //Agregar el certificado y la clave
         console.log("asdsd")
@@ -218,71 +279,71 @@ imageName: string = '';
 
         //Obtener el email de la sociedad
         this.httpService.obtenerEmailPorIdSociedad(sociedad).subscribe(res => {
-          if(res != null || res != undefined || res != ""){
+          if (res != null || res != undefined || res != "") {
             this.emailAux = res;
             console.log("ESTE ES EL CERTIFICADONAME ", this.certificadoName)
             this.httpServiceImage
-            .agregarCertificado(imageEntity).subscribe(res1 => {
-              if (res1.codigoError == 'OK') {
-                const userEntity: SociedadesEntity = {
-                  idGrupo: '',
-                  nombre_comercial: '',
-                  tipo_ambienteid: '',
-                  id_fiscal: '',
-                  email: this.emailAux || "",
-                  telefono: '',
-                  password: '',
-                  funcion: '',
-                  idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
-                  razon_social: '',
-                  url_certificado: this.certificadoName == '' ? "" : this.certificadoName,
-                  clave_certificado: passnuevo, // cambiar por new
-                  pass_certificado: '',// activar validacion
-                  email_certificado: emailCert
-                }
-  
-                console.log("entro al OK")
-                console.log("Estees el userEntity ", userEntity)
-                this.httpService.actualizarCertificado(userEntity).subscribe(res => {
-                  if (res.codigoError == "OK") {
-                    Swal.fire({
-                      icon: 'success',
-                      title: 'Actualizado Correctamente.',
-                      text: `Se ha actualizado la información`,
-                      showConfirmButton: true,
-                      confirmButtonText: "Ok"
-                    }).finally(() => {
-                      switch (this.fun) {
-                        case "admin":
-                          this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['cofiguracion-user'] } }]);
-                          break;
-                        case "client":
-                          this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['cofiguracion-user'] } }]);
-                          break;
-                      }
-  
-                    });
-  
-  
-                  } else {
-                    Swal.fire({
-                      icon: 'error',
-                      title: 'Ha ocurrido un error2.',
-                      text: res.descripcionError,
-                      showConfirmButton: false,
-                    });
+              .agregarCertificado(imageEntity).subscribe(res1 => {
+                if (res1.codigoError == 'OK') {
+                  const userEntity: SociedadesEntity = {
+                    idGrupo: '',
+                    nombre_comercial: '',
+                    tipo_ambienteid: '',
+                    id_fiscal: '',
+                    email: this.emailAux || "",
+                    telefono: '',
+                    password: '',
+                    funcion: '',
+                    idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
+                    razon_social: '',
+                    url_certificado: this.certificadoName == '' ? "" : this.certificadoName,
+                    clave_certificado: passnuevo, // cambiar por new
+                    pass_certificado: '',// activar validacion
+                    email_certificado: emailCert
                   }
-                });
-              }
-            })
-  
-  
+
+                  console.log("entro al OK")
+                  console.log("Estees el userEntity ", userEntity)
+                  this.httpService.actualizarCertificado(userEntity).subscribe(res => {
+                    if (res.codigoError == "OK") {
+                      Swal.fire({
+                        icon: 'success',
+                        title: 'Actualizado Correctamente.',
+                        text: `Se ha actualizado la información`,
+                        showConfirmButton: true,
+                        confirmButtonText: "Ok"
+                      }).finally(() => {
+                        switch (this.fun) {
+                          case "admin":
+                            this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['cofiguracion-user'] } }]);
+                            break;
+                          case "client":
+                            this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['cofiguracion-user'] } }]);
+                            break;
+                        }
+
+                      });
+
+
+                    } else {
+                      Swal.fire({
+                        icon: 'error',
+                        title: 'Ha ocurrido un error2.',
+                        text: res.descripcionError,
+                        showConfirmButton: false,
+                      });
+                    }
+                  });
+                }
+              })
+
+
           }
         }
         )
         console.log("ESTE ES EL EMAIL AUX ", this.emailAux)
 
-      
+
       }
     }
   }
@@ -294,54 +355,54 @@ imageName: string = '';
     if (!this.emailForm.valid) {
       this.emailForm.markAllAsTouched();
     } else {
-              const userEntity: SociedadesEntity = {
-                idGrupo: '',
-                nombre_comercial: '',
-                tipo_ambienteid: '',
-                id_fiscal: '',
-                email: '',
-                telefono: '',
-                password: '',
-                funcion: '',
-                idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
-                razon_social: '',
-                url_certificado: '',
-                clave_certificado: '', // cambiar por new
-                pass_certificado: passemailnew,// activar validacion
-                email_certificado: email
-              }
-              this.httpService.actualizarClaveCorreo(userEntity).subscribe(res => {
-                if (res.codigoError == "OK") {
-                  Swal.fire({
-                    icon: 'success',
-                    title: 'Actualizado Correctamente.',
-                    text: `Se ha actualizado la información`,
-                    showConfirmButton: true,
-                    confirmButtonText: "Ok"
-                  }).finally(() => {
-                    switch (this.fun) {
-                      case "admin":
-                        this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['cofiguracion-user'] } }]);
-                        break;
-                      case "client":
-                        this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['cofiguracion-user'] } }]);
-                        break;
-                    }
+      const userEntity: SociedadesEntity = {
+        idGrupo: '',
+        nombre_comercial: '',
+        tipo_ambienteid: '',
+        id_fiscal: '',
+        email: '',
+        telefono: '',
+        password: '',
+        funcion: '',
+        idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
+        razon_social: '',
+        url_certificado: '',
+        clave_certificado: '', // cambiar por new
+        pass_certificado: passemailnew,// activar validacion
+        email_certificado: email
+      }
+      this.httpService.actualizarClaveCorreo(userEntity).subscribe(res => {
+        if (res.codigoError == "OK") {
+          Swal.fire({
+            icon: 'success',
+            title: 'Actualizado Correctamente.',
+            text: `Se ha actualizado la información`,
+            showConfirmButton: true,
+            confirmButtonText: "Ok"
+          }).finally(() => {
+            switch (this.fun) {
+              case "admin":
+                this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['cofiguracion-user'] } }]);
+                break;
+              case "client":
+                this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['cofiguracion-user'] } }]);
+                break;
+            }
 
-                  });
+          });
 
 
-                } else {
-                  Swal.fire({
-                    icon: 'error',
-                    title: 'Ha ocurrido un error3.',
-                    text: res.descripcionError,
-                    showConfirmButton: false,
-                  });
-                }
-              });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Ha ocurrido un error3.',
+            text: res.descripcionError,
+            showConfirmButton: false,
+          });
+        }
+      });
 
-      
+
     }
   }
 
@@ -359,9 +420,9 @@ imageName: string = '';
     }
   }
 
-  onPass1(): void{
-      this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['cofiguracion-user'] } }]);
-    
+  onPass1(): void {
+    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['cofiguracion-user'] } }]);
+
   }
 
   logout() {
@@ -372,99 +433,125 @@ imageName: string = '';
 
   showPassword: { [key: string]: boolean } = {};
 
-togglePassword(field: string) {
+  togglePassword(field: string) {
     this.showPassword[field] = !this.showPassword[field];
-}
+  }
 
-actualizarImagen(){
+  actualizarImagen() {
 
-  console.log("entro al metodo")
+    console.log("entro al metodo")
 
-  if (this.imageName != '') {
+    if (this.imageName != '') {
 
-    console.log("entro al metodo2")
+      console.log("entro al metodo2")
 
-    const imageEntity: ImagenesEntity = {
-      imageBase64: this.imageBase64,
-      nombreArchivo: this.imageName,
-      codigoError: '',
-      descripcionError: '',
-      nombreArchivoEliminar: this.imageNameOriginal,
-    };
+      const imageEntity: ImagenesEntity = {
+        imageBase64: this.imageBase64,
+        nombreArchivo: this.imageName,
+        codigoError: '',
+        descripcionError: '',
+        nombreArchivoEliminar: this.imageNameOriginal,
+      };
 
-    const sociedadEntity: SociedadesEntity = {
-      idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
-      idGrupo: '',
-      nombre_comercial: '',
-      id_fiscal: '',
-      email: '',
-      tipo_ambienteid: '',
-      telefono: '',
-      password: '',
-      funcion: '',
-      razon_social: '',
-      url_certificado: '',
-      clave_certificado: '',
-      url_logo:this.imageName == '' ? this.imageUrl : this.imageName
-    };
+      const sociedadEntity: SociedadesEntity = {
+        idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
+        idGrupo: '',
+        nombre_comercial: '',
+        id_fiscal: '',
+        email: '',
+        tipo_ambienteid: '',
+        telefono: '',
+        password: '',
+        funcion: '',
+        razon_social: '',
+        url_certificado: '',
+        clave_certificado: '',
+        url_logo: this.imageName == '' ? this.imageUrl : this.imageName
+      };
 
-    this.httpServiceImage
-    .agregarImagenLS(imageEntity)
-    .subscribe((res) => {
-      if (res.codigoError == "OK") {
-        console.log("Se agrego la imagen")
-        sociedadEntity.url_logo = imageEntity.nombreArchivo;
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Ha ocurrido un error.',
-          text: res.descripcionError,
-          showConfirmButton: false,
-        });
-      }
-    });
-
-    this.httpService.actualizarSociedadImagen(sociedadEntity).subscribe((res) => {
-      if (res.codigoError == "OK") {
-        Swal.fire({
-          icon: 'success',
-          title: 'Actualizado Correctamente.',
-          text: `Se ha actualizado la información`,
-          showConfirmButton: true,
-          confirmButtonText: "Ok"
-        }).finally(() => {
-          switch (this.fun) {
-            case "admin":
-              this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['cofiguracion-user'] } }]);
-              break;
-            case "client":
-              this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['cofiguracion-user'] } }]);
-              break;
+      this.httpServiceImage
+        .agregarImagenLS(imageEntity)
+        .subscribe((res) => {
+          if (res.codigoError == "OK") {
+            console.log("Se agrego la imagen")
+            sociedadEntity.url_logo = imageEntity.nombreArchivo;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Ha ocurrido un error.',
+              text: res.descripcionError,
+              showConfirmButton: false,
+            });
           }
+        });
 
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Ha ocurrido un error.',
-          text: res.descripcionError,
-          showConfirmButton: false,
-        });
-      }
-    });
-    
+      this.httpService.actualizarSociedadImagen(sociedadEntity).subscribe((res) => {
+        if (res.codigoError == "OK") {
+          Swal.fire({
+            icon: 'success',
+            title: 'Actualizado Correctamente.',
+            text: `Se ha actualizado la información`,
+            showConfirmButton: true,
+            confirmButtonText: "Ok"
+          }).finally(() => {
+            switch (this.fun) {
+              case "admin":
+                this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['cofiguracion-user'] } }]);
+                break;
+              case "client":
+                this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['cofiguracion-user'] } }]);
+                break;
+            }
+
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Ha ocurrido un error.',
+            text: res.descripcionError,
+            showConfirmButton: false,
+          });
+        }
+      });
+
+    }
+
+
+
+
+
+  }
+  eliminarImagen() {
+    this.imageUrl = this.imageUrlAux;
+    this.imageName = this.imageUrl;
   }
 
 
+  changeCheckbox(event: any, formaPago: FormasPagoEntity) {
+
+    if(event.target.checked == false){
+
+    console.log("Entro al metodo de eliminar forma de pago")
+    //si no esta marcado se elimina
+    const idSociedad = JSON.parse(localStorage.getItem('sociedadid') || "[]");
+    const idSociedadString = idSociedad.toString();
+    this.formasPagoSociedadService.eliminarFormaSociedad(formaPago.codigo, idSociedadString).subscribe(res => {
+      console.log("Eliminado correctamente")
+    });
+    }else{
+      console.log("Entro al metodo de GUARDAR forma de pago")
+
+     //si esta marcado se inserta
+    const idSociedad = JSON.parse(localStorage.getItem('sociedadid') || "[]");
+    const idSociedadString = idSociedad.toString();
+    this.formasPagoSociedadService.insertarFormaSociedad(formaPago.codigo, idSociedadString).subscribe(res => {
+    });
+    }
 
 
 
-}
-eliminarImagen() {
-  this.imageUrl = this.imageUrlAux;
-  this.imageName = this.imageUrl;
-}
 
+  }
 
 
 

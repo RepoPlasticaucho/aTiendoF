@@ -12,4 +12,5 @@ export interface FormasPagoEntity {
     fecha_fin: string;
     created_at: string;
     updated_at: string;
+    checked?: boolean;
 }
