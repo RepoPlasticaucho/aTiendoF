@@ -125,9 +125,9 @@ export class MovimientosService {
   obtenerMovimientosAlmacenc(movimiento: MovimientosEntity): Observable<Movimientos> {
     return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientosAlmacenC`, movimiento );
   }
-
+//APIURLSOME
   crearXML(movimiento: string): Observable<String> {
-    return this.http.get<String>(`${environment.apiUrlSome}movimientos/CrearXML?movimiento=`+movimiento );
+    return this.http.get<String>(`${environment.apiUrl}movimientos/CrearXML?movimiento=`+movimiento );
   }
 
   actualizarCLAVEACCESO(movimiento: MovimientosEntity): Observable<Movimientos> {

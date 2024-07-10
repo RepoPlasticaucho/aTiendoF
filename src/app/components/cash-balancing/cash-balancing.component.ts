@@ -8,10 +8,13 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { AlmacenesService } from 'src/app/services/almacenes.service';
 import { AlmacenesEntity } from 'src/app/models/almacenes';
 import { SociedadesEntity } from 'src/app/models/sociedades';
+import { FormasPagoSociedadEntity } from 'src/app/models/formas-pago-sociedad';
 import { DetallesPagoService } from 'src/app/services/detalles-pago.service';
 import { FormasPagoEntity } from 'src/app/models/formas-pago';
 import { MatDialog } from '@angular/material/dialog';
 import { CuadreMovComponent } from './cuadre-mov/cuadre-mov.component';
+import { FormasPagoServiceSociedad } from 'src/app/services/formaspagosociedad.service';
+
 
 @Component({
   selector: 'app-cash-balancing',
@@ -37,10 +40,12 @@ export class CashBalancingComponent implements OnInit {
   sumaTotal: any;
   nombreAlmacen: string = '';
   mostrarDiv: boolean = false;
+  formasPagoSociedad: FormasPagoSociedadEntity[] = [];
 
   constructor(private readonly httpServiceAlm: AlmacenesService,
     private dialog: MatDialog,
     private readonly httpService: DetallesPagoService,
+    private readonly httpServiceForma: FormasPagoServiceSociedad,
     private router: Router) { }
 
   filtroForm = new FormGroup({
@@ -208,6 +213,20 @@ export class CashBalancingComponent implements OnInit {
       password: '',
       funcion: ''
     }
+
+    //Obtener formas de pago de la sociedad
+    this.httpServiceForma.obtenerFormasPago(sociedadNew).subscribe(res => {
+      if (res.codigoError != 'OK') {
+        console.log("Error al obtener formas de pago")
+      } else {
+        this.formasPagoSociedad = res.lstFormasPagoSociedad;
+        console.log("Esta es la data de formas de pagoooopppp", this.formasPagoSociedad)
+      }
+    })
+
+    
+
+    
     const almacen: AlmacenesEntity = {
       idAlmacen: '',
       sociedad_id: localStorage.getItem('sociedadid')!,

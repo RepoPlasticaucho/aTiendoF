@@ -66,6 +66,21 @@
         </table>
     </div>
     
+    <div class="card-body">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered table-striped vertical-table">
+           <!-- Mapear y mostrar cada uno de los nombres de la forma pago de la sociedad -->
+            
+            <tbody style="color: #000000;">
+                <tr class="custom-table" *ngFor="let formaPago of formasPagoSociedad; let i = index" (click)="verDetalleMovimiento('5')">
+                    <th style="width: 33%; background-color: rgb(205, 205, 223);">{{formaPago.nombreFormaPago}}</th>
+                    <td>$ {{sumaTotal}}</td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+    
+
     <div class="icon-container">
         <fa-icon [icon]="faMoneyBillAlt" [size]="'3x'" class="icono-input custom-icon" (click)="verDetalleMovimiento('4')"></fa-icon>
         <label for="total" class="label-input">TOTAL VENTAS:</label>
