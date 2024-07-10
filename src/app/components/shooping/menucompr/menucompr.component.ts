@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { Subject, finalize } from 'rxjs';
-import { faShoppingBag, faSave, faList, faTimes, faCartPlus, faEdit, faTrashAlt, faMoneyBillAlt, faCheck, faPlus, faFolderPlus } from '@fortawesome/free-solid-svg-icons';
+import { faShoppingBag, faSave, faList, faTimes, faCartPlus, faEdit, faTrashAlt, faMoneyBillAlt, faCheck, faPlus, faFolderPlus, faArchive } from '@fortawesome/free-solid-svg-icons';
 import { DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
 import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service';
 import { CompraNuevoComponent } from '../compra-nuevo/compra-nuevo.component';
@@ -45,6 +45,7 @@ export class MenucomprComponent implements OnInit {
   faTimes = faTimes;
   faCheck = faCheck;
   faSave = faSave;
+  faArchive = faArchive;
   faPlus = faPlus;
   faCartPlus = faCartPlus;
   faEdit = faEdit;

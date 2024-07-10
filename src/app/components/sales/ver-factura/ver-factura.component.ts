@@ -9,6 +9,8 @@ import { faShoppingCart, faEdit, faTrashAlt, faMoneyBillAlt, faFileInvoice, faCh
 import { Subject, finalize } from 'rxjs';
 import Swal from 'sweetalert2';
 import { SociedadesEntity } from 'src/app/models/sociedades';
+import { FormasPagoSociedadEntity } from 'src/app/models/formas-pago-sociedad';
+
 import { TercerosService } from 'src/app/services/terceros.service';
 import { TercerosEntity } from 'src/app/models/terceros';
 import { FormasPagoService } from 'src/app/services/formas-pago.service';
@@ -20,6 +22,7 @@ import { AlmacenesService } from 'src/app/services/almacenes.service';
 import { SriwsService } from 'src/app/services/sriws.service';
 import { DataTableDirective } from 'angular-datatables';
 import { environment } from 'src/environments/environment.prod';
+import { FormasPagoServiceSociedad } from 'src/app/services/formaspagosociedad.service';
 
 @Component({
   selector: 'app-ver-factura',
@@ -70,6 +73,8 @@ export class VerFacturaComponent implements OnInit {
   detalleEditIndex: number = -1;
   detalleEditBackup: DetallesPagoEntity | null = null;
   valorAnterior: string = '';
+  lstFormasPagoSociedad: FormasPagoSociedadEntity[] = [];
+  lstFormasPagoAux: FormasPagoEntity[] = [];
 
   iva=environment.iva;
 
@@ -81,6 +86,7 @@ export class VerFacturaComponent implements OnInit {
     private readonly httpServiceAlmacen: AlmacenesService,
     private readonly httpServiceTercero: TercerosService,
     private readonly httpServiceForma: FormasPagoService,
+    private readonly httpServiceFormaSociedad: FormasPagoServiceSociedad,
     private router: Router) { }
 
   ngOnInit(): void {
@@ -108,7 +114,35 @@ export class VerFacturaComponent implements OnInit {
     }
     this.httpServiceForma.obtenerFormasPago().subscribe(res => {
       if (res.codigoError == 'OK') {
-        this.lstFormasPago = res.lstFormasPago;
+        this.lstFormasPagoAux = res.lstFormasPago;
+
+        const sociedad: SociedadesEntity = {
+          idSociedad: localStorage.getItem('sociedadid')!,
+          razon_social: '',
+          nombre_comercial: '',
+          id_fiscal: '',
+          email: '',
+          telefono: '',
+          password: '',
+          funcion: '',
+          tipo_ambienteid: '',
+          idGrupo: ''
+        }
+        this.httpServiceFormaSociedad.obtenerFormasPago(sociedad).subscribe(res => {
+          if (res.codigoError == 'OK') {
+            this.lstFormasPagoSociedad = res.lstFormasPagoSociedad;
+            //Recorrer lstFormasPagoAux y solo sacar los que tengan el mismo codigo de lstFormasPagoSociedad
+            this.lstFormasPago = this.lstFormasPagoAux.filter((item) => {
+              return this.lstFormasPagoSociedad.some((item2) => {
+                return parseInt(item.codigo) === parseInt(item2.forma_pago_id);
+              });
+            });
+
+          } else {
+            console.log('ERROR')
+          }
+        });
+
       } else {
         Swal.fire({
           icon: 'info',
@@ -118,6 +152,11 @@ export class VerFacturaComponent implements OnInit {
         });
       }
     });
+
+ 
+
+
+
     const newDetalle: DetallesMovimientoEntity = {
       id: '',
       producto_nombre: '',
