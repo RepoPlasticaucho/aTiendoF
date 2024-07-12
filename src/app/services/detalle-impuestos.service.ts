@@ -13,7 +13,8 @@ const initDetail: DetalleImpuestosEntity = {
   valor: '',
   created_at: '',
   updated_at: '',
-  movimiento_id: ''
+  movimiento_id: '',
+  codigo_tarifa: '',
 }
 
 @Injectable({

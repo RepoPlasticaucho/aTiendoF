@@ -14,4 +14,5 @@ export interface DetalleImpuestosEntity {
     created_at: string;
     updated_at: string;
     movimiento_id?: string;
+    codigo_tarifa?: string;
 }

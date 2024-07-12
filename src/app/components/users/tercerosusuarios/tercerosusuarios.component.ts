@@ -59,21 +59,20 @@ export class TercerosusuariosComponent implements OnInit {
       provincia: '',
       ciudadid: ''
     }
-    this.httpService.obtenerTerceros(tercero).subscribe(res => {
+
+    //
+    this.httpService.obtenerTodosTerceros(tercero).subscribe(res => {
       if (res.codigoError != "OK") {
-        Swal.fire({
-          icon: 'error',
-          title: 'Ha ocurrido un error.',
-          text: res.descripcionError,
-          showConfirmButton: false,
-          // timer: 3000
-        });
+    
       } else {
-        this.lstTerceros = res.lstTerceros;
         this.dtTrigger.next('');
-        console.log(this.lstTerceros);
+        this.lstTerceros = res.lstTerceros;
+
+        console.log("AQUI TODOS TERCEROOOS", this.lstTerceros);
       }
     })
+
+
 
   }
 

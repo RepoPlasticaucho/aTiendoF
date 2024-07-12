@@ -57,8 +57,7 @@ export class DashboardClComponent {
         { title: 'Pedido Sugerido', cols: 1, rows: 1, name: "los pedidos sugeridos a Platicaucho", figure: "widgets", dir: "navegation-cl/(contentClient:pedido-sugeridos)"},
         { title: 'Movimientos', cols: 1, rows: 1, name: "los movimientos", figure: "monitor" ,  dir: "navegation-cl/(contentClient:movimientos)"},
         { title: 'Almacenes', cols: 1, rows: 1, name: "los almacenes", figure: "location_city", dir: "navegation-cl/(contentClient:almacenes)" },
-        { title: 'Terceros', cols: 1, rows: 1, name: "los terceros", figure: "person", dir: "navegation-cl/(contentClient:tercerosalmacen)" },
-        { title: 'Plasticaucho', cols: 1, rows: 1, name: "plasticaucho", figure: "book" , dir: "navegation-cl/(contentClient:almaceningresos)"},
+        { title: 'Terceros', cols: 1, rows: 1, name: "los terceros", figure: "person", dir: "navegation-cl/(contentClient:tercerosusuarios)" },
         { title: 'Proveedores', cols: 1, rows: 1, name: "los proveedores", figure: "supervisor_account", dir: "navegation-cl/(contentClient:proveedores)" },
         { title: 'Personal', cols: 1, rows: 1, name: "el personal", figure: "supervisor_account", dir: "navegation-cl/(contentClient:personal)" },
 

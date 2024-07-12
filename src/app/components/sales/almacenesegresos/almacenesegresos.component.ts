@@ -61,14 +61,6 @@ export class AlmacenesegresosComponent implements OnInit {
         },
       },
 
-      initComplete: function () {
-        $('#dtdt tbody').on('click', '.ver-icon', function () {
-          console.log('ver-icon');
-          const data = $(this).closest('span').data('almacen');
-          component.abrirVista(data);
-          return;
-        });
-      }
 
     }
 
@@ -104,6 +96,9 @@ export class AlmacenesegresosComponent implements OnInit {
     })
 
   }
+
+
+  
 
   abrirVista(almacen: AlmacenesEntity) {
 
@@ -150,11 +145,7 @@ export class AlmacenesegresosComponent implements OnInit {
           if(ruta.includes('navegation-facturador')){
             this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['menuvent'] } }]);
           }
-
           
-
-          
-
         }
       })
     })

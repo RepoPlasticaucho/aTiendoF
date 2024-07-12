@@ -321,6 +321,52 @@ export class NuevoProductoComponent implements OnInit {
               costo: this.modelProductForm.value!.costo ?? "",
               updated_at: ''
             }
+
+            //Si el precio es menor que el costo preguntar si esta seguro de guardar
+            if(parseFloat(newProdProv.precio) < parseFloat(newProdProv.costo!)){  
+
+              //Preguntar si esta seguro de guardar
+              Swal.fire({
+                icon: 'question',
+                title: '¿Esta seguro de guardar?',
+                showDenyButton: true,
+                confirmButtonText: 'Si',
+                denyButtonText: 'No',
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.httpServiceProveedoresProd.agregarProductosProv(newProdProv).subscribe(res1 => {
+                    if (res1.codigoError == "OK") {
+                      Swal.fire({
+                        icon: 'success',
+                        title: 'Guardado Exitosamente.',
+                        text: `Se ha creado el Producto ${this.modelProductForm.value.producto}`,
+                        showConfirmButton: true,
+                        confirmButtonText: "Ok"
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                          this.cerrarDialog();
+                        }
+                      });
+                    } else {
+                      Swal.fire({
+                        icon: 'error',
+                        title: 'Ha ocurrido un error.',
+                        text: res.descripcionError,
+                        showConfirmButton: false,
+                      });
+                    }
+                  });
+                }
+              });
+
+            }else{
+
+              return
+
+            }          
+
+
+
             this.httpServiceProveedoresProd.agregarProductosProv(newProdProv).subscribe(res1 => {
               if (res1.codigoError == "OK") {
                 Swal.fire({

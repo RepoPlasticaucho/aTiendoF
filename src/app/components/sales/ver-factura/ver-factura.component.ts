@@ -570,6 +570,8 @@ export class VerFacturaComponent implements OnInit {
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
+                                 
+     
           this.httpServiceMovimiento.finalizarPedido(newPedido).pipe(
             finalize(() => {
               this.httpServiceMovimiento.obtenerMovimientoCLAVEACCESO(newPedido).subscribe(res2 => {
@@ -632,19 +634,48 @@ export class VerFacturaComponent implements OnInit {
                       url_factura: 'ftp://calidad.atiendo.ec/FacturasXML/factura_' + claveAccesoConDV + '.xml'
                     }
                     console.log(newMovCA)
+
                     this.httpServiceMovimiento.actualizarCLAVEACCESO(newMovCA).pipe(finalize(() => {
                       this.httpServiceMovimiento.crearXML(localStorage.getItem('movimiento_id')!).pipe(finalize(() => {
+                                       //Mostrar pantalla de carga mientras se autoriza el XML
+                    Swal.fire({
+                      title: 'Autorizando XML',
+                      html: 'Espere un momento por favor',
+                      timer: 30000,
+                      didOpen: () => {
+                        Swal.showLoading();
+                      }
+                    });
                         this.httpServiceSRI.recibirXMLSri(localStorage.getItem('movimiento_id')!).subscribe(res4 => {
+
+
                           console.log(res4);
                           if(res4 == 'RECIBIDA'){
+
+                            Swal.close();
+
+        
                             this.httpServiceSRI.autorizarXMLSri(localStorage.getItem('movimiento_id')!).subscribe(res5 => {
+                              
                               console.log(res5);
                               const palabras: string[] = res5.split(' ');
                               console.log(palabras)
                               localStorage.setItem('fechaAutoriz', palabras.slice(1).join(' '));
+
+                              //Cerrar pantalla de carga
                             });
                           } else {
+                            Swal.fire({
+                              icon: 'error',
+                              title: 'Ha ocurrido un error.',
+                              text: 'NO SE PUEDE ENVIAR LA FACTURA PARA SU AUTORIZACIÓN',
+                              showConfirmButton: false,
+                            });
                             console.log('NO SE PUEDE ENVIAR LA FACTURA PARA SU AUTORIZACIÓN')
+
+                            //Enviar a la pantalla de menuvent  
+                            this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['menuvent'] } }]);
+                      
                           }
                         });
                       })).subscribe(res2 => {
@@ -679,11 +710,16 @@ export class VerFacturaComponent implements OnInit {
 
                   if(ruta.includes('navegation-cl')){
                     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['factura'] } }]);
+         
+
                   }
         
                   if(ruta.includes('navegation-facturador')){
                     this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['factura'] } }]);
+        
+
                   }
+
                 });
               } else {
                 Swal.fire({

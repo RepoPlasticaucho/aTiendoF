@@ -493,13 +493,18 @@ export class VerCarritoComponent implements OnInit {
                   const newDetalleImp: DetalleImpuestosEntity = {
                     id: '',
                     detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
-                    cod_impuesto: res1.lstDetalleMovimientos[0].cod_tarifa!,
+                    cod_impuesto: res1.lstDetalleMovimientos[0].codigo_impuesto!,
+                    codigo_tarifa: res1.lstDetalleMovimientos[0].cod_tarifa!,
                     porcentaje: res1.lstDetalleMovimientos[0].tarifa!,
                     base_imponible: '',
                     valor: res1.lstDetalleMovimientos[0].costo!,
                     created_at: '',
                     updated_at: ''
                   };
+
+                  console.log("Aca el detalleImp" + JSON.stringify(newDetalleImp));
+
+
                   this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
                     if (res2.codigoError !== 'OK') {
                       Swal.fire({
@@ -616,13 +621,18 @@ export class VerCarritoComponent implements OnInit {
                 const newDetalleImp: DetalleImpuestosEntity = {
                   id: '',
                   detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
-                  cod_impuesto: res1.lstDetalleMovimientos[0].cod_tarifa!,
+                  cod_impuesto: res1.lstDetalleMovimientos[0].codigo_impuesto!,
+                  codigo_tarifa: res1.lstDetalleMovimientos[0].cod_tarifa!,
                   porcentaje: res1.lstDetalleMovimientos[0].tarifa!,
                   base_imponible: '',
                   valor: res1.lstDetalleMovimientos[0].costo!,
                   created_at: '',
                   updated_at: ''
                 };
+
+                console.log("Aca el detalleImp" + JSON.stringify(newDetalleImp));
+
+
                 this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
                   if (res2.codigoError !== 'OK') {
                     Swal.fire({
