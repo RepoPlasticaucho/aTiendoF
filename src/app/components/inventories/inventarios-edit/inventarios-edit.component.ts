@@ -118,6 +118,7 @@ export class InventariosEditComponent implements OnInit {
     this.inventarioForm.get("modelo")?.disable();
     this.inventarioForm.get("modelo_producto")?.disable();
     this.inventarioForm.get("producto")?.disable();
+    this.inventarioForm.get("costo")?.disable();
 
   }
 

@@ -7,6 +7,7 @@ import { CategoriasEntity } from '../models/categorias';
 import { Inventarios, InventariosEntity } from '../models/inventarios';
 import { LineasEntity } from '../models/lineas';
 import { ModelosEntity } from '../models/modelos';
+import { SociedadesEntity } from '../models/sociedades';
 
 const initGruop: InventariosEntity = {
   categoria_id: "",
@@ -102,6 +103,10 @@ export class InventariosService {
 
   obtenerPortafolios(almacen: AlmacenesEntity): Observable<Inventarios> {
     return this.http.post<Inventarios>(`${environment.apiUrl}inventarios/ObtenerPortafolios`, almacen );
+  }
+
+  obtenerPortafoliosTodos(sociedad: SociedadesEntity): Observable<Inventarios> {
+    return this.http.post<Inventarios>(`${environment.apiUrl}inventarios/ObtenerPortafoliosTodos`, sociedad );
   }
 
   obtenerPortafoliosCategoria(inventario: InventariosEntity): Observable<Inventarios> {

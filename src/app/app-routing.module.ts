@@ -7,6 +7,7 @@ import { LoginComponent } from './components/login/login.component';
 import { GestionarPersonalComponent } from './components/all_components';
 import { PersonalCreateComponent } from './components/personalFactory/personal-create/personal-create.component';
 import { PersonalEditComponent } from './components/personalFactory/personal-edit/personal-edit.component';
+import { AllInventario } from './components/inventories/all-inventario-cliente/all-inventario-cliente.component';
 const routes: Routes = [
   {
     path: 'navegation-cl', component: NavegationClComponent,
@@ -23,6 +24,7 @@ const routes: Routes = [
       { path: "inventarios-pedido-lineas", component: InventariosPedidoLineasComponent, outlet: "contentClient" },
       { path: "inventarios-pedido-modelos", component: InventariosPedidoModelosComponent, outlet: "contentClient" },
       { path: "inventarios-almacen", component: InventariosAlmacenComponent, outlet: "contentClient" },
+      { path: "inventarios-almacenes", component: AllInventario, outlet: "contentClient" },
       { path: "inventarios-productos", component: InventariosProductosComponent, outlet: "contentClient" },
       { path: "inventarios-create", component: InventariosCreateComponent, outlet: "contentClient" },
       { path: "inventarios-edit", component: InventariosEditComponent, outlet: "contentClient" },

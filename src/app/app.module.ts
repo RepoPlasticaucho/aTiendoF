@@ -151,6 +151,7 @@ import { GestionarPersonalComponent } from './components/gestionar-personal/gest
 import { PersonalComponent } from './components/personalFactory/personal/personal.component';
 import { PersonalCreateComponent } from './components/personalFactory/personal-create/personal-create.component';
 import { PersonalEditComponent } from './components/personalFactory/personal-edit/personal-edit.component';
+import { AllInventario } from './components/inventories/all-inventario-cliente/all-inventario-cliente.component';
 
 @NgModule({
   declarations: [
@@ -279,6 +280,7 @@ import { PersonalEditComponent } from './components/personalFactory/personal-edi
     PersonalComponent,
     PersonalCreateComponent,
     PersonalEditComponent,
+    AllInventario,
   ],
   imports: [
     BrowserModule,

@@ -61,8 +61,7 @@ export class MovimientosComponent implements OnInit {
       search: false,
       searching: true,
       ordering: false,
-      info: true,
-      responsive: true
+      info: true
     }
 
     const almacen: AlmacenesEntity = {
@@ -175,7 +174,7 @@ export class MovimientosComponent implements OnInit {
       timer: 30000,
       didOpen: () => {
         Swal.showLoading();
-        this.httpService.obtenerDetalleMovimientoSociedad(sociedadNew).subscribe(res => {
+        this.httpService.obtenerDetalleMovimientoSociedadDocumento(sociedadNew).subscribe(res => {
           if (res.codigoError != "OK") {
             Swal.fire({
               icon: 'error',
@@ -214,6 +213,15 @@ export class MovimientosComponent implements OnInit {
     }
   }
 
+
+  // descargarFactura() {
+  //   this.facturaService.descargarFactura().subscribe((response: any) => {
+  //     const blob = new Blob([response.body], { type: 'application/xml' });
+  //     const url = window.URL.createObjectURL(blob);
+  //     window.open(url); // abre una nueva pestaña con el archivo descargado
+  //   });
+  // }
+  
   changeGroup(tipoC: any): void {
     console.log("SE EJECUTO CHANGEGROUP")
     this.filtroForm.get('fechaDesde')?.setValue(null);

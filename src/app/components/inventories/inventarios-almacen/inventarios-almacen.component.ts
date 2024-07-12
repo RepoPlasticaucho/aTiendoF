@@ -108,4 +108,11 @@ constructor(private readonly httpService: AlmacenesService,
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido'] } }]);
 
   }
+
+  vertodos(){
+
+    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-almacenes'] } }]);
+  }
+
+
 }

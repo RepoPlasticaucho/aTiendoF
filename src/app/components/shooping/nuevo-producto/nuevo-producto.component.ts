@@ -260,8 +260,24 @@ export class NuevoProductoComponent implements OnInit {
   }
 
   onSubmit(): void {
+    
     console.log(this.modelProductForm.value);
     console.log(this.modelProductForm.valid);
+
+    //Si el precio es menor que el costo preguntar si esta seguro de guardar
+    if(parseFloat(this.modelProductForm.value.precio!) < parseFloat(this.modelProductForm.value.costo!)){  
+
+      //Preguntar si esta seguro de guardar
+      Swal.fire({
+        icon: 'question',
+        title: 'El costo es mayor que el precio, ¿Esta seguro de guardar?',
+        showDenyButton: true,
+        confirmButtonText: 'Si',
+        denyButtonText: 'No',
+      }).then((result) => {
+        if (result.isConfirmed) {
+         
+
     if (!this.modelProductForm.valid) {
       this.modelProductForm.markAllAsTouched();
 
@@ -478,6 +494,232 @@ export class NuevoProductoComponent implements OnInit {
         */
       }
     }
+        }
+      });
+    }else{
+  
+
+      if (!this.modelProductForm.valid) {
+        this.modelProductForm.markAllAsTouched();
+  
+        if (this.modelProductForm.get('modelo_producto_id')?.value == '0') {
+          this.selectModeloProducto = true;
+        }
+      } else {
+        if (this.modelProductForm.get('modelo_producto_id')?.value == '0') {
+          this.selectModeloProducto = true;
+  
+        } else {
+          const productEntity: ProducAdmEntity = {
+            id: '',
+            tamanio: this.modelProductForm.value!.tamanio ?? "",
+            nombre: this.modelProductForm.value!.producto ?? "",
+            etiquetas: this.modelProductForm.value!.etiquetas ?? "",
+            es_plasticaucho: '1',
+            es_sincronizado: '1',
+            modelo_producto_id: this.modelProductForm.value!.modeloproducto_id ?? "",
+            cod_sap: '',
+            impuesto_id: '',
+            impuesto_nombre: '',
+            tarifa_ice_iva_id: this.lstTarifas2[0].id,
+            marca_nombre: '',
+            unidad_medida: this.modelProductForm.value!.medida ?? "",
+            color_nombre: '',
+            pvp: this.modelProductForm.value!.precio ?? "",
+            atributo_nombre: '',
+            genero_nombre: '',
+            modelo_nombre: '',
+            modelo_producto: '',
+            categoria: '',
+            linea: '',
+            tarifa_ice_iva_id1: this.lstTarifas3[0].id,
+            costo: this.modelProductForm.value!.costo ?? ""
+          };
+  
+  
+          console.log("LOS PRODUCTOS ", productEntity);
+  
+          let fecha = new Date();
+          let fechaFormateada = fecha.getFullYear() + '-' +
+            ('0' + (fecha.getMonth() + 1)).slice(-2) + '-' +
+            ('0' + fecha.getDate()).slice(-2) + ' ' +
+            ('0' + fecha.getHours()).slice(-2) + ':' +
+            ('0' + fecha.getMinutes()).slice(-2) + ':' +
+            ('0' + fecha.getSeconds()).slice(-2);
+          this.httpService.obtenerProductosNomEti(productEntity).subscribe(res => {
+            if (res.codigoError == "OK") {
+              const newProdProv: ProveedoresProductosEntity = {
+                id: '',
+                provedor_id: localStorage.getItem('proveedorid')!,
+                producto_id: res.lstProductos[0].id,
+                nombre_producto: this.modelProductForm.value!.producto ?? "",
+                precio: this.modelProductForm.value!.precio ?? "",
+                created_at: fechaFormateada,
+                costo: this.modelProductForm.value!.costo ?? "",
+                updated_at: ''
+              }
+  
+              //Si el precio es menor que el costo preguntar si esta seguro de guardar
+              if(parseFloat(newProdProv.precio) < parseFloat(newProdProv.costo!)){  
+  
+                //Preguntar si esta seguro de guardar
+                Swal.fire({
+                  icon: 'question',
+                  title: '¿Esta seguro de guardar?',
+                  showDenyButton: true,
+                  confirmButtonText: 'Si',
+                  denyButtonText: 'No',
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    this.httpServiceProveedoresProd.agregarProductosProv(newProdProv).subscribe(res1 => {
+                      if (res1.codigoError == "OK") {
+                        Swal.fire({
+                          icon: 'success',
+                          title: 'Guardado Exitosamente.',
+                          text: `Se ha creado el Producto ${this.modelProductForm.value.producto}`,
+                          showConfirmButton: true,
+                          confirmButtonText: "Ok"
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            this.cerrarDialog();
+                          }
+                        });
+                      } else {
+                        Swal.fire({
+                          icon: 'error',
+                          title: 'Ha ocurrido un error.',
+                          text: res.descripcionError,
+                          showConfirmButton: false,
+                        });
+                      }
+                    });
+                  }
+                });
+  
+              }else{
+  
+                return
+  
+              }          
+  
+  
+  
+              this.httpServiceProveedoresProd.agregarProductosProv(newProdProv).subscribe(res1 => {
+                if (res1.codigoError == "OK") {
+                  Swal.fire({
+                    icon: 'info',
+                    title: 'Información.',
+                    text: `El Producto ${this.modelProductForm.value.producto} existe`,
+                    showConfirmButton: true,
+                    confirmButtonText: "Ok"
+                  })
+  
+                  console.log("entro a agregar producto prov")
+                  this.cerrarDialog();
+                } else {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Ha ocurrido un error.',
+                    text: res.descripcionError,
+                    showConfirmButton: false,
+                  });
+                }
+              });
+  
+            } else if (res.codigoError == 'NEXISTE') {
+              this.httpService.agregarProducto(productEntity).pipe(finalize(() => {
+                this.httpService.obtenerProductosNomEti(productEntity).subscribe(res2 => {
+                  if (res2.codigoError == "OK") {
+                    const newProdProv: ProveedoresProductosEntity = {
+                      id: '',
+                      provedor_id: localStorage.getItem('proveedorid')!,
+                      producto_id: res2.lstProductos[0].id,
+                      nombre_producto: this.modelProductForm.value!.producto ?? "",
+                      precio: this.modelProductForm.value!.precio ?? "",
+                      created_at: fechaFormateada,
+                      costo: this.modelProductForm.value!.costo ?? "",
+                      updated_at: ''
+                    }
+                    this.httpServiceProveedoresProd.agregarProductosProv(newProdProv).subscribe(res3 => {
+                      if (res3.codigoError == "OK") {
+                        Swal.fire({
+                          icon: 'success',
+                          title: 'Guardado Exitosamente.',
+                          text: `Se ha creado el Producto ${this.modelProductForm.value.producto}`,
+                          showConfirmButton: true,
+                          confirmButtonText: "Ok"
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            this.cerrarDialog();
+                          }
+                        });
+                      } else {
+                        Swal.fire({
+                          icon: 'error',
+                          title: 'Ha ocurrido un error.',
+                          text: res.descripcionError,
+                          showConfirmButton: false,
+                        });
+                      }
+                    });
+                  } else {
+                    Swal.fire({
+                      icon: 'error',
+                      title: 'Ha ocurrido un error.',
+                      text: res.descripcionError,
+                      showConfirmButton: false,
+                    });
+                  }
+                });
+              })
+              ).subscribe(res4 => {
+                if (res4.codigoError != 'OK') {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Ha ocurrido un error.',
+                    text: res4.descripcionError,
+                    showConfirmButton: false
+                  });
+                } else {
+                }
+              });
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Ha ocurrido un error.',
+                text: res.descripcionError,
+                showConfirmButton: false,
+              });
+            }
+          })
+          /*
+          this.httpService.agregarProducto(productEntity).subscribe(res => {
+            if (res.codigoError == "OK") {
+              Swal.fire({
+                icon: 'success',
+                title: 'Guardado Exitosamente.',
+                text: `Se ha creado el Producto ${this.modelProductForm.value.producto}`,
+                showConfirmButton: true,
+                confirmButtonText: "Ok"
+              })
+              this.cerrarDialog();
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Ha ocurrido un error.',
+                text: res.descripcionError,
+                showConfirmButton: false,
+              });
+            }
+          })
+          */
+        }
+      }
+  
+      }
+
+
+
   }
 
   //Disparador cuando selecciona algún item de los combos

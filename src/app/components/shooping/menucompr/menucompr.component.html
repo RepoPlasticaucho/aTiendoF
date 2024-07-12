@@ -31,7 +31,7 @@
                                 >
                                 <option value="0" selected>Seleccione un proveedor</option>
                                 <option *ngFor="let proveedor of lstProveedores" [value]="proveedor.nombre">
-                                    {{proveedor.nombre}}
+                                    {{proveedor.id_fiscal}} - {{proveedor.nombre}}
                                 </option>
                             </select>
                             <small *ngIf="selectTipo">

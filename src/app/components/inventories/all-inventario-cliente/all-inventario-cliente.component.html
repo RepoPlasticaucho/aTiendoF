@@ -1,0 +1,125 @@
+<div style="width: 95%;margin: auto;">
+    <div class="card">
+        <br>
+        <div class="card-header">
+            <div class="row mx-3"  >
+                <fa-icon [icon]="faUserFriends" [size]="'3x'" style="color: #636363;"></fa-icon>
+                <h1 class="mx-5 " style="color: #636363;">Inventario General</h1>
+                <div style="position: absolute;right:200px;" class="mx-3" *ngIf="mostrarDiv">
+                  
+                </div>
+                <div style="position: absolute;right:0;" class="mx-3" *ngIf="mostrarDiv">
+                
+                </div>
+            </div>
+        </div>
+        <div class="card-body ">
+            <div>
+                <mat-grid-list cols="6" rowHeight="50px">
+                    <mat-grid-tile>
+                        <a class="btn button" 
+                        (click)="navegar()"
+                            style="text-align:center;
+                                    font-size: 15px; width:140px; 
+                                       height:35px;
+                                       text-align:center; 
+                                       margin-top: 10px;
+                                       background: rgb(54,169,225,0.8);"
+                        ><span style="color: white;">
+                            Volver
+                        </span>
+                        
+                        </a>
+
+                        
+                        </mat-grid-tile>
+                        <mat-grid-tile>
+                            <a class="btn button" 
+                            (click)="exportarAXLSX()"
+                                style="text-align:center;
+                                        font-size: 15px; width:140px; 
+                                           height:35px;
+                                           text-align:center; 
+                                           margin-top: 10px;
+                                           background: rgba(19, 180, 54, 0.753);"
+                            ><span style="color: white;">
+                                <fa-icon [icon]="faTable" style="color: white;"></fa-icon>
+                                Exportar
+                            </span>
+                            
+                            </a>
+    
+                            
+                            </mat-grid-tile>
+
+                </mat-grid-list>
+                <mat-grid-list cols="6" rowHeight="60px">
+                    <mat-grid-tile *ngFor="let card of lstCategorias">
+                        
+                            <a class="btn button" (click)="buscarPortafolioLinea(card)" 
+                                style="border-radius: 5px; 
+                                       background: rgb(49,99,173,0.8); 
+                                       font-size: 15px; width:140px; 
+                                       height:40px;
+                                       text-align:center; 
+                                       margin-top: 15px;
+                                       ;">
+                                <span style="color: white;">
+                                        {{card.categoria}}
+                                </span>
+                            </a>
+                        
+                        
+                    </mat-grid-tile>
+                </mat-grid-list>
+            </div>
+
+            <br><br>
+            
+
+
+
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" id="table_id" >
+                <thead style="color: #636363;">
+                    <tr>
+                        <th style="width: 50%; ">PRODUCTO</th>
+                        <th style="width: 5%; ">CANTIDAD OPTIMO</th>
+                        <th style="width: 5%; ">STOCK</th>
+                        <th style="width: 5%; ">COSTO</th>
+                        <th style="width: 5%; ">PRECIO</th>
+
+
+                        <th style="width: 30%; ">ALMACEN</th>
+
+                    </tr>
+                </thead>
+                <tbody style="color: #767695;">
+                    <tr *ngFor="let inventario of lstInventarios">
+                        <td>{{inventario.Producto}}</td>
+                        <td>{{inventario.stock_optimo}}</td>
+                        <td [class.text-danger]="isStockBelowOptimal(inventario.stock!, inventario.stock_optimo)">
+                            {{ inventario.stock }}
+                        </td>
+                        <td>{{inventario.costo}}</td>
+
+                        <td>{{inventario.pvp2}}</td>
+                        <td>{{inventario.almacen}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br><br>
+            <div class="icon-container">
+                <fa-icon [icon]="faMoneyBillAlt" [size]="'3x'" style="color: #6aaf42" class="icono-input"></fa-icon>
+                <label for="total" class="label-input">TOTAL $:</label>
+                <input type="text" [(ngModel)]="sumaTotal" class="cool-input resultado-input" readonly>
+            </div>
+            <br><br><br>
+            <div class="icon-container">
+                <fa-icon [icon]="faBoxes" [size]="'3x'" style="color: #7e94d1" class="icono-input2"></fa-icon>
+                <label for="total" class="label-input2">TOTAL DE PRODUCTOS:</label>
+                <input type="text" [(ngModel)]="totalRegistros" class="cool-input resultado-input" readonly>
+            </div>
+            <br><br>
+        </div>
+    </div>
+</div>

@@ -60,6 +60,10 @@ export class DetallesmovimientoService {
     return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ObtenerDetalleMovimientoSociedad`, sociedad );
   }
 
+  obtenerDetalleMovimientoSociedadDocumento(sociedad: SociedadesEntity): Observable<DetallesMovimiento> {
+    return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ObtenerDetalleMovimientoSociedadDocumento`, sociedad );
+  }
+
   obtenerDetalleMovimientoAlm(almacen: AlmacenesEntity): Observable<DetallesMovimiento> {
     return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ObtenerDetalleMovimientoAlm`, almacen );
   }

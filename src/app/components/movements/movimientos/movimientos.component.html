@@ -73,11 +73,13 @@
             <thead style="color: #636363;">
                 <tr>
                     <th style="width: 10%; ">PROUCTO</th>
-                    <th style="width: 10%; ">PUNTO DE EMISIÓN</th>
+                    <th style="width: 5%; ">PUNTO DE EMISIÓN</th>
                     <th style="width: 10%; ">FECHA</th>
-                    <th style="width: 10%; ">TIPO</th>
-                    <th style="width: 10%; ">CANTIDAD</th>
-                    <th style="width: 10%; ">VALOR TOTAL</th>
+                    <th style="width: 5%; ">TIPO</th>
+                    <th style="width: 5%; ">CANTIDAD</th>
+                    <th style="width: 5%; ">VALOR TOTAL</th>
+                    <th style="width: 60%; ">DOCUMENTO</th>
+
                 </tr>
             </thead>
             <tbody style="color: #767695;">
@@ -94,6 +96,8 @@
                     <td
                         [ngClass]="{'text-success': detalle.tipo_movimiento === 'Ingreso', 'text-danger': detalle.tipo_movimiento === 'Egreso'}">
                         {{detalle.precio}}</td>
+
+                    <td>{{detalle.documento}}</td>
                 </tr>
             </tbody>
         </table>

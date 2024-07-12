@@ -27,4 +27,5 @@ export interface DetallesMovimientoEntity {
     ice?: string;
     update_at?: string;
     codigo_impuesto?: string;
+    documento?: string;
 }
