@@ -58,7 +58,8 @@ export class AllInventario implements OnInit {
       searching: true,
       ordering: true,
       info: true,
-      responsive: true
+      responsive: true,
+      pageLength: 15,
     }
     const almacen: AlmacenesEntity = {
       idAlmacen: JSON.parse(localStorage.getItem('almacenid') || "[]"),

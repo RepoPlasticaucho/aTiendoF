@@ -97,7 +97,11 @@
                         [ngClass]="{'text-success': detalle.tipo_movimiento === 'Ingreso', 'text-danger': detalle.tipo_movimiento === 'Egreso'}">
                         {{detalle.precio}}</td>
 
-                    <td>{{detalle.documento}}</td>
+                    <td>
+                    <button class="btn btn-primary" (click)="descargarFactura(detalle.documento!)">
+                        <span style="color: white"> Descargar</span>
+                    </button>
+                </td>
                 </tr>
             </tbody>
         </table>

@@ -222,6 +222,29 @@ export class MovimientosComponent implements OnInit {
   //   });
   // }
   
+  descargarFactura(detalle:string) {
+    console.log("Este es el detalle 4 " )
+
+    //Reemplazar .xml por .pdf
+    const detalle2 = detalle.replace(".xml",".pdf");
+    //Eliminar ftp://
+    const detalle3 = detalle2.replace("ftp://","");
+
+
+    //Agregar /eojgprlg/ despues de calidad.atiendo.ec
+    const detalle4 = detalle3.replace("calidad.atiendo.ec","calidad.atiendo.ec/eojgprlg");
+
+    //Reemplazar FacturasXML por FacturasPDF
+    const detalle5 = detalle4.replace("FacturasXML","FacturasPDF");
+
+    console.log("Este es el detalle 4 " + detalle5);
+    
+
+    //Abrir en una nueva pestaña
+    
+  }
+
+
   changeGroup(tipoC: any): void {
     console.log("SE EJECUTO CHANGEGROUP")
     this.filtroForm.get('fechaDesde')?.setValue(null);

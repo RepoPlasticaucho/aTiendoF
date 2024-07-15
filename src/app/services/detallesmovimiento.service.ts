@@ -64,6 +64,14 @@ export class DetallesmovimientoService {
     return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ObtenerDetalleMovimientoSociedadDocumento`, sociedad );
   }
 
+  descargarFactura(): Observable<Blob> {
+    const ss ={
+
+    }
+
+    return this.http.post<Blob>(`${environment.apiUrl}detallesmovimiento/DetalleMovimientoFactura`, ss);
+  }
+
   obtenerDetalleMovimientoAlm(almacen: AlmacenesEntity): Observable<DetallesMovimiento> {
     return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ObtenerDetalleMovimientoAlm`, almacen );
   }
