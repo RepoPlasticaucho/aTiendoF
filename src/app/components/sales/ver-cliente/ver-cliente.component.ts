@@ -269,16 +269,20 @@ export class VerClienteComponent implements OnInit {
                     // timer: 3000
                   });
                 } else {
-                  Swal.fire({
-                    icon: 'info',
-                    title: 'Información',
-                    text: 'Se ha elegido al Cliente',
-                    showConfirmButton: true,
-                    // timer: 3000
-                  }).then(() => {
-                    this.cerrarDialog();
-                  }
-                  );
+                //   Swal.fire({
+                //     icon: 'info',
+                //     title: 'Información',
+                //     text: 'Se ha elegido al Cliente1',
+                //     // timer: 3000
+           
+                //   }
+                //   );
+
+                //  //Cerrar el dialog
+                //   this.dialogRef.close();
+                this.dialogRef.close();
+    
+
                 }
               });
             });
@@ -358,16 +362,19 @@ export class VerClienteComponent implements OnInit {
                       // timer: 3000
                     });
                   } else {
-                    Swal.fire({
-                      icon: 'info',
-                      title: 'Información',
-                      text: 'Se ha elegido al Cliente',
-                      showConfirmButton: true,
-                      // timer: 3000
-                    }).then(() => {
-                      this.cerrarDialog();
-                    }
-                    );
+                  //   Swal.fire({
+                  //     icon: 'info',
+                  //     title: 'Información',
+                  //     text: 'Se ha elegido al Cliente2',
+                  //     // timer: 3000
+                  
+                  //   }
+                  //   );
+                  // this.dialogRef.close();
+                this.dialogRef.close();
+
+     
+
                   }
                 });
               }
@@ -409,16 +416,21 @@ export class VerClienteComponent implements OnInit {
                   // timer: 3000
                 });
               } else {
-                Swal.fire({
-                  icon: 'info',
-                  title: 'Información',
-                  text: 'Se ha elegido al Cliente',
-                  showConfirmButton: true,
-                  // timer: 3000
-                }).then(() => {
-                  this.cerrarDialog();
-                }
-                );
+                // Swal.fire({
+                //   icon: 'info',
+                //   title: 'Información',
+                //   text: 'Se ha elegido al Cliente',
+                //   // timer: 3000
+            
+                // }
+                
+                // );
+                // this.dialogRef.close();
+                this.dialogRef.close();
+
+                //Mostrar un mensaje durante medio segundo y se cierra automaticamente
+      
+
               }
 
             });

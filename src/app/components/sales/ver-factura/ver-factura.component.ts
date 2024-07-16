@@ -665,17 +665,21 @@ export class VerFacturaComponent implements OnInit {
                               //Cerrar pantalla de carga
                             });
                           } else {
+ 
+                            console.log('NO SE PUEDE ENVIAR LA FACTURA PARA SU AUTORIZACIÓN')
+
+                            //Indicar que no se pudo autorizar y cuando presione ok redirigir a la pantalla de menuvent
                             Swal.fire({
                               icon: 'error',
                               title: 'Ha ocurrido un error.',
-                              text: 'NO SE PUEDE ENVIAR LA FACTURA PARA SU AUTORIZACIÓN',
-                              showConfirmButton: false,
+                              text: 'No se pudo enviar la factura para su autorización',
+                              showConfirmButton: true,
+                              confirmButtonText: "Ok"
+                            }).finally(() => {
+                              //Enviar a la pantalla de menuvent  
+                              this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['menuvent'] } }]);
                             });
-                            console.log('NO SE PUEDE ENVIAR LA FACTURA PARA SU AUTORIZACIÓN')
-
-                            //Enviar a la pantalla de menuvent  
-                            this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['menuvent'] } }]);
-                      
+                          
                           }
                         });
                       })).subscribe(res2 => {

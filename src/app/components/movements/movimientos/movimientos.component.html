@@ -72,13 +72,14 @@
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
             <thead style="color: #636363;">
                 <tr>
-                    <th style="width: 10%; ">PROUCTO</th>
+                    <th style="width: 45%; ">PROUCTO</th>
                     <th style="width: 5%; ">PUNTO DE EMISIÓN</th>
                     <th style="width: 10%; ">FECHA</th>
                     <th style="width: 5%; ">TIPO</th>
                     <th style="width: 5%; ">CANTIDAD</th>
                     <th style="width: 5%; ">VALOR TOTAL</th>
-                    <th style="width: 60%; ">DOCUMENTO</th>
+                    <th style="width: 10%; ">COSTO</th>
+                    <th style="width: 15%; ">DOCUMENTO</th>
 
                 </tr>
             </thead>
@@ -97,11 +98,20 @@
                         [ngClass]="{'text-success': detalle.tipo_movimiento === 'Ingreso', 'text-danger': detalle.tipo_movimiento === 'Egreso'}">
                         {{detalle.precio}}</td>
 
-                    <td>
-                    <button class="btn btn-primary" (click)="descargarFactura(detalle.documento!)">
-                        <span style="color: white"> Descargar</span>
-                    </button>
-                </td>
+                    <td>{{detalle.costo}}</td>
+
+                        <td *ngIf="detalle.documento?.includes('.xml')!">
+                            <button class="btn btn-primary" (click)="descargarFactura(detalle.documento!)">
+                                <span style="color: white">Descargar</span>
+                            </button>
+                        </td>
+                <td 
+                *ngIf="!detalle.documento?.includes('.xml')!"
+            >
+                {{detalle.documento}}
+        </td>
+
+
                 </tr>
             </tbody>
         </table>

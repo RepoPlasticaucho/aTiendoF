@@ -765,6 +765,13 @@ export class MenuventComponent implements OnInit {
     }
   }
 
+
+  descargarInventario() {
+    //Solo reduce el stock, crea el movimiento pero no factura
+
+
+  }
+
   calcularPrecio(index: number): void {
     const detalleMovimientos = this.lstDetalleMovimientos[index];
     const cantidad = parseFloat(detalleMovimientos.cantidad);

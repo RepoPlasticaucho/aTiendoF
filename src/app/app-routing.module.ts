@@ -31,7 +31,7 @@ const routes: Routes = [
       { path: "pedido-sugeridos", component: PedidoSugeridoComponent, outlet: "contentClient" },
       { path: "usuario", component: UsuarioComponent, outlet: "contentClient" },
       { path: "usuario-pass", component: UsuarioPassComponent, outlet: "contentClient" },
-      { path: "tercerosalmacen", component: TercerosalmacenComponent, outlet: "contentClient" },
+      { path: "tercerosalmacen", component: TercerosusuariosComponent, outlet: "contentClient" },
       { path: "tercerosusuarios-create", component: TercerosusuariosCreateComponent, outlet: "contentClient" },
       { path: "tercerosusuarios-edit", component: TercerosusuariosEditComponent, outlet: "contentClient" },
       { path: "tercerosusuarios", component: TercerosusuariosComponent, outlet: "contentClient" },

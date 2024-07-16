@@ -187,6 +187,7 @@ export class MovimientosComponent implements OnInit {
 
             if(!this.esFacturador){
               this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+
             }
 
         
@@ -237,8 +238,10 @@ export class MovimientosComponent implements OnInit {
     //Reemplazar FacturasXML por FacturasPDF
     const detalle5 = detalle4.replace("FacturasXML","FacturasPDF");
 
-    console.log("Este es el detalle 4 " + detalle5);
-    
+    //Agregar http://
+    const detalle6 = "http://" + detalle5;
+
+    window.open(detalle6, '_blank');
 
     //Abrir en una nueva pestaña
     
@@ -261,6 +264,13 @@ export class MovimientosComponent implements OnInit {
       codigo: '',
       pto_emision: ''
     }
+
+    //Si solo tenemos un cambio en el select tipo traer ese tipo de toda la sociedad
+
+
+      
+    
+
     if (tipoC.target.value == '0') {
       const sociedadNew: SociedadesEntity = {
         idGrupo: '',
@@ -404,7 +414,44 @@ export class MovimientosComponent implements OnInit {
     //Si es facturador toma nombreAlmacenFacturador si no el valor del select
     const almacen = this.esFacturador ? this.nombreAlmacenFacturador : this.filtroForm.get('almacen')?.value!;
     const tipo = this.filtroForm.get('tipo')?.value!;
+
+
+
     
+    
+    if (tipo !== '0' && almacen == '0' && fechaDesde == null) {
+
+
+      this.httpService.obtenerDetalleMovimientoSociedadTipo(localStorage.getItem('sociedadid')!,tipo).subscribe(res => {
+        if (res.codigoError != "OK") {
+          Swal.fire({
+            icon: 'error',
+            title: 'Ha ocurrido un error.',
+            text: res.descripcionError,
+            showConfirmButton: false,
+          });
+        } else {
+          this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+          this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            // Destruye la tabla existente y elimina los datos
+            dtInstance.destroy();
+
+            // Renderiza la tabla con los nuevos datos
+            this.dtTrigger.next('');
+
+            // Opcional: Reinicia la página a la primera página
+            dtInstance.page('first').draw('page');
+            
+          });
+
+          return;
+        }
+      });
+    
+      return;
+    };
+    
+
     if (fechaDesde == null || almacen == null) {
       this.httpService.obtenerDetalleMovimientoAlmTipo(almacen, tipo).subscribe(res => {
         if (res.codigoError != "OK") {
@@ -549,7 +596,7 @@ export class MovimientosComponent implements OnInit {
       password: '',
       funcion: ''
     }
-    this.httpService.obtenerDetalleMovimientoSociedad(sociedadNew).subscribe(res => {
+    this.httpService.obtenerDetalleMovimientoSociedadDocumento(sociedadNew).subscribe(res => {
       if (res.codigoError != "OK") {
         Swal.fire({
           icon: 'error',
