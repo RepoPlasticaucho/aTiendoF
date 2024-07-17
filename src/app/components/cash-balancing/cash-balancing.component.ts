@@ -35,12 +35,21 @@ export class CashBalancingComponent implements OnInit {
   efectivo: string = '';
   tar_deb: string = '';
   tar_cre: string = '';
+  deposito: string = '';
+  transferencia: string = '';
   lstAlmacenes: AlmacenesEntity[] = [];
   fechaActual: string = '';
   sumaTotal: any;
   nombreAlmacen: string = '';
   mostrarDiv: boolean = false;
   formasPagoSociedad: FormasPagoSociedadEntity[] = [];
+
+
+  containsEfectivo: boolean = false;
+  containsTarDeb: boolean = false;
+  containsTarCre: boolean = false;
+  containsDeposito: boolean = false;
+  containsTransferencia: boolean = false
 
   constructor(private readonly httpServiceAlm: AlmacenesService,
     private dialog: MatDialog,
@@ -56,6 +65,7 @@ export class CashBalancingComponent implements OnInit {
 
 
   ngOnInit(): void {
+
 
     this.esFacturador();
 
@@ -135,6 +145,26 @@ export class CashBalancingComponent implements OnInit {
             updated_at: ''
           }
 
+          const forma4: FormasPagoEntity = {
+            id: '4',
+            nombre: '',
+            codigo: '',
+            fecha_inicio: '',
+            fecha_fin: '',
+            created_at: '',
+            updated_at: ''
+          }
+
+          const forma5: FormasPagoEntity = {
+            id: '5',
+            nombre: '',
+            codigo: '',
+            fecha_inicio: '',
+            fecha_fin: '',
+            created_at: '',
+            updated_at: ''
+          }
+
           const almacen: AlmacenesEntity = {
             idAlmacen: '',
             sociedad_id: '',
@@ -173,6 +203,7 @@ export class CashBalancingComponent implements OnInit {
                 } else {
                   this.filtroForm.get('almacen')?.disable();
                   this.tar_deb = res.lstDetallePagos[0].valor!;
+                  
 
                   this.httpService.obtenerDetallePagoAlm(almacen, forma3).subscribe(res => {
                     if (res.codigoError != "OK") {
@@ -187,7 +218,45 @@ export class CashBalancingComponent implements OnInit {
                       this.filtroForm.get('almacen')?.disable();
                       this.tar_cre = res.lstDetallePagos[0].valor!;
                       console.log("AQUI TARJETA CREDITO ", res)
+
+                      this.httpService.obtenerDetallePagoAlm(almacen, forma4).subscribe(res => {
+                        if (res.codigoError != "OK") {
+                          this.filtroForm.get('almacen')?.enable();
+                          Swal.fire({
+                            icon: 'error',
+                            title: 'No se pudo obtener movimientos.',
+                            text: res.descripcionError,
+                            showConfirmButton: false,
+                          });
+                        } else {
+                          this.filtroForm.get('almacen')?.disable();
+                          this.transferencia = res.lstDetallePagos[0].valor!;
+                          console.log("AQUI TARJETA CREDITO ", res)
+
+                          this.httpService.obtenerDetallePagoAlm(almacen, forma5).subscribe(res => {
+                            if (res.codigoError != "OK") {
+                              this.filtroForm.get('almacen')?.enable();
+                              Swal.fire({
+                                icon: 'error',
+                                title: 'No se pudo obtener movimientos.',
+                                text: res.descripcionError,
+                                showConfirmButton: false,
+                              });
+                            } else {
+                              this.filtroForm.get('almacen')?.disable();
+                              this.deposito = res.lstDetallePagos[0].valor!;
+                              console.log("AQUI TARJETA CREDITO ", res)
+                              this.calcularSumaTotal();
+                            }
+                          });
+                        }
+                      });
+
                       this.calcularSumaTotal();
+                      
+
+
+
                     }
                   });
                 }
@@ -214,17 +283,87 @@ export class CashBalancingComponent implements OnInit {
       funcion: ''
     }
 
+    
     //Obtener formas de pago de la sociedad
     this.httpServiceForma.obtenerFormasPago(sociedadNew).subscribe(res => {
       if (res.codigoError != 'OK') {
         console.log("Error al obtener formas de pago")
       } else {
         this.formasPagoSociedad = res.lstFormasPagoSociedad;
+
+        //Recorrer las formas de pago y ver si contiene efectivo, tarjeta de debito, tarjeta de credito, deposito y transferencia caso contrario dejarlas en false
+        this.formasPagoSociedad.forEach(element => {
+          if (element.id_externo == '1') {
+            this.containsEfectivo = true;
+          }
+          if (element.id_externo == '2') {
+            this.containsTarDeb = true;
+          }
+          if (element.id_externo == '3') {
+            this.containsTarCre = true;
+          }
+          if (element.id_externo == '4') {
+            this.containsDeposito = true;
+          }
+          if (element.id_externo == '4') {
+            this.containsTransferencia = true;
+          }
+        });
+
         console.log("Esta es la data de formas de pagoooopppp", this.formasPagoSociedad)
       }
     })
 
     
+    const forma1: FormasPagoEntity = {
+      id: '1',
+      nombre: '',
+      codigo: '',
+      fecha_inicio: '',
+      fecha_fin: '',
+      created_at: '',
+      updated_at: ''
+    }
+
+    const forma2: FormasPagoEntity = {
+      id: '2',
+      nombre: '',
+      codigo: '',
+      fecha_inicio: '',
+      fecha_fin: '',
+      created_at: '',
+      updated_at: ''
+    }
+
+    const forma3: FormasPagoEntity = {
+      id: '3',
+      nombre: '',
+      codigo: '',
+      fecha_inicio: '',
+      fecha_fin: '',
+      created_at: '',
+      updated_at: ''
+    }
+
+    const forma4: FormasPagoEntity = {
+      id: '4',
+      nombre: '',
+      codigo: '',
+      fecha_inicio: '',
+      fecha_fin: '',
+      created_at: '',
+      updated_at: ''
+    }
+
+    const forma5: FormasPagoEntity = {
+      id: '5',
+      nombre: '',
+      codigo: '',
+      fecha_inicio: '',
+      fecha_fin: '',
+      created_at: '',
+      updated_at: ''
+    }
 
     
     const almacen: AlmacenesEntity = {
@@ -288,6 +427,36 @@ export class CashBalancingComponent implements OnInit {
                   } else {
                     this.tar_cre = res.lstDetallePagos[0].valorTC!;
 
+                    this.httpService.obtenerDetallePagoDEP(almacen).subscribe(res => {
+                      if (res.codigoError != "OK") {
+                        Swal.fire({
+                          icon: 'error',
+                          title: 'Ha ocurrido un error.',
+                          text: res.descripcionError,
+                          showConfirmButton: false,
+                        });
+                      } else {
+                        this.deposito = res.lstDetallePagos[0].valorDEP!;
+
+                        this.httpService.obtenerDetallePagoTRF(almacen).subscribe(res => {
+                          if (res.codigoError != "OK") {
+                            Swal.fire({
+                              icon: 'error',
+                              title: 'Ha ocurrido un error.',
+                              text: res.descripcionError,
+                              showConfirmButton: false,
+                            });
+                          } else {
+                            this.transferencia = res.lstDetallePagos[0].valorTRF!;
+                            this.calcularSumaTotal();
+                            Swal.close();
+                          }
+                        });
+                      }
+                    }
+                    );
+                    
+
                     this.calcularSumaTotal();
                     Swal.close();
                   }
@@ -321,11 +490,46 @@ export class CashBalancingComponent implements OnInit {
     if (this.tar_deb == '') {
       this.tar_deb = '0';
     }
+
+console.log("AQUI TARJETA DEBITOoooOOOoo ", this.tar_deb)
     if (this.tar_cre == '') {
       this.tar_cre = '0';
     }
 
-    const suma = parseFloat(this.efectivo) + parseFloat(this.tar_deb) + parseFloat(this.tar_cre)
+    console.log("AQUI TARJETA DepoooOOOOsoiiitOO ", this.deposito)
+
+    if (this.deposito == '') {
+      this.deposito = '0';
+    }
+
+    console.log("AQUI TARJETA transfeeerenciaasEa ", this.transferencia)
+
+    if (this.transferencia == '') {
+      this.transferencia = '0';
+    }
+
+
+    //Calcular la suma de solo los que tengan contains true
+
+    if (this.containsEfectivo == false) {
+      this.efectivo = '0';
+    }
+    if (this.containsTarDeb == false) {
+      this.tar_deb = '0';
+    }
+    if (this.containsTarCre == false) {
+      this.tar_cre = '0';
+    }
+    if (this.containsDeposito == false) {
+      this.deposito = '0';
+    }
+    if (this.containsTransferencia == false) {
+      this.transferencia = '0';
+    }
+
+    
+
+    const suma = parseFloat(this.efectivo) + parseFloat(this.tar_deb) + parseFloat(this.tar_cre) + parseFloat(this.deposito) + parseFloat(this.transferencia);
     console.log(this.efectivo)
     this.sumaTotal = suma
       .toLocaleString(undefined, { minimumFractionDigits: 2 })
@@ -386,6 +590,27 @@ export class CashBalancingComponent implements OnInit {
       created_at: '',
       updated_at: ''
     }
+
+    const forma4: FormasPagoEntity = {
+      id: '4',
+      nombre: '',
+      codigo: '',
+      fecha_inicio: '',
+      fecha_fin: '',
+      created_at: '',
+      updated_at: ''
+    }
+
+    const forma5: FormasPagoEntity = {
+      id: '5',
+      nombre: '',
+      codigo: '',
+      fecha_inicio: '',
+      fecha_fin: '',
+      created_at: '',
+      updated_at: ''
+    }
+
     if (tipoC.target.value == '0') {
       const sociedadNew: SociedadesEntity = {
         idGrupo: '',
@@ -429,6 +654,33 @@ export class CashBalancingComponent implements OnInit {
                   });
                 } else {
                   this.tar_cre = res.lstDetallePagos[0].valorTC!;
+
+                  this.httpService.obtenerDetallePagoDEP(almacen).subscribe(res => {
+                    if (res.codigoError != "OK") {
+                      Swal.fire({
+                        icon: 'error',
+                        title: 'Ha ocurrido un error.',
+                        text: res.descripcionError,
+                        showConfirmButton: false,
+                      });
+                    } else {
+                      this.deposito = res.lstDetallePagos[0].valorDEP!;
+
+                      this.httpService.obtenerDetallePagoTRF(almacen).subscribe(res => {
+                        if (res.codigoError != "OK") {
+                          Swal.fire({
+                            icon: 'error',
+                            title: 'Ha ocurrido un error.',
+                            text: res.descripcionError,
+                            showConfirmButton: false,
+                          });
+                        } else {
+                          this.transferencia = res.lstDetallePagos[0].valorTRF!;
+                        }
+                      });
+                    }
+                  });
+
                   this.calcularSumaTotal();
                 }
               });
@@ -474,7 +726,41 @@ export class CashBalancingComponent implements OnInit {
                 } else {
                   this.filtroForm.get('almacen')?.disable();
                   this.tar_cre = res.lstDetallePagos[0].valor!;
+
+                  this.httpService.obtenerDetallePagoAlm(almacen, forma4).subscribe(res => {
+                    if (res.codigoError != "OK") {
+                      this.filtroForm.get('almacen')?.enable();
+                      Swal.fire({
+                        icon: 'error',
+                        title: 'No se pudo obtener movimientos.',
+                        text: res.descripcionError,
+                        showConfirmButton: false,
+                      });
+                    } else {
+                      this.filtroForm.get('almacen')?.disable();
+                      this.deposito = res.lstDetallePagos[0].valor!;
+
+                      this.httpService.obtenerDetallePagoAlm(almacen, forma5).subscribe(res => {
+                        if (res.codigoError != "OK") {
+                          this.filtroForm.get('almacen')?.enable();
+                          Swal.fire({
+                            icon: 'error',
+                            title: 'No se pudo obtener movimientos.',
+                            text: res.descripcionError,
+                            showConfirmButton: false,
+                          });
+                        } else {
+                          this.filtroForm.get('almacen')?.disable();
+                          this.transferencia = res.lstDetallePagos[0].valor!;
                   this.calcularSumaTotal();
+
+                        }
+                      });
+                    }
+                  });
+
+
+
                 }
               });
             }
@@ -652,6 +938,26 @@ export class CashBalancingComponent implements OnInit {
             updated_at: ''
           }
 
+          const forma4: FormasPagoEntity = {
+            id: '4',
+            nombre: '',
+            codigo: '',
+            fecha_inicio: '',
+            fecha_fin: '',
+            created_at: '',
+            updated_at: ''
+          }
+
+          const forma5: FormasPagoEntity = {
+            id: '5',
+            nombre: '',
+            codigo: '',
+            fecha_inicio: '',
+            fecha_fin: '',
+            created_at: '',
+            updated_at: ''
+          }
+
           const almacen: AlmacenesEntity = {
             idAlmacen: '',
             sociedad_id: '',
@@ -703,8 +1009,41 @@ export class CashBalancingComponent implements OnInit {
                     } else {
                       this.filtroForm.get('almacen')?.disable();
                       this.tar_cre = res.lstDetallePagos[0].valor!;
-                      console.log("AQUI TARJETA CREDITO ", res)
-                      this.calcularSumaTotal();
+
+                      this.httpService.obtenerDetallePagoAlm(almacen, forma4).subscribe(res => {
+                        if (res.codigoError != "OK") {
+                          this.filtroForm.get('almacen')?.enable();
+                          Swal.fire({
+                            icon: 'error',
+                            title: 'No se pudo obtener movimientos.',
+                            text: res.descripcionError,
+                            showConfirmButton: false,
+                          });
+                        } else {
+                          this.filtroForm.get('almacen')?.disable();
+                          this.transferencia = res.lstDetallePagos[0].valor!;
+                          console.log("AQUI TRASNFERENCIAAAAAAAAS ", res)
+
+                          this.httpService.obtenerDetallePagoAlm(almacen, forma5).subscribe(res => {
+                            if (res.codigoError != "OK") {
+                              this.filtroForm.get('almacen')?.enable();
+                              Swal.fire({
+                                icon: 'error',
+                                title: 'No se pudo obtener movimientos.',
+                                text: res.descripcionError,
+                                showConfirmButton: false,
+                              });
+                            } else {
+                              this.filtroForm.get('almacen')?.disable();
+                              this.deposito = res.lstDetallePagos[0].valor!;
+                              console.log("AQUI TARJETA CREDITO ", res)
+                              this.calcularSumaTotal();
+                            }
+                          });
+                        }
+                      });
+
+                    
                     }
                   });
                 }
@@ -766,7 +1105,36 @@ export class CashBalancingComponent implements OnInit {
                   showConfirmButton: false,
                 });
               } else {
+                
                 this.tar_cre = res.lstDetallePagos[0].valorTC!;
+
+                this.httpService.obtenerDetallePagoDEP(almacen).subscribe(res => {
+                  if (res.codigoError != "OK") {
+                    Swal.fire({
+                      icon: 'error',
+                      title: 'Ha ocurrido un error.',
+                      text: res.descripcionError,
+                      showConfirmButton: false,
+                    });
+                  } else {
+                    this.deposito = res.lstDetallePagos[0].valorDEP!;
+
+                    this.httpService.obtenerDetallePagoTRF(almacen).subscribe(res => {
+                      if (res.codigoError != "OK") {
+                        Swal.fire({
+                          icon: 'error',
+                          title: 'Ha ocurrido un error.',
+                          text: res.descripcionError,
+                          showConfirmButton: false,
+                        });
+                      } else {
+                        this.transferencia = res.lstDetallePagos[0].valorTRF!;
+                        this.calcularSumaTotal();
+                      }
+                    });
+                  }
+                });
+
                 this.calcularSumaTotal();
               }
             });

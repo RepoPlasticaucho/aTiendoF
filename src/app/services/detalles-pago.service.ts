@@ -53,13 +53,30 @@ export class DetallesPagoService {
   obtenerDetallePagoTD(almacen: AlmacenesEntity): Observable<DetallesPago> {
     return this.http.post<DetallesPago>(`${environment.apiUrl}detallespago/ObtenerDetallePagoTD`, almacen);
   }
+
+  obtenerDetallePagoGeneral(sociedadid: string, formaid: string): Observable<DetallesPago> {
+    return this.http.get<DetallesPago>(`${environment.apiUrl}detallespago/ObtenerDetallePagoGeneral?sociedad=`+sociedadid+`&forma=`+formaid);
+  }
+
   obtenerDetallePagoTC(almacen: AlmacenesEntity): Observable<DetallesPago> {
     return this.http.post<DetallesPago>(`${environment.apiUrl}detallespago/ObtenerDetallePagoTC`, almacen);
   }
 
+  obtenerDetallePagoDEP(almacen: AlmacenesEntity): Observable<DetallesPago> {
+    return this.http.post<DetallesPago>(`${environment.apiUrl}detallespago/ObtenerDetallePagoDEP`, almacen);
+  }
+
+  obtenerDetallePagoTRF(almacen: AlmacenesEntity): Observable<DetallesPago> {
+    return this.http.post<DetallesPago>(`${environment.apiUrl}detallespago/ObtenerDetallePagoTRF`, almacen);
+  }
+
+
+
   obtenerDetallePagoAlm(almacen: AlmacenesEntity, forma: FormasPagoEntity): Observable<DetallesPago> {
     return this.http.get<DetallesPago>(`${environment.apiUrl}detallespago/ObtenerDetallePagoAlm?almacen=`+almacen.nombre_almacen+`&forma=`+forma.id);
   }
+
+
 
   obtenerDetallePagoAlmF(almacen: string, forma: string, fechadesde: string, fechahasta: string): Observable<DetallesPago> {
     return this.http.get<DetallesPago>(`${environment.apiUrl}detallespago/ObtenerDetallePagoAlmF?almacen=`+almacen+`&forma=`+forma+`&fechadesde=`+fechadesde+`&fechahasta=`+fechahasta);

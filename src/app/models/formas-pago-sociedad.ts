@@ -9,4 +9,5 @@ export interface FormasPagoSociedadEntity {
     forma_pago_id: string;
     sociedad_id: string;
     nombreFormaPago: string;
+    id_externo?: string;
 }

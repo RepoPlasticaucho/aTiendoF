@@ -90,13 +90,17 @@ export class CuadreMovComponent implements OnInit {
         const fechadesde = localStorage.getItem('fechadesde')!;
         const fechahasta = localStorage.getItem('fechahasta')!;
         const sociedadid = localStorage.getItem('sociedadid')!;
-        if (this.tipoPago == '1' || this.tipoPago == '2' || this.tipoPago == '3') {
+        if (this.tipoPago == '1' || this.tipoPago == '2' || this.tipoPago == '3' || this.tipoPago == '4' || this.tipoPago == '5') {
           if (this.tipoPago == '1'){
             this.metodoPago = 'PAGO EN EFECTIVO';
           } else if (this.tipoPago == '2'){
             this.metodoPago = 'PAGO POR TARJETA DE DÉBITO';
           } else if (this.tipoPago == '3'){
             this.metodoPago = 'PAGO POR TARJETA DE CRÉDITO';
+          } else if (this.tipoPago == '4'){
+            this.metodoPago = 'TRANSFERENCIAS BANCARIAS';
+          } else if (this.tipoPago == '5'){
+            this.metodoPago = 'DEPOSITO BANCARIO';
           }
           if (almacen != '' && fechadesde != '' && fechahasta != '') {
             this.httpsMovimientosService.obtenerMovimientosAlmacenFechaPAGO(almacen, fechadesde, fechahasta, this.tipoPago).subscribe((res1) => {

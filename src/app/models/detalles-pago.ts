@@ -13,6 +13,8 @@ export interface DetallesPagoEntity {
     valorE?: string;
     valorTD?: string;
     valorTC?: string;
+    valorTRF?: string;
+    valorDEP?: string;
     fecha_recaudo: string;
     created_at: string;
     updated_at: string;
