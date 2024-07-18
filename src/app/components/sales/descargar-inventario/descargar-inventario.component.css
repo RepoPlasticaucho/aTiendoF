@@ -1,0 +1,105 @@
+/* CSS */
+.custom-modal {
+  max-width: 600px; /* Ancho máximo del modal */
+  margin: 0 auto; /* Centrado horizontal del modal */
+}
+
+.modal-header {
+  background-color: #5e72e4; /* Color de fondo del encabezado */
+  color: white; /* Color del texto del encabezado */
+  border-bottom: 1px solid #dee2e6; /* Borde inferior del encabezado */
+}
+
+.modal-title {
+  font-size: 1.5rem; /* Tamaño de fuente del título */
+  display: flex;
+  align-items: center;
+}
+
+.modal-title i {
+  font-size: 1.2rem; /* Tamaño de fuente del icono */
+}
+
+.cool-label {
+  margin-bottom: 0; /* Elimina el margen inferior de las etiquetas */
+}
+
+.cool-input,
+.cool-input2,
+.cool-input3,
+.small-select {
+  min-width: 150px; /* Ancho mínimo para los inputs y select */
+}
+
+@media (max-width: 576px) {
+  .custom-modal {
+    max-width: 90%; /* Para pantallas más pequeñas, ocupa el 90% del ancho disponible */
+  }
+
+  .modal-body {
+    padding: 15px; /* Ajusta el padding del cuerpo del modal */
+  }
+
+  .form-group {
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
+  }
+
+  .form-group .form-control,
+  .form-group .btn {
+    margin-top: 5px; /* Espacio entre elementos en pantallas pequeñas */
+  }
+}
+/* CSS para el modal */
+.custom-modal {
+  margin: 0 auto; /* Centrado horizontal */
+}
+
+@media (max-width: 768px) {
+  .custom-modal {
+    width: 90%; /* Ancho del modal al 90% del viewport width en pantallas más pequeñas */
+    max-width: 90%; /* Máximo ancho del modal al 90% del viewport width */
+    height: auto; /* Altura automática */
+    max-height: 80vh; /* Máxima altura del modal al 80% del viewport height */
+  }
+
+  .form-group {
+    flex-direction: column; /* Coloca los elementos en columna en pantallas pequeñas */
+  }
+
+  .form-group .form-control,
+  .form-group .btn {
+    margin-top: 5px; /* Espacio entre elementos */
+  }
+
+  .form-group .form-control.cool-input2 {
+    margin-top: 10px; /* Aumenta el espacio para el input de monto */
+  }
+}
+
+
+/* CSS para el modal */
+.custom-modal {
+  margin: 0 auto; /* Centrado horizontal */
+  max-width: 600px; /* Ancho máximo del modal */
+}
+
+@media (max-width: 576px) {
+  .custom-modal {
+    width: 90%; /* Ancho del modal al 90% del viewport width en pantallas más pequeñas */
+    max-width: 90%; /* Máximo ancho del modal al 90% del viewport width */
+  }
+
+  .form-group {
+    flex-direction: column; /* Coloca los elementos en columna en pantallas pequeñas */
+  }
+
+  .form-group .form-control {
+    width: 100%; /* Ancho completo para los inputs y select */
+    margin-bottom: 10px; /* Espacio entre elementos */
+  }
+
+  .form-group .btn {
+    width: 100%; /* Ancho completo para el botón */
+    margin-top: 10px; /* Espacio entre elementos */
+  }
+}

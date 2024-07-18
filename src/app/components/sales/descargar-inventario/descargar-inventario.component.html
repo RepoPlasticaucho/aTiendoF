@@ -1,0 +1,51 @@
+<!-- Modal -->
+<div class="modal-dialog custom-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="fas fa-download mr-2"></i> DESCARGAR INVENTARIO</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="cliente" class="cool-label">Cliente:</label>
+          <input type="text" class="form-control cool-input" placeholder="Cliente" readonly [(ngModel)]="cliente">
+        </div>
+
+        <div class="form-group">
+            <label for="cliente" class="cool-label">Documento:</label>
+            <input type="text" class="form-control cool-input" placeholder="Numero de documento"  [(ngModel)]="documento">
+          </div>
+  
+        <div class="form-group mt-3">
+          <div class="d-flex align-items-center">
+            <select class="form-control small-select" (change)="changePago($event)">
+              <option value="0" selected>Seleccionar método de pago</option>
+              <option *ngFor="let formasPago of lstFormasPago" [value]="formasPago.nombre">
+                {{formasPago.nombre}}
+              </option>
+            </select>
+            <input type="text" class="form-control cool-input2 ml-2" placeholder="Monto" id="monto">
+            <button class="btn btn-success ml-2" [disabled]="!isBotonHabilitado"
+                (click)="abonar()"
+            >ABONAR</button>
+          </div>
+        </div>
+  
+        <div class="form-group mt-3">
+          <div class="d-flex align-items-center">
+            <label for="restante" class="cool-label mr-2">RESTANTE:</label>
+            <input type="text" class="form-control cool-input3" placeholder="Resto" readonly [(ngModel)]="resto" [ngStyle]="{'background-color': inputColor}">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary"
+            (click)="descargarInventario()"
+        >Confirmar</button>
+      </div>
+    </div>
+  </div>
+  
