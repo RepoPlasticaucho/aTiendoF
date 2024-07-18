@@ -83,7 +83,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <br>
-                        <button class="btn btn-primary" style="margin-left: 50px; margin-top: 7px;" [disabled]="identificacion == '' || nombre == '' || correo == '' || ciudad == '' || direccion == '' || telefono == ''" >Descargar Inventario</button>
+                        <button class="btn btn-primary" style="margin-left: 50px; margin-top: 7px;" [disabled]="identificacion == '' || nombre == '' || correo == '' || ciudad == '' || direccion == '' || telefono == ''" (click)="facturarFisica()">Descargar Inventario</button>
                     </div>
                 </div>
             </div>

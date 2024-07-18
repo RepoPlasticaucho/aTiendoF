@@ -238,20 +238,7 @@ export class NuevoProductoComponent implements OnInit {
       }
     });
 
-    /*
-    this.httpServiceMarcas.obtenerMarcasProveedor(newProveedor).subscribe(res => {
-      if (res.codigoError != "OK") {
-        Swal.fire({
-          icon: 'error',
-          title: 'No se pudo obtener las marcas.',
-          text: res.descripcionError,
-          showConfirmButton: false,
-        });
-      } else {
-        this.lstMarcas = res.lstMarcas;
-      }
-    })
-    */
+
 
   }
 

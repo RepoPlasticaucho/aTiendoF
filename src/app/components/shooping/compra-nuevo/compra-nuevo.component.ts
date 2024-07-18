@@ -68,11 +68,10 @@ export class CompraNuevoComponent implements OnInit {
       }
     }
   }
-
   ngOnInit(): void {
     let component = this;
     let cantidadAux = "";
-
+  
     this.dtOptions = {
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
@@ -83,54 +82,50 @@ export class CompraNuevoComponent implements OnInit {
       ordering: true,
       pageLength: 20,
       info: false,
-      responsive: {
-        details: {
-          renderer: function (api: any, rowIdx: any, columns: any) {
-            component.isResponsive = true; // Indicar que la tabla está en modo responsive
-
-          var data = $.map(columns, function (col, i) {
-            return col.hidden ?
-            '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
-            '<td>' + col.title + ':' + '</td> ' +
-            '<td>' + col.data + '</td>' +
-            '</tr>' :
-            '';
-          }).join('');
+      // responsive: {
+      //   details: {
+      //     renderer: function (api: any, rowIdx: any, columns: any) {
+      //       component.isResponsive = true; // Indicar que la tabla está en modo responsive
   
-          return data ?
-            $('<table/>').append(data) :
-            false;
-          }
-        }
-        },
-        
-        initComplete: function () {
-
-          $('#dataTable tbody').on('input', 'input', function () {
-            // Obtener el valor actual del input
-            console.log("input")
-            cantidadAux = $(this).val() + ""
-            console.log(cantidadAux)
-        });
+      //       var data = $.map(columns, function (col, i) {
+      //         return col.hidden ?
+      //         '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+      //         '<td>' + col.title + ':' + '</td> ' +
+      //         '<td>' + col.data + '</td>' +
+      //         '</tr>' :
+      //         '';
+      //       }).join('');
   
-        // Add click event listener to the table rows
-        $('#dataTable tbody').on('click', 'tr a', function () {
-        
-          //Solo se ejecuta si esta en responsive
-          if (component.isResponsive == false) return
-
-          let data: ProveedoresProductosEntity = $(this).closest('a').data('proveedor');
-          data.cantidad = cantidadAux
-          console.log("Esta es la data", data)
-          if(cantidadAux=="0") return 
-          console.log("Se llamo en responsive")
-          component.crearDetalle(data);
-          return
-
-        });
-        }
+      //       return data ?
+      //         $('<table/>').append(data) :
+      //         false;
+      //     }
+      //   }
+      // },
+      // initComplete: function () {
+      //   $('#dataTable tbody').on('input', 'input', function () {
+      //     // Obtener el valor actual del input
+      //     console.log("input")
+      //     cantidadAux = $(this).val() + ""
+      //     console.log(cantidadAux)
+      //   });
+  
+      //   // Add click event listener to the table rows
+      //   $('#dataTable tbody').on('click', 'tr a', function () {
+      //     // Solo se ejecuta si esta en responsive
+      //     if (component.isResponsive == false) return
+  
+      //     let data: ProveedoresProductosEntity = $(this).closest('a').data('proveedor');
+      //     data.cantidad = cantidadAux
+      //     console.log("Esta es la data", data)
+      //     if (cantidadAux == "0") return 
+      //     console.log("Se llamo en responsive")
+      //     component.crearDetalle(data);
+      //     return
+      //   });
+      // }
     }
-
+  
     const newProveedor: ProveedoresProductosEntity = {
       id: '',
       provedor_id: localStorage.getItem('proveedorid')!,
@@ -140,12 +135,19 @@ export class CompraNuevoComponent implements OnInit {
       created_at: '',
       updated_at: ''
     }
-
+  
     Swal.fire({
       title: 'CARGANDO...',
       html: 'Se están cargando los productos.',
       timer: 20000,
       didOpen: () => {
+        if (this.lstProveedoresProductos.length > 0) {
+          // Obtener los productos pero no perder los valores de los inputs
+          this.actualizarListaProductos(newProveedor);
+          Swal.close();
+          return;
+        }
+  
         Swal.showLoading();
         this.httpServiceProvProd.obtenerProveedoresProductosProv(newProveedor).subscribe((res1) => {
           console.log(res1)
@@ -161,11 +163,11 @@ export class CompraNuevoComponent implements OnInit {
             this.dtTrigger.next('');
             const batchSize = 10; // Cantidad de productos por lote
             const totalProducts = this.lstProveedoresProductos.length;
-
+  
             const processBatch = (startIndex: number) => {
               const endIndex = Math.min(startIndex + batchSize, totalProducts);
               const batchObservables = [];
-
+  
               for (let i = startIndex; i < endIndex; i++) {
                 const proveedorProducto = this.lstProveedoresProductos[i];
                 const newDetalle: DetallesMovimientoEntity = {
@@ -178,10 +180,10 @@ export class CompraNuevoComponent implements OnInit {
                   costo: '',
                   precio: ''
                 };
-
+  
                 batchObservables.push(this.httpServiceDetalle.obtenerDetalleMovimientoEx(newDetalle));
               }
-
+  
               forkJoin(batchObservables).subscribe(responses => {
                 responses.forEach((res2, i) => {
                   if (res2.codigoError == 'OK') {
@@ -191,7 +193,7 @@ export class CompraNuevoComponent implements OnInit {
                     this.lstProveedoresProductos[startIndex + i].productoExistente = false;
                   }
                 });
-
+  
                 // Procesar el próximo lote si es necesario
                 if (endIndex < totalProducts) {
                   processBatch(endIndex);
@@ -201,9 +203,8 @@ export class CompraNuevoComponent implements OnInit {
                 }
               });
             };
-
+  
             processBatch(0); // Comienza el procesamiento del primer lote
-
           }
         });
       },
@@ -213,7 +214,33 @@ export class CompraNuevoComponent implements OnInit {
       }
     });
   }
-
+  
+  private actualizarListaProductos(newProveedor: ProveedoresProductosEntity): void {
+    this.httpServiceProvProd.obtenerProveedoresProductosProv(newProveedor).subscribe((res1) => {
+      console.log(res1)
+      if (res1.codigoError != 'OK') {
+        Swal.fire({
+          icon: 'error',
+          title: 'No se pudo obtener los productos.',
+          text: res1.descripcionError,
+          showConfirmButton: false,
+        });
+      } else {
+        const nuevosProductos = res1.lstProveedoresProductos;
+        // Combinar la lista actual con los nuevos productos
+        const productosMap = new Map();
+        this.lstProveedoresProductos.forEach(producto => productosMap.set(producto.producto_id, producto));
+        nuevosProductos.forEach(producto => {
+          if (!productosMap.has(producto.producto_id)) {
+            productosMap.set(producto.producto_id, producto);
+          }
+        });
+        this.lstProveedoresProductos = Array.from(productosMap.values());
+        this.dtTrigger.next('');
+      }
+    });
+  }
+  
   /*
   const newDetalle: DetallesMovimientoEntity = {
     id: '',

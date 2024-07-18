@@ -766,12 +766,6 @@ export class MenuventComponent implements OnInit {
   }
 
 
-  descargarInventario() {
-    //Solo reduce el stock, crea el movimiento pero no factura
-
-
-  }
-
   calcularPrecio(index: number): void {
     const detalleMovimientos = this.lstDetalleMovimientos[index];
     const cantidad = parseFloat(detalleMovimientos.cantidad);
@@ -1051,10 +1045,155 @@ export class MenuventComponent implements OnInit {
 
     if (localStorage.getItem('idClVenta') != null) {
       this.clienteDatosCompletos = true;
-    }
+    }  
+  }
 
 
+  //Registar una factura fisica, se selecciona el cliente se agrega los productos, pero al llamar esta funcion se pregunta si esta seguro de descargar el inventario (reducir stock) y se crea el movimiento pero no se factura
+  //1. Preguntare si esta seguro de descargar el inventario
+  //2. Continuar y hacer todo el proceso pero no facturar
+
+  facturarFisica() {
+    Swal.fire({
+      title: '¿Esta seguro de descargar el inventario?',
+      showDenyButton: true,
+      confirmButtonText: 'SÍ',
+      denyButtonText: `NO`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+          // Realizar todo el proceso de una factura electronica
+
+          for (let i = 0; i < this.lstDetalleMovimientos.length; i++) {
+            const detalleMovimiento = this.lstDetalleMovimientos[i];
+            if (detalleMovimiento) {
+              const newDetalleImp: DetalleImpuestosEntity = {
+                id: '',
+                detalle_movimiento_id: detalleMovimiento.id ?? '',
+                cod_impuesto: '',
+                porcentaje: detalleMovimiento.tarifa ?? '',
+                base_imponible: '',
+                valor: '',
+                movimiento_id: detalleMovimiento.movimiento_id ?? '',
+                created_at: '',
+                updated_at: ''
+              };
+              this.httpServiceDet.obtenerDetalleImpuesto(newDetalleImp).subscribe(res => {
+                if (res.codigoError == 'OK') {
+                  if (res.lstDetalleImpuestos[0].porcentaje == this.iva + '%') {
+                    const newDetalleImp2: DetalleImpuestosEntity = {
+                      id: '',
+                      detalle_movimiento_id: detalleMovimiento.id ?? '',
+                      cod_impuesto: '',
+                      porcentaje: detalleMovimiento.tarifa ?? '',
+                      base_imponible: '',
+                      valor: (parseFloat(res.lstDetalleImpuestos[0].base_imponible) * (this.iva / 100)).toString(),
+                      movimiento_id: detalleMovimiento.movimiento_id ?? '',
+                      created_at: '',
+                      updated_at: ''
+                    };
+                    this.httpServiceDet.modificarMovimientoBP(newDetalleImp).subscribe(resp => {
+                      if (resp.codigoError == 'OK') {
+                        console.log('Actualizado BP GENERAL')
+                      } else {
+                        console.log('ERROR')
+                      }
+                    });
+                    this.httpServiceDet.modificarDetalleImpuestosBP(newDetalleImp2).pipe(
+                      finalize(() => {
+                        this.httpServiceDet.obtenerDetalleImpuesto(newDetalleImp).subscribe(res3 => {
+                          if (res3.codigoError == 'OK') {
+                            const newDetalleImp3: DetalleImpuestosEntity = {
+                              id: '',
+                              detalle_movimiento_id: detalleMovimiento.id ?? '',
+                              cod_impuesto: '',
+                              porcentaje: detalleMovimiento.tarifa ?? '',
+                              base_imponible: '',
+                              valor: (parseFloat(res3.lstDetalleImpuestos[0].base_imponible) * (this.iva / 100)).toString(),
+                              movimiento_id: detalleMovimiento.movimiento_id ?? '',
+                              created_at: '',
+                              updated_at: ''
+                            };
+                            this.httpServiceDet.modificarDetalleImpuestosVal(newDetalleImp3).subscribe(res2 => {
+                              if (res2.codigoError == 'OK') {
+                                console.log('Actualizado')
+                              } else {
+                                console.log('ERROR')
+                              }
+                            });
+                          }
+                        })
+                      })
+                    ).subscribe(res1 => {
+                      if (res1.codigoError == 'OK') {
   
+                      } else {
+                        console.log('ERROR')
+                      }
+                    });
+                  } else {
+                    const newDetalleImp2: DetalleImpuestosEntity = {
+                      id: '',
+                      detalle_movimiento_id: detalleMovimiento.id ?? '',
+                      cod_impuesto: '',
+                      porcentaje: detalleMovimiento.tarifa ?? '',
+                      base_imponible: '',
+                      valor: (parseFloat(res.lstDetalleImpuestos[0].base_imponible) * 0).toString(),
+                      movimiento_id: detalleMovimiento.movimiento_id ?? '',
+                      created_at: '',
+                      updated_at: ''
+                    };
+                    this.httpServiceDet.modificarMovimientoBP(newDetalleImp).subscribe(resp => {
+                      if (resp.codigoError == 'OK') {
+                        console.log('Actualizado BP GENERAL')
+                      } else {
+                        console.log('ERROR')
+                      }
+                    });
+                    this.httpServiceDet.modificarDetalleImpuestosBP(newDetalleImp2).pipe(
+                      finalize(() => {
+                        this.httpServiceDet.obtenerDetalleImpuesto(newDetalleImp).subscribe(res3 => {
+                          if (res3.codigoError == 'OK') {
+                            const newDetalleImp3: DetalleImpuestosEntity = {
+                              id: '',
+                              detalle_movimiento_id: detalleMovimiento.id ?? '',
+                              cod_impuesto: '',
+                              porcentaje: detalleMovimiento.tarifa ?? '',
+                              base_imponible: '',
+                              valor: (parseFloat(res3.lstDetalleImpuestos[0].base_imponible) * (this.iva / 100)).toString(),
+                              movimiento_id: detalleMovimiento.movimiento_id ?? '',
+                              created_at: '',
+                              updated_at: ''
+                            };
+                            this.httpServiceDet.modificarDetalleImpuestosVal(newDetalleImp3).subscribe(res2 => {
+                              if (res2.codigoError == 'OK') {
+                                console.log('Actualizado')
+                              } else {
+                                console.log('ERROR')
+                              }
+                            });
+                          }
+                        })
+                      })
+                    ).subscribe(res1 => {
+                      if (res1.codigoError == 'OK') {
+  
+                      } else {
+                        console.log('ERROR')
+                      }
+                    });
+                  }
+                } else {
+                  console.log('ERROR')
+                }
+              });
+            }
+          
+        };
+      } else if (result.isDenied) {
+        Swal.fire('No se finalizó el proceso de venta', '', 'info');
+      }
+    });
   }
 
 
