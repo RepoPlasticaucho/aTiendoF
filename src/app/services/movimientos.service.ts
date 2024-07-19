@@ -138,6 +138,10 @@ export class MovimientosService {
     return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/FinalizarPedido`, movimiento);
   }
 
+  finalizarPedidoFisico(movimiento: MovimientosEntity): Observable<Movimientos> {
+    return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/FinalizarPedidoDocumento`, movimiento);
+  }
+
   finalizarCompra(movimiento: MovimientosEntity): Observable<Movimientos> {
     return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/FinalizarCompra`, movimiento);
   }
