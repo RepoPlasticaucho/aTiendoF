@@ -27,7 +27,7 @@ import { DetalleImpuestosService } from 'src/app/services/detalle-impuestos.serv
 import { ComprobanteComprasEntity } from 'src/app/models/comprobante_compras';
 import { ComprobanteComprasService } from 'src/app/services/comprobante-compras.service';
 import { environment } from 'src/environments/environment.prod';
-
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-menucompr',
@@ -135,7 +135,8 @@ export class MenucomprComponent implements OnInit {
     private readonly httpServiceDet: DetalleImpuestosService,
     private readonly httpServiceComprobante: ComprobanteComprasService,
     private datePipe: DatePipe,
-    private router: Router) { }
+    private router: Router,
+    private http: HttpClient) { }
 
   ngOnInit(): void {
 
@@ -942,6 +943,278 @@ export class MenucomprComponent implements OnInit {
     localStorage.removeItem('compventa');
     localStorage.removeItem('autorizacion');
     localStorage.removeItem('fecha');
+  }
+
+  // Carga de XML
+
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const xmlString = reader.result as string;
+        this.parseXML(xmlString);
+      };
+      reader.readAsText(file);
+    }
+  }
+  
+  ruc?: string | null;
+  detalle?: any[] | null;
+  codigosPrincipales?: any[] | null;
+
+  parseXML(xmlString: string) {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlString, 'application/xml');
+    
+    // Asegurarse de que no hay errores en el parsing
+    const parserError = xmlDoc.getElementsByTagName('parsererror');
+    if (parserError.length) {
+      console.error('Error parsing XML', parserError[0].textContent);
+      return;
+    }
+
+    const getTextContent = (tagName: string) => {
+      const elements = xmlDoc.getElementsByTagName(tagName);
+      return elements.length ? elements[0].textContent : '';
+    };
+  
+    const cdataContent = getTextContent('comprobante');
+
+  if (cdataContent) {
+    const cdataDoc = parser.parseFromString(cdataContent, 'application/xml');
+    this.ruc = this.getTextContentFromElement(cdataDoc, 'ruc');
+
+    // Extraer todos los códigos principales
+    const detalles = cdataDoc.getElementsByTagName('detalle');
+    this.codigosPrincipales = [];
+    for (let i = 0; i < detalles.length; i++) {
+      const codigoPrincipal = this.getTextContentFromElement(detalles[i], 'codigoPrincipal');
+      if (codigoPrincipal) {
+        this.codigosPrincipales.push(codigoPrincipal);
+      }
+    }
+  }
+
+  for (let i = 0; i < this.codigosPrincipales?.length!; i++) {
+        //Asignamos los valores a los campos
+        this.costo = res.costo;
+        this.costo2 = res.costo;
+        this.precio = parseFloat(res.costo!) * parseFloat(proveedorProducto.cantidad!);
+
+        const newInventario: InventariosEntity = {
+          categoria_id: '',
+          categoria: '',
+          linea: '',
+          modelo: '',
+          marca_id: '',
+          marca: '',
+          modelo_producto_id: '',
+          idProducto: '',
+          Producto: '',
+          id: '',
+          etiquetas: res.etiquetas,
+          dInventario: '',
+          producto_id: res.producto_id,
+          almacen_id: localStorage.getItem('almacenid')!,
+          almacen: '',
+          stock_optimo: '',
+          fav: '0',
+          costo: this.costo2,
+          color: '',
+          stock: proveedorProducto.cantidad!,
+          pvp2: this.costo
+        }
+        // cambios
+        //console.log(proveedorProducto.productoExistente)
+        
+        this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res1 => {
+          if (res1.codigoError == 'NEXISTE') {
+            this.httpServiceInventario.agregarInventario(newInventario).pipe(
+              finalize(() => {
+                this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res5 => {
+                  const newDetalle: DetallesMovimientoEntity = {
+                    id: '',
+                    producto_nombre: '',
+                    inventario_id: res5.lstInventarios[0].id,
+                    producto_id: res.producto_id,
+                    movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
+                    cantidad: proveedorProducto.cantidad!,
+                    costo: this.costo,
+                    precio: this.precio
+                  }
+               
+                  
+                  this.httpServiceDetalle.agregarDetalleCompra(newDetalle).pipe(finalize(() => {
+               
+                    this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
+                      if (res1.codigoError == 'OK') {
+                        const newDetalleImp: DetalleImpuestosEntity = {
+                          id: '',
+                          detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
+                          cod_impuesto: res1.lstDetalleMovimientos[0].codigo_impuesto!,
+                          codigo_tarifa: res1.lstDetalleMovimientos[0].cod_tarifa!,
+                          porcentaje: res1.lstDetalleMovimientos[0].tarifa!,
+                          base_imponible: '',
+                          valor: res1.lstDetalleMovimientos[0].costo!,
+                          created_at: '',
+                          updated_at: ''
+                        }
+                        this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
+                          if (res2.codigoError != 'OK') {
+                            Swal.fire({
+                              icon: 'error',
+                              title: 'Ha ocurrido un error.',
+                              text: res2.descripcionError,
+                              showConfirmButton: false
+                            });
+                          }
+                        });
+                      }
+                    });
+                  })).subscribe(res4 => {
+                    if (res4.codigoError != 'OK') {
+                      Swal.fire({
+                        icon: 'error',
+                        title: 'Ha ocurrido un error.',
+                        text: 'La cantidad no puede ser vacía',
+                        showConfirmButton: false
+                      });
+                    } else {
+                      
+                          this.productoAgregado.emit(proveedorProducto);
+                          this.cerrarDialog();
+                     
+                    }
+                  });
+                });
+              })
+            ).subscribe(res2 => {
+              if (res2.codigoError != 'OK') {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Ha ocurrido un error.',
+                  text: res2.descripcionError,
+                  showConfirmButton: false
+                });
+              } else {
+              }
+            });
+
+          } else if (res1.codigoError == 'OK') {
+            this.costoStatic = res1.lstInventarios[0].costo;
+            this.stockStatic = res1.lstInventarios[0].stock;
+            const oper1 = parseFloat(res1.lstInventarios[0].costo!) * parseFloat(res1.lstInventarios[0].stock!);
+            const oper2 = parseFloat(proveedorProducto.cantidad!) * parseFloat(proveedorProducto.costo!);
+            const nuevoCosto = (oper1 + oper2) / (parseFloat(res1.lstInventarios[0].stock!) + parseFloat(proveedorProducto.cantidad!));
+            const inventarioCosto: InventariosEntity = {
+              categoria_id: '',
+              categoria: '',
+              linea: '',
+              modelo: '',
+              marca_id: '',
+              marca: '',
+              modelo_producto_id: '',
+              idProducto: '',
+              Producto: '',
+              costo: nuevoCosto.toString(),
+              id: res1.lstInventarios[0].id,
+              dInventario: '',
+              producto_id: '',
+              almacen_id: '',
+              almacen: '',
+              stock_optimo: '',
+              fav: '',
+              color: ''
+            }
+            this.httpServiceInventario.actualizarCosto(inventarioCosto).subscribe(resC => {
+              if (resC.codigoError != 'OK') {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Ha ocurrido un error.',
+                  text: resC.descripcionError,
+                  showConfirmButton: false
+                });
+              } else {
+
+              }
+            });
+            const newDetalle: DetallesMovimientoEntity = {
+              id: '',
+              producto_nombre: '',
+              inventario_id: res1.lstInventarios[0].id,
+              producto_id: res.producto_id,
+              movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
+              cantidad: proveedorProducto.cantidad!,
+              costo: this.costo,
+              precio: this.precio
+            }
+
+
+            if (!proveedorProducto.productoExistente){
+              if(proveedorProducto.cantidad=="0"){
+                Swal.fire({
+                  icon: 'error',
+                  title: 'No se puede agregar 0',
+                  text: "La cantidad no puede ser 0",
+                  showConfirmButton: false
+                });
+                this.botonBloqueado=false
+                return
+              }
+              this.httpServiceDetalle.agregarDetalleCompras(newDetalle).pipe(finalize(() => {
+
+                this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
+                  
+                  if (res1.codigoError == 'OK') {
+                    const newDetalleImp: DetalleImpuestosEntity = {
+                      id: '',
+                      detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
+                      cod_impuesto: res1.lstDetalleMovimientos[0].codigo_impuesto!,
+                    codigo_tarifa: res1.lstDetalleMovimientos[0].cod_tarifa!,
+                      porcentaje: res1.lstDetalleMovimientos[0].tarifa!,
+                      base_imponible: '',
+                      valor: res1.lstDetalleMovimientos[0].costo!,
+                      created_at: '',
+                      updated_at: ''
+                    }
+                    this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
+                      
+                      if (res2.codigoError != 'OK') {
+                        Swal.fire({
+                          icon: 'error',
+                          title: 'Ha ocurrido un error.',
+                          text: res2.descripcionError,
+                          showConfirmButton: false
+                        });
+                      }
+                    });
+                  }
+                });
+              })).subscribe(res3 => {
+                if (res3.codigoError != 'OK') {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Ha ocurrido un error.',
+                    text: 'La cantidad no puede ser vacía',
+                    showConfirmButton: false
+                  });
+                }
+              });
+            }
+          }
+        });
+  
+
+  }
+    console.log('RUC:', this.ruc);
+    console.log('Items:', this.detalle);
+    console.log('Códigos Principales:', this.codigosPrincipales);
+  }
+
+  getTextContentFromElement(element: Element | Document, tagName: string): string  | null{
+    const elements = element.getElementsByTagName(tagName);
+    return elements.length ? elements[0].textContent : '';
   }
 }
 

@@ -129,10 +129,11 @@
                     </button>
                 </div>
                 <div class="col-md-3">
-                    <button class="btn button carrito-button" [disabled]="true">
+                    <button class="btn button carrito-button" (click)="fileInput.click()">
                         <fa-icon [icon]="faArchive" [size]="'lg'" style="color: #ffffff; margin-right: 10px;"></fa-icon>
-                        XML PLASTICAUCHO
-                    </button>
+                                             XML PLASTICAUCHO
+                        <input type="file" #fileInput (change)="onFileSelected($event)" accept=".xml" style="display: none;" />
+                     </button>
                 </div>
             </div>
             <br><br>
