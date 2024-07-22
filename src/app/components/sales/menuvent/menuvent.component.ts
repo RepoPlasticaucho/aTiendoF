@@ -1062,6 +1062,17 @@ export class MenuventComponent implements OnInit {
 //Guardar el total en el local storage
 localStorage.setItem('totalDescargar', this.sumaTotal);
 
+    if(this.lstDetalleMovimientos.length == 0){
+      Swal.fire({
+        icon: 'info',
+        title: 'Información',
+        text: 'No hay productos en el carrito.',
+        showConfirmButton: true,
+        // timer: 3000
+      });
+      return
+    }
+
     const dialogRef = this.dialog.open(DescargarInventarioComponent, {
       width: 'auto', // Ancho automático basado en el contenido
       maxWidth: '90vw', // Máximo ancho del modal al 90% del viewport width
@@ -1069,4 +1080,7 @@ localStorage.setItem('totalDescargar', this.sumaTotal);
       maxHeight: '80vh', // Máxima altura del modal al 80% del viewport height
     });
   }
+
+
+
 }

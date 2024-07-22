@@ -16,7 +16,11 @@
 
         <div class="form-group">
             <label for="cliente" class="cool-label">Documento:</label>
-            <input type="text" class="form-control cool-input" placeholder="Numero de documento"  [(ngModel)]="documento">
+            <input type="text" class="form-control cool-input" placeholder="Numero de documento"  [(ngModel)]="documento"
+              maxlength="10"
+              (keypress)="onKeyPress($event)"
+              >
+            
           </div>
   
         <div class="form-group mt-3">
@@ -27,7 +31,9 @@
                 {{formasPago.nombre}}
               </option>
             </select>
-            <input type="text" class="form-control cool-input2 ml-2" placeholder="Monto" id="monto">
+            <input type="text" class="form-control cool-input2 ml-2" placeholder="Monto" id="monto"
+              (keypress)="onKeyPressFloat($event)"
+            >
             <button class="btn btn-success ml-2" [disabled]="!isBotonHabilitado"
                 (click)="abonar()"
             >ABONAR</button>

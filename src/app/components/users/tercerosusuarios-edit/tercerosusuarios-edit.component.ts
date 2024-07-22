@@ -44,11 +44,11 @@ export class TercerosusuariosEditComponent implements OnInit {
     provincia: new FormControl('', Validators.required),
     nombre: new FormControl('', Validators.required),
     apellido: new FormControl('', Validators.required),
-    fecha_nac: new FormControl('', Validators.required),
+    fecha_nac: new FormControl(''),
     id_fiscal: new FormControl('', Validators.required),
     correo: new FormControl('', Validators.required),
-    direccion: new FormControl('', Validators.required),
-    telefono: new FormControl('', Validators.required),
+    direccion: new FormControl(''),
+    telefono: new FormControl(''),
   });
 
   
@@ -258,6 +258,16 @@ export class TercerosusuariosEditComponent implements OnInit {
 
   onSubmit() {
     this.fechaFormateada = this.datePipe.transform(this.fechaSeleccionada, 'yyyy-MM-dd');
+
+    //Si la dirección esta vacia guardar sin dirección
+    if (this.TercerosForm.value!.direccion == "") {
+      this.TercerosForm.get("direccion")?.setValue("Sin dirección");
+    }
+
+    //Si la fecha esta vacia guardar una fecha por defecto
+    if (this.fechaFormateada == "") {
+      this.fechaFormateada = "1900-01-01";
+    }
 
     if (!this.TercerosForm.valid) {
       this.TercerosForm.markAllAsTouched();

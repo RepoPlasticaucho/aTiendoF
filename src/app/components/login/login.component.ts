@@ -46,10 +46,8 @@ export class LoginComponent {
 
   onSubmit(): void {
 
-    console.log("entro1");
 
     if (!this.categoryForm.valid) {
-    console.log("entro2");
 
       this.categoryForm.markAllAsTouched();
     } else {
@@ -67,7 +65,6 @@ export class LoginComponent {
         sociedad_pertenece: '',
         almacen_personal_id: ''
       }
-      console.log("IDSOCIEDAD1: ", userEntity);
 
 
       this.httpService.obtenerUsuario(userEntity).subscribe(res => {
@@ -102,7 +99,6 @@ export class LoginComponent {
 
           this.passwre = pass;
           this.encPass = encrypted.toString();
-          // console.log(this.encPass);
 
           const sociedadEntity: SociedadesEntity = {
             idGrupo: '',
@@ -122,7 +118,6 @@ export class LoginComponent {
                 if (res.codigoError == "OK") {
                   this.mostrarIni = false;
                   this.mostrarAct = true;
-                  console.log(res)
                 } else{
                   Swal.fire({
                     icon: 'error',
@@ -130,7 +125,6 @@ export class LoginComponent {
                   }).finally(() => {
                     this.router.navigate(['/login-nav']);
                   });
-                 console.log(res)
                 }
               });
               break;
@@ -263,7 +257,6 @@ export class LoginComponent {
             idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
             razon_social: ''
           }
-          console.log(userEntity)
           this.httpService.actualizarPass(userEntity).subscribe(res => {
             if (res.codigoError == "OK") {
               Swal.fire({

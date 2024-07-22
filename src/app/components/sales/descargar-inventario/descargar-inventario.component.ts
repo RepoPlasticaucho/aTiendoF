@@ -98,6 +98,7 @@ export class DescargarInventarioComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
+
     this.actualizarColor();
     this.dtOptions = {
       language: {
@@ -312,6 +313,26 @@ export class DescargarInventarioComponent implements OnInit {
 
   }
 
+
+  //Cuando se cierre y no se a guardado los pagos se eliminan
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
+    this.dtTrigger2.unsubscribe();
+
+    if (this.lstDetallePagos.length > 0) {
+      this.lstDetallePagos.forEach((detalle) => {
+        this.httpServiceDetallePago.eliminarDetallePago(detalle).subscribe((res) => {
+          if (res.codigoError == 'OK') {
+            console.log('Eliminado')
+          } else {
+            console.log('ERROR')
+          }
+        });
+      });
+    }
+
+  }
+
   actualizarColor() {
     const restoNumerico = parseFloat(this.resto); // Convertir a número
 
@@ -437,8 +458,20 @@ export class DescargarInventarioComponent implements OnInit {
   }
 
   descargarInventario() {
+    //Si el numero de factura esta vacio
+    if (this.documento == '') {
+      Swal.fire({
+        icon: 'error',
+        title: 'Ha ocurrido un error.',
+        text: 'El número de factura no puede estar vacío',
+        showConfirmButton: false,
+      });
+      return;
+    }
 
-    //1. Comrpohbar si ya esta abonado
+
+
+    //1. Comprobar si ya esta abonado
 
     if (parseFloat(this.resto) > 0) {
       Swal.fire({
@@ -653,6 +686,27 @@ export class DescargarInventarioComponent implements OnInit {
     this.dialogRef.close();
    
   }
+
+    
+  //Controlar que lo que ingrese en el input sea solo numeros caso contrario no escribir
+  onKeyPress(event: any) {
+    const pattern = /[0-9]/;
+    const inputChar = String.fromCharCode(event.charCode);
+    if (!pattern.test(inputChar)) {
+      event.preventDefault();
+    }
+  }
+
+  //Controlar que lo que ingrese en el input sea solo numeros o punto o coma caso contrario no escribir
+  onKeyPressFloat(event: any) {
+    const pattern = /[0-9.,]/;
+    const inputChar = String.fromCharCode(event.charCode);
+    if (!pattern.test(inputChar)) {
+      event.preventDefault();
+    }
+  }
+
+
 
   calcularSubtotal(): number {
     const subtotal = this.lstDetalleMovimientos
