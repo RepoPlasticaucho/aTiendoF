@@ -68,6 +68,9 @@ export class CompraNuevoComponent implements OnInit {
       }
     }
   }
+
+
+
   ngOnInit(): void {
     let component = this;
     let cantidadAux = "";

@@ -20,4 +20,5 @@ export interface ProveedoresProductosEntity {
     marca?: string;
     cantidad?: string;
     etiquetas?: string;
+    cod_sap?: string;
 }

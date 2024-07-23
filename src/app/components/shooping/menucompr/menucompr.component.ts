@@ -2,7 +2,8 @@ import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { Subject, finalize } from 'rxjs';
+
+import { Subject, finalize,take } from 'rxjs';
 import { faShoppingBag, faSave, faList, faTimes, faCartPlus, faEdit, faTrashAlt, faMoneyBillAlt, faCheck, faPlus, faFolderPlus, faArchive } from '@fortawesome/free-solid-svg-icons';
 import { DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
 import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service';
@@ -28,6 +29,9 @@ import { ComprobanteComprasEntity } from 'src/app/models/comprobante_compras';
 import { ComprobanteComprasService } from 'src/app/services/comprobante-compras.service';
 import { environment } from 'src/environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
+import { XmlCarga, XmlCargaEntity } from 'src/app/models/xmlCarga';
+import { ProveedoresproductosService } from 'src/app/services/proveedoresproductos.service';
+import { ProveedoresProductos, ProveedoresProductosEntity } from 'src/app/models/proveedoresproductos';
 
 @Component({
   selector: 'app-menucompr',
@@ -58,6 +62,20 @@ export class MenucomprComponent implements OnInit {
   selectedProveedor: string = '';
   selectedComprobante: string = '';
   selectedSustento: string = '';
+  lstXmlProveedoresProductos: ProveedoresProductosEntity[] = [];
+  failedCodSap: string[] = [];
+
+  costo: any;
+  costoStatic: any;
+  stockStatic: any;
+  costo2: any;
+  precio: any;
+    
+  ruc?: string | null;
+  detalle?: any[] | null;
+  codigosPrincipales?: any[] | null;
+
+  lstXmlCarga: XmlCargaEntity[] = [];
 
   public proveedorSeleccionado = false;
   public sustentoSeleccionado = false;
@@ -127,13 +145,19 @@ export class MenucomprComponent implements OnInit {
   iva = environment.iva
 
   constructor(private dialog: MatDialog,
+    private readonly httpServiceProvProd: ProveedoresproductosService,
+    private readonly httpServiceInventario: InventariosService,
+    private readonly httpServiceDetalle: DetallesmovimientoService,
     private readonly httpService: DetallesmovimientoService,
     private readonly httpServiceProv: ProveedoresService,
     private readonly httpServiceMov: MovimientosService,
     private readonly httpServiceSus: SustentosTributariosService,
     private readonly httpServiceInv: InventariosService,
     private readonly httpServiceDet: DetalleImpuestosService,
+    private readonly httpProveedorProducto: ProveedoresproductosService,
     private readonly httpServiceComprobante: ComprobanteComprasService,
+    private readonly httpServiceDetalleImp: DetalleImpuestosService,
+
     private datePipe: DatePipe,
     private router: Router,
     private http: HttpClient) { }
@@ -945,62 +969,150 @@ export class MenucomprComponent implements OnInit {
     localStorage.removeItem('fecha');
   }
 
-  // Carga de XML
-
   onFileSelected(event: any) {
+    Swal.fire({
+      title: 'Cargando XML...',
+      text: 'Por favor espere',
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      willOpen: () => {
+        Swal.showLoading();
+      }
+    });
+  
+    let counterCompleted = 0;
+    let counterError = 0;
     const file: File = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
         const xmlString = reader.result as string;
         this.parseXML(xmlString);
+  
+        // Crear un array de promesas para todas las llamadas asíncronas
+        console.log("Este es el total de lstXmlCarga", this.lstXmlCarga);
+  
+        const promises = this.lstXmlCarga.map((element) => {
+          const proveedorProducto: ProveedoresProductosEntity = {
+            id: '',
+            provedor_id: localStorage.getItem('proveedorid')!,
+            producto_id: '',
+            nombre_producto: '',
+            precio: element.precioUnitario!,
+            costo: element.costo,
+            created_at: '',
+            updated_at: '',
+            cod_sap: element.codigoSap,
+            cantidad: element.cantidad,
+          };
+  
+          console.log("Proveedor Producto antes 1009", proveedorProducto);
+  
+          return this.httpProveedorProducto.obtenerProveedoresProductosXML(proveedorProducto).toPromise()
+            .then(res => {
+              if (res?.codigoError != "OK") {
+                counterError++;
+                this.failedCodSap.push(element.codigoSap);
+              } else {
+                res.lstProveedoresProductos.forEach((producto) => {
+                  // Asignar los valores correctamente según el producto correspondiente
+                  producto.cantidad = element.cantidad;
+                  producto.cod_sap = element.codigoSap;
+                  producto.costo = element.costo;
+                  producto.precio = element.precioUnitario!;
+                  this.lstXmlProveedoresProductos.push(producto); // Agregar productos en lugar de sobrescribir
+                });
+  
+                counterCompleted++;
+                console.log("XML Proveedores Productos", this.lstXmlProveedoresProductos);
+              }
+            })
+            .catch(err => {
+              counterError++;
+              this.failedCodSap.push(element.codigoSap);
+              console.error('Error fetching proveedor producto', err);
+            });
+        });
+  
+        // Esperar a que todas las promesas se resuelvan
+        Promise.all(promises).then(() => {
+          Swal.close();
+          console.log(`Completed: ${counterCompleted}, Errors: ${counterError}`);
+  
+          Swal.fire({
+            icon: 'success',
+            title: 'XML cargado correctamente.',
+            text: `Se han cargado ${counterCompleted} productos correctamente y ${counterError} productos no se han podido cargar.
+            Los productos que no se han podido cargar son: ${this.failedCodSap.join(', ')}`,
+            showConfirmButton: true,
+            confirmButtonText: "Ok"
+          });
+  
+          console.log("Este es el total de lstXmlProveedoresProductos", this.lstXmlProveedoresProductos);
+  
+
+          // Crear un array de promesas para la creación de detalles
+          const detailPromises = this.lstXmlProveedoresProductos.splice(0,10).map((element) => {
+            return new Promise<void>((resolve, reject) => {
+              const proveedorProducto: ProveedoresProductosEntity = {
+                id: '',
+                provedor_id: localStorage.getItem('proveedorid')!,
+                producto_id: element.producto_id,
+                nombre_producto: '',
+                precio: element.precio, 
+                costo: element.costo,
+                created_at: '',
+                updated_at: '',
+                cod_sap: element.cod_sap,
+                cantidad: element.cantidad,
+              };
+  
+  
+              try {
+                this.crearDetalle(proveedorProducto);
+
+                resolve();
+              } catch (err) {
+                reject(err);
+              }
+            });
+          });
+  
+          // Esperar a que todas las promesas de creación de detalles se resuelvan
+          Promise.all(detailPromises).then(() => {
+            // Recargar la tabla aquí
+          }).catch(err => {
+            console.error('Error creating details', err);
+          });
+        });
       };
       reader.readAsText(file);
     }
   }
   
-  ruc?: string | null;
-  detalle?: any[] | null;
-  codigosPrincipales?: any[] | null;
 
-  parseXML(xmlString: string) {
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlString, 'application/xml');
-    
-    // Asegurarse de que no hay errores en el parsing
-    const parserError = xmlDoc.getElementsByTagName('parsererror');
-    if (parserError.length) {
-      console.error('Error parsing XML', parserError[0].textContent);
-      return;
-    }
-
-    const getTextContent = (tagName: string) => {
-      const elements = xmlDoc.getElementsByTagName(tagName);
-      return elements.length ? elements[0].textContent : '';
-    };
   
-    const cdataContent = getTextContent('comprobante');
-
-  if (cdataContent) {
-    const cdataDoc = parser.parseFromString(cdataContent, 'application/xml');
-    this.ruc = this.getTextContentFromElement(cdataDoc, 'ruc');
-
-    // Extraer todos los códigos principales
-    const detalles = cdataDoc.getElementsByTagName('detalle');
-    this.codigosPrincipales = [];
-    for (let i = 0; i < detalles.length; i++) {
-      const codigoPrincipal = this.getTextContentFromElement(detalles[i], 'codigoPrincipal');
-      if (codigoPrincipal) {
-        this.codigosPrincipales.push(codigoPrincipal);
-      }
-    }
-  }
-
-  for (let i = 0; i < this.codigosPrincipales?.length!; i++) {
+  crearDetalle(proveedorProducto: ProveedoresProductosEntity): void {
+  
+    this.httpServiceProvProd.asignarProveedorProducto(proveedorProducto);
+    this.httpServiceProvProd.obtenerProveedorProducto$.pipe(take(1)).subscribe((res) => {
+      if (res.producto_id == '') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Ha ocurrido un error.',
+          text: 'No se ha obtenido información.',
+          showConfirmButton: false,
+        }).finally(() => {
+          this.router.navigate([
+            '/navegation-cl',
+            { outlets: { contentClient: ['menucompr'] } },
+          ]);
+        });
+      } else {
         //Asignamos los valores a los campos
-        this.costo = res.costo;
-        this.costo2 = res.costo;
-        this.precio = parseFloat(res.costo!) * parseFloat(proveedorProducto.cantidad!);
+        this.costo = proveedorProducto.costo;
+        this.costo2 = proveedorProducto.costo;
+        this.precio = proveedorProducto.precio
 
         const newInventario: InventariosEntity = {
           categoria_id: '',
@@ -1082,8 +1194,8 @@ export class MenucomprComponent implements OnInit {
                       });
                     } else {
                       
-                          this.productoAgregado.emit(proveedorProducto);
-                          this.cerrarDialog();
+                          // this.productoAgregado.emit(proveedorProducto);
+                          // this.cerrarDialog();
                      
                     }
                   });
@@ -1146,8 +1258,8 @@ export class MenucomprComponent implements OnInit {
               producto_id: res.producto_id,
               movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
               cantidad: proveedorProducto.cantidad!,
-              costo: this.costo,
-              precio: this.precio
+              costo: proveedorProducto.precio!,
+              precio: proveedorProducto.costo!
             }
 
 
@@ -1159,7 +1271,6 @@ export class MenucomprComponent implements OnInit {
                   text: "La cantidad no puede ser 0",
                   showConfirmButton: false
                 });
-                this.botonBloqueado=false
                 return
               }
               this.httpServiceDetalle.agregarDetalleCompras(newDetalle).pipe(finalize(() => {
@@ -1199,17 +1310,105 @@ export class MenucomprComponent implements OnInit {
                     text: 'La cantidad no puede ser vacía',
                     showConfirmButton: false
                   });
+                } else {
+                      // this.productoAgregado.emit(proveedorProducto);
+                      // this.cerrarDialog();
                 }
               });
+            } else {
+              if(proveedorProducto.cantidad! != '0'){
+
+                newDetalle.precio = (parseFloat(newDetalle.cantidad!) * parseFloat(newDetalle.costo!)).toString();
+
+                console.log("ESTE ES EL nuevo precio ", newDetalle.precio)
+                console.log(newDetalle)
+
+                this.httpServiceDetalle.modificarDetallePedidoVenta(newDetalle).subscribe(res => {
+                  console.log(res.codigoError)
+                  if(res.codigoError == 'OK'){
+                  
+                      //   this.cerrarDialog();
+                      
+                      // this.productoAgregado.emit(proveedorProducto);
+               
+                  } else {
+                    
+                  }
+                });
+              } else {
+                this.httpServiceDetalle.eliminarDetallePedidoVenta(newDetalle).subscribe(res => {
+                  console.log("en este metodo"+res)
+               
+                   // this.cerrarDialog();
+                
+                });     
+              }
             }
           }
         });
-  
-
+      }
+    })
   }
+
+  parseXML(xmlString: string) {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlString, 'application/xml');
+    
+    // Asegurarse de que no hay errores en el parsing
+    const parserError = xmlDoc.getElementsByTagName('parsererror');
+    if (parserError.length) {
+      console.error('Error parsing XML', parserError[0].textContent);
+      return;
+    }
+
+    const getTextContent = (tagName: string) => {
+      const elements = xmlDoc.getElementsByTagName(tagName);
+      return elements.length ? elements[0].textContent : '';
+    };
+  
+    const cdataContent = getTextContent('comprobante');
+
+  if (cdataContent) {
+    const cdataDoc = parser.parseFromString(cdataContent, 'application/xml');
+    this.ruc = this.getTextContentFromElement(cdataDoc, 'ruc');
+
+    // Extraer todos los códigos principales
+    const detalles = cdataDoc.getElementsByTagName('detalle');
+    this.codigosPrincipales = [];
+    for (let i = 0; i < detalles.length; i++) {
+      const codigo = this.getTextContentFromElement(detalles[i], 'codigoPrincipal')
+      const cantidad = this.getTextContentFromElement(detalles[i], 'cantidad')
+      const costo = this.getTextContentFromElement(detalles[i], 'precioTotalSinImpuesto')
+      const descuento = this.getTextContentFromElement(detalles[i], 'descuento')
+      const precioUnitario = this.getTextContentFromElement(detalles[i], 'precioUnitario')
+
+      //Crear XmlCargaEntity
+      const xmlCarga: XmlCargaEntity = {
+        codigoSap: codigo!,
+        cantidad: cantidad!,
+        costo: costo!,
+        descuento: descuento!,
+        precioUnitario: precioUnitario!
+      }
+
+      
+
+
+      if (xmlCarga) {
+        this.lstXmlCarga.push(xmlCarga);
+      }
+    }
+  }
+
+
+
+  
     console.log('RUC:', this.ruc);
     console.log('Items:', this.detalle);
-    console.log('Códigos Principales:', this.codigosPrincipales);
+    console.log('Códigos Principales:', this.lstXmlCarga);
+
+
+
   }
 
   getTextContentFromElement(element: Element | Document, tagName: string): string  | null{

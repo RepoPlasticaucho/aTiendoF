@@ -43,4 +43,10 @@ export class ProveedoresproductosService {
   obtenerProveedoresProductosProv(proveedorProducto: ProveedoresProductosEntity): Observable<ProveedoresProductos> {
     return this.http.post<ProveedoresProductos>(`${environment.apiUrl}proveedoresproductos/ObtenerProveedoresProductosProv`,proveedorProducto);
   }
+
+  obtenerProveedoresProductosXML(proveedorProducto: ProveedoresProductosEntity): Observable<ProveedoresProductos> {
+    return this.http.post<ProveedoresProductos>(`${environment.apiUrl}proveedoresproductos/ObtenerProductosProveedoresXML`,proveedorProducto);
+  }
+
+
 }
