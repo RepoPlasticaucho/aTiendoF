@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
-import { Subject, finalize,take } from 'rxjs';
+import { Subject, finalize, take } from 'rxjs';
 import { faShoppingBag, faSave, faList, faTimes, faCartPlus, faEdit, faTrashAlt, faMoneyBillAlt, faCheck, faPlus, faFolderPlus, faArchive } from '@fortawesome/free-solid-svg-icons';
 import { DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
 import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service';
@@ -41,6 +41,7 @@ import { ProveedoresProductos, ProveedoresProductosEntity } from 'src/app/models
 })
 export class MenucomprComponent implements OnInit {
   clienteForm = new FormGroup({
+    proveedor: new FormControl('0', Validators.required),
     tipo: new FormControl('0', Validators.required)
   });
 
@@ -70,7 +71,7 @@ export class MenucomprComponent implements OnInit {
   stockStatic: any;
   costo2: any;
   precio: any;
-    
+
   ruc?: string | null;
   detalle?: any[] | null;
   codigosPrincipales?: any[] | null;
@@ -164,7 +165,6 @@ export class MenucomprComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.loadFormStateFromLocalStorage();
 
 
 
@@ -247,6 +247,16 @@ export class MenucomprComponent implements OnInit {
         });
       } else {
         this.lstProveedores = res.lstProveedores;
+
+        //Si hay en el localStorge un proveedor seleccionado
+        if (localStorage.getItem('proveedorid') != '0') {
+          //Buscar el la lista lstProveedores el indice del proveedor seleccionado 
+          let index = this.lstProveedores.findIndex(x => x.id == localStorage.getItem('proveedorid'));
+
+          //Si existe el proveedor seleccionado
+          this.selectedProveedor = this.lstProveedores[index].nombre;
+          this.proveedorSeleccionado = true;
+        }
       }
     });
 
@@ -261,8 +271,68 @@ export class MenucomprComponent implements OnInit {
         });
       } else {
         this.lstComprobantes = res.lstComprobantes;
+        //Si hay en el localStorge un proveedor seleccionado
+        //Si hay en el localStorge un proveedor seleccionado
+        if (localStorage.getItem('comprobanteCompraid') != '0') {
+          //   //Buscar el la lista lstProveedores el indice del proveedor seleccionado 
+          let index = this.lstComprobantes.findIndex(x => x.id == localStorage.getItem('comprobanteCompraid'));
+
+
+          //   //Si existe el proveedor seleccionado
+          this.selectedComprobante = this.lstComprobantes[index].tipo;
+          this.comprobanteCompraSeleccionado = true;
+
+
+          const sustento: SustentosTributariosEntity = {
+            id: '',
+            etiquetas: '',
+            codigo: '',
+            sustento: '',
+            comprobante_id: localStorage.getItem('comprobanteCompraid')!
+          }
+
+          this.httpServiceSus.obtenerSustentosComp(sustento).subscribe(res1 => {
+            if (res1.codigoError != "OK") {
+              this.lstSustentos = [];
+              Swal.fire({
+                icon: 'error',
+                title: 'No se pudo obtener sustentos.',
+                text: res1.descripcionError,
+                showConfirmButton: false,
+              });
+            } else {
+              this.lstSustentos = res1.lstSustentos;
+              if (localStorage.getItem('sustentoid') != "0") {
+                //   //Buscar el la lista lstProveedores el indice del proveedor seleccionado 
+                //Concatener el codigo con el sustento y buscarlo en la lista
+                
+                //   //Buscar el la lista lstProveedores el indice del proveedor seleccionado 
+                let index3 = this.lstSustentos.findIndex(x => parseInt(x.codigo) == parseInt(localStorage.getItem('sustentoid')!));
+
+                //   //Si existe el proveedor seleccionado
+                this.selectedSustento = this.lstSustentos[index3].sustento;
+
+
+              }
+
+
+            }
+          });
+  
+
+
+
+        }
+
+
+
+
       }
     });
+
+
+    this.loadFormStateFromLocalStorage();
+    this.buttonsDisabled = this.checkAllConditions();
 
     this.cargarTablaMenucompr();
     this.checkRegistros();
@@ -878,7 +948,7 @@ export class MenucomprComponent implements OnInit {
             text: `Se ha finalizado la compra`,
             showConfirmButton: true,
             confirmButtonText: "Ok"
-            
+
           }).finally(() => {
             // this.groupForm.reset();
             this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ver-compra'] } }]);
@@ -919,20 +989,11 @@ export class MenucomprComponent implements OnInit {
     const comprobante = localStorage.getItem('comprobanteCompra');
     const sustento = localStorage.getItem('sustento');
 
-    // const sustentoid = localStorage.getItem('sustentoid');
-    // const comprobanteCompraid = localStorage.getItem('comprobanteCompraid');
-    // const compventa = localStorage.getItem('compventa');
-    // const autorizacion = localStorage.getItem('autorizacion');
-    // const fecha = localStorage.getItem('fecha');
 
-    console.log("proveedorid", proveedorid);
-    console.log("proveedor", proveedor);
+    //Obtener el proveedor del local storage y eliminar el numero del inicio hasta el guion 
 
-    if (proveedorid != null && proveedor != null) {
-      this.selectedProveedor = proveedor;
-      this.proveedorSeleccionado = true;
-      this.buttonsDisabled = !this.checkAllConditions();
-    }
+    this.selectedProveedor = localStorage.getItem('proveedor') ?? '';
+
 
 
 
@@ -951,7 +1012,7 @@ export class MenucomprComponent implements OnInit {
     this.comprobanteLleno = this.comprobante.trim() !== "";
     this.buttonsDisabled = !this.checkAllConditions();
 
- 
+
 
 
   }
@@ -968,7 +1029,6 @@ export class MenucomprComponent implements OnInit {
     localStorage.removeItem('autorizacion');
     localStorage.removeItem('fecha');
   }
-
   onFileSelected(event: any) {
     Swal.fire({
       title: 'Cargando XML...',
@@ -979,7 +1039,7 @@ export class MenucomprComponent implements OnInit {
         Swal.showLoading();
       }
     });
-  
+
     let counterCompleted = 0;
     let counterError = 0;
     const file: File = event.target.files[0];
@@ -988,10 +1048,8 @@ export class MenucomprComponent implements OnInit {
       reader.onload = () => {
         const xmlString = reader.result as string;
         this.parseXML(xmlString);
-  
+
         // Crear un array de promesas para todas las llamadas asíncronas
-        console.log("Este es el total de lstXmlCarga", this.lstXmlCarga);
-  
         const promises = this.lstXmlCarga.map((element) => {
           const proveedorProducto: ProveedoresProductosEntity = {
             id: '',
@@ -1005,9 +1063,7 @@ export class MenucomprComponent implements OnInit {
             cod_sap: element.codigoSap,
             cantidad: element.cantidad,
           };
-  
-          console.log("Proveedor Producto antes 1009", proveedorProducto);
-  
+
           return this.httpProveedorProducto.obtenerProveedoresProductosXML(proveedorProducto).toPromise()
             .then(res => {
               if (res?.codigoError != "OK") {
@@ -1015,16 +1071,13 @@ export class MenucomprComponent implements OnInit {
                 this.failedCodSap.push(element.codigoSap);
               } else {
                 res.lstProveedoresProductos.forEach((producto) => {
-                  // Asignar los valores correctamente según el producto correspondiente
                   producto.cantidad = element.cantidad;
                   producto.cod_sap = element.codigoSap;
                   producto.costo = element.costo;
                   producto.precio = element.precioUnitario!;
-                  this.lstXmlProveedoresProductos.push(producto); // Agregar productos en lugar de sobrescribir
+                  this.lstXmlProveedoresProductos.push(producto);
                 });
-  
                 counterCompleted++;
-                console.log("XML Proveedores Productos", this.lstXmlProveedoresProductos);
               }
             })
             .catch(err => {
@@ -1033,12 +1086,12 @@ export class MenucomprComponent implements OnInit {
               console.error('Error fetching proveedor producto', err);
             });
         });
-  
+
         // Esperar a que todas las promesas se resuelvan
         Promise.all(promises).then(() => {
           Swal.close();
           console.log(`Completed: ${counterCompleted}, Errors: ${counterError}`);
-  
+
           Swal.fire({
             icon: 'success',
             title: 'XML cargado correctamente.',
@@ -1047,313 +1100,313 @@ export class MenucomprComponent implements OnInit {
             showConfirmButton: true,
             confirmButtonText: "Ok"
           });
-  
-          console.log("Este es el total de lstXmlProveedoresProductos", this.lstXmlProveedoresProductos);
-  
-
-          // Crear un array de promesas para la creación de detalles
-          const detailPromises = this.lstXmlProveedoresProductos.splice(0,10).map((element) => {
-            return new Promise<void>((resolve, reject) => {
-              const proveedorProducto: ProveedoresProductosEntity = {
-                id: '',
-                provedor_id: localStorage.getItem('proveedorid')!,
-                producto_id: element.producto_id,
-                nombre_producto: '',
-                precio: element.precio, 
-                costo: element.costo,
-                created_at: '',
-                updated_at: '',
-                cod_sap: element.cod_sap,
-                cantidad: element.cantidad,
-              };
-  
-  
-              try {
-                this.crearDetalle(proveedorProducto);
-
-                resolve();
-              } catch (err) {
-                reject(err);
+        }).then(async () => {
+          try {
+            //Mostrar carga
+            Swal.fire({
+              title: 'Creando detalles...',
+              text: 'Por favor espere',
+              allowOutsideClick: false,
+              showConfirmButton: false,
+              willOpen: () => {
+                Swal.showLoading();
               }
             });
-          });
-  
-          // Esperar a que todas las promesas de creación de detalles se resuelvan
-          Promise.all(detailPromises).then(() => {
-            // Recargar la tabla aquí
-          }).catch(err => {
+
+            await this.realizarAccionConDetalles(this.lstXmlProveedoresProductos);
+            console.log('Detalles creados y página recargada');
+            this.cargarTablaMenucompr();
+
+            Swal.close();
+          } catch (err) {
             console.error('Error creating details', err);
-          });
+          }
+        }).catch(err => {
+          console.error('Error creating details', err);
         });
       };
       reader.readAsText(file);
     }
   }
-  
-
-  
-  crearDetalle(proveedorProducto: ProveedoresProductosEntity): void {
-  
-    this.httpServiceProvProd.asignarProveedorProducto(proveedorProducto);
-    this.httpServiceProvProd.obtenerProveedorProducto$.pipe(take(1)).subscribe((res) => {
-      if (res.producto_id == '') {
-        Swal.fire({
-          icon: 'error',
-          title: 'Ha ocurrido un error.',
-          text: 'No se ha obtenido información.',
-          showConfirmButton: false,
-        }).finally(() => {
-          this.router.navigate([
-            '/navegation-cl',
-            { outlets: { contentClient: ['menucompr'] } },
-          ]);
-        });
-      } else {
-        //Asignamos los valores a los campos
-        this.costo = proveedorProducto.costo;
-        this.costo2 = proveedorProducto.costo;
-        this.precio = proveedorProducto.precio
-
-        const newInventario: InventariosEntity = {
-          categoria_id: '',
-          categoria: '',
-          linea: '',
-          modelo: '',
-          marca_id: '',
-          marca: '',
-          modelo_producto_id: '',
-          idProducto: '',
-          Producto: '',
-          id: '',
-          etiquetas: res.etiquetas,
-          dInventario: '',
-          producto_id: res.producto_id,
-          almacen_id: localStorage.getItem('almacenid')!,
-          almacen: '',
-          stock_optimo: '',
-          fav: '0',
-          costo: this.costo2,
-          color: '',
-          stock: proveedorProducto.cantidad!,
-          pvp2: this.costo
-        }
-        // cambios
-        //console.log(proveedorProducto.productoExistente)
-        
-        this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res1 => {
-          if (res1.codigoError == 'NEXISTE') {
-            this.httpServiceInventario.agregarInventario(newInventario).pipe(
-              finalize(() => {
-                this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res5 => {
-                  const newDetalle: DetallesMovimientoEntity = {
-                    id: '',
-                    producto_nombre: '',
-                    inventario_id: res5.lstInventarios[0].id,
-                    producto_id: res.producto_id,
-                    movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
-                    cantidad: proveedorProducto.cantidad!,
-                    costo: this.costo,
-                    precio: this.precio
-                  }
-               
-                  
-                  this.httpServiceDetalle.agregarDetalleCompra(newDetalle).pipe(finalize(() => {
-               
-                    this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
-                      if (res1.codigoError == 'OK') {
-                        const newDetalleImp: DetalleImpuestosEntity = {
-                          id: '',
-                          detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
-                          cod_impuesto: res1.lstDetalleMovimientos[0].codigo_impuesto!,
-                          codigo_tarifa: res1.lstDetalleMovimientos[0].cod_tarifa!,
-                          porcentaje: res1.lstDetalleMovimientos[0].tarifa!,
-                          base_imponible: '',
-                          valor: res1.lstDetalleMovimientos[0].costo!,
-                          created_at: '',
-                          updated_at: ''
-                        }
-                        this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
-                          if (res2.codigoError != 'OK') {
-                            Swal.fire({
-                              icon: 'error',
-                              title: 'Ha ocurrido un error.',
-                              text: res2.descripcionError,
-                              showConfirmButton: false
-                            });
-                          }
-                        });
-                      }
-                    });
-                  })).subscribe(res4 => {
-                    if (res4.codigoError != 'OK') {
-                      Swal.fire({
-                        icon: 'error',
-                        title: 'Ha ocurrido un error.',
-                        text: 'La cantidad no puede ser vacía',
-                        showConfirmButton: false
-                      });
-                    } else {
-                      
-                          // this.productoAgregado.emit(proveedorProducto);
-                          // this.cerrarDialog();
-                     
-                    }
-                  });
-                });
-              })
-            ).subscribe(res2 => {
-              if (res2.codigoError != 'OK') {
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Ha ocurrido un error.',
-                  text: res2.descripcionError,
-                  showConfirmButton: false
-                });
-              } else {
-              }
-            });
-
-          } else if (res1.codigoError == 'OK') {
-            this.costoStatic = res1.lstInventarios[0].costo;
-            this.stockStatic = res1.lstInventarios[0].stock;
-            const oper1 = parseFloat(res1.lstInventarios[0].costo!) * parseFloat(res1.lstInventarios[0].stock!);
-            const oper2 = parseFloat(proveedorProducto.cantidad!) * parseFloat(proveedorProducto.costo!);
-            const nuevoCosto = (oper1 + oper2) / (parseFloat(res1.lstInventarios[0].stock!) + parseFloat(proveedorProducto.cantidad!));
-            const inventarioCosto: InventariosEntity = {
-              categoria_id: '',
-              categoria: '',
-              linea: '',
-              modelo: '',
-              marca_id: '',
-              marca: '',
-              modelo_producto_id: '',
-              idProducto: '',
-              Producto: '',
-              costo: nuevoCosto.toString(),
-              id: res1.lstInventarios[0].id,
-              dInventario: '',
-              producto_id: '',
-              almacen_id: '',
-              almacen: '',
-              stock_optimo: '',
-              fav: '',
-              color: ''
-            }
-            this.httpServiceInventario.actualizarCosto(inventarioCosto).subscribe(resC => {
-              if (resC.codigoError != 'OK') {
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Ha ocurrido un error.',
-                  text: resC.descripcionError,
-                  showConfirmButton: false
-                });
-              } else {
-
-              }
-            });
-            const newDetalle: DetallesMovimientoEntity = {
-              id: '',
-              producto_nombre: '',
-              inventario_id: res1.lstInventarios[0].id,
-              producto_id: res.producto_id,
-              movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
-              cantidad: proveedorProducto.cantidad!,
-              costo: proveedorProducto.precio!,
-              precio: proveedorProducto.costo!
-            }
 
 
-            if (!proveedorProducto.productoExistente){
-              if(proveedorProducto.cantidad=="0"){
-                Swal.fire({
-                  icon: 'error',
-                  title: 'No se puede agregar 0',
-                  text: "La cantidad no puede ser 0",
-                  showConfirmButton: false
-                });
-                return
-              }
-              this.httpServiceDetalle.agregarDetalleCompras(newDetalle).pipe(finalize(() => {
 
-                this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
-                  
-                  if (res1.codigoError == 'OK') {
-                    const newDetalleImp: DetalleImpuestosEntity = {
+  async realizarAccionConDetalles(detalles: ProveedoresProductosEntity[]): Promise<void> {
+    try {
+      for (const detalle of detalles) {
+        await this.crearDetalle(detalle);
+      }
+      Swal.fire({
+        icon: 'success',
+        title: 'Detalles creados con éxito',
+        showConfirmButton: true,
+      }).then(() => {
+        this.router.navigate(['/navegation-cl', { outlets: { contentClient: ['menucompr'] } }]);
+      });
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al crear detalles',
+        text: "error",
+        showConfirmButton: true,
+      });
+    }
+  }
+
+
+  crearDetalle(proveedorProducto: ProveedoresProductosEntity): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.httpServiceProvProd.asignarProveedorProducto(proveedorProducto);
+      this.httpServiceProvProd.obtenerProveedorProducto$.pipe(take(1)).subscribe((res) => {
+        if (res.producto_id == '') {
+          Swal.fire({
+            icon: 'error',
+            title: 'Ha ocurrido un error.',
+            text: 'No se ha obtenido información.',
+            showConfirmButton: false,
+          }).finally(() => {
+            this.router.navigate([
+              '/navegation-cl',
+              { outlets: { contentClient: ['menucompr'] } },
+            ]);
+            reject(new Error('No se ha obtenido información.'));
+          });
+        } else {
+          //Asignamos los valores a los campos
+          this.costo = proveedorProducto.costo;
+          this.costo2 = proveedorProducto.costo;
+          this.precio = proveedorProducto.precio;
+
+          const newInventario: InventariosEntity = {
+            categoria_id: '',
+            categoria: '',
+            linea: '',
+            modelo: '',
+            marca_id: '',
+            marca: '',
+            modelo_producto_id: '',
+            idProducto: '',
+            Producto: '',
+            id: '',
+            etiquetas: res.etiquetas,
+            dInventario: '',
+            producto_id: res.producto_id,
+            almacen_id: localStorage.getItem('almacenid')!,
+            almacen: '',
+            stock_optimo: '',
+            fav: '0',
+            costo: this.costo2,
+            color: '',
+            stock: proveedorProducto.cantidad!,
+            pvp2: this.costo
+          };
+
+          this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res1 => {
+            if (res1.codigoError == 'NEXISTE') {
+              this.httpServiceInventario.agregarInventario(newInventario).pipe(
+                finalize(() => {
+                  this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res5 => {
+                    const newDetalle: DetallesMovimientoEntity = {
                       id: '',
-                      detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
-                      cod_impuesto: res1.lstDetalleMovimientos[0].codigo_impuesto!,
-                    codigo_tarifa: res1.lstDetalleMovimientos[0].cod_tarifa!,
-                      porcentaje: res1.lstDetalleMovimientos[0].tarifa!,
-                      base_imponible: '',
-                      valor: res1.lstDetalleMovimientos[0].costo!,
-                      created_at: '',
-                      updated_at: ''
-                    }
-                    this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
-                      
-                      if (res2.codigoError != 'OK') {
+                      producto_nombre: '',
+                      inventario_id: res5.lstInventarios[0].id,
+                      producto_id: res.producto_id,
+                      movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
+                      cantidad: proveedorProducto.cantidad!,
+                      costo: this.costo,
+                      precio: this.precio
+                    };
+
+                    this.httpServiceDetalle.agregarDetalleCompra(newDetalle).pipe(finalize(() => {
+                      this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
+                        if (res1.codigoError == 'OK') {
+                          const newDetalleImp: DetalleImpuestosEntity = {
+                            id: '',
+                            detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
+                            cod_impuesto: res1.lstDetalleMovimientos[0].codigo_impuesto!,
+                            codigo_tarifa: res1.lstDetalleMovimientos[0].cod_tarifa!,
+                            porcentaje: res1.lstDetalleMovimientos[0].tarifa!,
+                            base_imponible: '',
+                            valor: res1.lstDetalleMovimientos[0].costo!,
+                            created_at: '',
+                            updated_at: ''
+                          };
+                          this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
+                            if (res2.codigoError != 'OK') {
+                              Swal.fire({
+                                icon: 'error',
+                                title: 'Ha ocurrido un error.',
+                                text: res2.descripcionError,
+                                showConfirmButton: false
+                              });
+                            }
+                          });
+                        }
+                      });
+                    })).subscribe(res4 => {
+                      if (res4.codigoError != 'OK') {
                         Swal.fire({
                           icon: 'error',
                           title: 'Ha ocurrido un error.',
-                          text: res2.descripcionError,
+                          text: 'La cantidad no puede ser vacía',
                           showConfirmButton: false
                         });
+                        reject(new Error('La cantidad no puede ser vacía'));
+                      } else {
+                        resolve();
                       }
                     });
-                  }
-                });
-              })).subscribe(res3 => {
-                if (res3.codigoError != 'OK') {
+                  });
+                })
+              ).subscribe(res2 => {
+                if (res2.codigoError != 'OK') {
                   Swal.fire({
                     icon: 'error',
                     title: 'Ha ocurrido un error.',
-                    text: 'La cantidad no puede ser vacía',
+                    text: res2.descripcionError,
                     showConfirmButton: false
                   });
+                  reject(new Error(res2.descripcionError));
                 } else {
-                      // this.productoAgregado.emit(proveedorProducto);
-                      // this.cerrarDialog();
+                  resolve();
                 }
               });
-            } else {
-              if(proveedorProducto.cantidad! != '0'){
+            } else if (res1.codigoError == 'OK') {
+              this.costoStatic = res1.lstInventarios[0].costo;
+              this.stockStatic = res1.lstInventarios[0].stock;
+              const oper1 = parseFloat(res1.lstInventarios[0].costo!) * parseFloat(res1.lstInventarios[0].stock!);
+              const oper2 = parseFloat(proveedorProducto.cantidad!) * parseFloat(proveedorProducto.costo!);
+              const nuevoCosto = (oper1 + oper2) / (parseFloat(res1.lstInventarios[0].stock!) + parseFloat(proveedorProducto.cantidad!));
+              const inventarioCosto: InventariosEntity = {
+                categoria_id: '',
+                categoria: '',
+                linea: '',
+                modelo: '',
+                marca_id: '',
+                marca: '',
+                modelo_producto_id: '',
+                idProducto: '',
+                Producto: '',
+                costo: nuevoCosto.toString(),
+                id: res1.lstInventarios[0].id,
+                dInventario: '',
+                producto_id: '',
+                almacen_id: '',
+                almacen: '',
+                stock_optimo: '',
+                fav: '',
+                color: ''
+              };
+              this.httpServiceInventario.actualizarCosto(inventarioCosto).subscribe(resC => {
+                if (resC.codigoError != 'OK') {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Ha ocurrido un error.',
+                    text: resC.descripcionError,
+                    showConfirmButton: false
+                  });
+                  reject(new Error(resC.descripcionError));
+                } else {
+                  resolve();
+                }
+              });
+              const newDetalle: DetallesMovimientoEntity = {
+                id: '',
+                producto_nombre: '',
+                inventario_id: res1.lstInventarios[0].id,
+                producto_id: res.producto_id,
+                movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
+                cantidad: proveedorProducto.cantidad!,
+                costo: proveedorProducto.precio!,
+                precio: proveedorProducto.costo!
+              };
 
-                newDetalle.precio = (parseFloat(newDetalle.cantidad!) * parseFloat(newDetalle.costo!)).toString();
-
-                console.log("ESTE ES EL nuevo precio ", newDetalle.precio)
-                console.log(newDetalle)
-
-                this.httpServiceDetalle.modificarDetallePedidoVenta(newDetalle).subscribe(res => {
-                  console.log(res.codigoError)
-                  if(res.codigoError == 'OK'){
-                  
-                      //   this.cerrarDialog();
-                      
-                      // this.productoAgregado.emit(proveedorProducto);
-               
+              if (!proveedorProducto.productoExistente) {
+                if (proveedorProducto.cantidad == "0") {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'No se puede agregar 0',
+                    text: "La cantidad no puede ser 0",
+                    showConfirmButton: false
+                  });
+                  reject(new Error('La cantidad no puede ser 0'));
+                }
+                this.httpServiceDetalle.agregarDetalleCompras(newDetalle).pipe(finalize(() => {
+                  this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
+                    if (res1.codigoError == 'OK') {
+                      const newDetalleImp: DetalleImpuestosEntity = {
+                        id: '',
+                        detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
+                        cod_impuesto: res1.lstDetalleMovimientos[0].codigo_impuesto!,
+                        codigo_tarifa: res1.lstDetalleMovimientos[0].cod_tarifa!,
+                        porcentaje: res1.lstDetalleMovimientos[0].tarifa!,
+                        base_imponible: '',
+                        valor: res1.lstDetalleMovimientos[0].costo!,
+                        created_at: '',
+                        updated_at: ''
+                      };
+                      this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
+                        if (res2.codigoError != 'OK') {
+                          Swal.fire({
+                            icon: 'error',
+                            title: 'Ha ocurrido un error.',
+                            text: res2.descripcionError,
+                            showConfirmButton: false
+                          });
+                          reject(new Error(res2.descripcionError));
+                        } else {
+                          resolve();
+                        }
+                      });
+                    } else {
+                      resolve();
+                    }
+                  });
+                })).subscribe(res3 => {
+                  if (res3.codigoError != 'OK') {
+                    Swal.fire({
+                      icon: 'error',
+                      title: 'Ha ocurrido un error.',
+                      text: 'La cantidad no puede ser vacía',
+                      showConfirmButton: false
+                    });
+                    reject(new Error('La cantidad no puede ser vacía'));
                   } else {
-                    
+                    resolve();
                   }
                 });
               } else {
-                this.httpServiceDetalle.eliminarDetallePedidoVenta(newDetalle).subscribe(res => {
-                  console.log("en este metodo"+res)
-               
-                   // this.cerrarDialog();
-                
-                });     
+                if (proveedorProducto.cantidad! != '0') {
+                  newDetalle.precio = (parseFloat(newDetalle.cantidad!) * parseFloat(newDetalle.costo!)).toString();
+
+                  console.log("ESTE ES EL nuevo precio ", newDetalle.precio)
+                  console.log(newDetalle);
+
+                  this.httpServiceDetalle.modificarDetallePedidoVenta(newDetalle).subscribe(res => {
+                    if (res.codigoError == 'OK') {
+                      resolve();
+                    } else {
+                      reject(new Error(res.descripcionError));
+                    }
+                  });
+                } else {
+                  this.httpServiceDetalle.eliminarDetallePedidoVenta(newDetalle).subscribe(res => {
+                    resolve();
+                  });
+                }
               }
             }
-          }
-        });
-      }
-    })
+          });
+        }
+      });
+    });
   }
 
   parseXML(xmlString: string) {
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(xmlString, 'application/xml');
-    
+
     // Asegurarse de que no hay errores en el parsing
     const parserError = xmlDoc.getElementsByTagName('parsererror');
     if (parserError.length) {
@@ -1365,44 +1418,44 @@ export class MenucomprComponent implements OnInit {
       const elements = xmlDoc.getElementsByTagName(tagName);
       return elements.length ? elements[0].textContent : '';
     };
-  
+
     const cdataContent = getTextContent('comprobante');
 
-  if (cdataContent) {
-    const cdataDoc = parser.parseFromString(cdataContent, 'application/xml');
-    this.ruc = this.getTextContentFromElement(cdataDoc, 'ruc');
+    if (cdataContent) {
+      const cdataDoc = parser.parseFromString(cdataContent, 'application/xml');
+      this.ruc = this.getTextContentFromElement(cdataDoc, 'ruc');
 
-    // Extraer todos los códigos principales
-    const detalles = cdataDoc.getElementsByTagName('detalle');
-    this.codigosPrincipales = [];
-    for (let i = 0; i < detalles.length; i++) {
-      const codigo = this.getTextContentFromElement(detalles[i], 'codigoPrincipal')
-      const cantidad = this.getTextContentFromElement(detalles[i], 'cantidad')
-      const costo = this.getTextContentFromElement(detalles[i], 'precioTotalSinImpuesto')
-      const descuento = this.getTextContentFromElement(detalles[i], 'descuento')
-      const precioUnitario = this.getTextContentFromElement(detalles[i], 'precioUnitario')
+      // Extraer todos los códigos principales
+      const detalles = cdataDoc.getElementsByTagName('detalle');
+      this.codigosPrincipales = [];
+      for (let i = 0; i < detalles.length; i++) {
+        const codigo = this.getTextContentFromElement(detalles[i], 'codigoPrincipal')
+        const cantidad = this.getTextContentFromElement(detalles[i], 'cantidad')
+        const costo = this.getTextContentFromElement(detalles[i], 'precioTotalSinImpuesto')
+        const descuento = this.getTextContentFromElement(detalles[i], 'descuento')
+        const precioUnitario = this.getTextContentFromElement(detalles[i], 'precioUnitario')
 
-      //Crear XmlCargaEntity
-      const xmlCarga: XmlCargaEntity = {
-        codigoSap: codigo!,
-        cantidad: cantidad!,
-        costo: costo!,
-        descuento: descuento!,
-        precioUnitario: precioUnitario!
-      }
-
-      
+        //Crear XmlCargaEntity
+        const xmlCarga: XmlCargaEntity = {
+          codigoSap: codigo!,
+          cantidad: cantidad!,
+          costo: costo!,
+          descuento: descuento!,
+          precioUnitario: precioUnitario!
+        }
 
 
-      if (xmlCarga) {
-        this.lstXmlCarga.push(xmlCarga);
+
+
+        if (xmlCarga) {
+          this.lstXmlCarga.push(xmlCarga);
+        }
       }
     }
-  }
 
 
 
-  
+
     console.log('RUC:', this.ruc);
     console.log('Items:', this.detalle);
     console.log('Códigos Principales:', this.lstXmlCarga);
@@ -1411,7 +1464,7 @@ export class MenucomprComponent implements OnInit {
 
   }
 
-  getTextContentFromElement(element: Element | Document, tagName: string): string  | null{
+  getTextContentFromElement(element: Element | Document, tagName: string): string | null {
     const elements = element.getElementsByTagName(tagName);
     return elements.length ? elements[0].textContent : '';
   }

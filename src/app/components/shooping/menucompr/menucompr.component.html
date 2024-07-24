@@ -28,6 +28,7 @@
                             <select class="form-control small-select" (change)="changeGroup($event)"
                                 [disabled]="disableProveedor"
                                 [(ngModel)]="selectedProveedor"
+                                name="proveedor" id="proveedor"
                                 >
                                 <option value="0" selected>Seleccione un proveedor</option>
                                 <option *ngFor="let proveedor of lstProveedores" [value]="proveedor.nombre">
@@ -46,6 +47,8 @@
                             <label for="cedula">Comprobante:</label>
                             <select class="form-control small-select" (change)="changeGroup3($event)"
                                 [disabled]="disableProveedor"
+                                [(ngModel)]="selectedComprobante"
+
                                 >
                                 <option value="0" selected>Seleccione un comprobante</option>
                                 <option *ngFor="let comprobante of lstComprobantes" [value]="comprobante.tipo">
@@ -59,6 +62,8 @@
                             <label for="cedula">Sustento:</label>
                             <select class="form-control small-select" (change)="changeGroup2($event)"
                                 [disabled]="disableProveedor"
+                                [(ngModel)]="selectedSustento"
+
                                 >
                                 <option value="0" selected>Seleccione un sustento</option>
                                 <option *ngFor="let sustento of lstSustentos" [value]="sustento.sustento">
@@ -131,7 +136,7 @@
                 <div class="col-md-3">
                     <button class="btn button carrito-button" (click)="fileInput.click()">
                         <fa-icon [icon]="faArchive" [size]="'lg'" style="color: #ffffff; margin-right: 10px;"></fa-icon>
-                                             XML PLASTICAUCHO
+                                            XML
                         <input type="file" #fileInput (change)="onFileSelected($event)" accept=".xml" style="display: none;" />
                      </button>
                 </div>
