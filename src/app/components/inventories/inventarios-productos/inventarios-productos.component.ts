@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
 })
 export class InventariosProductosComponent implements OnInit {
 ///Iconos para la pagina de grupos
+
 faUserFriends = faUserFriends;
 faEdit = faEdit;
 faTrashAlt = faTrashAlt;
@@ -105,6 +106,9 @@ constructor(private readonly httpService: AlmacenesService,
   buscarInventario(almacen: AlmacenesEntity){
 
     localStorage.setItem('almacenid',almacen.idAlmacen)
+    //Guardar el nombre del almacen inventario
+    localStorage.setItem('almacenInventarioNombre',almacen.nombre_almacen!)
+
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios'] } }]);
 
   }

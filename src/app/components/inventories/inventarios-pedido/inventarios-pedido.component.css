@@ -41,3 +41,164 @@
     text-align: center;
     /* Estilos adicionales para el input del resultado */
   }
+  /* Estilo general para la card-header */
+.card-header {
+  position: relative;
+  padding: 1rem; /* Espaciado interno */
+}
+
+/* Alineación del contenido en la fila */
+.row {
+  align-items: center; /* Centra verticalmente el contenido en la fila */
+}
+
+/* Estilo del icono */
+.icon {
+  color: #636363;
+}
+
+/* Estilo del título */
+.title {
+  color: #636363;
+  margin: 0; /* Elimina márgenes para un mejor control */
+}
+
+/* Estilo para los botones */
+.btn-success {
+  border-radius: 5px; /* Bordes redondeados */
+  font-size: 12px; /* Tamaño de fuente */
+  width: 150px; /* Ancho del botón */
+  height: 30px; /* Altura del botón */
+  text-align: center; /* Centra el texto dentro del botón */
+  margin-top: 15px; /* Margen superior para separación */
+}
+
+/* Estilo para el contenedor de la derecha */
+.right-content {
+  text-align: right; /* Alinea el texto a la derecha en pantallas grandes */
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .card-header {
+      padding: 0.5rem; /* Reduce el espaciado para pantallas más pequeñas */
+  }
+
+  .row {
+      flex-direction: column; /* Apila los elementos verticalmente en pantallas pequeñas */
+      text-align: center; /* Centra el texto */
+  }
+
+  .title-container {
+      text-align: center; /* Centra el título en pantallas pequeñas */
+  }
+
+  .right-content {
+      text-align: center; /* Centra el contenido a la derecha en pantallas pequeñas */
+      margin-top: 1rem; /* Añade margen superior para separación */
+  }
+
+  .btn-success {
+      width: 100%; /* Hace que el botón ocupe todo el ancho disponible en pantallas pequeñas */
+      height: auto; /* Ajusta la altura del botón según el contenido */
+      margin-top: 0.5rem; /* Ajusta el margen superior para separación */
+  }
+}
+
+/* Para pantallas muy pequeñas */
+@media (max-width: 576px) {
+  .title {
+      font-size: 1.25rem; /* Reduce el tamaño de fuente del título */
+  }
+
+  .btn-success {
+      font-size: 10px; /* Ajusta el tamaño de fuente del botón */
+  }
+}
+
+
+/* Estilo general para la card-header */
+.card-header {
+  position: relative;
+  padding: 1rem; /* Espaciado interno */
+}
+
+/* Alineación del contenido en la fila */
+.row {
+  align-items: center; /* Centra verticalmente el contenido en la fila */
+}
+
+/* Estilo del icono */
+.icon {
+  color: #636363;
+}
+
+/* Estilo del título */
+.title {
+  color: #636363;
+  margin: 0; /* Elimina márgenes para un mejor control */
+}
+
+/* Estilo para los botones */
+.btn-success {
+  border-radius: 5px; /* Bordes redondeados */
+  font-size: 12px; /* Tamaño de fuente */
+  width: 150px; /* Ancho del botón */
+  height: 30px; /* Altura del botón */
+  text-align: center; /* Centra el texto dentro del botón */
+}
+
+/* Contenedor para los botones */
+.btn-container {
+  display: flex; /* Usa Flexbox para alinear los botones horizontalmente */
+  gap: 1rem; /* Espacio entre los botones */
+  align-items: center; /* Alinea verticalmente los botones */
+  margin-top: 1rem; /* Espacio superior para separación */
+}
+
+/* Estilo para el contenedor de la derecha */
+.right-content {
+  text-align: right; /* Alinea el texto a la derecha en pantallas grandes */
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .card-header {
+      padding: 0.5rem; /* Reduce el espaciado para pantallas más pequeñas */
+  }
+
+  .row {
+      flex-direction: column; /* Apila los elementos verticalmente en pantallas pequeñas */
+      text-align: center; /* Centra el texto */
+  }
+
+  .title-container {
+      text-align: center; /* Centra el título en pantallas pequeñas */
+  }
+
+  .right-content {
+      text-align: center; /* Centra el contenido a la derecha en pantallas pequeñas */
+      margin-top: 1rem; /* Añade margen superior para separación */
+  }
+
+  .btn-container {
+      flex-direction: column; /* Apila los botones verticalmente en pantallas pequeñas */
+      gap: 0.5rem; /* Espacio entre los botones en pantallas pequeñas */
+  }
+
+  .btn-success {
+      width: 100%; /* Hace que el botón ocupe todo el ancho disponible en pantallas pequeñas */
+      height: auto; /* Ajusta la altura del botón según el contenido */
+  }
+}
+
+/* Para pantallas muy pequeñas */
+@media (max-width: 576px) {
+  .title {
+      font-size: 1.25rem; /* Reduce el tamaño de fuente del título */
+  }
+
+  .btn-success {
+      font-size: 10px; /* Ajusta el tamaño de fuente del botón */
+  }
+}

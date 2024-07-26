@@ -20,6 +20,7 @@ export class InventariosPedidoModelosComponent implements OnInit {
   private codigolinea: string = "";
   private codigomodelo: string = "";
 
+  nombreAlmacenCompra = localStorage.getItem('almacenNombreInventarios')!;
   faUserFriends = faUserFriends;
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;

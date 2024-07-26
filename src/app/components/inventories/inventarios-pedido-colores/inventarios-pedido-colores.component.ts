@@ -19,6 +19,9 @@ export class InventariosPedidoColoresComponent implements OnInit {
   private codigomodelo: string = "";
   private codigocolor: string = "";
 
+
+  nombreAlmacenCompra = localStorage.getItem('almacenNombreInventarios')!;
+
   faUserFriends = faUserFriends;
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;

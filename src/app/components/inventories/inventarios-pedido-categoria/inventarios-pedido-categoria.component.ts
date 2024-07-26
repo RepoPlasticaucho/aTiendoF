@@ -17,6 +17,7 @@ import { CategoriasEntity } from 'src/app/models/categorias';
 export class InventariosPedidoCategoriaComponent implements OnInit {
   [x: string]: any;
   ///Iconos para la pagina de grupos
+  nombreAlmacenCompra = localStorage.getItem('almacenNombreInventarios')!;
   faUserFriends = faUserFriends;
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;

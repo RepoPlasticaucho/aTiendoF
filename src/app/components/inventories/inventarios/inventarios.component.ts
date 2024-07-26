@@ -15,6 +15,7 @@ import Swal from 'sweetalert2';
 export class InventariosComponent implements OnInit {
 
   ///Iconos para la pagina de grupos
+  inventarioAlamacenNombre = localStorage.getItem('almacenInventarioNombre')!;
   faUserFriends = faUserFriends;
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;

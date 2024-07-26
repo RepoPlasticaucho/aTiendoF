@@ -105,6 +105,7 @@ constructor(private readonly httpService: AlmacenesService,
   buscarInventario(almacen: AlmacenesEntity){
 
     localStorage.setItem('almacenid',almacen.idAlmacen)
+    localStorage.setItem('almacenNombreInventarios',almacen.nombre_almacen!)
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido'] } }]);
 
   }

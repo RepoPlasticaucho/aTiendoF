@@ -2,33 +2,32 @@
     <div class="card">
         <br>
         <div class="card-header">
-            <div class="row mx-3"  >
-                <fa-icon [icon]="faUserFriends" [size]="'3x'" style="color: #636363;"></fa-icon>
-                <h1 class="mx-5 " style="color: #636363;">Inventarios</h1>
-                <div style="position: absolute;right:200px;" class="mx-3" *ngIf="mostrarDiv">
-                    <a class="btn btn-success" (click)="abrirMovInv()"
-                        style=" border-radius: 5px;
-                            font-size: 12px; width:150px;
-                            height:30px;
-                            text-align:center;
-                            margin-top: 15px;
-                            ;"
-                    > MOVER INVENTARIO
-                    </a>
-                </div>
-                <div style="position: absolute;right:0;" class="mx-3" *ngIf="mostrarDiv">
-                    <a class="btn btn-success" (click)="buscarPortafolioLineaSugerido(lstCategorias[0])"
-                        style=" border-radius: 5px; 
-                            font-size: 12px; width:150px; 
-                            height:30px;
-                            text-align:center; 
-                            margin-top: 15px;
-                            ;"
-                    > PEDIDO SUGERIDO
-                    </a>
+            <div class="container">
+                <div class="row align-items-center">
+                    <!-- Icono -->
+                    <div class="col-auto">
+                        <fa-icon [icon]="faUserFriends" [size]="'3x'" class="icon"></fa-icon>
+                    </div>
+        
+                    <!-- Título -->
+                    <div class="col title-container">
+                        <h1 class="title">Inventarios</h1>
+                    </div>
+        
+                    <!-- Contenido a la derecha -->
+                    <div class="col-auto right-content" *ngIf="mostrarDiv">
+                        <div class="responsive-text">
+                            <strong>Inventarios en: </strong>{{nombreAlmacen}}
+                        </div>
+                        <div class="btn-container">
+                            <a class="btn btn-success" (click)="abrirMovInv()">MOVER INVENTARIO</a>
+                            <a class="btn btn-success" (click)="buscarPortafolioLineaSugerido(lstCategorias[0])">PEDIDO SUGERIDO</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        
         <div class="card-body ">
             <div>
                 <mat-grid-list cols="6" rowHeight="50px">

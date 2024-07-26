@@ -16,6 +16,8 @@ import { LineasEntity } from 'src/app/models/lineas';
 })
 export class InventariosPedidoComponent implements OnInit {
 
+
+  nombreAlmacen =  localStorage.getItem('almacenNombreInventarios')!;
   ///Iconos para la pagina de grupos
   faUserFriends = faUserFriends;
   faEdit = faEdit;
