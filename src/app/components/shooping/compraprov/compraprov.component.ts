@@ -18,6 +18,8 @@ import { DataTableDirective } from 'angular-datatables';
 })
 export class CompraprovComponent implements OnInit {
 
+
+  nombreAlmacenCompra = localStorage.getItem('nombreAlmacenCompra')!;
   //Iconos para la pagina de grupos
   faList = faList;
   faEdit = faEdit;

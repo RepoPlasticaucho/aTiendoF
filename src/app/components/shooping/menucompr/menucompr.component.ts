@@ -45,6 +45,8 @@ export class MenucomprComponent implements OnInit {
     tipo: new FormControl('0', Validators.required)
   });
 
+  nombreAlmacenCompra = localStorage.getItem('nombreAlmacenCompra')!;
+
   //Iconos para la pagina de grupos
   faList = faList;
   faTimes = faTimes;

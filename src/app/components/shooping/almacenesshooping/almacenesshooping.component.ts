@@ -103,6 +103,8 @@ export class AlmacenesshoopingComponent implements OnInit {
 
   abrirVista(almacen: AlmacenesEntity) {
     localStorage.setItem('almacenid', almacen.idAlmacen)
+    //Guardar el nombre del almacen
+    localStorage.setItem('nombreAlmacenCompra', almacen.nombre_almacen!)
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['compraprov'] } }]);
   }
   

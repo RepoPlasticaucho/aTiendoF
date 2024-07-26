@@ -6,6 +6,10 @@
                 <fa-icon [icon]="faShoppingBag" [size]="'3x'" style="color: #636363"></fa-icon>
                 <h1 class="mx-5" style="color: #636363">COMPRAS</h1>
             </div>
+
+            <div class="ml-auto text-right pr-3" style="color: #888888; font-size: 14px;">
+                <strong>Comprando en: </strong>{{nombreAlmacenCompra}}
+            </div>
         </div>
         <div class="card-body">
             <div class="row mx-3">
@@ -26,10 +30,8 @@
                         <div class="form-group">
                             <label for="cedula">Proveedor:</label>
                             <select class="form-control small-select" (change)="changeGroup($event)"
-                                [disabled]="disableProveedor"
-                                [(ngModel)]="selectedProveedor"
-                                name="proveedor" id="proveedor"
-                                >
+                                [disabled]="disableProveedor" [(ngModel)]="selectedProveedor" name="proveedor"
+                                id="proveedor">
                                 <option value="0" selected>Seleccione un proveedor</option>
                                 <option *ngFor="let proveedor of lstProveedores" [value]="proveedor.nombre">
                                     {{proveedor.id_fiscal}} - {{proveedor.nombre}}
@@ -46,10 +48,7 @@
                         <div class="form-group">
                             <label for="cedula">Comprobante:</label>
                             <select class="form-control small-select" (change)="changeGroup3($event)"
-                                [disabled]="disableProveedor"
-                                [(ngModel)]="selectedComprobante"
-
-                                >
+                                [disabled]="disableProveedor" [(ngModel)]="selectedComprobante">
                                 <option value="0" selected>Seleccione un comprobante</option>
                                 <option *ngFor="let comprobante of lstComprobantes" [value]="comprobante.tipo">
                                     {{comprobante.tipo}}
@@ -61,13 +60,10 @@
                         <div class="form-group">
                             <label for="cedula">Sustento:</label>
                             <select class="form-control small-select" (change)="changeGroup2($event)"
-                                [disabled]="disableProveedor"
-                                [(ngModel)]="selectedSustento"
-
-                                >
+                                [disabled]="disableProveedor" [(ngModel)]="selectedSustento">
                                 <option value="0" selected>Seleccione un sustento</option>
                                 <option *ngFor="let sustento of lstSustentos" [value]="sustento.sustento">
-                                   {{sustento.codigo}} - {{sustento.sustento}}
+                                    {{sustento.codigo}} - {{sustento.sustento}}
                                 </option>
                             </select>
                         </div>
@@ -86,15 +82,15 @@
                         <div class="form-group">
                             <label for="cedula">Autorización de venta:</label>
                             <input type="text" [disabled]="disableProveedor" (input)="keyPressValidator49or10($event)"
-                                (keypress)="keyPressNumbers($event)"
-                                [(ngModel)]="autorizacion" class="form-control input-1"
-                                placeholder="Autorización de venta" (input)="onInputAutorizacion($event)">
+                                (keypress)="keyPressNumbers($event)" [(ngModel)]="autorizacion"
+                                class="form-control input-1" placeholder="Autorización de venta"
+                                (input)="onInputAutorizacion($event)">
                             <small *ngIf="errorAutorizacion">
-                                <small  *ngIf="errorAutorizacion" style="color: red;">
+                                <small *ngIf="errorAutorizacion" style="color: red;">
                                     La autorización debe tener 10 (impresa) o 49 (electrónica) dígitos.
-                                </small >
-                            </small >
-                            
+                                </small>
+                            </small>
+
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -129,16 +125,18 @@
                 </div>
                 <div class="col-md-3">
                     <button class="btn button boton-adicional" (click)="nuevoProducto()">
-                        <fa-icon [icon]="faFolderPlus" [size]="'lg'" style="color: #ffffff; margin-right: 10px;"></fa-icon>
+                        <fa-icon [icon]="faFolderPlus" [size]="'lg'"
+                            style="color: #ffffff; margin-right: 10px;"></fa-icon>
                         NUEVO PRODUCTO
                     </button>
                 </div>
                 <div class="col-md-3">
                     <button class="btn button carrito-button" (click)="fileInput.click()">
                         <fa-icon [icon]="faArchive" [size]="'lg'" style="color: #ffffff; margin-right: 10px;"></fa-icon>
-                                            XML
-                        <input type="file" #fileInput (change)="onFileSelected($event)" accept=".xml" style="display: none;" />
-                     </button>
+                        XML
+                        <input type="file" #fileInput (change)="onFileSelected($event)" accept=".xml"
+                            style="display: none;" />
+                    </button>
                 </div>
             </div>
             <br><br>
@@ -183,24 +181,24 @@
                         <td style="text-align: center;">
                             <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
                                 <span [attr.data-index]="i">
-                                <fa-icon [icon]="faEdit" class="btn btn-info editar-icon" [size]="'lg'" style="margin-right: 5px;"
-                                    data-placement="bottom" (click)="editarDetalleMovimiento(i)"
-                                    title="Editar Detalle"></fa-icon>
+                                    <fa-icon [icon]="faEdit" class="btn btn-info editar-icon" [size]="'lg'"
+                                        style="margin-right: 5px;" data-placement="bottom"
+                                        (click)="editarDetalleMovimiento(i)" title="Editar Detalle"></fa-icon>
                                 </span>
 
                             </ng-container>
                             <ng-container *ngIf="editarDetalle && i === detalleEditIndex">
                                 <span [attr.data-index]="i">
-                                <fa-icon [icon]="faCheck" class="btn btn-success" [size]="'lg'"
-                                    style="margin-right: 5px;" data-placement="bottom"
-                                    (click)="aplicarCambiosDetalle(i)" title="Aplicar"></fa-icon>
+                                    <fa-icon [icon]="faCheck" class="btn btn-success" [size]="'lg'"
+                                        style="margin-right: 5px;" data-placement="bottom"
+                                        (click)="aplicarCambiosDetalle(i)" title="Aplicar"></fa-icon>
                                 </span>
                             </ng-container>
                             <span [attr.data-index]="detalleMovimientos | json">
-                            <fa-icon [icon]="faTrashAlt" class="btn btn-danger delete-icon" [size]=" 'lg' " data-placement="bottom"
-                                (click)=" eliminarDetalle(detalleMovimientos)"
-                                title="Eliminar Modelo Producto">
-                            </fa-icon>
+                                <fa-icon [icon]="faTrashAlt" class="btn btn-danger delete-icon" [size]=" 'lg' "
+                                    data-placement="bottom" (click)=" eliminarDetalle(detalleMovimientos)"
+                                    title="Eliminar Modelo Producto">
+                                </fa-icon>
                             </span>
                         </td>
                     </tr>
@@ -219,8 +217,8 @@
             <br><br>
             <div class="icon-container">
                 <label for="total" class="label-input" style="font-size: 14px;">SUBTOTAL IVA {{iva}}% :</label>
-                <input type="text" [value]="calcularTotalTarifa15P() | number:'1.2-2'" class="cool-input resultado-input"
-                    readonly>
+                <input type="text" [value]="calcularTotalTarifa15P() | number:'1.2-2'"
+                    class="cool-input resultado-input" readonly>
             </div>
             <br><br>
             <div class="icon-container">
