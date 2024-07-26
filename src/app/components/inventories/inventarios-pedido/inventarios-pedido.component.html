@@ -8,12 +8,12 @@
                     <div class="col-auto">
                         <fa-icon [icon]="faUserFriends" [size]="'3x'" class="icon"></fa-icon>
                     </div>
-        
+
                     <!-- Título -->
                     <div class="col title-container">
                         <h1 class="title">Inventarios</h1>
                     </div>
-        
+
                     <!-- Contenido a la derecha -->
                     <div class="col-auto right-content" *ngIf="mostrarDiv">
                         <div class="responsive-text">
@@ -21,58 +21,70 @@
                         </div>
                         <div class="btn-container">
                             <a class="btn btn-success" (click)="abrirMovInv()">MOVER INVENTARIO</a>
-                            <a class="btn btn-success" (click)="buscarPortafolioLineaSugerido(lstCategorias[0])">PEDIDO SUGERIDO</a>
+                            <a class="btn btn-success" (click)="buscarPortafolioLineaSugerido(lstCategorias[0])">PEDIDO
+                                SUGERIDO</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <div class="card-body ">
             <div>
                 <mat-grid-list cols="6" rowHeight="50px">
                     <mat-grid-tile>
-                        <a class="btn button" 
-                        (click)="navegar()"
-                            style="text-align:center;
+                        <a class="btn button" (click)="navegar()" style="text-align:center;
                                     font-size: 15px; width:140px; 
                                        height:35px;
                                        text-align:center; 
                                        margin-top: 10px;
-                                       background: rgb(54,169,225,0.8);"
-                        ><span style="color: white;">
-                            Volver
-                        </span>
-                        
+                                       background: rgb(54,169,225,0.8);"><span style="color: white;">
+                                Volver
+                            </span>
+
                         </a>
-                        </mat-grid-tile>
+                    </mat-grid-tile>
+                    <mat-grid-tile>
+                        <a class="btn button" (click)="exportarAXLSX()" style="text-align:center;
+                                        font-size: 15px; width:140px; 
+                                           height:35px;
+                                           text-align:center; 
+                                           margin-top: 10px;
+                                           background: rgba(19, 180, 54, 0.753);"><span style="color: white;">
+                                <fa-icon [icon]="faTable" style="color: white;"></fa-icon>
+                                Exportar
+                            </span>
+
+                        </a>
+
+
+                    </mat-grid-tile>
                 </mat-grid-list>
                 <mat-grid-list cols="6" rowHeight="60px">
                     <mat-grid-tile *ngFor="let card of lstCategorias">
-                        
-                            <a class="btn button" (click)="buscarPortafolioLinea(card)" 
-                                style="border-radius: 5px; 
+
+                        <a class="btn button" (click)="buscarPortafolioLinea(card)" style="border-radius: 5px; 
                                        background: rgb(49,99,173,0.8); 
                                        font-size: 15px; width:140px; 
                                        height:40px;
                                        text-align:center; 
                                        margin-top: 15px;
                                        ;">
-                                <span style="color: white;">
-                                        {{card.categoria}}
-                                </span>
-                            </a>
-                        
-                        
+                            <span style="color: white;">
+                                {{card.categoria}}
+                            </span>
+                        </a>
+
+
                     </mat-grid-tile>
                 </mat-grid-list>
             </div>
             <br><br>
-            
 
 
 
-            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" id="table_id" >
+
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" id="table_id">
                 <thead style="color: #636363;">
                     <tr>
                         <th style="width: 55%; ">PRODUCTO</th>

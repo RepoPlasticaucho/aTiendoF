@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faEdit, faPlus, faTrashAlt, faUserFriends, faMoneyBillAlt, faBoxes } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrashAlt, faUserFriends, faMoneyBillAlt, faBoxes, faTable } from '@fortawesome/free-solid-svg-icons';
 import { Subject, subscribeOn } from 'rxjs';
 import { InventariosEntity } from 'src/app/models/inventarios';
 import { AlmacenesEntity } from 'src/app/models/almacenes';
@@ -8,6 +8,7 @@ import { InventariosService } from 'src/app/services/inventarios.service';
 import Swal from 'sweetalert2';
 import { CategoriasEntity } from 'src/app/models/categorias';
 import { LineasEntity } from 'src/app/models/lineas';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-inventarios-pedido',
@@ -20,6 +21,8 @@ export class InventariosPedidoComponent implements OnInit {
   nombreAlmacen =  localStorage.getItem('almacenNombreInventarios')!;
   ///Iconos para la pagina de grupos
   faUserFriends = faUserFriends;
+  faTable = faTable;
+
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;
   faMoneyBillAlt = faMoneyBillAlt;
@@ -130,6 +133,72 @@ export class InventariosPedidoComponent implements OnInit {
 
     this.totalRegistros = this.lstInventarios.length;
   }
+
+
+  exportarAXLSX() {
+
+    const renombrar = this.lstInventarios.map(inventario => {
+        // Renombrar las propiedades del objeto
+        return {
+            'NOMBRE PRODUCTO': inventario.producto_nombre,
+            'CANTIDAD OPTIMA': inventario.stock_optimo,
+            'STOCK': inventario.stock,
+            'COSTO': inventario.costo,
+            'PRECIO': inventario.pvp2, // Revisar este valor, no parece correcto
+            'ALMACEN': inventario.almacen,
+        };
+    });
+
+      // Crear un nuevo libro de Excel
+      const wb = XLSX.utils.book_new();
+
+      // Convertir los datos de la tabla a una hoja de Excel
+      const wsData = XLSX.utils.json_to_sheet(renombrar);
+  
+      // Agregar estilos y colores
+      wsData['!cols'] = [
+          { width: 10 },
+          { width: 20 },
+          { width: 20 },
+          { width: 20 },
+          { width: 15 },
+          { width: 15 }
+      ];
+  
+      // Establecer los colores de fondo para las celdas de encabezado
+      wsData['A1'].s = { fill: { fgColor: { rgb: 'FFFF0000' } } }; // Rojo
+      wsData['B1'].s = { fill: { fgColor: { rgb: 'FF00FF00' } } }; // Verde
+      wsData['C1'].s = { fill: { fgColor: { rgb: 'FF0000FF' } } }; // Azul
+      wsData['D1'].s = { fill: { fgColor: { rgb: 'FFFFFF00' } } }; // Amarillo
+      wsData['E1'].s = { fill: { fgColor: { rgb: 'FFFF00FF' } } }; // Magenta
+      wsData['F1'].s = { fill: { fgColor: { rgb: 'FF00FFFF' } } }; // Cian
+  
+      // Agregar la hoja de Excel al libro
+      XLSX.utils.book_append_sheet(wb, wsData, 'Movimientos');
+  
+      // Generar el archivo Excel y guardarlo
+      const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+      const date = new Date();
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+      const fecha = `${day}-${month}-${year}`;
+  
+  
+      this.saveExcelFile(excelBuffer, `InventariodelAlmacen-${this.nombreAlmacen}-${fecha}.xlsx`);
+    }  
+  
+    private saveExcelFile(buffer: any, fileName: string): void {
+      const data: Blob = new Blob([buffer], { type: 'application/octet-stream' });
+      const url: string = window.URL.createObjectURL(data);
+      const link: HTMLAnchorElement = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      link.click();
+      setTimeout(() => {
+        window.URL.revokeObjectURL(url);
+      }, 1000);
+    }
 
   navegar(){
     let ruta = this.router.url;
