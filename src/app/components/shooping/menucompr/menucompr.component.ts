@@ -1029,6 +1029,8 @@ export class MenucomprComponent implements OnInit {
     localStorage.removeItem('autorizacion');
     localStorage.removeItem('fecha');
   }
+
+
   onFileSelected(event: any) {
     Swal.fire({
       title: 'Cargando XML...',
@@ -1074,9 +1076,14 @@ export class MenucomprComponent implements OnInit {
                   producto.cantidad = element.cantidad;
                   producto.cod_sap = element.codigoSap;
                   producto.costo = element.costo;
+                  producto.pvp2 = producto.precio;
                   producto.precio = element.precioUnitario!;
+                  
+                  console.log('Producto aquiiiii', producto);
+
                   this.lstXmlProveedoresProductos.push(producto);
                 });
+                
                 counterCompleted++;
               }
             })
@@ -1132,6 +1139,9 @@ export class MenucomprComponent implements OnInit {
 
 
   async realizarAccionConDetalles(detalles: ProveedoresProductosEntity[]): Promise<void> {
+
+    
+
     try {
       for (const detalle of detalles) {
         await this.crearDetalle(detalle);
@@ -1191,19 +1201,22 @@ export class MenucomprComponent implements OnInit {
             id: '',
             etiquetas: res.etiquetas,
             dInventario: '',
-            producto_id: res.producto_id,
+            producto_id: proveedorProducto.producto_id,
             almacen_id: localStorage.getItem('almacenid')!,
             almacen: '',
             stock_optimo: '',
             fav: '0',
-            costo: this.costo2,
+            costo: proveedorProducto.precio,
             color: '',
             stock: proveedorProducto.cantidad!,
-            pvp2: this.costo
+            pvp2: proveedorProducto.pvp2,
           };
 
           this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res1 => {
             if (res1.codigoError == 'NEXISTE') {
+
+              console.log('ENTRO A NEXISTEEEEE0000000000000000000000000000');
+
               this.httpServiceInventario.agregarInventario(newInventario).pipe(
                 finalize(() => {
                   this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res5 => {
@@ -1211,12 +1224,13 @@ export class MenucomprComponent implements OnInit {
                       id: '',
                       producto_nombre: '',
                       inventario_id: res5.lstInventarios[0].id,
-                      producto_id: res.producto_id,
+                      producto_id: proveedorProducto.producto_id,
                       movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
                       cantidad: proveedorProducto.cantidad!,
-                      costo: this.costo,
-                      precio: this.precio
+                      costo: proveedorProducto.precio,
+                      precio: proveedorProducto.costo!
                     };
+
 
                     this.httpServiceDetalle.agregarDetalleCompra(newDetalle).pipe(finalize(() => {
                       this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
@@ -1273,6 +1287,8 @@ export class MenucomprComponent implements OnInit {
                 }
               });
             } else if (res1.codigoError == 'OK') {
+              console.log('ENTRO A EXISTE 12911110000000000000000000');
+
               this.costoStatic = res1.lstInventarios[0].costo;
               this.stockStatic = res1.lstInventarios[0].stock;
               const oper1 = parseFloat(res1.lstInventarios[0].costo!) * parseFloat(res1.lstInventarios[0].stock!);
@@ -1315,7 +1331,7 @@ export class MenucomprComponent implements OnInit {
                 id: '',
                 producto_nombre: '',
                 inventario_id: res1.lstInventarios[0].id,
-                producto_id: res.producto_id,
+                producto_id: proveedorProducto.producto_id,
                 movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
                 cantidad: proveedorProducto.cantidad!,
                 costo: proveedorProducto.precio!,

@@ -306,7 +306,7 @@ export class CompraNuevoComponent implements OnInit {
           costo: this.costo2,
           color: '',
           stock: proveedorProducto.cantidad!,
-          pvp2: this.costo
+          pvp2: proveedorProducto.precio
         }
         // cambios
         //console.log(proveedorProducto.productoExistente)

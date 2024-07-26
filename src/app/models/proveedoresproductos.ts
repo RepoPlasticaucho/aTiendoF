@@ -21,4 +21,5 @@ export interface ProveedoresProductosEntity {
     cantidad?: string;
     etiquetas?: string;
     cod_sap?: string;
+    pvp2?: string;
 }

@@ -251,12 +251,14 @@ export class FacturaComponent implements OnInit {
   }
 
 
-  generarPDF1() {
+
+  generarPDF() {
+
     const DATA = document.getElementById('htmlData')!;
     const doc = new jsPDF('p', 'pt', 'a4');
     const options = {
       background: 'white',
-      scale: 2  // Ajusta la escala si es necesario
+      scale: 3
     };
 
     // Crear un contenedor para renderizar el contenido en tamaño fijo
@@ -271,189 +273,6 @@ export class FacturaComponent implements OnInit {
     const contentClone = DATA.cloneNode(true) as HTMLElement;
     fixedContainer.appendChild(contentClone);
     document.body.appendChild(fixedContainer);
-
-    // Descargar la imagen del logo y convertirla a base64
-    const logoUrl = this.url_logo;
-
-    this.getBase64Image(logoUrl).then((logoBase64) => {
-      // Asegúrate de que la imagen se haya descargado correctamente
-      if (logoBase64) {
-        html2canvas(fixedContainer, options).then((canvas) => {
-          const imgData = canvas.toDataURL('image/png');
-          const pdfWidth = doc.internal.pageSize.getWidth();
-          const pdfHeight = doc.internal.pageSize.getHeight();
-
-          // Agregar la imagen del contenido al PDF
-          doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-
-          // Agregar la imagen del logo al PDF
-          doc.addImage(logoBase64, 'PNG', 10, 10, 100, 100); // Ajusta las coordenadas y el tamaño según sea necesario
-          document.body.removeChild(fixedContainer); // Eliminar el contenedor fijo después de generar el PDF
-
-          return doc
-        })  
-          
-        const pdfContent = doc.output('datauristring');
-        const pdfBase64 = pdfContent.split(',')[1];
-        const pdfBase64URL = `data:application/pdf;base64,${pdfBase64}`;
-        const pdfBase641 = pdfBase64URL.split(',')[1];
-        this.facturaBase64 = pdfBase641;
-    
-          const newMov: MovimientosEntity = {
-            id: localStorage.getItem('movimiento_id')!,
-            tipo_id: '',
-            tipo_emision_cod: '',
-            estado_fact_id: '',
-            tipo_comprb_id: '',
-            almacen_id: '',
-            cod_doc: '',
-            secuencial: ''
-          }
-
-          this.httpServiceMovimiento.obtenerMovimientoCLAVEACCESO(newMov).subscribe(res => {
-            this.facturaName = `factura_${res.lstMovimientos[0].clave_acceso}.pdf`;
-            // Guardar pdf en local
-            doc.save(this.facturaName);
-            const imageEntity: ImagenesEntity = {
-              imageBase64: this.facturaBase64,
-              nombreArchivo: this.facturaName,
-              codigoError: '',
-              descripcionError: '',
-              nombreArchivoEliminar: '',
-            };
-            
-
-
-
-            this.httpServiceImage.agregarPDF(imageEntity).subscribe(res1 => {
-              if (res1.codigoError == 'OK') {
-                console.log('PDF subido correctamente');
-                this.pdfGenerado = true;
-              } else {
-                console.error('Error al subir el PDF:', res1.descripcionError);
-              }
-            }
-            );
-          }
-          );
-      }
-    }
-    );
-  }
-
-  generarPDFFunciona() {
-
-    const DATA = document.getElementById('htmlData')!;
-    const doc = new jsPDF('p', 'pt', 'a4');
-    const options = {
-      background: 'white',
-      scale: 3
-    };
-
-
-        // Crear un contenedor para renderizar el contenido en tamaño fijo
-        const fixedContainer = document.createElement('div');
-        fixedContainer.style.width = '794px'; // Ancho en puntos para A4
-        fixedContainer.style.position = 'absolute';
-        fixedContainer.style.top = '0';
-        fixedContainer.style.left = '0';
-        fixedContainer.style.background = 'white';
-    
-        // Clonar el contenido original y agregarlo al contenedor fijo
-        const contentClone = DATA.cloneNode(true) as HTMLElement;
-        fixedContainer.appendChild(contentClone);
-        document.body.appendChild(fixedContainer);
-
-
-    html2canvas(fixedContainer, options).then((canvas) => {
-  
-      const img = canvas.toDataURL('image/PNG');
-  
-  
-      const bufferX = 0;
-      const bufferY = 0;
-
-      const pdfWidth = doc.internal.pageSize.getWidth();
-      const pdfHeight = doc.internal.pageSize.getHeight();
-
-      doc.addImage(img, 'PNG', bufferX, bufferY, pdfWidth, pdfHeight, undefined, 'FAST');
-
-      //Descargarse y agregar la imagen del logo
-      const logoUrl = this.url_logo;
-      this.getBase64Image(logoUrl).then((logoBase64) => {
-        if (logoBase64) {
-          doc.addImage(logoBase64, 'PNG', 10, 10, 70, 70);
-        }
-      })
-
-      return doc;
-    }).then((docResult) => {
-  
-      // Datos para guardar el pdf en remoto
-  
-      const pdfContent = doc.output('datauristring');
-      const pdfBase64 = pdfContent.split(',')[1];
-      const pdfBase64URL = `data:application/pdf;base64,${pdfBase64}`;
-      const pdfBase641 = pdfBase64URL.split(',')[1];
-      this.facturaBase64 = pdfBase641;
-  
-      const newMov: MovimientosEntity = {
-        id: localStorage.getItem('movimiento_id')!,
-        tipo_id: '',
-        tipo_emision_cod: '',
-        estado_fact_id: '',
-        tipo_comprb_id: '',
-        almacen_id: '',
-        cod_doc: '',
-        secuencial: ''
-      }
-      this.httpServiceMovimiento.obtenerMovimientoCLAVEACCESO(newMov).subscribe(res => {
-        this.facturaName = `factura_${res.lstMovimientos[0].clave_acceso}.pdf`;
-        // Guardar pdf en local
-        docResult.save(this.facturaName);
-        const imageEntity: ImagenesEntity = {
-          imageBase64: this.facturaBase64,
-          nombreArchivo: this.facturaName,
-          codigoError: '',
-          descripcionError: '',
-          nombreArchivoEliminar: '',
-        };
-        this.httpServiceImage
-          .agregarPDF(imageEntity).subscribe(res1 => {
-            if (res1.codigoError == 'OK') {
-              console.log('CORRECTO')
-              this.pdfGenerado = true;
-            } else {
-              console.log(res1.descripcionError)
-            }
-          });
-      });
-    })
-  }
-
-
-  generarPDF() {
-
-    const DATA = document.getElementById('htmlData')!;
-    const doc = new jsPDF('p', 'pt', 'a4');
-    const options = {
-      background: 'white',
-      scale: 3
-    };
-
-
-        // Crear un contenedor para renderizar el contenido en tamaño fijo
-        const fixedContainer = document.createElement('div');
-        fixedContainer.style.width = '794px'; // Ancho en puntos para A4
-        fixedContainer.style.position = 'absolute';
-        fixedContainer.style.top = '0';
-        fixedContainer.style.left = '0';
-        fixedContainer.style.background = 'white';
-    
-        // Clonar el contenido original y agregarlo al contenedor fijo
-        const contentClone = DATA.cloneNode(true) as HTMLElement;
-        fixedContainer.appendChild(contentClone);
-        document.body.appendChild(fixedContainer);
 
 
     html2canvas(fixedContainer, options).then((canvas) => {
