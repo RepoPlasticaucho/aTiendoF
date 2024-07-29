@@ -1,11 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faEdit, faPlus, faTrashAlt, faUserFriends } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrashAlt, faUserFriends,faTable } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
 import { InventariosEntity } from 'src/app/models/inventarios';
 import { AlmacenesEntity } from 'src/app/models/almacenes';
 import { InventariosService } from 'src/app/services/inventarios.service';
 import Swal from 'sweetalert2';
+import * as XLSX from 'xlsx';
+
 
 @Component({
   selector: 'app-inventarios',
@@ -20,6 +22,7 @@ export class InventariosComponent implements OnInit {
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;
   faPlus = faPlus;
+  faTable = faTable;
   //Declaración de variables
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
@@ -182,6 +185,82 @@ export class InventariosComponent implements OnInit {
       this.router.navigate(['/navegation-facturador']);
     }
   }
+
+  exportarAXLSX() {
+    const movimientosSinProductId = this.lstInventarios.map(movimiento => {
+        const { ...movimientoSinProductId } = movimiento;
+        return movimientoSinProductId;
+    });
+
+
+    
+    const renombrar = movimientosSinProductId.map(movimiento => {
+        return {
+            'PRODUCTO': movimiento.producto_nombre,
+            'CATEGORIA': movimiento.categoria,
+            'LINEA': movimiento.linea,
+            'MARCA': movimiento.marca,
+            'MODELO': movimiento.modelo,
+            'COLOR': movimiento.color,
+            'CARACTERISTICA': movimiento.atributo,
+            'GENERO': movimiento.genero,
+            'ETIQUETAS': movimiento.etiquetas,
+            'STOCK': movimiento.stock,
+            'PRECIO': movimiento.pvp2,
+            'COSTO': movimiento.costo,
+            'UNIDAD DE MEDIDA': movimiento.unidad_medidad,
+            'TAMAÑO': movimiento.talla,
+            'IVA': movimiento.tarifa_ice_iva,
+            'ICE': movimiento.tarifa_ice_iva1,
+        };
+    });
+
+    const wb = XLSX.utils.book_new();
+    const wsData = XLSX.utils.json_to_sheet(renombrar);
+
+    // Establecer estilos y colores antes de agregar datos
+    wsData['!cols'] = [
+        { width: 20 },
+        { width: 20 },
+        { width: 20 },
+        { width: 20 }
+    ];
+
+
+
+    // Agregar los datos de la tabla
+    XLSX.utils.sheet_add_json(wsData, renombrar, { origin: 'A1' });
+
+    // Agregar la hoja de Excel al libro
+    XLSX.utils.book_append_sheet(wb, wsData, 'Movimientos');
+
+    // Generar el archivo Excel y guardarlo
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+    const date = new Date();
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const fecha = `${day}-${month}-${year}`;
+
+
+    this.saveExcelFile(excelBuffer, `${this.inventarioAlamacenNombre}_${fecha}.xlsx`);
+
+
+    
+}
+
+private saveExcelFile(buffer: any, fileName: string): void {
+  const data: Blob = new Blob([buffer], { type: 'application/octet-stream' });
+  const url: string = window.URL.createObjectURL(data);
+  const link: HTMLAnchorElement = document.createElement('a');
+  link.href = url;
+  link.download = fileName;
+  link.click();
+  setTimeout(() => {
+    window.URL.revokeObjectURL(url);
+  }, 1000);
+}
 
   deshabilitarInventarios(inventario: InventariosEntity): void {
     Swal.fire({

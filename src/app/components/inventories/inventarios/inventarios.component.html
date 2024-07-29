@@ -1,7 +1,7 @@
 <div style="max-width: 95%;margin: auto;">
     <div class="card">
         <br>
-        
+
         <div class="card-header">
             <div class="row mx-3">
                 <fa-icon [icon]="faUserFriends" [size]="'3x'" style="color: #636363;"></fa-icon>
@@ -14,27 +14,48 @@
             </div>
 
 
-            
+
             <div class="ml-auto text-right pr-3" style="color: #888888; font-size: 14px;">
                 <strong>Productos de: </strong>{{inventarioAlamacenNombre}}
             </div>
         </div><br>
         <mat-grid-list cols="6" rowHeight="50px">
             <mat-grid-tile>
-                <a class="btn button" 
-                    (click)="navegar()"
-                    style="text-align:center;
+                <a class="btn button" (click)="navegar()" style="text-align:center;
                             font-size: 15px; width:140px; 
                                height:35px;
                                text-align:center; 
                                margin-top: 10px;
-                               background: rgb(54,169,225,0.8);"
-                ><span style="color: white;">
-                    VOLVER
-                </span>
-                
+                               background: rgb(54,169,225,0.8);"><span style="color: white;">
+                        VOLVER
+                    </span>
+
+
                 </a>
-                </mat-grid-tile>
+
+
+
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+
+
+                <a class="btn button" (click)="exportarAXLSX()" style="text-align:center;
+                                font-size: 15px; width:140px; 
+                                   height:35px;
+                                   text-align:center; 
+                                   margin-top: 10px;
+                                   background: rgba(23, 139, 48, 0.8);"><span style="color: white;">
+                        Exportar
+                        <fa-icon [icon]="faTable" style="color: white;"></fa-icon>
+                    </span>
+
+
+                </a>
+
+            </mat-grid-tile>
+
+
         </mat-grid-list><br>
         <div id="tabla-contenedor" class="card-body ">
             <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" id="dtdt">
@@ -64,8 +85,8 @@
                 <tbody style="color: #767695;">
                     <tr *ngFor="let inventario of lstInventarios" class="table-row">
                         <td style="text-align: center;">
-                            <img src={{inventario.url_image}} alt={{inventario.marca}} class="img-thumbnail" height="60px"
-                                width="100px" data-toggle="modal" data-target="#exampleModal">
+                            <img src={{inventario.url_image}} alt={{inventario.marca}} class="img-thumbnail"
+                                height="60px" width="100px" data-toggle="modal" data-target="#exampleModal">
                         </td>
                         <td>{{inventario.Producto}}</td>
                         <td>{{inventario.categoria}}</td>
@@ -86,12 +107,14 @@
                         <td>{{inventario.tarifa_ice_iva1}}</td>
 
                         <td>
-                           <!-- <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'sm'"  style="margin-right: 5px;" data-placement="bottom" title="Editar Almacen" (click)="editarInventarios(inventario)"></fa-icon> -->
-                           <span [attr.data-inventario]="inventario | json">
-                            <fa-icon [icon]="faEdit" class="btn btn-info edit-icon" [size]="'lg'" style="margin-right: 5px;"
-                            data-placement="bottom" title="Editar Modelo Producto"
-                            (click)=" editarInventarios(inventario) "></fa-icon>
-                                <fa-icon [icon]="faTrashAlt" class="btn btn-danger delete-icon" [size]="'lg'" data-placement="bottom" title="Eliminar Almacen" (click)="deshabilitarInventarios(inventario)"></fa-icon>
+                            <!-- <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'sm'"  style="margin-right: 5px;" data-placement="bottom" title="Editar Almacen" (click)="editarInventarios(inventario)"></fa-icon> -->
+                            <span [attr.data-inventario]="inventario | json">
+                                <fa-icon [icon]="faEdit" class="btn btn-info edit-icon" [size]="'lg'"
+                                    style="margin-right: 5px;" data-placement="bottom" title="Editar Modelo Producto"
+                                    (click)=" editarInventarios(inventario) "></fa-icon>
+                                <fa-icon [icon]="faTrashAlt" class="btn btn-danger delete-icon" [size]="'lg'"
+                                    data-placement="bottom" title="Eliminar Almacen"
+                                    (click)="deshabilitarInventarios(inventario)"></fa-icon>
                             </span>
                         </td>
                     </tr>

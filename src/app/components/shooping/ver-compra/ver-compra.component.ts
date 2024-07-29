@@ -45,6 +45,7 @@ export class VerCompraComponent implements OnInit {
   inputColor: string = '';
   totalF: number = 0;
   comprobanteFormato: string = '';
+  nombreAlmacenCompra = localStorage.getItem('nombreAlmacenCompra')!;
 
 
 

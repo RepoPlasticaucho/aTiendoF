@@ -346,6 +346,8 @@ export class FacturaComponent implements OnInit {
 
   guardarPDF() {
 
+    console.log("ENTRO A GUARDAR PDF")
+
     const DATA = document.getElementById('htmlData')!;
     const doc = new jsPDF('p', 'pt', 'a4');
     const options = {
@@ -383,8 +385,11 @@ export class FacturaComponent implements OnInit {
 
       //Descargarse y agregar la imagen del logo
       const logoUrl = this.url_logo;
+      console.log("ESTO ES LO QUE TENGO EN EL LOGO URL " + logoUrl)
       this.getBase64Image(logoUrl).then((logoBase64) => {
         if (logoBase64) {
+
+          console.log("eSTO ES LO QUE TENGO EN EL LOGO " + logoBase64)
           doc.addImage(logoBase64, 'PNG', 10, 10, 70, 70);
         }
       })

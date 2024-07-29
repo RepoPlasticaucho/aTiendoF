@@ -28,7 +28,7 @@ import { DataTableDirective } from 'angular-datatables';
 export class CompraNuevoComponent implements OnInit {
 
   searchText: string = '';
-  
+
   isResponsive: boolean = false; // Nueva propiedad
   faShoppingBag = faShoppingBag;
   faShoppingCart = faShoppingCart;
@@ -42,8 +42,7 @@ export class CompraNuevoComponent implements OnInit {
   lstProveedoresProductos: ProveedoresProductosEntity[] = [];
 
   costo: any;
-  costoStatic: any;
-  stockStatic: any;
+
   costo2: any;
   precio: any;
   botonBloqueado: boolean = false;
@@ -63,7 +62,10 @@ export class CompraNuevoComponent implements OnInit {
 
   anadirTodosProductos(): void {
     for (let producto of this.lstProveedoresProductos) {
+
       if (parseInt(producto.cantidad!) > 0) {
+        console.log("ESTE ES EL PRODUCTO", producto)
+
         this.crearDetalle(producto);
       }
     }
@@ -74,7 +76,7 @@ export class CompraNuevoComponent implements OnInit {
   ngOnInit(): void {
     let component = this;
     let cantidadAux = "";
-  
+
     this.dtOptions = {
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
@@ -89,7 +91,7 @@ export class CompraNuevoComponent implements OnInit {
       //   details: {
       //     renderer: function (api: any, rowIdx: any, columns: any) {
       //       component.isResponsive = true; // Indicar que la tabla está en modo responsive
-  
+
       //       var data = $.map(columns, function (col, i) {
       //         return col.hidden ?
       //         '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
@@ -98,7 +100,7 @@ export class CompraNuevoComponent implements OnInit {
       //         '</tr>' :
       //         '';
       //       }).join('');
-  
+
       //       return data ?
       //         $('<table/>').append(data) :
       //         false;
@@ -112,12 +114,12 @@ export class CompraNuevoComponent implements OnInit {
       //     cantidadAux = $(this).val() + ""
       //     console.log(cantidadAux)
       //   });
-  
+
       //   // Add click event listener to the table rows
       //   $('#dataTable tbody').on('click', 'tr a', function () {
       //     // Solo se ejecuta si esta en responsive
       //     if (component.isResponsive == false) return
-  
+
       //     let data: ProveedoresProductosEntity = $(this).closest('a').data('proveedor');
       //     data.cantidad = cantidadAux
       //     console.log("Esta es la data", data)
@@ -128,7 +130,7 @@ export class CompraNuevoComponent implements OnInit {
       //   });
       // }
     }
-  
+
     const newProveedor: ProveedoresProductosEntity = {
       id: '',
       provedor_id: localStorage.getItem('proveedorid')!,
@@ -138,7 +140,7 @@ export class CompraNuevoComponent implements OnInit {
       created_at: '',
       updated_at: ''
     }
-  
+
     Swal.fire({
       title: 'CARGANDO...',
       html: 'Se están cargando los productos.',
@@ -150,7 +152,7 @@ export class CompraNuevoComponent implements OnInit {
           Swal.close();
           return;
         }
-  
+
         Swal.showLoading();
         this.httpServiceProvProd.obtenerProveedoresProductosProv(newProveedor).subscribe((res1) => {
           console.log(res1)
@@ -166,11 +168,11 @@ export class CompraNuevoComponent implements OnInit {
             this.dtTrigger.next('');
             const batchSize = 10; // Cantidad de productos por lote
             const totalProducts = this.lstProveedoresProductos.length;
-  
+
             const processBatch = (startIndex: number) => {
               const endIndex = Math.min(startIndex + batchSize, totalProducts);
               const batchObservables = [];
-  
+
               for (let i = startIndex; i < endIndex; i++) {
                 const proveedorProducto = this.lstProveedoresProductos[i];
                 const newDetalle: DetallesMovimientoEntity = {
@@ -183,10 +185,10 @@ export class CompraNuevoComponent implements OnInit {
                   costo: '',
                   precio: ''
                 };
-  
+
                 batchObservables.push(this.httpServiceDetalle.obtenerDetalleMovimientoEx(newDetalle));
               }
-  
+
               forkJoin(batchObservables).subscribe(responses => {
                 responses.forEach((res2, i) => {
                   if (res2.codigoError == 'OK') {
@@ -196,7 +198,7 @@ export class CompraNuevoComponent implements OnInit {
                     this.lstProveedoresProductos[startIndex + i].productoExistente = false;
                   }
                 });
-  
+
                 // Procesar el próximo lote si es necesario
                 if (endIndex < totalProducts) {
                   processBatch(endIndex);
@@ -206,7 +208,7 @@ export class CompraNuevoComponent implements OnInit {
                 }
               });
             };
-  
+
             processBatch(0); // Comienza el procesamiento del primer lote
           }
         });
@@ -217,7 +219,7 @@ export class CompraNuevoComponent implements OnInit {
       }
     });
   }
-  
+
   private actualizarListaProductos(newProveedor: ProveedoresProductosEntity): void {
     this.httpServiceProvProd.obtenerProveedoresProductosProv(newProveedor).subscribe((res1) => {
       console.log(res1)
@@ -243,7 +245,7 @@ export class CompraNuevoComponent implements OnInit {
       }
     });
   }
-  
+
   /*
   const newDetalle: DetallesMovimientoEntity = {
     id: '',
@@ -263,10 +265,10 @@ export class CompraNuevoComponent implements OnInit {
 
 
   crearDetalle(proveedorProducto: ProveedoresProductosEntity): void {
-  
+
     this.httpServiceProvProd.asignarProveedorProducto(proveedorProducto);
     this.httpServiceProvProd.obtenerProveedorProducto$.pipe(take(1)).subscribe((res) => {
-      this.botonBloqueado=true;
+      this.botonBloqueado = true;
       if (res.producto_id == '') {
         Swal.fire({
           icon: 'error',
@@ -308,11 +310,15 @@ export class CompraNuevoComponent implements OnInit {
           stock: proveedorProducto.cantidad!,
           pvp2: proveedorProducto.precio
         }
+
+        console.log("ESTE ES EL INVENTARIOOOOO========O", newInventario)
+
         // cambios
         //console.log(proveedorProducto.productoExistente)
-        
+
         this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res1 => {
           if (res1.codigoError == 'NEXISTE') {
+            console.log("ENTRO AL PRODUCTO NEXISTE")
             this.httpServiceInventario.agregarInventario(newInventario).pipe(
               finalize(() => {
                 this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res5 => {
@@ -323,13 +329,13 @@ export class CompraNuevoComponent implements OnInit {
                     producto_id: res.producto_id,
                     movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
                     cantidad: proveedorProducto.cantidad!,
-                    costo: this.costo,
-                    precio: this.precio
+                    costo: proveedorProducto.costo!,
+                    precio: (parseFloat(proveedorProducto.costo!) * parseFloat(proveedorProducto.cantidad!)).toString()
                   }
-               
-                  
+
+
                   this.httpServiceDetalle.agregarDetalleCompra(newDetalle).pipe(finalize(() => {
-               
+
                     this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
                       if (res1.codigoError == 'OK') {
                         const newDetalleImp: DetalleImpuestosEntity = {
@@ -364,10 +370,10 @@ export class CompraNuevoComponent implements OnInit {
                         showConfirmButton: false
                       });
                     } else {
-                      
-                          this.productoAgregado.emit(proveedorProducto);
-                          this.cerrarDialog();
-                     
+
+                      this.productoAgregado.emit(proveedorProducto);
+                      this.cerrarDialog();
+
                     }
                   });
                 });
@@ -385,8 +391,12 @@ export class CompraNuevoComponent implements OnInit {
             });
 
           } else if (res1.codigoError == 'OK') {
-            this.costoStatic = res1.lstInventarios[0].costo;
-            this.stockStatic = res1.lstInventarios[0].stock;
+            console.log("ENTRO AL OKKK")
+
+            //Obtener el indice del producto
+            console.log("ESTE es el inventario", res1.lstInventarios[0])
+
+
             const oper1 = parseFloat(res1.lstInventarios[0].costo!) * parseFloat(res1.lstInventarios[0].stock!);
             const oper2 = parseFloat(proveedorProducto.cantidad!) * parseFloat(proveedorProducto.costo!);
             const nuevoCosto = (oper1 + oper2) / (parseFloat(res1.lstInventarios[0].stock!) + parseFloat(proveedorProducto.cantidad!));
@@ -429,32 +439,33 @@ export class CompraNuevoComponent implements OnInit {
               producto_id: res.producto_id,
               movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
               cantidad: proveedorProducto.cantidad!,
-              costo: this.costo,
-              precio: this.precio
+              costo: proveedorProducto.costo!,
+              precio: (parseFloat(proveedorProducto.costo!) * parseInt(proveedorProducto.cantidad!)).toString()
+
             }
 
 
-            if (!proveedorProducto.productoExistente){
-              if(proveedorProducto.cantidad=="0"){
+            if (!proveedorProducto.productoExistente) {
+              if (proveedorProducto.cantidad == "0") {
                 Swal.fire({
                   icon: 'error',
                   title: 'No se puede agregar 0',
                   text: "La cantidad no puede ser 0",
                   showConfirmButton: false
                 });
-                this.botonBloqueado=false
+                this.botonBloqueado = false
                 return
               }
               this.httpServiceDetalle.agregarDetalleCompras(newDetalle).pipe(finalize(() => {
 
                 this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
-                  
+
                   if (res1.codigoError == 'OK') {
                     const newDetalleImp: DetalleImpuestosEntity = {
                       id: '',
                       detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
                       cod_impuesto: res1.lstDetalleMovimientos[0].codigo_impuesto!,
-                    codigo_tarifa: res1.lstDetalleMovimientos[0].cod_tarifa!,
+                      codigo_tarifa: res1.lstDetalleMovimientos[0].cod_tarifa!,
                       porcentaje: res1.lstDetalleMovimientos[0].tarifa!,
                       base_imponible: '',
                       valor: res1.lstDetalleMovimientos[0].costo!,
@@ -462,7 +473,7 @@ export class CompraNuevoComponent implements OnInit {
                       updated_at: ''
                     }
                     this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
-                      
+
                       if (res2.codigoError != 'OK') {
                         Swal.fire({
                           icon: 'error',
@@ -483,41 +494,42 @@ export class CompraNuevoComponent implements OnInit {
                     showConfirmButton: false
                   });
                 } else {
-               
-                    this.botonBloqueado=false;
-                    
-                      this.productoAgregado.emit(proveedorProducto);
-                      this.cerrarDialog();
+
+                  this.botonBloqueado = false;
+
+                  this.productoAgregado.emit(proveedorProducto);
+                  this.cerrarDialog();
 
                 }
               });
             } else {
-              if(proveedorProducto.cantidad! != '0'){
+              if (proveedorProducto.cantidad! != '0' && proveedorProducto.productoExistente) {
 
-                newDetalle.precio = (parseFloat(newDetalle.cantidad!) * parseFloat(newDetalle.costo!)).toString();
+                 console.log("Entro al error")
+                // //Solo modificamos el detalle que cambio la cantidad
+             
+                 newDetalle.precio = (parseFloat(newDetalle.cantidad!) * parseFloat(newDetalle.costo!)).toString();
 
-                console.log("ESTE ES EL nuevo precio ", newDetalle.precio)
-                console.log(newDetalle)
 
-                this.httpServiceDetalle.modificarDetallePedidoVenta(newDetalle).subscribe(res => {
-                  console.log(res.codigoError)
-                  if(res.codigoError == 'OK'){
-                  
-                        this.cerrarDialog();
-                      
-                      this.productoAgregado.emit(proveedorProducto);
-               
-                  } else {
-                    
+                 this.httpServiceDetalle.modificarDetallePedidoVenta(newDetalle).subscribe(res => {
+                   console.log(res.codigoError)
+                   if (res.codigoError == 'OK') {
+
+                     this.cerrarDialog();
+
+                     this.productoAgregado.emit(proveedorProducto);
+
+                   } else {
+
                   }
-                });
+                 });
               } else {
                 this.httpServiceDetalle.eliminarDetallePedidoVenta(newDetalle).subscribe(res => {
-                  console.log("en este metodo"+res)
-               
-                    this.cerrarDialog();
-                
-                });     
+                  console.log("en este metodo" + res)
+
+                  this.cerrarDialog();
+
+                });
               }
             }
           }
