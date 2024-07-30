@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { faList, faEdit, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faList, faEdit, faTrashAlt, faPlus, faTable } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { ProveedoresEntity } from 'src/app/models/proveedores';
@@ -7,6 +7,7 @@ import { ProveedoresService } from 'src/app/services/proveedores.service';
 import Swal from 'sweetalert2';
 import { SociedadesComponent } from '../../all_components';
 import { SociedadesEntity } from 'src/app/models/sociedades';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-proveedores',
@@ -19,6 +20,7 @@ export class ProveedoresComponent implements OnInit {
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;
   faPlus = faPlus;
+  faTable = faTable;
   //Declaración de variables
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
@@ -168,4 +170,69 @@ export class ProveedoresComponent implements OnInit {
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['proveedores-create'] } }]);
   }
 
+
+  exportarAXLSX() {
+    const movimientosSinProductId = this.lstProveedores.map(movimiento => {
+      const { ...movimientoSinProductId } = movimiento;
+      return movimientoSinProductId;
+    });
+
+
+
+    const renombrar = movimientosSinProductId.map(movimiento => {
+      return {
+        'NOMBRE': movimiento.nombre,
+        'CORREO': movimiento.correo,
+        'TELEFONO': movimiento.telefono,
+        'CIUDAD': movimiento.ciudad,
+        'DIRECCION': movimiento.direccionprov,
+      };
+    });
+
+    const wb = XLSX.utils.book_new();
+    const wsData = XLSX.utils.json_to_sheet(renombrar);
+
+    // Establecer estilos y colores antes de agregar datos
+    wsData['!cols'] = [
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 }
+    ];
+
+
+
+    // Agregar los datos de la tabla
+    XLSX.utils.sheet_add_json(wsData, renombrar, { origin: 'A1' });
+
+    // Agregar la hoja de Excel al libro
+    XLSX.utils.book_append_sheet(wb, wsData, 'Proveedores');
+
+    // Generar el archivo Excel y guardarlo
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+    const date = new Date();
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const fecha = `${day}-${month}-${year}`;
+
+
+    this.saveExcelFile(excelBuffer, `Proveedores_${fecha}.xlsx`);
+
+
+
+  }
+
+  private saveExcelFile(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], { type: 'application/octet-stream' });
+    const url: string = window.URL.createObjectURL(data);
+    const link: HTMLAnchorElement = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    link.click();
+    setTimeout(() => {
+      window.URL.revokeObjectURL(url);
+    }, 1000);
+  }
 }

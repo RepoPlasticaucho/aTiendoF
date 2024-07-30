@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faEdit, faPlus, faTrashAlt, faUserFriends } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrashAlt, faUserFriends, faTable } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
 import { AlmacenesEntity } from 'src/app/models/almacenes';
 import { SociedadesEntity } from 'src/app/models/sociedades';
@@ -8,6 +8,8 @@ import { TercerosEntity } from 'src/app/models/terceros';
 import { AlmacenesService } from 'src/app/services/almacenes.service';
 import { TercerosService } from 'src/app/services/terceros.service';
 import Swal from 'sweetalert2';
+import * as XLSX from 'xlsx';
+
 
 @Component({
   selector: 'app-tercerosalmacen',
@@ -21,6 +23,7 @@ export class TercerosalmacenComponent implements OnInit {
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;
   faPlus = faPlus;
+  faTable = faTable;
   //Declaración de variables
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
@@ -105,6 +108,8 @@ export class TercerosalmacenComponent implements OnInit {
 
     localStorage.setItem('almacenid',almacen.idAlmacen)
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['tercerosusuarios'] } }]);
-
   }
+
+
+
 }

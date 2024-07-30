@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faEdit, faPlus, faTrashAlt, faUserFriends,faTable } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrashAlt, faUserFriends, faTable } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
 import { InventariosEntity } from 'src/app/models/inventarios';
 import { AlmacenesEntity } from 'src/app/models/almacenes';
@@ -43,28 +43,28 @@ export class InventariosComponent implements OnInit {
       searching: true,
       ordering: true,
       info: true,
-      responsive:  {
+      responsive: {
         details: {
           renderer: function (api: any, rowIdx: any, columns: any) {
-          var data = $.map(columns, function (col, i) {
-            return col.hidden ?
-            '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
-            '<td>' + col.title + ':' + '</td> ' +
-            '<td>' + col.data + '</td>' +
-            '</tr>' :
-            '';
-          }).join('');
+            var data = $.map(columns, function (col, i) {
+              return col.hidden ?
+                '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+                '<td>' + col.title + ':' + '</td> ' +
+                '<td>' + col.data + '</td>' +
+                '</tr>' :
+                '';
+            }).join('');
 
-          return data ?
-          $('<table/>').append(data) :
-          false;
-        
+            return data ?
+              $('<table/>').append(data) :
+              false;
+
           }
         },
-        },
+      },
 
-        initComplete: function () {
-     
+      initComplete: function () {
+
         $('#dtdt tbody').on('click', '.delete-icon', function () {
           const inventario: InventariosEntity = $(this).closest("span").data('inventario');
           component.eliminarInventarios(inventario);
@@ -174,45 +174,45 @@ export class InventariosComponent implements OnInit {
     })
   }
 
-  navegar(){
+  navegar() {
     let ruta = this.router.url;
 
-    if(ruta.includes('navegation-cl')){
+    if (ruta.includes('navegation-cl')) {
       this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-productos'] } }]);
     }
 
-    if(ruta.includes('navegation-facturador')){
+    if (ruta.includes('navegation-facturador')) {
       this.router.navigate(['/navegation-facturador']);
     }
   }
 
   exportarAXLSX() {
     const movimientosSinProductId = this.lstInventarios.map(movimiento => {
-        const { ...movimientoSinProductId } = movimiento;
-        return movimientoSinProductId;
+      const { ...movimientoSinProductId } = movimiento;
+      return movimientoSinProductId;
     });
 
 
-    
+
     const renombrar = movimientosSinProductId.map(movimiento => {
-        return {
-            'PRODUCTO': movimiento.producto_nombre,
-            'CATEGORIA': movimiento.categoria,
-            'LINEA': movimiento.linea,
-            'MARCA': movimiento.marca,
-            'MODELO': movimiento.modelo,
-            'COLOR': movimiento.color,
-            'CARACTERISTICA': movimiento.atributo,
-            'GENERO': movimiento.genero,
-            'ETIQUETAS': movimiento.etiquetas,
-            'STOCK': movimiento.stock,
-            'PRECIO': movimiento.pvp2,
-            'COSTO': movimiento.costo,
-            'UNIDAD DE MEDIDA': movimiento.unidad_medidad,
-            'TAMAÑO': movimiento.talla,
-            'IVA': movimiento.tarifa_ice_iva,
-            'ICE': movimiento.tarifa_ice_iva1,
-        };
+      return {
+        'PRODUCTO': movimiento.producto_nombre,
+        'CATEGORIA': movimiento.categoria,
+        'LINEA': movimiento.linea,
+        'MARCA': movimiento.marca,
+        'MODELO': movimiento.modelo,
+        'COLOR': movimiento.color,
+        'CARACTERISTICA': movimiento.atributo,
+        'GENERO': movimiento.genero,
+        'ETIQUETAS': movimiento.etiquetas,
+        'STOCK': movimiento.stock,
+        'PRECIO': movimiento.pvp2,
+        'COSTO': movimiento.costo,
+        'UNIDAD DE MEDIDA': movimiento.unidad_medidad,
+        'TAMAÑO': movimiento.talla,
+        'IVA': movimiento.tarifa_ice_iva,
+        'ICE': movimiento.tarifa_ice_iva1,
+      };
     });
 
     const wb = XLSX.utils.book_new();
@@ -220,10 +220,10 @@ export class InventariosComponent implements OnInit {
 
     // Establecer estilos y colores antes de agregar datos
     wsData['!cols'] = [
-        { width: 20 },
-        { width: 20 },
-        { width: 20 },
-        { width: 20 }
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 }
     ];
 
 
@@ -247,20 +247,20 @@ export class InventariosComponent implements OnInit {
     this.saveExcelFile(excelBuffer, `${this.inventarioAlamacenNombre}_${fecha}.xlsx`);
 
 
-    
-}
 
-private saveExcelFile(buffer: any, fileName: string): void {
-  const data: Blob = new Blob([buffer], { type: 'application/octet-stream' });
-  const url: string = window.URL.createObjectURL(data);
-  const link: HTMLAnchorElement = document.createElement('a');
-  link.href = url;
-  link.download = fileName;
-  link.click();
-  setTimeout(() => {
-    window.URL.revokeObjectURL(url);
-  }, 1000);
-}
+  }
+
+  private saveExcelFile(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], { type: 'application/octet-stream' });
+    const url: string = window.URL.createObjectURL(data);
+    const link: HTMLAnchorElement = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    link.click();
+    setTimeout(() => {
+      window.URL.revokeObjectURL(url);
+    }, 1000);
+  }
 
   deshabilitarInventarios(inventario: InventariosEntity): void {
     Swal.fire({

@@ -38,8 +38,6 @@
             </mat-grid-tile>
 
             <mat-grid-tile>
-
-
                 <a class="btn button" (click)="exportarAXLSX()" style="text-align:center;
                                 font-size: 15px; width:140px; 
                                    height:35px;
@@ -49,13 +47,8 @@
                         Exportar
                         <fa-icon [icon]="faTable" style="color: white;"></fa-icon>
                     </span>
-
-
                 </a>
-
             </mat-grid-tile>
-
-
         </mat-grid-list><br>
         <div id="tabla-contenedor" class="card-body ">
             <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" id="dtdt">

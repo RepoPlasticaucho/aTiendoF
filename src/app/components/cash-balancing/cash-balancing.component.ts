@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { faList, faEdit, faTrashAlt, faPlus, faMoneyBillAlt } from '@fortawesome/free-solid-svg-icons';
+import { faList, faEdit, faTrashAlt, faPlus, faMoneyBillAlt, faTable } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
@@ -14,6 +14,7 @@ import { FormasPagoEntity } from 'src/app/models/formas-pago';
 import { MatDialog } from '@angular/material/dialog';
 import { CuadreMovComponent } from './cuadre-mov/cuadre-mov.component';
 import { FormasPagoServiceSociedad } from 'src/app/services/formaspagosociedad.service';
+import * as XLSX from 'xlsx';
 
 
 @Component({
@@ -43,7 +44,7 @@ export class CashBalancingComponent implements OnInit {
   nombreAlmacen: string = '';
   mostrarDiv: boolean = false;
   formasPagoSociedad: FormasPagoSociedadEntity[] = [];
-
+  faTable = faTable;
 
   containsEfectivo: boolean = false;
   containsTarDeb: boolean = false;
@@ -1149,4 +1150,6 @@ console.log("AQUI TARJETA DEBITOoooOOOoo ", this.tar_deb)
     this.dtTrigger.unsubscribe();
   }
 
+
+  
 }
