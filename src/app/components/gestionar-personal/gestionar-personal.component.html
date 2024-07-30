@@ -5,9 +5,16 @@
             <fa-icon [icon]="faList" [size]="'3x'" style="color: #636363;"></fa-icon>
             <h1 class="mx-5 " style="color: #636363;">Personal</h1>
             <div style="position: absolute;right:0;" class="mx-3">
-                <fa-icon [icon]="faPlus" class="btn btn-success" [size]="'lg'" data-toggle="tooltip"
+                <fa-icon [icon]="faTable" class="btn btn-success" [size]="'lg'" data-toggle="tooltip"
+                    data-placement="bottom" title="Exportar"
+                    (click)="exportarAXLSX()"></fa-icon>
+
+                    
+                    <fa-icon [icon]="faPlus" class="btn btn-success" [size]="'lg'" data-toggle="tooltip"
                     data-placement="bottom" title="Agregar una nuevo Proveedor"
-                    (click)="agregarProveedor()"></fa-icon>
+                    (click)="agregarProveedor()"
+                        style="margin-left: 5px;"
+                    ></fa-icon>
             </div>
         </div>
     </div>

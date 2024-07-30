@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { faList, faEdit, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faList, faEdit, faTrashAlt, faPlus, faTable } from '@fortawesome/free-solid-svg-icons';
 import { faUserFriends } from '@fortawesome/free-solid-svg-icons';
 
 import { Router } from '@angular/router';
@@ -13,6 +13,7 @@ import { SociedadesService } from 'src/app/services/sociedades.service';
 import { ProveedoresEntity } from 'src/app/models/proveedores';
 import { AlmacenesService } from 'src/app/services/almacenes.service';
 import { Almacenes, AlmacenesEntity } from 'src/app/models/almacenes';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-gestionar-personal',
@@ -25,6 +26,7 @@ export class GestionarPersonalComponent implements OnInit {
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;
   faPlus = faPlus;
+  faTable = faTable;
   //Declaración de variables
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
@@ -183,4 +185,87 @@ export class GestionarPersonalComponent implements OnInit {
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['personal-edit'] } }]);
   }
   
+
+  exportarAXLSX() {
+
+    
+    const renombrar = this.lstProveedores.map(movimiento => {
+        return {
+            'NOMBRE': movimiento.nombre_personal,
+            'CORREO': movimiento.email,
+            'TELEFOO': movimiento.telefono,
+            'ALMACEN': movimiento.almacen_personal_id,
+        };
+    });
+
+    const wb = XLSX.utils.book_new();
+    const wsData = XLSX.utils.json_to_sheet(renombrar);
+
+    // Establecer estilos y colores antes de agregar datos
+    wsData['!cols'] = [
+        { width: 20 },
+        { width: 20 },
+        { width: 20 },
+        { width: 20 }
+    ];
+
+    // Fusionar celdas para el título general "Movimientos"
+    wsData['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 3 } }];
+    //Agregar estilos a la fusionada
+    wsData['A1'].s = {
+      font: { bold: true, sz: 24 },
+      alignment: { horizontal: 'center', vertical: 'center' },
+      fill: {
+          patternType: 'solid',
+          fgColor: { rgb: 'FFFF00' } // Aquí puedes especificar el color de fondo que desees, por ejemplo, amarillo (FFFF00)
+      }
+  };
+
+    // Establecer el título general "Movimientos" en la fila 1
+    wsData['A1'] = { v: `Personal`, t: 's' };
+    
+    // Establecer estilos para el título
+    wsData['A1'].s = {
+      font: { bold: true, sz: 24 },
+      alignment: { horizontal: 'center', vertical: 'center' },
+      fill: {
+          patternType: 'solid',
+          fgColor: { rgb: 'FFFF00' } // Aquí puedes especificar el color de fondo que desees, por ejemplo, amarillo (FFFF00)
+      }
+  };
+
+    // Agregar los datos de la tabla
+    XLSX.utils.sheet_add_json(wsData, renombrar, { origin: 'A2' });
+
+    // Agregar la hoja de Excel al libro
+    XLSX.utils.book_append_sheet(wb, wsData, 'Persoanl');
+
+    // Generar el archivo Excel y guardarlo
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+    const date = new Date();
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const fecha = `${day}-${month}-${year}`;
+
+
+    this.saveExcelFile(excelBuffer, `Personal_${fecha}.xlsx`);
+
+
+    
+}
+
+
+  private saveExcelFile(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], { type: 'application/octet-stream' });
+    const url: string = window.URL.createObjectURL(data);
+    const link: HTMLAnchorElement = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    link.click();
+    setTimeout(() => {
+      window.URL.revokeObjectURL(url);
+    }, 1000);
+  }
 }
