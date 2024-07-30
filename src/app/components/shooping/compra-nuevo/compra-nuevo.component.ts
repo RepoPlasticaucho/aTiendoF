@@ -311,8 +311,6 @@ export class CompraNuevoComponent implements OnInit {
           pvp2: proveedorProducto.precio
         }
 
-        console.log("ESTE ES EL INVENTARIOOOOO========O", newInventario)
-
         // cambios
         //console.log(proveedorProducto.productoExistente)
 
