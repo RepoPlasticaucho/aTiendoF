@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faEdit, faPlus, faTrashAlt, faUserFriends } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrashAlt, faUserFriends, faTable } from '@fortawesome/free-solid-svg-icons';
 import { Session } from 'inspector';
 import { Subject } from 'rxjs';
 import { AlmacenesEntity } from 'src/app/models/almacenes';
 import { SociedadesEntity } from 'src/app/models/sociedades';
 import { AlmacenesService } from 'src/app/services/almacenes.service';
 import Swal from 'sweetalert2';
+import * as XLSX from 'xlsx';
+
+
 @Component({
   selector: 'app-almacenessociedad',
   templateUrl: './almacenessociedad.component.html',
@@ -19,6 +22,7 @@ export class AlmacenessociedadComponent implements OnInit {
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;
   faPlus = faPlus;
+  faTable = faTable;
   //Declaración de variables
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
@@ -158,6 +162,67 @@ export class AlmacenessociedadComponent implements OnInit {
     console.log(almacen);
     this.httpService.asignarAlmacen(almacen);
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['editarAlmacenes'] } }]);
+  }
+
+  exportarAXLSX() {
+
+
+    const renombrar = this.lstAlmacenes.map(movimiento => {
+      return {
+        'NOMBRE': movimiento.nombre_almacen,
+        'DIRECCION': movimiento.direccion,
+        'TELEFONO': movimiento.telefono,
+        'CODIGO': movimiento.codigo,
+        'PTO DE EMISION': movimiento.pto_emision,
+
+      };
+    });
+
+    const wb = XLSX.utils.book_new();
+    const wsData = XLSX.utils.json_to_sheet(renombrar);
+
+    // Establecer estilos y colores antes de agregar datos
+    wsData['!cols'] = [
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 }
+    ];
+
+
+
+    // Agregar los datos de la tabla
+    XLSX.utils.sheet_add_json(wsData, renombrar, { origin: 'A1' });
+
+    // Agregar la hoja de Excel al libro
+    XLSX.utils.book_append_sheet(wb, wsData, 'Movimientos');
+
+    // Generar el archivo Excel y guardarlo
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+    const date = new Date();
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const fecha = `${day}-${month}-${year}`;
+
+
+    this.saveExcelFile(excelBuffer, `ALMACENES_${fecha}.xlsx`);
+
+
+
+  }
+
+  private saveExcelFile(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], { type: 'application/octet-stream' });
+    const url: string = window.URL.createObjectURL(data);
+    const link: HTMLAnchorElement = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    link.click();
+    setTimeout(() => {
+      window.URL.revokeObjectURL(url);
+    }, 1000);
   }
 
 }
