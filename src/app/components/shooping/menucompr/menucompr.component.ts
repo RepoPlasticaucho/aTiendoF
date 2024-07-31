@@ -313,7 +313,7 @@ export class MenucomprComponent implements OnInit {
 
                 //   //Si existe el proveedor seleccionado
                 this.selectedSustento = this.lstSustentos[index3].sustento;
-
+                this.sustentoSeleccionado = true;
 
               }
 
@@ -345,13 +345,16 @@ export class MenucomprComponent implements OnInit {
   }
 
   changeGroup(tipoC: any): void {
+    console.log("entro a changeGroup")
     this.proveedorSeleccionado = tipoC.target.value !== "0";
     this.buttonsDisabled = !this.checkAllConditions();
     if (tipoC.target.value == 0) {
+      console.log("entro a changeGroup if 1")
       this.selectTipo = true;
       localStorage.setItem('proveedorid', '0')
       localStorage.setItem('proveedor', '')
     } else {
+      console.log("entro a changeGroup else 1")
       this.selectTipo = false;
     }
     const proveedores: ProveedoresEntity = {
@@ -366,6 +369,9 @@ export class MenucomprComponent implements OnInit {
 
     this.httpServiceProv.obtenerProveedoresN(proveedores).subscribe(res => {
       if (res.codigoError != "OK") {
+
+      console.log("entro a changeGroup if 2")
+
         Swal.fire({
           icon: 'error',
           title: 'No se pudo obtener la Sociedad.',
@@ -373,6 +379,8 @@ export class MenucomprComponent implements OnInit {
           showConfirmButton: false,
         });
       } else {
+      console.log("entro a changeGroup if 3")
+
         localStorage.setItem('proveedorid', res.lstProveedores[0].id);
         localStorage.setItem('proveedor', tipoC.target.options[tipoC.target.selectedIndex].text);
       }
@@ -380,6 +388,7 @@ export class MenucomprComponent implements OnInit {
   }
 
   changeGroup2(sustento: any): void {
+    console.log("entro a changeGroup2")
     this.sustentoSeleccionado = sustento.target.value !== "0";
     this.buttonsDisabled = !this.checkAllConditions();
     if (sustento.target.value == 0) {
@@ -411,6 +420,7 @@ export class MenucomprComponent implements OnInit {
   }
 
   changeGroup3(comprobanteCompra: any): void {
+    console.log("entro a changeGroup3")
     this.comprobanteCompraSeleccionado = comprobanteCompra.target.value !== "0";
     this.buttonsDisabled = !this.checkAllConditions();
     if (comprobanteCompra.target.value == 0) {

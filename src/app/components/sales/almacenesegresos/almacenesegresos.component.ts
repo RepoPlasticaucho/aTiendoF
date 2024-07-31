@@ -60,6 +60,14 @@ export class AlmacenesegresosComponent implements OnInit {
           }
         },
       },
+      initComplete: function () {
+        $('#dataTable tbody').on('click', '.entrar-btn', function () {
+          console.log('click');
+          let almacen = $(this).closest('a').data('almacen');
+          console.log(almacen);
+          component.abrirVista(almacen);
+      });
+    }
 
 
     }

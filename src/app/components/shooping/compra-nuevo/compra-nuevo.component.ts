@@ -148,7 +148,7 @@ export class CompraNuevoComponent implements OnInit {
       didOpen: () => {
         if (this.lstProveedoresProductos.length > 0) {
           // Obtener los productos pero no perder los valores de los inputs
-          this.actualizarListaProductos(newProveedor);
+          //this.actualizarListaProductos(newProveedor);
           Swal.close();
           return;
         }
@@ -166,52 +166,40 @@ export class CompraNuevoComponent implements OnInit {
           } else {
             this.lstProveedoresProductos = res1.lstProveedoresProductos;
             this.dtTrigger.next('');
-            const batchSize = 10; // Cantidad de productos por lote
-            const totalProducts = this.lstProveedoresProductos.length;
 
-            const processBatch = (startIndex: number) => {
-              const endIndex = Math.min(startIndex + batchSize, totalProducts);
-              const batchObservables = [];
+            //1. Obtener el detalle movimiento
 
-              for (let i = startIndex; i < endIndex; i++) {
-                const proveedorProducto = this.lstProveedoresProductos[i];
-                const newDetalle: DetallesMovimientoEntity = {
-                  id: '',
-                  producto_id: proveedorProducto.producto_id,
-                  producto_nombre: '',
-                  inventario_id: '',
-                  movimiento_id: localStorage.getItem('movimiento_id')!,
-                  cantidad: '',
-                  costo: '',
-                  precio: ''
-                };
+            const detalleMovimiento: DetallesMovimientoEntity = {
+              id: '',
+              producto_id: '',
+              producto_nombre: '',
+              inventario_id: '',
+              movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
+              cantidad: '',
+              costo: '',
+              precio: ''
+            }
 
-                batchObservables.push(this.httpServiceDetalle.obtenerDetalleMovimientoEx(newDetalle));
-              }
-
-              forkJoin(batchObservables).subscribe(responses => {
-                responses.forEach((res2, i) => {
-                  if (res2.codigoError == 'OK') {
-                    this.lstProveedoresProductos[startIndex + i].productoExistente = true;
-                    this.lstProveedoresProductos[startIndex + i].cantidad = res2.lstDetalleMovimientos[0].cantidad;
-                  } else {
-                    this.lstProveedoresProductos[startIndex + i].productoExistente = false;
+            this.httpServiceDetalle.obtenerDetalleMovimiento(detalleMovimiento).subscribe(res => {
+              if (res.codigoError == 'OK') {
+                for (let producto of this.lstProveedoresProductos) {
+                  for (let detalle of res.lstDetalleMovimientos) {
+                    if (producto.producto_id == detalle.producto_id) {
+                      producto.cantidad = detalle.cantidad
+                      producto.costo = detalle.costo
+                      producto.precio = detalle.precio
+                      producto.productoExistente = true
+                    }
                   }
-                });
-
-                // Procesar el próximo lote si es necesario
-                if (endIndex < totalProducts) {
-                  processBatch(endIndex);
-                } else {
-                  // Todos los lotes han sido procesados, cierra el indicador de carga aquí
-                  Swal.close();
                 }
-              });
-            };
+              }
+            })    
+            Swal.close();
 
-            processBatch(0); // Comienza el procesamiento del primer lote
           }
-        });
+        }
+        );
+        
       },
     }).then((result) => {
       if (result.dismiss === Swal.DismissReason.timer) {
