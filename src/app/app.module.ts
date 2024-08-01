@@ -153,6 +153,7 @@ import { PersonalCreateComponent } from './components/personalFactory/personal-c
 import { PersonalEditComponent } from './components/personalFactory/personal-edit/personal-edit.component';
 import { AllInventario } from './components/inventories/all-inventario-cliente/all-inventario-cliente.component';
 import { DescargarInventarioComponent } from './components/sales/descargar-inventario/descargar-inventario.component';
+import { SugeridoAlmacenesComponent } from './components/suggested/sugerido-almacenes/sugerido-almacenes.component';
 
 @NgModule({
   declarations: [
@@ -283,6 +284,7 @@ import { DescargarInventarioComponent } from './components/sales/descargar-inven
     PersonalEditComponent,
     AllInventario,
     DescargarInventarioComponent,
+    SugeridoAlmacenesComponent,
   ],
   imports: [
     BrowserModule,

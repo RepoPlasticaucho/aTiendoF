@@ -13,7 +13,7 @@
       </div>
       <mat-grid-list [cols]="getGridCols()" [rowHeight]="getRowHeight()">
           <mat-grid-tile *ngFor="let card of cards | async" [colspan]="card.cols" [rowspan]="card.rows">
-              <mat-card class="dashboard-card" [ngClass]="{ 'disabled-card': card.title === 'Pedido Sugerido' }">
+              <mat-card class="dashboard-card">
                   <mat-card-header>
                       <mat-card-title>
                           <span class="material-icons-outlined" style="font-size: 40px ; color: #3163ad">{{card.figure}}</span>

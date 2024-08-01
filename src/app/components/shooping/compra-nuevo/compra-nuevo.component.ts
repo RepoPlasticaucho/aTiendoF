@@ -46,6 +46,7 @@ export class CompraNuevoComponent implements OnInit {
   costo2: any;
   precio: any;
   botonBloqueado: boolean = false;
+  esPlasticaucho: boolean = false;
 
   productoAgregado: EventEmitter<any> = new EventEmitter<any>();
 
@@ -153,6 +154,12 @@ export class CompraNuevoComponent implements OnInit {
           return;
         }
 
+
+        if (localStorage.getItem('proveedor')?.toLocaleLowerCase().includes('plasticaucho')) {
+          this.esPlasticaucho = true;
+        }
+
+
         Swal.showLoading();
         this.httpServiceProvProd.obtenerProveedoresProductosProv(newProveedor).subscribe((res1) => {
           console.log(res1)
@@ -192,14 +199,19 @@ export class CompraNuevoComponent implements OnInit {
                     }
                   }
                 }
+                Swal.close();
+
+              } else {
+                Swal.close();
+
               }
-            })    
-            Swal.close();
+            })
+
 
           }
         }
         );
-        
+
       },
     }).then((result) => {
       if (result.dismiss === Swal.DismissReason.timer) {
@@ -491,24 +503,24 @@ export class CompraNuevoComponent implements OnInit {
             } else {
               if (proveedorProducto.cantidad! != '0' && proveedorProducto.productoExistente) {
 
-                 console.log("Entro al error")
+                console.log("Entro al error")
                 // //Solo modificamos el detalle que cambio la cantidad
-             
-                 newDetalle.precio = (parseFloat(newDetalle.cantidad!) * parseFloat(newDetalle.costo!)).toString();
+
+                newDetalle.precio = (parseFloat(newDetalle.cantidad!) * parseFloat(newDetalle.costo!)).toString();
 
 
-                 this.httpServiceDetalle.modificarDetallePedidoVenta(newDetalle).subscribe(res => {
-                   console.log(res.codigoError)
-                   if (res.codigoError == 'OK') {
+                this.httpServiceDetalle.modificarDetallePedidoVenta(newDetalle).subscribe(res => {
+                  console.log(res.codigoError)
+                  if (res.codigoError == 'OK') {
 
-                     this.cerrarDialog();
+                    this.cerrarDialog();
 
-                     this.productoAgregado.emit(proveedorProducto);
+                    this.productoAgregado.emit(proveedorProducto);
 
-                   } else {
+                  } else {
 
                   }
-                 });
+                });
               } else {
                 this.httpServiceDetalle.eliminarDetallePedidoVenta(newDetalle).subscribe(res => {
                   console.log("en este metodo" + res)

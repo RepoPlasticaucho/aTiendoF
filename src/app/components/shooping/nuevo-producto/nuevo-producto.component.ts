@@ -237,9 +237,6 @@ export class NuevoProductoComponent implements OnInit {
         this.lstProveedores = res.lstProveedores;
       }
     });
-
-
-
   }
 
   cerrarDialog(): void {

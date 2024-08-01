@@ -8,6 +8,7 @@ import { GestionarPersonalComponent } from './components/all_components';
 import { PersonalCreateComponent } from './components/personalFactory/personal-create/personal-create.component';
 import { PersonalEditComponent } from './components/personalFactory/personal-edit/personal-edit.component';
 import { AllInventario } from './components/inventories/all-inventario-cliente/all-inventario-cliente.component';
+import { SugeridoAlmacenesComponent } from './components/suggested/sugerido-almacenes/sugerido-almacenes.component';
 const routes: Routes = [
   {
     path: 'navegation-cl', component: NavegationClComponent,
@@ -72,6 +73,7 @@ const routes: Routes = [
       { path: "personal", component: GestionarPersonalComponent, outlet: "contentClient" },
       { path: "personal-create", component: PersonalCreateComponent, outlet: "contentClient" },
       { path: "personal-edit", component: PersonalEditComponent, outlet: "contentClient" },
+      { path: "sugerdio-almacen", component: SugeridoAlmacenesComponent, outlet: "contentClient" },
     ]
   },
   {

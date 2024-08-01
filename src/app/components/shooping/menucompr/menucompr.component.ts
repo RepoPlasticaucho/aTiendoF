@@ -307,7 +307,7 @@ export class MenucomprComponent implements OnInit {
               if (localStorage.getItem('sustentoid') != "0") {
                 //   //Buscar el la lista lstProveedores el indice del proveedor seleccionado 
                 //Concatener el codigo con el sustento y buscarlo en la lista
-                
+
                 //   //Buscar el la lista lstProveedores el indice del proveedor seleccionado 
                 let index3 = this.lstSustentos.findIndex(x => parseInt(x.codigo) == parseInt(localStorage.getItem('sustentoid')!));
 
@@ -320,7 +320,7 @@ export class MenucomprComponent implements OnInit {
 
             }
           });
-  
+
 
 
 
@@ -370,7 +370,7 @@ export class MenucomprComponent implements OnInit {
     this.httpServiceProv.obtenerProveedoresN(proveedores).subscribe(res => {
       if (res.codigoError != "OK") {
 
-      console.log("entro a changeGroup if 2")
+        console.log("entro a changeGroup if 2")
 
         Swal.fire({
           icon: 'error',
@@ -379,7 +379,7 @@ export class MenucomprComponent implements OnInit {
           showConfirmButton: false,
         });
       } else {
-      console.log("entro a changeGroup if 3")
+        console.log("entro a changeGroup if 3")
 
         localStorage.setItem('proveedorid', res.lstProveedores[0].id);
         localStorage.setItem('proveedor', tipoC.target.options[tipoC.target.selectedIndex].text);
@@ -1090,12 +1090,12 @@ export class MenucomprComponent implements OnInit {
                   producto.costo = element.costo;
                   producto.pvp2 = producto.precio;
                   producto.precio = element.precioUnitario!;
-                  
+
                   console.log('Producto aquiiiii', producto);
 
                   this.lstXmlProveedoresProductos.push(producto);
                 });
-                
+
                 counterCompleted++;
               }
             })
@@ -1111,14 +1111,7 @@ export class MenucomprComponent implements OnInit {
           Swal.close();
           console.log(`Completed: ${counterCompleted}, Errors: ${counterError}`);
 
-          Swal.fire({
-            icon: 'success',
-            title: 'XML cargado correctamente.',
-            text: `Se han cargado ${counterCompleted} productos correctamente y ${counterError} productos no se han podido cargar.
-            Los productos que no se han podido cargar son: ${this.failedCodSap.join(', ')}`,
-            showConfirmButton: true,
-            confirmButtonText: "Ok"
-          });
+
         }).then(async () => {
           try {
             //Mostrar carga
@@ -1128,21 +1121,48 @@ export class MenucomprComponent implements OnInit {
               allowOutsideClick: false,
               showConfirmButton: false,
               willOpen: () => {
-                Swal.showLoading();
-              }
+                Swal.showLoading()
+              },
             });
 
-            await this.realizarAccionConDetalles(this.lstXmlProveedoresProductos);
-            console.log('Detalles creados y página recargada');
-            this.cargarTablaMenucompr();
+            await this.realizarAccionConDetalles(this.lstXmlProveedoresProductos).finally(() => {
 
-            Swal.close();
+
+              if (counterError == 0) {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'XML cargado correctamente.',
+                  text: `Se han cargado ${counterCompleted} productos correctamente.`,
+                  showConfirmButton: true,
+                  confirmButtonText: "Ok"
+                }).finally(() => {
+                  this.cargarTablaMenucompr();
+                })
+              } else {
+                Swal.fire({
+                  icon: 'warning',
+                  title: 'XML cargado correctamente.',
+                  text: `Se han cargado ${counterCompleted} productos correctamente y ${counterError} productos no se han podido cargar.
+              Los productos que no se han podido cargar son: ${this.failedCodSap.join(', ')}`,
+                  showConfirmButton: true,
+                  confirmButtonText: "Ok"
+                }).finally(() => {
+                  this.cargarTablaMenucompr();
+                })
+              }
+
+            });
+            console.log('Detalles creados y página recargada');
+
+
           } catch (err) {
             console.error('Error creating details', err);
           }
         }).catch(err => {
           console.error('Error creating details', err);
-        });
+        })
+
+
       };
       reader.readAsText(file);
     }
@@ -1152,7 +1172,7 @@ export class MenucomprComponent implements OnInit {
 
   async realizarAccionConDetalles(detalles: ProveedoresProductosEntity[]): Promise<void> {
 
-    
+
 
     try {
       for (const detalle of detalles) {
