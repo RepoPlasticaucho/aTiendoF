@@ -41,7 +41,8 @@ export class InventariosEditComponent implements OnInit {
     etiquetas: new FormControl('', Validators.required),
     stock: new FormControl('', [Validators.required]),
     precio: new FormControl('', [Validators.required]),
-    costo: new FormControl('', [Validators.required]),    
+    costo: new FormControl('', [Validators.required]),  
+    stock_optimo: new FormControl('', [Validators.required]),  
   });
 
   lstCategorias: CategoriasEntity[] = [];
@@ -108,6 +109,7 @@ export class InventariosEditComponent implements OnInit {
         this.inventarioForm.get("stock")?.setValue(res.stock!);
         this.inventarioForm.get("precio")?.setValue(res.pvp2!);
         this.inventarioForm.get("costo")?.setValue(res.costo!);
+        this.inventarioForm.get("stock_optimo")?.setValue(res.stock_optimo!);
         this.idProducto = res.producto_id ?? "";
       }
     });
@@ -148,11 +150,11 @@ export class InventariosEditComponent implements OnInit {
         almacen : '',
         stock : this.inventarioForm.value!.stock ?? "",
         etiquetas: this.inventarioForm.value!.etiquetas ?? "",
-        stock_optimo : '',
+        stock_optimo : this.inventarioForm.value!.stock_optimo ?? "",
         fav : '',
         color : '',
         pvp2 : this.inventarioForm.value!.precio ?? "",
-        costo : this.inventarioForm.value!.costo ?? ""
+        costo : this.inventarioForm.value!.costo ?? "",
       }
       console.log(inventario);
 

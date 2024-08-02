@@ -8,6 +8,8 @@ import { InventariosEntity } from 'src/app/models/inventarios';
 import { LineasEntity } from 'src/app/models/lineas';
 import { InventariosService } from 'src/app/services/inventarios.service';
 import Swal from 'sweetalert2';
+import * as XLSX from 'xlsx';
+
 
 @Component({
   selector: 'app-pedido-sugerido',
@@ -36,6 +38,8 @@ export class PedidoSugeridoComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
+
+    console.log("ACA NGOINIT");
     this.dtOptions = {
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
@@ -51,6 +55,8 @@ export class PedidoSugeridoComponent implements OnInit, OnDestroy {
 
       this.codigocategoria = res.categoria_id ?? "";
       this.codigoalmacen = res.almacen_id ?? "";
+
+    
       if (this.codigocategoria || this.codigoalmacen == null) {
         const categoria: CategoriasEntity = {
           id: this.codigocategoria,
@@ -172,7 +178,12 @@ export class PedidoSugeridoComponent implements OnInit, OnDestroy {
                   // timer: 3000
                 });*/
               } else {
+
+                console.log("ENTRO A LA 182 LO QUE SE IMPRIME ES EL RES");
                 this.lstInventarios = res.lstInventarios;
+
+                console.log("ESTE ES EL INVENTARIO", res.lstInventarios);
+
 
                 this.dtTrigger.next('');
                 this.categorianame = this.lstInventarios[0].categoria;
@@ -215,12 +226,79 @@ export class PedidoSugeridoComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
   }
+
+
   pedidosugerido(lstInventariosR: InventariosEntity[]) {
 
     console.log(lstInventariosR);
+
+    this.exportarAXLSX(lstInventariosR);
     // this.httpService.asignarLinea(inventario);
     // this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-pedido-lineas'] } }]);
   }
+
+  exportarAXLSX(lstInventariosR: InventariosEntity[]) {
+ 
+    //Traer mas informacion de cada producto del inventario
+  
+    const renombrar = lstInventariosR.map(movimiento => {
+      return {
+        'CODIGO SAP': movimiento.idProducto,
+        'PRODUCTO': movimiento.Producto,
+        'CATEGORIA': movimiento.categoria,
+        'LINEA': movimiento.linea,
+        'MARCA': movimiento.marca,
+        'STOCK': movimiento.stock,
+        'PRECIO': movimiento.pvp2,
+        'CANTIDAD A PEDIR': parseInt(movimiento.stock_optimo) - parseInt(movimiento.stock!),
+      };
+
+
+
+      
+    });
+
+    const wb = XLSX.utils.book_new();
+    const wsData = XLSX.utils.json_to_sheet(renombrar);
+
+    // Establecer estilos y colores antes de agregar datos
+    wsData['!cols'] = [
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 }
+    ];
+
+    // Agregar los datos de la tabla
+    XLSX.utils.sheet_add_json(wsData, renombrar, { origin: 'A1' });
+
+    // Agregar la hoja de Excel al libro
+    XLSX.utils.book_append_sheet(wb, wsData, 'Pedido');
+
+    // Generar el archivo Excel y guardarlo
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+    const date = new Date();
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const fecha = `${day}-${month}-${year}`;
+    this.saveExcelFile(excelBuffer, `Pedido_${localStorage.getItem('almacenNombreInventarios')}_${fecha}.xlsx`);
+  }
+
+  private saveExcelFile(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], { type: 'application/octet-stream' });
+    const url: string = window.URL.createObjectURL(data);
+    const link: HTMLAnchorElement = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    link.click();
+    setTimeout(() => {
+      window.URL.revokeObjectURL(url);
+    }, 1000);
+  }
+
+
 
   pedidosugeridoLinea(card: LineasEntity) {
     this.codigolinea = card["linea"];

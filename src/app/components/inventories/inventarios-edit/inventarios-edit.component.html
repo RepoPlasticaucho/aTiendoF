@@ -80,10 +80,17 @@
                         formControlName="precio" />
                 </div>
                 <div class="form-group">
+                    <label for="stock_optimo">STOCK OPTIMO</label>
+                    <input type="text" (keypress)="keyPressNumbers($event)" class="form-control" id="codigoSAP" placeholder="Ingrese el sotck optimo"
+                        formControlName="stock_optimo" />
+                </div>
+                <div class="form-group">
                     <label for="costo">Costo</label>
                     <input type="text" (keypress)="keyPressNumbers($event)" class="form-control" id="codigoSAP" placeholder="Ingrese el costo"
                         formControlName="costo" />
                 </div>
+
+              
                 <button type="submit" class="btn btn-primary">
                     <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
                     Guardar

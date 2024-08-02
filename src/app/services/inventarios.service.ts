@@ -8,6 +8,8 @@ import { Inventarios, InventariosEntity } from '../models/inventarios';
 import { LineasEntity } from '../models/lineas';
 import { ModelosEntity } from '../models/modelos';
 import { SociedadesEntity } from '../models/sociedades';
+import { ProducAdmEntity } from '../models/productadm';
+import { ProveedoresProductos } from '../models/proveedoresproductos';
 
 const initGruop: InventariosEntity = {
   categoria_id: "",
@@ -156,6 +158,10 @@ export class InventariosService {
   }
   deshabilitarInventarios(inventario: InventariosEntity): Observable<Inventarios> {
     return this.http.post<Inventarios>(`${environment.apiUrl}inventarios/DeshabilitarInventarios`, inventario);
+  }
+
+  proveedoresCodSapId(inventario: InventariosEntity): Observable<ProveedoresProductos> {
+    return this.http.post<ProveedoresProductos>(`${environment.apiUrl}productos/ObtenerProductoCodSapId`, inventario);
   }
  
   
