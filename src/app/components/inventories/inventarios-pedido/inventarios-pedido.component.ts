@@ -248,7 +248,7 @@ export class InventariosPedidoComponent implements OnInit {
   }
 
   buscarPortafolioLineaSugerido(card: CategoriasEntity) {
-    console.log(card);
+    console.log("ESTA ES LA CATTTTTTT", card);
     this.cat = card["id"];
     const inventario: InventariosEntity = {
       categoria_id: this.cat!,

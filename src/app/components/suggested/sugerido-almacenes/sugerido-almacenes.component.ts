@@ -109,9 +109,26 @@ export class SugeridoAlmacenesComponent implements OnInit {
   
     buscarInventario(almacen: AlmacenesEntity){
   
+
+
+      
       localStorage.setItem('almacenid',almacen.idAlmacen)
       localStorage.setItem('almacenNombreInventarios',almacen.nombre_almacen!)
+
+      const cat : CategoriasEntity = {
+        id: '1',
+        categoria: 'CALZADO',
+        cod_sap: 'CALZADO',
+        etiquetas: '',
+        almacen_id: almacen.idAlmacen
+      }
+
+      this.buscarPortafolioLineaSugerido(cat);
+
       this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['pedido-sugeridos'] } }]);
+    
+
+    
   
     }
   
