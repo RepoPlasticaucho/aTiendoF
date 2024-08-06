@@ -74,18 +74,13 @@
                         <input type="text" [disabled]="telefono == ''" [(ngModel)]="telefono" class="form-control input-1" placeholder="Teléfono">
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="form-group">
                         <br>
-                        <button class="btn btn-primary" style="margin-left: 50px; margin-top: 7px;" [disabled]="identificacion == '' || nombre == '' || correo == '' || ciudad == '' || direccion == '' || telefono == ''" (click)="actualizar()">Actualizar</button>
+                        <button class="btn btn-primary"  [disabled]="identificacion == '' || nombre == '' || correo == '' || ciudad == '' || direccion == '' || telefono == ''" (click)="actualizar()">Actualizar los datos del cliente</button>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <br>
-                        <button class="btn btn-primary" style="margin-left: 50px; margin-top: 7px;" [disabled]="identificacion == '' || nombre == '' || correo == '' || ciudad == '' || direccion == '' || telefono == ''" (click)="facturarFisica()">Descargar Inventario</button>
-                    </div>
-                </div>
+           
             </div>
 
             <!-- Contenedor flex para agregar productos y productos agregados -->
@@ -114,7 +109,7 @@
                         </thead>
                         <tbody style="color: #767695;">
                             <tr *ngFor="let detalleMovimientos of lstDetalleMovimientos; let i = index">
-                                <td>{{detalleMovimientos.producto_nombre}}</td>
+                                <td>{{detalleMovimientos.modelo_producto_nombre}} {{detalleMovimientos.tamanio}}</td>
                                 <td>
                                     <ng-container>
                                         {{detalleMovimientos.cantidad}}
@@ -196,10 +191,14 @@
             </div>
             <br><br><br>
             <div class="button-container">
-                <button class="btn btn-primary" [disabled]="identificacion == '' || nombre == '' || correo == '' || ciudad == '' || direccion == '' || telefono == '' || lstDetalleMovimientos.length == 0" (click)="finalizarPedido()">
-                    <span style="color: white ; font-size: 20px;">CONTINUAR</span>
+                <button class="btn btn-secondary"  [disabled]="identificacion == '' || nombre == '' || correo == '' || ciudad == '' || direccion == '' || telefono == ''" (click)="facturarFisica()">
+                    <span style="color: white ; font-size: 20px;">Descargar Inventario</span>
+                </button>
+                <button class="btn btn-primary" style="margin-left: 50px" [disabled]="identificacion == '' || nombre == '' || correo == '' || ciudad == '' || direccion == '' || telefono == '' || lstDetalleMovimientos.length == 0" (click)="finalizarPedido()">
+                    <span style="color: white ; font-size: 20px;">Continuar</span>
                 </button>
             </div>
+
         </div>
     </div>
 </div>

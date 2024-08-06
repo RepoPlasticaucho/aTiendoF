@@ -515,7 +515,7 @@ export class MenuventComponent implements OnInit {
 
           console.log(res.lstDetalleMovimientos)
 
-          this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+          this.lstDetalleMovimientos = res.lstDetalleMovimientos
           this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
             // Destruye la tabla existente y elimina los datos
             dtInstance.destroy();

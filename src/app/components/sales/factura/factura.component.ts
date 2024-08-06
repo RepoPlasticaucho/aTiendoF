@@ -202,6 +202,9 @@ export class FacturaComponent implements OnInit {
               // timer: 3000
             });
           } else {
+
+            console.log("ESTOS SON LOS DETALLES MOVIEMIENTOS", res.lstDetalleMovimientos)
+
             this.lstDetalleMovimientos = res.lstDetalleMovimientos;
             this.httpServiceMovimiento.obtenerMovimientoID(newMovimiento).subscribe(res2 => {
               if (res2.codigoError != "OK") {
