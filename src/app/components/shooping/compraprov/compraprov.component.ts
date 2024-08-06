@@ -87,13 +87,7 @@ export class CompraprovComponent implements OnInit {
         Swal.showLoading();
         this.httpService.obtenerMovimientosAlmacenc(newMovimiento).subscribe(res => {
           if (res.codigoError != "OK") {
-            Swal.fire({
-              icon: 'error',
-              title: 'Ha ocurrido un error.',
-              text: res.descripcionError,
-              showConfirmButton: false,
-              // timer: 3000
-            });
+            Swal.close();
           } else {
             console.log(res.lstMovimientos)
             this.lstMovimientos = res.lstMovimientos;
