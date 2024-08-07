@@ -316,7 +316,7 @@ export class VerCarritoComponent implements OnInit {
     
     // Filtra los nuevos detalles que tienen una cantidad definida y mayor a cero
     const nuevos = this.lstInventarios.filter(invent =>
-      invent.cantidad !== undefined && invent.cantidad !== '' && invent.cantidad !== '0'
+      invent.cantidad !== undefined && invent.cantidad !== ''
     );
 
     //Si el producto_id ya existe en auxlst y tiene la misma cantidad, no se agrega
@@ -456,20 +456,15 @@ export class VerCarritoComponent implements OnInit {
             } else {
 
               this.httpServiceDetalle.eliminarDetallePedidoVenta(newDetalle).subscribe(res => {
-                Swal.fire({
-                  icon: 'success',
-                  title: 'Eliminado',
-                  text: `Se ha eliminado el producto del detalle`,
-                  showConfirmButton: true,
-                  confirmButtonText: 'Ok',
-                }).then(() => {
+              
                   inventario.productoExistente = false;
-
+                  //Actualizar auxlst con el nuevo inventario
+                  this.auxlst = this.auxlst.filter(invent => invent.producto_id !== inventario.producto_id);                  
        
 
                   this.cerrar();
                   resolve();
-                });
+             
 
               }, error => reject(error));
             }
@@ -482,8 +477,13 @@ export class VerCarritoComponent implements OnInit {
               movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
               cantidad: inventario.cantidad!,
               costo: this.costo,
-              precio: this.precio
+              precio: this.precio,
             };
+            
+            if (newDetalle.cantidad === '0') {
+              resolve();
+              return;
+            }
 
             console.log("Aca el detalle" + JSON.stringify(newDetalle));
 
@@ -538,128 +538,6 @@ export class VerCarritoComponent implements OnInit {
           }
         }
       });
-    });
-  }
-
-  crearDetalle1(inventario: InventariosEntity): void {
-
-    this.httpServiceInventarios.asignarInventario(inventario);
-    console.log("Aca 1");
-    this.httpServiceInventarios.obtenerInventario$.pipe(take(1)).subscribe(res => {
-      console.log("Aca 2");
-      if (res.id === '') {
-        Swal.fire({
-          icon: 'error',
-          title: 'Ha ocurrido un error.',
-          text: 'No se ha obtenido información.',
-          showConfirmButton: false,
-        }).finally(() => {
-          this.router.navigate(['/navegation-cl', { outlets: { contentClient: ['menuvent'] } }]);
-        });
-      } else {
-        this.costo = res.pvp2;
-        this.precio = parseFloat(res.pvp2!) * parseFloat(inventario.cantidad!);
-        this.codigo = res.id!;
-
-        if (inventario.productoExistente) {
-          const newDetalle: DetallesMovimientoEntity = {
-            id: '',
-            producto_nombre: '',
-            inventario_id: this.codigo,
-            producto_id: res.producto_id,
-            movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
-            cantidad: inventario.cantidad!,
-            costo: '',
-            precio: ''
-          };
-
-          newDetalle.precio = (parseFloat(inventario.cantidad!) * parseFloat(res.pvp2!)).toString();
-
-          if (inventario.cantidad! !== '0') {
-            this.httpServiceDetalle.modificarDetallePedidoVenta(newDetalle).subscribe(res => {
-              if (res.codigoError === 'OK') {
-
-              } else {
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Ha ocurrido un error.',
-                  text: 'No existe suficiente stock.',
-                  showConfirmButton: false
-                });
-              }
-            });
-          } else {
-            this.httpServiceDetalle.eliminarDetallePedidoVenta(newDetalle).subscribe(res => {
-              Swal.fire({
-                icon: 'success',
-                title: 'Eliminado',
-                text: `Se ha eliminado el producto del detalle`,
-                showConfirmButton: true,
-                confirmButtonText: 'Ok',
-              }).then(() => {
-                this.cerrar();
-              });
-            });
-          }
-        } else {
-          const newDetalle: DetallesMovimientoEntity = {
-            id: '',
-            producto_nombre: '',
-            inventario_id: this.codigo,
-            producto_id: res.producto_id,
-            movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
-            cantidad: inventario.cantidad!,
-            costo: this.costo,
-            precio: this.precio
-          };
-
-          console.log("Aca el detalle" + JSON.stringify(newDetalle));
-
-          this.httpServiceDetalle.agregarDetallePedido(newDetalle).pipe(finalize(() => {
-            this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
-              if (res1.codigoError === 'OK') {
-                const newDetalleImp: DetalleImpuestosEntity = {
-                  id: '',
-                  detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
-                  cod_impuesto: res1.lstDetalleMovimientos[0].codigo_impuesto!,
-                  codigo_tarifa: res1.lstDetalleMovimientos[0].cod_tarifa!,
-                  porcentaje: res1.lstDetalleMovimientos[0].tarifa!,
-                  base_imponible: '',
-                  valor: res1.lstDetalleMovimientos[0].costo!,
-                  created_at: '',
-                  updated_at: ''
-                };
-
-                console.log("Aca el detalleImp" + JSON.stringify(newDetalleImp));
-
-
-                this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
-                  if (res2.codigoError !== 'OK') {
-                    Swal.fire({
-                      icon: 'error',
-                      title: 'Ha ocurrido un error.',
-                      text: res2.descripcionError,
-                      showConfirmButton: false
-                    });
-                  }
-                });
-              }
-            });
-          })).subscribe(res => {
-            if (res.codigoError !== 'OK') {
-              Swal.fire({
-                icon: 'error',
-                title: 'Ha ocurrido un error3.',
-                text: 'No existe suficiente stock.',
-                showConfirmButton: false
-              });
-            } else {
-
-              this.productoAgregado.emit(inventario);
-            }
-          });
-        }
-      }
     });
   }
 
