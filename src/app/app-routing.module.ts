@@ -9,6 +9,8 @@ import { PersonalCreateComponent } from './components/personalFactory/personal-c
 import { PersonalEditComponent } from './components/personalFactory/personal-edit/personal-edit.component';
 import { AllInventario } from './components/inventories/all-inventario-cliente/all-inventario-cliente.component';
 import { SugeridoAlmacenesComponent } from './components/suggested/sugerido-almacenes/sugerido-almacenes.component';
+import { DiscountsComponent } from './components/discounts-cl/discounts/discounts.component';
+import { DiscountsCreateComponent } from './components/discounts-cl/discounts-create/discounts-create.component';
 const routes: Routes = [
   {
     path: 'navegation-cl', component: NavegationClComponent,
@@ -74,6 +76,8 @@ const routes: Routes = [
       { path: "personal-create", component: PersonalCreateComponent, outlet: "contentClient" },
       { path: "personal-edit", component: PersonalEditComponent, outlet: "contentClient" },
       { path: "sugerdio-almacen", component: SugeridoAlmacenesComponent, outlet: "contentClient" },
+      { path: "descuentos", component: DiscountsComponent, outlet: "contentClient" },
+      { path: "descuentos-create", component: DiscountsCreateComponent, outlet: "contentClient" },
     ]
   },
   {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faEdit, faPlus, faTrashAlt, faUserFriends,faStore } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrashAlt, faUserFriends, faStore } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs/internal/Subject';
 import { AlmacenesEntity } from 'src/app/models/almacenes';
 import { SociedadesEntity } from 'src/app/models/sociedades';
@@ -8,18 +8,19 @@ import { AlmacenesService } from 'src/app/services/almacenes.service';
 import { SociedadesService } from 'src/app/services/sociedades.service';
 import Swal from 'sweetalert2';
 
+
 @Component({
-  selector: 'app-inventarios-almacen',
-  templateUrl: './inventarios-almacen.component.html',
-  styleUrls: ['./inventarios-almacen.component.css']
+  selector: 'app-discounts',
+  templateUrl: './discounts.component.html',
+  styleUrls: ['./discounts.component.css']
 })
-export class InventariosAlmacenComponent implements OnInit {
+export class DiscountsComponent implements OnInit {
 ///Iconos para la pagina de grupos
 faUserFriends = faUserFriends;
 faEdit = faEdit;
 faTrashAlt = faTrashAlt;
 faPlus = faPlus;
-
+faStore = faStore
 //Declaración de variables
 dtOptions: DataTables.Settings = {};
 dtTrigger: Subject<any> = new Subject<any>();

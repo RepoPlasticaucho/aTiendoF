@@ -81,12 +81,37 @@ export class VerCarritoComponent implements OnInit {
           inventario.productoExistente = false;
         }
       })
+
+   
+
       
       //Actualizar auxlst
       this.auxlst = this.auxlst.filter(inventario => inventario.producto_id !== detalleMovimiento.producto_id);
       console.log("Lista de inventarios", this.lstInventarios)
       ;
       }
+
+
+         //Si el mensaje es edita actualizar la cantidad del producto en el input
+         if(mensaje === "editar"){
+
+          
+
+          console.log("Entra al editar del mensaje");
+          this.lstInventarios.forEach(inventario => {
+            if (inventario.producto_id === detalleMovimiento.producto_id) {
+              inventario.cantidad = detalleMovimiento.cantidad;
+              //Actualizar el stock auxiliar
+              inventario.stock_auxiliar = (parseInt(inventario.stock!) - parseInt(detalleMovimiento.cantidad!)).toString();
+
+              //Actualizar auxlst
+              const detalleExistente = this.auxlst.find(detalle => detalle.producto_id === detalleMovimiento.producto_id);
+              if (detalleExistente) {
+                detalleExistente.cantidad = detalleMovimiento.cantidad;
+              }
+            }
+          });
+        }
 
 
 

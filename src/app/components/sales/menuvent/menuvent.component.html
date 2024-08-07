@@ -102,7 +102,6 @@
                                 <th style="width: 5%;">CANTIDAD</th>
                                 <th style="width: 40%;">UNITARIO</th>
                                 <th style="width: 40%;">TOTAL</th>
-                                <th style="width: 5%;">DCTO</th>
                              
                                 <th style="width: 20%;"></th>
                             </tr>
@@ -111,23 +110,18 @@
                             <tr *ngFor="let detalleMovimientos of lstDetalleMovimientos; let i = index">
                                 <td>{{detalleMovimientos.modelo_producto_nombre}} {{detalleMovimientos.tamanio}}</td>
                                 <td>
-                                    <ng-container>
+                                    <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
                                         {{detalleMovimientos.cantidad}}
                                     </ng-container>
+                                    <input class="small-input" (input)="onInput2($event)" *ngIf="editarDetalle && i === detalleEditIndex" type="text" [(ngModel)]="detalleMovimientos.cantidad" (ngModelChange)="calcularPrecio(i)">
                                 </td>
                                 <td>
-                                    <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
+                                    <ng-container>
                                         {{detalleMovimientos.costo}}
                                     </ng-container>
-                                    <input class="small-input" (input)="onInput2($event)" *ngIf="editarDetalle && i === detalleEditIndex" type="text" [(ngModel)]="detalleMovimientos.costo" (ngModelChange)="calcularPrecio(i)">
                                 </td>
                                 <td>{{detalleMovimientos.precio}}</td>
-                                <td>
-                                    <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
-                                        {{detalleMovimientos.desc_add}}
-                                    </ng-container>
-                                    <input class="small-input" (input)="onInput2($event)" *ngIf="editarDetalle && i === detalleEditIndex" type="text" [(ngModel)]="detalleMovimientos.desc_add" (ngModelChange)="calcularPrecio(i)">
-                                </td>
+                            
                    
                                 <td style="text-align: center;">
                                     <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex" class="editar-detalle">

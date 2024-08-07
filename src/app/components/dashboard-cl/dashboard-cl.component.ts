@@ -44,6 +44,7 @@ export class DashboardClComponent {
           { title: 'Pedidos Plasticaucho', cols: 1, rows: 1, name: "plasticaucho", figure: "book" , dir: "navegation-cl/(contentClient:almaceningresos)"},
           { title: 'Proveedores', cols: 1, rows: 1, name: "los proveedores", figure: "supervisor_account", dir: "navegation-cl/(contentClient:proveedores)" },
           { title: 'Personal', cols: 1, rows: 1, name: "el personal", figure: "supervisor_account", dir: "navegation-cl/(contentClient:personal)" },
+          { title: 'Descuentos', cols: 1, rows: 1, name: "descuentos", figure: "discounts", dir: "navegation-cl/(contentClient:descuentos)" },
           { title: 'Ayuda', cols: 1, rows: 1, name: "ayuda", figure: "help", dir: "https://docs-atiendo.vercel.app/" },
 
         ];
@@ -61,6 +62,7 @@ export class DashboardClComponent {
         { title: 'Terceros', cols: 1, rows: 1, name: "los terceros", figure: "person", dir: "navegation-cl/(contentClient:tercerosusuarios)" },
         { title: 'Proveedores', cols: 1, rows: 1, name: "los proveedores", figure: "supervisor_account", dir: "navegation-cl/(contentClient:proveedores)" },
         { title: 'Personal', cols: 1, rows: 1, name: "el personal", figure: "supervisor_account", dir: "navegation-cl/(contentClient:personal)" },
+        { title: 'Descuentos', cols: 1, rows: 1, name: "descuentos", figure: "discounts", dir: "navegation-cl/(contentClient:descuentos)" },
         { title: 'Ayuda', cols: 1, rows: 1, name: "ayuda", figure: "help", dir: "https://docs-atiendo.vercel.app/" },
  
 

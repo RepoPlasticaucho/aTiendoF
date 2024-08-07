@@ -172,6 +172,7 @@ export class CompraNuevoComponent implements OnInit {
             });
           } else {
             this.lstProveedoresProductos = res1.lstProveedoresProductos;
+
             this.dtTrigger.next('');
 
             //1. Obtener el detalle movimiento

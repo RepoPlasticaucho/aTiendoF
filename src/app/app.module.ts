@@ -154,6 +154,9 @@ import { PersonalEditComponent } from './components/personalFactory/personal-edi
 import { AllInventario } from './components/inventories/all-inventario-cliente/all-inventario-cliente.component';
 import { DescargarInventarioComponent } from './components/sales/descargar-inventario/descargar-inventario.component';
 import { SugeridoAlmacenesComponent } from './components/suggested/sugerido-almacenes/sugerido-almacenes.component';
+import { DiscountsComponent } from './components/discounts-cl/discounts/discounts.component';
+import { DiscountsCreateComponent} from './components/discounts-cl/discounts-create/discounts-create.component';
+
 
 @NgModule({
   declarations: [
@@ -285,6 +288,9 @@ import { SugeridoAlmacenesComponent } from './components/suggested/sugerido-alma
     AllInventario,
     DescargarInventarioComponent,
     SugeridoAlmacenesComponent,
+    DiscountsComponent,
+    DiscountsCreateComponent
+
   ],
   imports: [
     BrowserModule,
