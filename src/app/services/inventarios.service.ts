@@ -91,6 +91,10 @@ export class InventariosService {
     return this.http.post<Inventarios>(`${environment.apiUrl}modelos/ObtenerModelosLineas`, linea );
   }
 
+  obtenerStockTotalSociedad(inventario: InventariosEntity): Observable<Inventarios> {
+    return this.http.post<Inventarios>(`${environment.apiUrl}inventarios/ObtenerStockTotalSociedad`, inventario );
+  }
+
   obtenerCategoria(): Observable<Inventarios> {
     return this.http.get<Inventarios>(`${environment.apiUrl}categorias/ObtenerCategorias` );
   }
@@ -135,6 +139,11 @@ export class InventariosService {
   obtenerInventariosAlm(inventario: InventariosEntity): Observable<Inventarios> {
     return this.http.post<Inventarios>(`${environment.apiUrl}inventarios/ObtenerInventarioAlm`,inventario );
   }
+  //Recibe una lista de strings
+  obtenerInventariosPorAlmacenes(almacenIds: string[]): Observable<Inventarios> {
+    return this.http.post<Inventarios>(`${environment.apiUrl}inventarios/ObtenerInventariosPorAlmacenes`, almacenIds);
+  }
+
   agregarInventario(inventario: InventariosEntity): Observable<Inventarios> {
     return this.http.post<Inventarios>(`${environment.apiUrl}inventarios/InsertarInventarios`, inventario);
   }

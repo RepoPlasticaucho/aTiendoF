@@ -101,6 +101,7 @@ export class VerCarritoComponent implements OnInit {
           this.lstInventarios.forEach(inventario => {
             if (inventario.producto_id === detalleMovimiento.producto_id) {
               inventario.cantidad = detalleMovimiento.cantidad;
+            
               //Actualizar el stock auxiliar
               inventario.stock_auxiliar = (parseInt(inventario.stock!) - parseInt(detalleMovimiento.cantidad!)).toString();
 

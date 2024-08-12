@@ -51,4 +51,5 @@ export interface InventariosEntity {
     genero?: string;
     atributo?: string;
     stock_auxiliar?: string;
+    sociedadid?: string;
 }

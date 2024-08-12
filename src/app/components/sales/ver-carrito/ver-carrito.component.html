@@ -7,10 +7,11 @@
             <th style="width: 10%;">IMAGEN</th>
             <th style="width: 10%;">PRODUCTO</th>
             <th style="width: 5%;">CANTIDAD</th>
+            <th style="width: 8%;">MEDIDA</th>
+            
             <th style="width: 10%;">PVP</th>
             <th style="width: 8%;">STOCK</th>
 
-            <th style="width: 8%;">CATEGORIA</th>
             <th style="width: 8%;">TIPO</th>
             <th style="width: 8%;">MARCA</th>
             <th style="width: 8%;">MODELO</th>
@@ -40,9 +41,10 @@
                 (keyup.enter)="onEnter($event)"  autocomplete="off">
               
             </td>
+            <td>{{ inventario.unidad_medidad }}</td>
+            
             <td>{{ inventario.pvp2 }}</td>
             <td>{{ parseInt(inventario.stock_auxiliar!) | number: '.0-0' }}</td>
-            <td>{{ inventario.categoria }}</td>
 
             <td>{{ inventario.linea }}</td>
             <td>{{ inventario.marca }}</td>

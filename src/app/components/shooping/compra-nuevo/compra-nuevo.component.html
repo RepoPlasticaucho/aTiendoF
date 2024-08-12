@@ -27,23 +27,21 @@
             <thead style="color: #636363;" class="fixed-header">
                 <tr>
                     <th style="width: 10%;">CÓDIGO</th>
-                    <th style="width: 10%;" *ngIf="esPlasticaucho">COD SAP</th>
+                    <th style="width: 10%;" *ngIf="esPlasticaucho">COD PROVEEDOR</th>
                     <th style="width: 10%;">PRODUCTO</th>
-                    <th style="width: 10%;">ETIQUETAS</th>
                     <th style="width: 10%;">TAMAÑO</th>
                     <th style="width: 10%;">U. MEDIDA</th>
                     <th style="width: 10%;">TARIFA</th>
                     <th style="width: 10%;">COSTO</th>
                     <th style="width: 10%;">CANTIDAD</th>
-                    <th style="width: 10%;">PRECIO</th>
+                    <th style="width: 10%;">COSTO CALCULADO</th>
                 </tr>
             </thead>
             <tbody style="color: #767695;">
                 <tr *ngFor="let proveedorProducto of lstProveedoresProductos" class="table-row">
                     <td>{{proveedorProducto.producto_id}}</td>
                     <td *ngIf="esPlasticaucho">{{proveedorProducto.cod_sap}}</td>
-                    <td>{{proveedorProducto.nombre_producto}}</td>
-                    <td>{{proveedorProducto.etiquetas}}</td>
+                    <td>{{proveedorProducto.nombre_producto}} {{proveedorProducto.tamanio}}</td>
                     <td>{{proveedorProducto.tamanio}}</td>
                     <td>{{proveedorProducto.unidad_medida}}</td>
                     <td>{{proveedorProducto.descripcion_uni}}</td>

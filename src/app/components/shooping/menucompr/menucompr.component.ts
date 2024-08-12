@@ -1090,6 +1090,7 @@ export class MenucomprComponent implements OnInit {
                   producto.costo = element.costo;
                   producto.pvp2 = producto.precio;
                   producto.precio = element.precioUnitario!;
+                  
 
                   console.log('Producto aquiiiii', producto);
 

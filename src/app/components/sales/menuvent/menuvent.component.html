@@ -86,24 +86,24 @@
             <!-- Contenedor flex para agregar productos y productos agregados -->
             <div class="row d-flex flex-column flex-md-row">
                 <!-- Agregar productos -->
-                <div class="col-12 col-md-6"
+                <div class="col-12 col-md-7"
                     style="border-right: 1px solid #e0e0e0; padding-right: 20px;">
                 
                     <h2 style="color: #636363; text-align: center;">AGREGAR PRODUCTOS AL CARRITO</h2>
                     <app-ver-carrito (prAgregado)="agregarProducto($event)"  ></app-ver-carrito>
                 </div>
                 <!-- Productos agregados -->
-                <div class="col-12 col-md-6">
+                <div class="col-12 col-md-5">
                     <h2 style="color: #636363; text-align: center;">PRODUCTOS AGREGADOS</h2>
                     <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" id="dtdt" style="font-size: 12px;">
                         <thead style="color: #636363;">
                             <tr>
-                                <th style="width: 10%;">PRODUCTO</th>
-                                <th style="width: 5%;">CANTIDAD</th>
-                                <th style="width: 40%;">UNITARIO</th>
-                                <th style="width: 40%;">TOTAL</th>
+                                <th style="width: 20%;">PRODUCTO</th>
+                                <th style="width: 10%;">CANTIDAD</th>
+                                <th style="width: 20%;">UNITARIO</th>
+                                <th style="width: 20%;">TOTAL</th>
                              
-                                <th style="width: 20%;"></th>
+                                <th style="width: 15%;"></th>
                             </tr>
                         </thead>
                         <tbody style="color: #767695;">
