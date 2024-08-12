@@ -22,4 +22,5 @@ export interface ProveedoresProductosEntity {
     etiquetas?: string;
     cod_sap?: string;
     pvp2?: string;
+    tieneCostoCalculado?: boolean;
 }

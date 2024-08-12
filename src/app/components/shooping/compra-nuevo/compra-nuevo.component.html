@@ -45,12 +45,23 @@
                     <td>{{proveedorProducto.tamanio}}</td>
                     <td>{{proveedorProducto.unidad_medida}}</td>
                     <td>{{proveedorProducto.descripcion_uni}}</td>
-                    <td>{{proveedorProducto.costo}}</td>
+                    <!-- <td>{{proveedorProducto.costo}}</td> -->
+                    <td>
+                        <input class="cool-input" (input)="onInput($event)" 
+                    
+                        type="text" [(ngModel)]="proveedorProducto.costo" value="proveedorProducto.costo"/>
+                    </td>
                     <td>
                         <input class="cool-input" (input)="onInput($event)" (keyup.enter)="anadirTodosProductos()" 
                             type="text" [(ngModel)]="proveedorProducto.cantidad" />
                     </td>
-                    <td>{{proveedorProducto.precio}}</td>
+                    <td
+                    [ngClass]="{
+                        'cool-input': !proveedorProducto.tieneCostoCalculado,
+                        'cool-input-readonly': proveedorProducto.tieneCostoCalculado
+                      }"
+                      *ngIf="proveedorProducto.tieneCostoCalculado"
+                    >{{proveedorProducto.precio}}</td>
                 </tr>
             </tbody>
         </table>

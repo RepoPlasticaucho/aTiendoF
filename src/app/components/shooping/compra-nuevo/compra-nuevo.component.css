@@ -131,3 +131,15 @@ font-size: 14px;
   background-color: green; /* Cambia el fondo a verde */
   /* Agrega cualquier otro estilo deseado para resaltar */
 }
+
+
+.cool-input-readonly {
+  border: 1px solid #35b0e9;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 14px;
+  background-color: orange; /* Fondo naranja cuando tieneCostoCalculado es true */
+
+  /* Otros estilos personalizados */
+  }
+  

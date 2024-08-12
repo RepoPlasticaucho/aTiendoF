@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { Almacenes, AlmacenesEntity } from '../models/almacenes';
 import { SociedadesEntity } from '../models/sociedades';
+import { Productossociedad } from '../models/productossociedad';
 
 const initGruop: AlmacenesEntity = {
   idAlmacen : "",
@@ -68,5 +69,9 @@ export class AlmacenesService {
   }
   obtenerAlmacenN(nombre_almacen: AlmacenesEntity):Observable<Almacenes>{
     return this.http.post<Almacenes>(`${environment.apiUrl}almacenes/ObtenerAlmacenN`, nombre_almacen);
+  }
+  
+  obtenerProductoSociedadCosto(so: SociedadesEntity): Observable<Productossociedad> {
+    return this.http.post<Productossociedad>(`${environment.apiUrl}productos/ProductoSociedadCostos`, so);
   }
 }

@@ -21,6 +21,7 @@ import { DetalleImpuestosService } from 'src/app/services/detalle-impuestos.serv
 import { DataTableDirective } from 'angular-datatables';
 import { SociedadesEntity } from 'src/app/models/sociedades';
 import { AlmacenesService } from 'src/app/services/almacenes.service';
+import { ProductossociedadEntity } from 'src/app/models/productossociedad';
 
 @Component({
   selector: 'app-compra-nuevo',
@@ -44,7 +45,7 @@ export class CompraNuevoComponent implements OnInit {
   lstProveedoresProductos: ProveedoresProductosEntity[] = [];
 
   costo: any;
-  almacenesSociedadId: any = [];
+  almacenesSociedadId: ProductossociedadEntity[] = [];
   inventarioSociedad: InventariosEntity[] = [];
 
   costo2: any;
@@ -198,45 +199,43 @@ export class CompraNuevoComponent implements OnInit {
               obligado_contabilidad: '',
               url_logo: ''
             }
-            //1. Obtener el id de todos los almacenes de la sociedad
-            this.httpServiceAlmacenes.obtenerAlmacenesS(sociedad).subscribe(res => {
+
+            //Obtener todos los productos de la sociedad
+
+            this.httpServiceAlmacenes.obtenerProductoSociedadCosto(sociedad).subscribe(res => {
               if (res.codigoError == 'OK') {
-                console.log("RES Estos son los almacenes de la sociedad", res.lstAlmacenes)
-                this.almacenesSociedadId = res.lstAlmacenes.map(almacen => {
-                  console.log("Aqui esta un almacen", almacen.idAlmacen)
-                  return almacen.idAlmacen
+
+                console.log("ALMACENESssssssSSSsssoooo", res)
+
+
+                console.log("ALMACENESssssssSSSsssoooo", res.lstProductos)
+
+                this.almacenesSociedadId = res.lstProductos;
+
+                //Recorrer la lista de la sociedad y de los que hayan en la lista de proveedores insertar el costo calculado
+                this.almacenesSociedadId.forEach(productoSociedad => {
+                  this.lstProveedoresProductos.forEach(productoProveedor => {
+                    if (productoSociedad.producto_id == productoProveedor.producto_id) {
+                      productoProveedor.costo = productoSociedad.costo
+                      productoProveedor.tieneCostoCalculado = true
+                    }
+                  });
                 });
 
-                console.log("1. Estos son los id de los almacenes de la sociedad", this.almacenesSociedadId);
-
-                //2. Obtener todos los inventarios que tengan los id de los almacenes de la sociedad
-                this.httpServiceInventario.obtenerInventariosPorAlmacenes(this.almacenesSociedadId).subscribe(resInventarios => {
-                  if (resInventarios.codigoError == 'OK') {
-                    this.inventarioSociedad = resInventarios.lstInventarios;
-                    console.log("2. Estos son los inventarios de los almacenes de la sociedad", resInventarios.lstInventarios);
-                  }
-
-                  //3. Recorrer this.lstProveedoresProductos y verificar si el producto ya existe en el inventario en el caso de que existe asigarle el costo del inventario
-
-                  // this.lstProveedoresProductos.forEach(producto => {
-                  //   console.log("Ebtro al foreach del 222")
-                  //   this.inventarioSociedad.forEach(inventario => {
-                  //     console.log("Ebtro al foreach del 333")
-                  //     if (producto.producto_id == inventario.producto_id) {
-                  //       console.log("El producto ya existe en el inventario", producto.producto_id)
-                  //       producto.costo = inventario.costo;
-                  //     }
-                  //   })
-                  // });
-
-
-                }
-
-
-                );
+                console.log("ALMACENES SOCIEDAAAAAAAAAAAAA0009AAAAAD", this.almacenesSociedadId)
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'No se pudo obtener los productos.',
+                  text: res.descripcionError,
+                  showConfirmButton: false,
+                });
               }
             });
+            
+              
 
+            //Recorrer la lista y de los que hayan en la sociedad insertar el costo calculado
 
             this.dtTrigger.next('');
 
@@ -330,6 +329,392 @@ export class CompraNuevoComponent implements OnInit {
   }
 
 
+  // crearDetalle(proveedorProducto: ProveedoresProductosEntity): void {
+
+  //   this.httpServiceProvProd.asignarProveedorProducto(proveedorProducto);
+  //   this.httpServiceProvProd.obtenerProveedorProducto$.pipe(take(1)).subscribe((res) => {
+  //     this.botonBloqueado = true;
+  //     if (res.producto_id == '') {
+  //       Swal.fire({
+  //         icon: 'error',
+  //         title: 'Ha ocurrido un error.',
+  //         text: 'No se ha obtenido información.',
+  //         showConfirmButton: false,
+  //       }).finally(() => {
+  //         this.router.navigate([
+  //           '/navegation-cl',
+  //           { outlets: { contentClient: ['menucompr'] } },
+  //         ]);
+  //       });
+  //     } else {
+  //       //Asignamos los valores a los campos
+  //       this.costo = res.costo;
+  //       this.costo2 = res.costo;
+  //       this.precio = parseFloat(res.costo!) * parseFloat(proveedorProducto.cantidad!);
+
+  //       const newInventario: InventariosEntity = {
+  //         categoria_id: '',
+  //         categoria: '',
+  //         linea: '',
+  //         modelo: '',
+  //         marca_id: '',
+  //         marca: '',
+  //         modelo_producto_id: '',
+  //         idProducto: '',
+  //         Producto: '',
+  //         id: '',
+  //         etiquetas: res.etiquetas,
+  //         dInventario: '',
+  //         producto_id: res.producto_id,
+  //         almacen_id: localStorage.getItem('almacenid')!,
+  //         almacen: '',
+  //         stock_optimo: '',
+  //         fav: '0',
+  //         costo: this.costo2,
+  //         color: '',
+  //         stock: proveedorProducto.cantidad!,
+  //         pvp2: proveedorProducto.precio,
+  //         url_image: localStorage.getItem('sociedadid')!
+  //       }
+
+
+
+  //       // cambios
+  //       //console.log(proveedorProducto.productoExistente)
+
+  //       //Cambio stock y costNuevo general
+  //       this.httpServiceInventario.obtenerStockTotalSociedad(newInventario).subscribe(res1 => {
+  //         if (res1.codigoError == 'NEXISTE') {
+  //           console.log("ENTRO AL PRODUCTO NEXISTE1")
+  //           this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res1 => {
+  //             if (res1.codigoError == 'NEXISTE') {
+
+  //               console.log("ENTRO AL PRODUCTO NEXISTE2")
+  //               this.httpServiceInventario.agregarInventario(newInventario).pipe(
+  //                 finalize(() => {
+  //                   this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res5 => {
+  //                     const newDetalle: DetallesMovimientoEntity = {
+  //                       id: '',
+  //                       producto_nombre: '',
+  //                       inventario_id: res5.lstInventarios[0].id,
+  //                       producto_id: res.producto_id,
+  //                       movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
+  //                       cantidad: proveedorProducto.cantidad!,
+  //                       costo: proveedorProducto.costo!,
+  //                       precio: (parseFloat(proveedorProducto.costo!) * parseFloat(proveedorProducto.cantidad!)).toString()
+  //                     }
+
+
+  //                     this.httpServiceDetalle.agregarDetalleCompra(newDetalle).pipe(finalize(() => {
+
+  //                       this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
+  //                         if (res1.codigoError == 'OK') {
+  //                           const newDetalleImp: DetalleImpuestosEntity = {
+  //                             id: '',
+  //                             detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
+  //                             cod_impuesto: res1.lstDetalleMovimientos[0].codigo_impuesto!,
+  //                             codigo_tarifa: res1.lstDetalleMovimientos[0].cod_tarifa!,
+  //                             porcentaje: res1.lstDetalleMovimientos[0].tarifa!,
+  //                             base_imponible: '',
+  //                             valor: res1.lstDetalleMovimientos[0].costo!,
+  //                             created_at: '',
+  //                             updated_at: ''
+  //                           }
+  //                           this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
+  //                             if (res2.codigoError != 'OK') {
+  //                               Swal.fire({
+  //                                 icon: 'error',
+  //                                 title: 'Ha ocurrido un error.',
+  //                                 text: res2.descripcionError,
+  //                                 showConfirmButton: false
+  //                               });
+  //                             }
+  //                           });
+  //                         }
+  //                       });
+  //                     })).subscribe(res4 => {
+  //                       if (res4.codigoError != 'OK') {
+  //                         Swal.fire({
+  //                           icon: 'error',
+  //                           title: 'Ha ocurrido un error.',
+  //                           text: 'La cantidad no puede ser vacía',
+  //                           showConfirmButton: false
+  //                         });
+  //                       } else {
+
+  //                         this.productoAgregado.emit(proveedorProducto);
+  //                         this.cerrarDialog();
+
+  //                       }
+  //                     });
+  //                   });
+  //                 })
+  //               ).subscribe(res2 => {
+  //                 if (res2.codigoError != 'OK') {
+  //                   Swal.fire({
+  //                     icon: 'error',
+  //                     title: 'Ha ocurrido un error.',
+  //                     text: res2.descripcionError,
+  //                     showConfirmButton: false
+  //                   });
+  //                 } else {
+  //                 }
+  //               });
+  //             }
+  //           });
+  //         } else if (res1.codigoError == 'OK') {
+  //           //Promedio de los costos de la res1}
+  //           console.log("=====]]Entro al OK")
+
+  //           const sumatoriaCostos = res1.lstInventarios.reduce((acc, inv) => {
+  //             return acc + parseFloat(inv.costo!);
+  //           }, 0);
+  //           const costoActual = sumatoriaCostos / res1.lstInventarios.length;
+  //           // console.log("=====]]COSTO ACTUAL", costoActual)
+
+  //           //Sumatoria de todo el stock
+  //           const existenciaActual = res1.lstInventarios.reduce((acc, inv) => {
+  //             return acc + parseFloat(inv.stock!);
+  //           }, 0);
+  //           // console.log("=====]]STOCK ACTUAL", existenciaActual)
+
+
+  //           const oper1 = costoActual * existenciaActual;
+
+  //           // console.log("=====]]ProveedorProducto.cantidad", proveedorProducto.cantidad)
+  //           // console.log("=====]]ProveedorProducto.costo", proveedorProducto.costo)
+  //           const oper2 = parseFloat(proveedorProducto.cantidad!) * parseFloat(proveedorProducto.costo!);
+  //           // console.log("=====]]OPER1", oper1)
+  //           // console.log("=====]]OPER2", oper2)
+  //           // console.log("=====]]Denominador", existenciaActual + parseFloat(proveedorProducto.cantidad!) )
+  //           // console.log("=====]]ExistenciaActual", existenciaActual)
+  //           // console.log("=====]]ProveedorProducto.cantidad", proveedorProducto.cantidad)
+  //           const nuevoCosto = (oper1 + oper2) / (existenciaActual + parseFloat(proveedorProducto.cantidad!));
+  //           // console.log("=====]]NUEVO COSTO", nuevoCosto)
+
+  //           //Actualizar el costo de todos los inventarios
+  //           res1.lstInventarios.forEach(inventario => {
+  //             const inventarioCosto: InventariosEntity = {
+  //               categoria_id: '',
+  //               categoria: '',
+  //               linea: '',
+  //               modelo: '',
+  //               marca_id: '',
+  //               marca: '',
+  //               modelo_producto_id: '',
+  //               idProducto: '',
+  //               Producto: '',
+  //               costo: nuevoCosto.toString(),
+  //               id: inventario.id,
+  //               dInventario: '',
+  //               producto_id: '',
+  //               almacen_id: '',
+  //               almacen: '',
+  //               stock_optimo: '',
+  //               fav: '',
+  //               color: ''
+  //             }
+  //             this.httpServiceInventario.actualizarCosto(inventarioCosto).subscribe(resC => {
+  //               if (resC.codigoError != 'OK') {
+  //                 Swal.fire({
+  //                   icon: 'error',
+  //                   title: 'Ha ocurrido un error.',
+  //                   text: resC.descripcionError,
+  //                   showConfirmButton: false
+  //                 });
+  //               } else {
+  //                 console.log("Se actualizo el costo")
+  //               }
+  //             });
+  //           });
+
+  //           const newDetalle: DetallesMovimientoEntity = {
+  //             id: '',
+  //             producto_nombre: '',
+  //             inventario_id: res1.lstInventarios[0].id,
+  //             producto_id: res.producto_id,
+  //             movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
+  //             cantidad: proveedorProducto.cantidad!,
+  //             costo: proveedorProducto.costo!,
+  //             precio: (parseFloat(proveedorProducto.costo!) * parseFloat(proveedorProducto.cantidad!)).toString(),
+  //             url_image: localStorage.getItem('almacenid')!
+  //           }
+
+  //           if (!proveedorProducto.productoExistente) {
+  //             if (proveedorProducto.cantidad == "0") {
+  //               Swal.fire({
+  //                 icon: 'error',
+  //                 title: 'No se puede agregar 0',
+  //                 text: "La cantidad no puede ser 0",
+  //                 showConfirmButton: false
+  //               });
+  //               this.botonBloqueado = false
+  //               return
+  //             }
+
+  //             this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res1 => {
+  //               if (res1.codigoError == 'NEXISTE') {
+
+  //                 console.log("ENTRO AL PRODUCTO NEXISTE2")
+  //                 this.httpServiceInventario.agregarInventario(newInventario).pipe(
+  //                   finalize(() => {
+  //                     this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res5 => {
+  //                       const newDetalle: DetallesMovimientoEntity = {
+  //                         id: '',
+  //                         producto_nombre: '',
+  //                         inventario_id: res5.lstInventarios[0].id,
+  //                         producto_id: res.producto_id,
+  //                         movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
+  //                         cantidad: proveedorProducto.cantidad!,
+  //                         costo: proveedorProducto.costo!,
+  //                         precio: (parseFloat(proveedorProducto.costo!) * parseFloat(proveedorProducto.cantidad!)).toString()
+  //                       }
+
+
+  //                       this.httpServiceDetalle.agregarDetalleCompra(newDetalle).pipe(finalize(() => {
+
+  //                         this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
+  //                           if (res1.codigoError == 'OK') {
+  //                             const newDetalleImp: DetalleImpuestosEntity = {
+  //                               id: '',
+  //                               detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
+  //                               cod_impuesto: res1.lstDetalleMovimientos[0].codigo_impuesto!,
+  //                               codigo_tarifa: res1.lstDetalleMovimientos[0].cod_tarifa!,
+  //                               porcentaje: res1.lstDetalleMovimientos[0].tarifa!,
+  //                               base_imponible: '',
+  //                               valor: res1.lstDetalleMovimientos[0].costo!,
+  //                               created_at: '',
+  //                               updated_at: ''
+  //                             }
+  //                             this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
+  //                               if (res2.codigoError != 'OK') {
+  //                                 Swal.fire({
+  //                                   icon: 'error',
+  //                                   title: 'Ha ocurrido un error.',
+  //                                   text: res2.descripcionError,
+  //                                   showConfirmButton: false
+  //                                 });
+  //                               }
+  //                             });
+  //                           }
+  //                         });
+  //                       })).subscribe(res4 => {
+  //                         if (res4.codigoError != 'OK') {
+  //                           Swal.fire({
+  //                             icon: 'error',
+  //                             title: 'Ha ocurrido un error.',
+  //                             text: 'La cantidad no puede ser vacía',
+  //                             showConfirmButton: false
+  //                           });
+  //                         } else {
+
+  //                           this.productoAgregado.emit(proveedorProducto);
+  //                           this.cerrarDialog();
+
+  //                         }
+  //                       });
+  //                     });
+  //                   })
+  //                 ).subscribe(res2 => {
+  //                   if (res2.codigoError != 'OK') {
+  //                     Swal.fire({
+  //                       icon: 'error',
+  //                       title: 'Ha ocurrido un error.',
+  //                       text: res2.descripcionError,
+  //                       showConfirmButton: false
+  //                     });
+  //                   } else {
+  //                   }
+  //                 });
+  //               } else {
+  //                 console.log("ENTRO AL PRODUCTO EXISTEEEEEEEEEEEEEEEEEE")
+  //                 this.httpServiceDetalle.agregarDetalleCompras(newDetalle).pipe(finalize(() => {
+
+  //                   this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
+  //                     if (res1.codigoError == 'OK') {
+  //                       const newDetalleImp: DetalleImpuestosEntity = {
+  //                         id: '',
+  //                         detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
+  //                         cod_impuesto: res1.lstDetalleMovimientos[0].codigo_impuesto!,
+  //                         codigo_tarifa: res1.lstDetalleMovimientos[0].cod_tarifa!,
+  //                         porcentaje: res1.lstDetalleMovimientos[0].tarifa!,
+  //                         base_imponible: '',
+  //                         valor: res1.lstDetalleMovimientos[0].costo!,
+  //                         created_at: '',
+  //                         updated_at: ''
+  //                       }
+  //                       this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
+  //                         if (res2.codigoError != 'OK') {
+  //                           Swal.fire({
+  //                             icon: 'error',
+  //                             title: 'Ha ocurrido un error.',
+  //                             text: res2.descripcionError,
+  //                             showConfirmButton: false
+  //                           });
+  //                         }
+  //                       });
+  //                     }
+  //                   });
+  //                 })).subscribe(res3 => {
+  //                   if (res3.codigoError != 'OK') {
+  //                     Swal.fire({
+  //                       icon: 'error',
+  //                       title: 'Ha ocurrido un error.',
+  //                       text: 'La cantidad no puede ser vacía',
+  //                       showConfirmButton: false
+  //                     });
+  //                   } else {
+
+  //                     this.botonBloqueado = false;
+
+  //                     this.productoAgregado.emit(proveedorProducto);
+  //                     this.cerrarDialog();
+
+  //                   }
+  //                 });
+  //               }
+  //             }
+  //             );
+
+  //           } else {
+
+  //             console.log("Entro al error")
+
+  //             if (proveedorProducto.cantidad! != '0' && proveedorProducto.productoExistente) {
+
+  //               console.log("Entro al error")
+  //               // //Solo modificamos el detalle que cambio la cantidad
+
+  //               newDetalle.precio = (parseFloat(newDetalle.cantidad!) * parseFloat(newDetalle.costo!)).toString();
+
+
+  //               this.httpServiceDetalle.modificarDetallePedidoVenta(newDetalle).subscribe(res => {
+  //                 console.log(res.codigoError)
+  //                 if (res.codigoError == 'OK') {
+
+  //                   this.cerrarDialog();
+
+  //                   this.productoAgregado.emit(proveedorProducto);
+
+  //                 } else {
+
+  //                 }
+  //               });
+  //             } else {
+  //               this.httpServiceDetalle.eliminarDetallePedidoVenta(newDetalle).subscribe(res => {
+  //                 console.log("en este metodo" + res)
+
+  //                 this.cerrarDialog();
+
+  //               });
+  //             }
+  //           }
+  //         }
+  //       });
+
+
+       
+  
   crearDetalle(proveedorProducto: ProveedoresProductosEntity): void {
 
     this.httpServiceProvProd.asignarProveedorProducto(proveedorProducto);
@@ -628,10 +1013,23 @@ export class CompraNuevoComponent implements OnInit {
                     }
                   });
                 } else {
-                  console.log("ENTRO AL PRODUCTO EXISTEEEEEEEEEEEEEEEEEE")
-                  this.httpServiceDetalle.agregarDetalleCompras(newDetalle).pipe(finalize(() => {
 
-                    this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
+                  const newDetalle2: DetallesMovimientoEntity = {
+                    id: '',
+                    producto_nombre: '',
+                    inventario_id: res1.lstInventarios[0].id,
+                    producto_id: res.producto_id,
+                    movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
+                    cantidad: proveedorProducto.cantidad!,
+                    costo: proveedorProducto.costo!,
+                    precio: (parseFloat(proveedorProducto.costo!) * parseFloat(proveedorProducto.cantidad!)).toString(),
+                    url_image: localStorage.getItem('almacenid')!
+                  }
+                  
+                  console.log("ENTRO AL PRODUCTO EXISTEEEEEEEEEEEEEEEEEE")
+                  this.httpServiceDetalle.agregarDetalleCompras(newDetalle2).pipe(finalize(() => {
+
+                    this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle2).subscribe(res1 => {
                       if (res1.codigoError == 'OK') {
                         const newDetalleImp: DetalleImpuestosEntity = {
                           id: '',
@@ -712,6 +1110,7 @@ export class CompraNuevoComponent implements OnInit {
             }
           }
         });
+
 
         // this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res1 => {
         //   if (res1.codigoError == 'NEXISTE') {
