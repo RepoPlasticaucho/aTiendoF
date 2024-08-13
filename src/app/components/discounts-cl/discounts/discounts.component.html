@@ -30,23 +30,36 @@
             <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" id="dtdt">
                 <thead style="color: #636363;">
                     <tr>
-                        <th style="width: 20%; ">Nombre</th>
-                        <th style="width: 20%; ">Direccion</th>
-                        <th style="width: 20%; ">Telefono</th>
                         <th style="width: 20%; ">Codigo</th>
-                        <th style="width: 20%; ">Punto de Emision</th>
+                        <th style="width: 20%; ">Tipo</th>
+                        <th style="width: 20%; ">Valor</th>
+                        <th style="width: 20%; ">Fecha Inicio</th>
+                        <th style="width: 20%; ">Fecha Fin</th>
+                        <th style="width: 20%; ">Uso Maximo</th>
+                        <th style="width: 20%; ">Estado</th>
                         <th style="width: 20%; ">Opciones</th>
                     </tr>
                 </thead>
                 <tbody style="color: #767695;">
-                    <tr *ngFor="let almacen of lstAlmacenes">
-                        <td>{{almacen.nombre_almacen}}</td>
-                        <td>{{almacen.direccion}}</td>
-                        <td>{{almacen.telefono}}</td>
-                        <td>{{almacen.codigo}}</td>
-                        <td>{{almacen.pto_emision}}</td>
+                    <tr *ngFor="let almacen of lstDescuentos">
+                        <td>{{almacen.codigoDescuento}}</td>
                         <td>
-                            <span [attr.data-almacen]="almacen | json">
+                            <span *ngIf="almacen.tipoDescuento.toString() == '1'">Porcentaje</span>
+                            <span *ngIf="almacen.tipoDescuento.toString() == '2'">Monto</span>
+                        </td>
+                        <td>
+                            <span *ngIf="almacen.tipoDescuento.toString() == '1'">{{almacen.valorDescuento}}%</span>
+                            <span *ngIf="almacen.tipoDescuento.toString() == '2'">${{almacen.valorDescuento}}</span>
+                        </td>
+                        <td>{{ formatDate(almacen.fecha_inicio) }}</td>
+        <td>{{ formatDate(almacen.fecha_fin) }}</td>
+                        <td>{{almacen.usoMaximo}}</td>
+                        <td>
+                            <span *ngIf="almacen.estado!.toString() == '1'">Activo</span>
+                            <span *ngIf="almacen.estado!.toString() == '0'">Inactivo</span>
+
+                        <td>
+                            <!-- <span [attr.data-almacen]="almacen | json">
                             <a class="btn button ver-icon" (click)="buscarInventario(almacen)"
                                 style="border-radius: 5px; 
                                        background: rgb(49,99,173,0.8); 
@@ -59,7 +72,7 @@
                                         DETALLAR
                                     </span>                            
                             </a>
-                        </span>
+                        </span> -->
 
                         </td>
                     </tr>

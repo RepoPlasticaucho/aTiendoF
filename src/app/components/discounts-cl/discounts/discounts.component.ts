@@ -3,8 +3,10 @@ import { Router } from '@angular/router';
 import { faEdit, faPlus, faTrashAlt, faUserFriends, faStore } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs/internal/Subject';
 import { AlmacenesEntity } from 'src/app/models/almacenes';
+import { DescuentosEntity } from 'src/app/models/descuentos';
 import { SociedadesEntity } from 'src/app/models/sociedades';
 import { AlmacenesService } from 'src/app/services/almacenes.service';
+import { DescuentosService } from 'src/app/services/descuentos.service';
 import { SociedadesService } from 'src/app/services/sociedades.service';
 import Swal from 'sweetalert2';
 
@@ -25,8 +27,10 @@ faStore = faStore
 dtOptions: DataTables.Settings = {};
 dtTrigger: Subject<any> = new Subject<any>();
 lstAlmacenes: AlmacenesEntity[] = [];
+lstDescuentos: DescuentosEntity[] = [];
 
 constructor(private readonly httpService: AlmacenesService,
+  private readonly httpDescuentos: DescuentosService,
   private router: Router) { }
 
   ngOnInit(): void {
@@ -40,36 +44,37 @@ constructor(private readonly httpService: AlmacenesService,
       searching: true,
       ordering: true,
       info: true,
-      responsive:  {
-        details: {
-          renderer: function (api: any, rowIdx: any, columns: any) {
-          var data = $.map(columns, function (col, i) {
-            return col.hidden ?
-            '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
-            '<td>' + col.title + ':' + '</td> ' +
-            '<td>' + col.data + '</td>' +
-            '</tr>' :
-            '';
-          }).join('');
+      
+      // responsive:  {
+      //   details: {
+      //     renderer: function (api: any, rowIdx: any, columns: any) {
+      //     var data = $.map(columns, function (col, i) {
+      //       return col.hidden ?
+      //       '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+      //       '<td>' + col.title + ':' + '</td> ' +
+      //       '<td>' + col.data + '</td>' +
+      //       '</tr>' :
+      //       '';
+      //     }).join('');
 
-          return data ?
-          $('<table/>').append(data) :
-          false;
+      //     return data ?
+      //     $('<table/>').append(data) :
+      //     false;
         
-          }
-        },
-        },
+      //     }
+      //   },
+      //   },
 
-        initComplete: function () {
-          $('#dtdt tbody').on('click', '.ver-icon', function () {
-          //BOTON EDITAR
+      //   initComplete: function () {
+      //     $('#dtdt tbody').on('click', '.ver-icon', function () {
+      //     //BOTON EDITAR
 
-          const data = $(this).closest('span').data('almacen');
-          component.buscarInventario(data);
-          return;
+      //     const data = $(this).closest('span').data('almacen');
+      //     component.buscarInventario(data);
+      //     return;
 
-        });
-      }
+      //   });
+      // }
     }
 
     const almacen: SociedadesEntity = {
@@ -84,9 +89,9 @@ constructor(private readonly httpService: AlmacenesService,
       funcion: '',
       razon_social: ''
     }
-    console.log(almacen);
 
-    this.httpService.obtenerAlmacenesSociedad(almacen).subscribe(res => {
+
+    this.httpDescuentos.obtenerDescuentos(almacen).subscribe(res => {
       if (res.codigoError != "OK") {
         Swal.fire({
           icon: 'error',
@@ -96,7 +101,8 @@ constructor(private readonly httpService: AlmacenesService,
         // timer: 3000
         });
       } else {
-        this.lstAlmacenes = res.lstAlmacenes;
+        this.lstDescuentos = res.lstDescuentos;
+        console.log("Estos son los descuentos",this.lstDescuentos)
         this.dtTrigger.next('');
       }
     
@@ -114,8 +120,20 @@ constructor(private readonly httpService: AlmacenesService,
 
   vertodos(){
 
-    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['inventarios-almacenes'] } }]);
+    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['descuentos-create'] } }]);
   }
 
+  formatDate(dateString: string): string {
 
+    //Solo dejar dd/mm/yy 00:00:00
+
+    //Eliminar la hora
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
 }
+
+

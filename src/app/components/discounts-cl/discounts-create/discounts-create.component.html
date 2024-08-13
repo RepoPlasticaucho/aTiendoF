@@ -1,1 +1,115 @@
-<p>discounts-create works!</p>
+
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="row mx-3">
+                <fa-icon [icon]="faUserFriends" [size]="'3x'" style="color: #636363;"></fa-icon>
+                <h1 class="mx-5 " style="color: #636363;">Crear codigo de descuento</h1>
+                <div style="position: absolute;right:0;" class="mx-3">
+                    <fa-icon [icon]="faTimes" class="btn btn-danger" [size]="'lg'" data-toggle="tooltip"
+                        data-placement="bottom" title="Regresar a almacenes" (click)="visualizarAlmacenes()">
+                    </fa-icon>
+                </div>
+            </div>
+        </div>
+        <div class="card-body ">
+            <form [formGroup]="warehousesForm" (ngSubmit)="onSubmit()">
+        
+
+                <div class="form-group">
+                    <label for="codigoDescuento">Codigo</label>
+                    <input type="text" class="form-control" id="codigoDescuento"
+                        placeholder="Ingrese el codigo" formControlName="codigoDescuento">
+                    <small
+                        *ngIf="warehousesForm.controls['codigoDescuento'].invalid && (warehousesForm.controls['codigoDescuento'].dirty || warehousesForm.controls['codigoDescuento'].touched)">
+                        <small *ngIf="warehousesForm.controls['codigoDescuento'].errors?.['required']"
+                            style="color: red;">
+                            Debe ingresar el codigo.
+                        </small>
+                    </small>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="grupo">Tipo</label>
+                    <select class="form-control" (change)="changeGroup($event)" formControlName="tipoDescuento">
+                        <option [value]=" 0 " selected>Seleccione un tipo de descuento</option>
+                        <!-- Opciones de porcentaje o monto -->
+                        <option value="1">Porcentaje</option>
+                        <option value="2">Monto</option>
+                    </select>
+                    <small *ngIf="selectSociedades">
+                        <small *ngIf="selectSociedades " style="color: red; ">
+                            Debe seleccionar un tipo de descuento.
+                        </small>
+                    </small>
+                </div>
+                
+                <div class="form-group ">
+                    <label for="valorDescuento ">Valor</label>
+                    <input type="text " class="form-control " id="valorDescuento "
+                        placeholder="Ingrese el número de teléfono "
+                        oninput="javascript: if (this.value.length> this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        maxlength="10" formControlName="valorDescuento" (keypress)="keyPressNumbers($event)">
+                    <small
+                        *ngIf="warehousesForm.controls['valorDescuento'].invalid && (warehousesForm.controls['valorDescuento'].dirty || warehousesForm.controls['valorDescuento'].touched)">
+                        <small *ngIf="warehousesForm.controls['valorDescuento'].errors?.['required']" style="color: red;">
+                            Debe ingresar el valor.
+                        </small>
+                     
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="usoMaximo">Cantidad de uso maximo</label>
+                    <input type="text" class="form-control" id="usoMaximo"
+                        placeholder="Ingrese el establecimiento " formControlName="usoMaximo">
+                    <small
+                        *ngIf="warehousesForm.controls['usoMaximo'].invalid && (warehousesForm.controls['usoMaximo'].dirty || warehousesForm.controls['usoMaximo'].touched)">
+                        <small *ngIf="warehousesForm.controls['usoMaximo'].errors?.['required']"
+                            style="color: red;">
+                            Debe ingresar el establecimiento.
+                        </small>
+                    </small>
+                </div>
+
+
+                <!-- Fecha Inicio -->
+                <div class="form-group
+                    ">
+                    <label for="fecha_inicio">Fecha Inicio</label>
+                    <input type="date" class="form-control" id="fecha_inicio" formControlName="fecha_inicio">
+                    <small
+                        *ngIf="warehousesForm.controls['fecha_inicio'].invalid && (warehousesForm.controls['fecha_inicio'].dirty || warehousesForm.controls['fecha_inicio'].touched)">
+                        <small *ngIf="warehousesForm.controls['fecha_inicio'].errors?.['required']"
+                            style="color: red;">
+                            Debe ingresar la fecha de inicio.
+                        </small>
+                    </small>
+                </div>
+
+
+                <!-- Fecha Fin -->
+
+                <div class="form-group
+                    ">
+                    <label for="fecha_fin">Fecha Fin</label>
+                    <input type="date" class="form-control" id="fecha_fin" formControlName="fecha_fin">
+                    <small
+                        *ngIf="warehousesForm.controls['fecha_fin'].invalid && (warehousesForm.controls['fecha_fin'].dirty || warehousesForm.controls['fecha_fin'].touched)">
+                        <small *ngIf="warehousesForm.controls['fecha_fin'].errors?.['required']"
+                            style="color: red;">
+                            Debe ingresar la fecha de fin.
+                        </small>
+                    </small>
+                </div>
+        
+                <button type="submit" class="btn btn-primary">
+                    <!--[disabled]="!this.corporationForm.valid"-->
+                    <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>
+                    Guardar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
