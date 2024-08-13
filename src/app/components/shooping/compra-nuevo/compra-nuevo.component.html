@@ -56,12 +56,23 @@
                             type="text" [(ngModel)]="proveedorProducto.cantidad" />
                     </td>
                     <td
+                    *ngIf="proveedorProducto.tieneCostoCalculado"
+              
+                    >
+                    <span
                     [ngClass]="{
                         'cool-input': !proveedorProducto.tieneCostoCalculado,
                         'cool-input-readonly': proveedorProducto.tieneCostoCalculado
                       }"
-                      *ngIf="proveedorProducto.tieneCostoCalculado"
-                    >{{proveedorProducto.precio}}</td>
+                    >
+                        {{proveedorProducto.costoCalculado}}
+                    </span>
+                </td>
+
+                    <td
+                    *ngIf="!proveedorProducto.tieneCostoCalculado"
+
+                    >{{proveedorProducto.costo}}</td>
                 </tr>
             </tbody>
         </table>

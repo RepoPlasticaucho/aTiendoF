@@ -134,12 +134,10 @@ font-size: 14px;
 
 
 .cool-input-readonly {
-  border: 1px solid #35b0e9;
-  border-radius: 5px;
-  padding: 5px;
-  font-size: 14px;
-  background-color: orange; /* Fondo naranja cuando tieneCostoCalculado es true */
-
-  /* Otros estilos personalizados */
+ /* Pinta solo el fondo del texto no todo el input */
+  background-color: #ffdb8e;
+  width: 50%;
+  height: 50%
+  
   }
   

@@ -216,7 +216,8 @@ export class CompraNuevoComponent implements OnInit {
                 this.almacenesSociedadId.forEach(productoSociedad => {
                   this.lstProveedoresProductos.forEach(productoProveedor => {
                     if (productoSociedad.producto_id == productoProveedor.producto_id) {
-                      productoProveedor.costo = productoSociedad.costo
+                      productoProveedor.costoCalculado = productoSociedad.costo
+                      
                       productoProveedor.tieneCostoCalculado = true
                     }
                   });
