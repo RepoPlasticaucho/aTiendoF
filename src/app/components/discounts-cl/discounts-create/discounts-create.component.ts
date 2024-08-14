@@ -66,6 +66,8 @@ export class DiscountsCreateComponent implements OnInit {
        this.warehousesForm.get("tipo")?.setValue(tipo.target.value);
      }
    }
+
+
  
    visualizarAlmacenes() {
      this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['almacenes'] } }]);
@@ -95,6 +97,7 @@ export class DiscountsCreateComponent implements OnInit {
           showConfirmButton: true,
           confirmButtonText: "Ok"
         }).finally(() => {
+          this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['descuentos'] } }]);
         });
       } else {
         Swal.fire({

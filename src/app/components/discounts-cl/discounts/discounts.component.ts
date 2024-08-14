@@ -44,7 +44,7 @@ constructor(private readonly httpService: AlmacenesService,
       searching: true,
       ordering: true,
       info: true,
-      
+      responsive: true,      
       // responsive:  {
       //   details: {
       //     renderer: function (api: any, rowIdx: any, columns: any) {
@@ -123,17 +123,249 @@ constructor(private readonly httpService: AlmacenesService,
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['descuentos-create'] } }]);
   }
 
-  formatDate(dateString: string): string {
-
-    //Solo dejar dd/mm/yy 00:00:00
-
-    //Eliminar la hora
-    const date = new Date(dateString);
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+  desactivarDescuento(descuento: DescuentosEntity): void {
+    // Mostrar el modal de carga
+    Swal.fire({
+      title: 'Cargando...',
+      text: 'Por favor espera mientras se procesa la solicitud.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+  
+    this.httpDescuentos.desactivarDescuento(descuento).subscribe(res => {
+      // Ocultar el modal de carga
+      Swal.close();
+  
+      if (res.codigoError == "OK") {
+        Swal.fire({
+          icon: 'success',
+          title: 'Desactivado Exitosamente.',
+          text: `Se ha desactivado el descuento ${descuento.codigoDescuento}`,
+          showConfirmButton: true,
+          confirmButtonText: "Ok"
+        }).finally(() => {
+          // Actualizar la tabla
+          const almacen: SociedadesEntity = {
+            idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
+            idGrupo: '',
+            nombre_comercial: '',
+            id_fiscal: '',
+            email: '',
+            telefono: '',
+            tipo_ambienteid: '',
+            password: '',
+            funcion: '',
+            razon_social: ''
+          };
+  
+          this.httpDescuentos.obtenerDescuentos(almacen).subscribe(res => {
+            if (res.codigoError != "OK") {
+              Swal.fire({
+                icon: 'error',
+                title: 'Ha ocurrido un error.',
+                text: res.descripcionError,
+                showConfirmButton: false,
+              });
+            } else {
+              this.lstDescuentos = res.lstDescuentos;
+              this.dtTrigger.next('');
+            }
+          }, error => {
+            // Manejo del error en la actualización de la tabla
+            Swal.fire({
+              icon: 'error',
+              title: 'Ha ocurrido un error.',
+              text: 'No se pudo actualizar la lista de descuentos.',
+              showConfirmButton: false,
+            });
+          });
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Ha ocurrido un error.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      }
+    }, error => {
+      // Ocultar el modal de carga en caso de error
+      Swal.close();
+      Swal.fire({
+        icon: 'error',
+        title: 'Ha ocurrido un error.',
+        text: 'No se pudo desactivar el descuento.',
+        showConfirmButton: false,
+      });
+    });
   }
+  activarDescuento(descuento: DescuentosEntity): void {
+    // Mostrar el modal de carga
+    Swal.fire({
+      title: 'Cargando...',
+      text: 'Por favor espera mientras se procesa la solicitud.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+  
+    this.httpDescuentos.activarDescuento(descuento).subscribe(res => {
+      // Ocultar el modal de carga
+      Swal.close();
+  
+      if (res.codigoError == "OK") {
+        Swal.fire({
+          icon: 'success',
+          title: 'Activado Exitosamente.',
+          text: `Se ha activado el descuento ${descuento.codigoDescuento}`,
+          showConfirmButton: true,
+          confirmButtonText: "Ok"
+        }).finally(() => {
+          // Actualizar la tabla
+          const almacen: SociedadesEntity = {
+            idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
+            idGrupo: '',
+            nombre_comercial: '',
+            id_fiscal: '',
+            email: '',
+            telefono: '',
+            tipo_ambienteid: '',
+            password: '',
+            funcion: '',
+            razon_social: ''
+          };
+  
+          this.httpDescuentos.obtenerDescuentos(almacen).subscribe(res => {
+            if (res.codigoError != "OK") {
+              Swal.fire({
+                icon: 'error',
+                title: 'Ha ocurrido un error.',
+                text: res.descripcionError,
+                showConfirmButton: false,
+              });
+            } else {
+              this.lstDescuentos = res.lstDescuentos;
+              this.dtTrigger.next('');
+            }
+          }, error => {
+            // Manejo del error en la actualización de la tabla
+            Swal.fire({
+              icon: 'error',
+              title: 'Ha ocurrido un error.',
+              text: 'No se pudo actualizar la lista de descuentos.',
+              showConfirmButton: false,
+            });
+          });
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Ha ocurrido un error.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
+      }
+    }, error => {
+      // Ocultar el modal de carga en caso de error
+      Swal.close();
+      Swal.fire({
+        icon: 'error',
+        title: 'Ha ocurrido un error.',
+        text: 'No se pudo activar el descuento.',
+        showConfirmButton: false,
+      });
+    });
+  }
+  
+
+
+  
+eliminarDescuento(descuento: DescuentosEntity): void {
+  // Mostrar el modal de carga
+  Swal.fire({
+    title: 'Cargando...',
+    text: 'Por favor espera mientras se procesa la solicitud.',
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
+    }
+  });
+
+  this.httpDescuentos.eliminarDescuento(descuento).subscribe(res => {
+    if (res.codigoError == "OK") {
+      Swal.fire({
+        icon: 'success',
+        title: 'Eliminado Exitosamente.',
+        text: `Se ha eliminado el descuento ${descuento.codigoDescuento}`,
+        showConfirmButton: true,
+        confirmButtonText: "Ok"
+      }).finally(() => {
+        // Actualizar la tabla
+        const almacen: SociedadesEntity = {
+          idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
+          idGrupo: '',
+          nombre_comercial: '',
+          id_fiscal: '',
+          email: '',
+          telefono: '',
+          tipo_ambienteid: '',
+          password: '',
+          funcion: '',
+          razon_social: ''
+        };
+
+        this.httpDescuentos.obtenerDescuentos(almacen).subscribe(res => {
+          // Ocultar el modal de carga
+          Swal.close();
+
+          if (res.codigoError != "OK") {
+            Swal.fire({
+              icon: 'error',
+              title: 'Ha ocurrido un error.',
+              text: res.descripcionError,
+              showConfirmButton: false,
+            });
+          } else {
+            this.lstDescuentos = res.lstDescuentos;
+            this.dtTrigger.next('');
+          }
+        }, error => {
+          // Ocultar el modal de carga en caso de error
+          Swal.close();
+          Swal.fire({
+            icon: 'error',
+            title: 'Ha ocurrido un error.',
+            text: 'No se pudo actualizar la lista de descuentos.',
+            showConfirmButton: false,
+          });
+        });
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Ha ocurrido un error.',
+        text: res.descripcionError,
+        showConfirmButton: false,
+      }).finally(() => {
+        // Ocultar el modal de carga en caso de error
+        Swal.close();
+      });
+    }
+  }, error => {
+    // Ocultar el modal de carga en caso de error
+    Swal.close();
+    Swal.fire({
+      icon: 'error',
+      title: 'Ha ocurrido un error.',
+      text: 'No se pudo eliminar el descuento.',
+      showConfirmButton: false,
+    });
+  });
+}
+  
 }
 
 

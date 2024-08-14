@@ -35,9 +35,9 @@
                         <th style="width: 20%; ">Valor</th>
                         <th style="width: 20%; ">Fecha Inicio</th>
                         <th style="width: 20%; ">Fecha Fin</th>
-                        <th style="width: 20%; ">Uso Maximo</th>
+                        <th style="width: 20%; ">Max. Usos</th>
                         <th style="width: 20%; ">Estado</th>
-                        <th style="width: 20%; ">Opciones</th>
+                        <th style="width: 1%; ">Opciones</th>
                     </tr>
                 </thead>
                 <tbody style="color: #767695;">
@@ -51,30 +51,58 @@
                             <span *ngIf="almacen.tipoDescuento.toString() == '1'">{{almacen.valorDescuento}}%</span>
                             <span *ngIf="almacen.tipoDescuento.toString() == '2'">${{almacen.valorDescuento}}</span>
                         </td>
-                        <td>{{ formatDate(almacen.fecha_inicio) }}</td>
-        <td>{{ formatDate(almacen.fecha_fin) }}</td>
+                        <td>{{ almacen.fecha_inicio }}</td>
+        <td>{{ almacen.fecha_fin }}</td>
                         <td>{{almacen.usoMaximo}}</td>
                         <td>
                             <span *ngIf="almacen.estado!.toString() == '1'">Activo</span>
                             <span *ngIf="almacen.estado!.toString() == '0'">Inactivo</span>
 
-                        <td>
-                            <!-- <span [attr.data-almacen]="almacen | json">
-                            <a class="btn button ver-icon" (click)="buscarInventario(almacen)"
-                                style="border-radius: 5px; 
-                                       background: rgb(49,99,173,0.8); 
-                                       font-size: 15px; width:120px; 
-                                       height:35px;
-                                       text-align:center; 
-                                       margin-top: 10px;
-                                       ">
-                                <span style="color:white;">
-                                        DETALLAR
-                                    </span>                            
-                            </a>
-                        </span> -->
-
-                        </td>
+                            <td style="display: flex; gap: 5px;">
+                                <!-- Boton Eliminar -->
+                                <span>
+                                    <a class="btn button ver-icon" style="border-radius: 5px; 
+                                           background: rgba(209, 53, 53, 0.8); 
+                                           font-size: 15px; width:120px; 
+                                           height:35px; text-align:center; 
+                                           margin-top: 10px;"
+                                       (click)="eliminarDescuento(almacen)">
+                                        <fa-icon [icon]="faTrashAlt" style="color: white;"></fa-icon>
+                                    </a>
+                                </span>
+                            
+                                <!--  Si esta activo el almacen se puede desactivar caso contrario activar -->
+                                <span *ngIf="almacen.estado!.toString() == '1'">
+                                    <a class="btn button ver-icon" style="border-radius: 5px; 
+                                           background: rgb(49,99,173,0.8); 
+                                           font-size: 15px; width:120px; 
+                                           height:35px; text-align:center; 
+                                           margin-top: 10px;"
+                                       (click)="desactivarDescuento(almacen)">
+                                        <span style="color:white;
+                                            font-size: 13px;
+                                        ">
+                                            DESACTIVAR
+                                        </span> 
+                                    </a>
+                                </span>
+                            
+                                <span *ngIf="almacen.estado!.toString() == '0'">
+                                    <a class="btn button ver-icon" style="border-radius: 5px; 
+                                           background: rgb(49,99,173,0.8); 
+                                           font-size: 15px; width:120px; 
+                                           height:35px; text-align:center; 
+                                           margin-top: 10px;"
+                                       (click)="activarDescuento(almacen)">
+                                        <span style="color:white;
+                                            font-size: 13px;
+                                        ">
+                                            ACTIVAR
+                                        </span>
+                                    </a>
+                                </span>
+                            </td>
+                            
                     </tr>
                 </tbody>
             </table>

@@ -19,7 +19,19 @@ export class DescuentosService {
     }
     obtenerDescuentos(sociedad: SociedadesEntity): Observable<Descuentos> {
         return this.http.post<Descuentos>(`${environment.apiUrl}descuentos/ObtenerDescuentosSociedad`, sociedad);
-      }
+    }
+
+    desactivarDescuento(descuento: DescuentosEntity): Observable<Descuentos> {
+        return this.http.post<Descuentos>(`${environment.apiUrl}descuentos/DesactivarDescuento`, descuento);
+    }
+
+    activarDescuento(descuento: DescuentosEntity): Observable<Descuentos> {
+        return this.http.post<Descuentos>(`${environment.apiUrl}descuentos/ActivarDescuento`, descuento);
+    }
+
+    eliminarDescuento(descuento: DescuentosEntity): Observable<Descuentos> {
+        return this.http.post<Descuentos>(`${environment.apiUrl}descuentos/EliminarDescuento`, descuento);
+    }
     
 
     //   actualizarcolor(color: ColorsEntity): Observable<Colors> {
