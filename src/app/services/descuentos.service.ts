@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { Descuentos, DescuentosEntity } from '../models/descuentos';
 import { SociedadesEntity } from '../models/sociedades';
+import { MovimientosEntity } from '../models/movimientos';
 
 
 @Injectable({
@@ -32,7 +33,17 @@ export class DescuentosService {
     eliminarDescuento(descuento: DescuentosEntity): Observable<Descuentos> {
         return this.http.post<Descuentos>(`${environment.apiUrl}descuentos/EliminarDescuento`, descuento);
     }
+
+    aplicarDescuento(descuento: DescuentosEntity): Observable<Descuentos> {
+        return this.http.post<Descuentos>(`${environment.apiUrl}descuentos/AplicarDescuento`, descuento);
+    }
+
+    obtenerDescuentosAplicados(movimiento: MovimientosEntity): Observable<Descuentos> {
+        return this.http.post<Descuentos>(`${environment.apiUrl}descuentos/ObtenerDescuentosAplicados`, movimiento.id);
+    }
     
+
+
 
     //   actualizarcolor(color: ColorsEntity): Observable<Colors> {
     //     return this.http.post<Colors>(`${environment.apiUrl}colores/ModificarColores`, color);

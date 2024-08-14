@@ -28,6 +28,9 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { parse } from 'path';
 import { DetalleImpuestosService } from 'src/app/services/detalle-impuestos.service';
 import { MenuventComponent } from '../../all_components';
+import { DescuentosEntity } from 'src/app/models/descuentos';
+import { DescuentosService } from 'src/app/services/descuentos.service';
+
 @Component({
   selector: 'app-apply-discount',
   templateUrl: './apply-discount.component.html',
@@ -48,7 +51,7 @@ export class ApplyDiscountComponent implements OnInit {
   faMoneyBillAlt = faMoneyBillAlt;
   dtTrigger: Subject<any> = new Subject<any>();
   dtTrigger2: Subject<any> = new Subject<any>();
-  lstDetallePagos: DetallesPagoEntity[] = [];
+  lstDescuentos: DescuentosEntity[] = [];
   lstDetalleMovimientos: DetallesMovimientoEntity[] = [];
   lstFormasPago: FormasPagoEntity[] = [];
   lstFormasPago2: FormasPagoEntity[] = [];
@@ -95,6 +98,8 @@ export class ApplyDiscountComponent implements OnInit {
     private readonly httpServiceForma: FormasPagoService,
     private readonly httpServiceFormaSociedad: FormasPagoServiceSociedad,
     private readonly httpServiceDet: DetalleImpuestosService,
+    private readonly httpServiceDescuento: DescuentosService,
+
     private router: Router) { }
 
   ngOnInit(): void {
@@ -227,82 +232,82 @@ export class ApplyDiscountComponent implements OnInit {
       title: 'CARGANDO...',
       html: 'Se está cargando el detalle.',
       timer: 30000,
-      didOpen: () => {
-        Swal.showLoading();
-        this.httpServiceTercero.obtenerTerceroCedula(newTercero).subscribe(res1 => {
-          console.log("ACA RES1"+res1.lstTerceros)
-          if (res1.codigoError != "OK") {
-            this.cliente = "Consumidor Final";
-            this.telefono = "999999999";
-            this.email = "99999999";
+      // didOpen: () => {
+      //   Swal.showLoading();
+      //   this.httpServiceTercero.obtenerTerceroCedula(newTercero).subscribe(res1 => {
+      //     console.log("ACA RES1"+res1.lstTerceros)
+      //     if (res1.codigoError != "OK") {
+      //       this.cliente = "Consumidor Final";
+      //       this.telefono = "999999999";
+      //       this.email = "99999999";
 
-          } else {
-            this.numFactura = localStorage.getItem('movimiento_id')!;
-            this.cliente = res1.lstTerceros[0].nombre;
-            this.telefono = res1.lstTerceros[0].telefono;
-            this.email = res1.lstTerceros[0].correo;
-            this.idFiscalCliente = res1.lstTerceros[0].id_fiscal;
-          }
-        });
-        this.httpServiceAlmacen.obtenerAlmacenID(newAlmacen).subscribe(res1 => {
-          if (res1.codigoError != "OK") {
+      //     } else {
+      //       this.numFactura = localStorage.getItem('movimiento_id')!;
+      //       this.cliente = res1.lstTerceros[0].nombre;
+      //       this.telefono = res1.lstTerceros[0].telefono;
+      //       this.email = res1.lstTerceros[0].correo;
+      //       this.idFiscalCliente = res1.lstTerceros[0].id_fiscal;
+      //     }
+      //   });
+      //   this.httpServiceAlmacen.obtenerAlmacenID(newAlmacen).subscribe(res1 => {
+      //     if (res1.codigoError != "OK") {
 
-          } else {
-            this.nombreSoc = res1.lstAlmacenes[0].nombresociedad!;
-            this.idFiscalSoc = res1.lstAlmacenes[0].idfiscal_sociedad!;
-            this.direccionAlm = res1.lstAlmacenes[0].direccion!;
-            this.telefonoAlm = res1.lstAlmacenes[0].telefono!;
-          }
-        });
-        this.httpServiceMovimiento.obtenerMovimientoID(newMovimiento).subscribe(res2 => {
-          if (res2.codigoError != "OK") {
+      //     } else {
+      //       this.nombreSoc = res1.lstAlmacenes[0].nombresociedad!;
+      //       this.idFiscalSoc = res1.lstAlmacenes[0].idfiscal_sociedad!;
+      //       this.direccionAlm = res1.lstAlmacenes[0].direccion!;
+      //       this.telefonoAlm = res1.lstAlmacenes[0].telefono!;
+      //     }
+      //   });
+      //   this.httpServiceMovimiento.obtenerMovimientoID(newMovimiento).subscribe(res2 => {
+      //     if (res2.codigoError != "OK") {
 
-          } else {
-            this.fechaEmision = res2.lstMovimientos[0].fecha_emision!;
-          }
-        });
-        this, this.httpServiceDetallePago.obtenerDetallePagoMov(newMovimiento).subscribe(res => {
-          if (res.codigoError != "OK") {
-            this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe(res1 => {
-              if (res1.codigoError != "OK") {
-                Swal.fire({
-                  icon: 'error',
-                  title: 'No existe nada en el carrito.',
-                  text: res.descripcionError,
-                  showConfirmButton: false,
-                  // timer: 3000
-                });
-              } else {
-                this.lstDetalleMovimientos = res1.lstDetalleMovimientos;
-                this.dtTrigger.next('');
-                Swal.close();
-              }
-            });
-          } else {
-            this.lstDetallePagos = res.lstDetallePagos;
-            this.dtTrigger2.next('');
-            console.log(this.lstDetalleMovimientos)
-            this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe(res1 => {
-              console.log(res1)
+      //     } else {
+      //       this.fechaEmision = res2.lstMovimientos[0].fecha_emision!;
+      //     }
+      //   });
+      //   this, this.httpServiceDetallePago.obtenerDetallePagoMov(newMovimiento).subscribe(res => {
+      //     if (res.codigoError != "OK") {
+      //       this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe(res1 => {
+      //         if (res1.codigoError != "OK") {
+      //           Swal.fire({
+      //             icon: 'error',
+      //             title: 'No existe nada en el carrito.',
+      //             text: res.descripcionError,
+      //             showConfirmButton: false,
+      //             // timer: 3000
+      //           });
+      //         } else {
+      //           this.lstDetalleMovimientos = res1.lstDetalleMovimientos;
+      //           this.dtTrigger.next('');
+      //           Swal.close();
+      //         }
+      //       });
+      //     } else {
+      //       this.lstDetallePagos = res.lstDetallePagos;
+      //       this.dtTrigger2.next('');
+      //       console.log(this.lstDetalleMovimientos)
+      //       this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe(res1 => {
+      //         console.log(res1)
               
-              if (res1.codigoError != "OK") {
-                Swal.fire({
-                  icon: 'error',
-                  title: 'No existe nada en el carrito.',
-                  text: res.descripcionError,
-                  showConfirmButton: false,
-                  // timer: 3000
-                });
-              } else {
-                this.lstDetalleMovimientos = res1.lstDetalleMovimientos;
-                this.dtTrigger.next('');
-                Swal.close();
-              }
-            });
-          }
-        })
+      //         if (res1.codigoError != "OK") {
+      //           Swal.fire({
+      //             icon: 'error',
+      //             title: 'No existe nada en el carrito.',
+      //             text: res.descripcionError,
+      //             showConfirmButton: false,
+      //             // timer: 3000
+      //           });
+      //         } else {
+      //           this.lstDetalleMovimientos = res1.lstDetalleMovimientos;
+      //           this.dtTrigger.next('');
+      //           Swal.close();
+      //         }
+      //       });
+      //     }
+      //   })
         
-      },
+      // },
       
     }).then((result) => {
       /* Read more about handling dismissals below */
@@ -315,23 +320,23 @@ export class ApplyDiscountComponent implements OnInit {
 
 
   //Cuando se cierre y no se a guardado los pagos se eliminan
-  ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
-    this.dtTrigger2.unsubscribe();
+  // ngOnDestroy(): void {
+  //   this.dtTrigger.unsubscribe();
+  //   this.dtTrigger2.unsubscribe();
 
-    if (this.lstDetallePagos.length > 0) {
-      this.lstDetallePagos.forEach((detalle) => {
-        this.httpServiceDetallePago.eliminarDetallePago(detalle).subscribe((res) => {
-          if (res.codigoError == 'OK') {
-            console.log('Eliminado')
-          } else {
-            console.log('ERROR')
-          }
-        });
-      });
-    }
+  //   if (this.lstDetallePagos.length > 0) {
+  //     this.lstDetallePagos.forEach((detalle) => {
+  //       this.httpServiceDetallePago.eliminarDetallePago(detalle).subscribe((res) => {
+  //         if (res.codigoError == 'OK') {
+  //           console.log('Eliminado')
+  //         } else {
+  //           console.log('ERROR')
+  //         }
+  //       });
+  //     });
+  //   }
 
-  }
+  // }
 
   actualizarColor() {
     const restoNumerico = parseFloat(this.resto); // Convertir a número
@@ -369,49 +374,33 @@ export class ApplyDiscountComponent implements OnInit {
 
   
   abonar() {
-    const monto = document.getElementById('monto') as HTMLInputElement;
-
-    //Si el monto contiene , cambiarlo por .
-    if (monto.value.includes(',')) {
-      monto.value = monto.value.replace(',', '.');
-    }
 
 
-    console.log('Monto parseado: ' + parseFloat(monto.value));
-
-    console.log('Suma total parseado cambiado: ' + this.sumaTotal.replace(',', '.'));
-
-    //Cambiar el resto , por .
-    if (this.resto.includes(',')) {
-      this.resto = this.resto.replace(',', '.');
-    }
 
     
-    if (parseFloat(monto.value) <= parseFloat(this.sumaTotal.replace(',', '.')) && parseFloat(monto.value) <= parseFloat(this.resto)) {
+    if (this.documento !== 'd') {
       //Imprimir lo que esta dentro del if}
 
+      console.log('Restoooo este eeees: ' + this.documento);
 
-      console.log('Resto antes de restar: ' + this.resto);
-      this.resto = (this.resto -parseFloat(monto.value)).toFixed(2);
-
+      // this.actualizarColor();
       
-      console.log('Monto: ' + parseFloat(monto.value));
-
-      console.log('Restoooo este eeees: ' + this.resto);
-
-      this.actualizarColor();
-      const newDetallePago: DetallesPagoEntity = {
+      const descuentoDetalle: DescuentosEntity = {
         id: '',
-        movimiento_id: localStorage.getItem('movimiento_id')!,
-        forma_pago_id: this.lstFormasPago2[0].id,
-        descripcion: 'PAGO',
-        valor: monto.value,
-        fecha_recaudo: '',
-        created_at: '',
-        updated_at: ''
+        //Agianar el valor de documento en codigo descuento
+        codigoDescuento: this.documento,
+        usoMaximo: '',
+        valorDescuento: '',
+        fecha_inicio: '',
+        fecha_fin: '',
+        tipoDescuento: '',
+        sociedad: localStorage.getItem('sociedadid')!,
+        estado: '',
+        movimiento_id: localStorage.getItem('movimiento_id')!
       }
 
-      this.httpServiceDetallePago.agregarDetallePago(newDetallePago).subscribe(res => {
+
+      this.httpServiceDescuento.aplicarDescuento(descuentoDetalle).subscribe(res => {
         if (res.codigoError == 'OK') {
  
           this.deshabilitarIn = true;
@@ -425,11 +414,12 @@ export class ApplyDiscountComponent implements OnInit {
             cod_doc: '',
             secuencial: ''
           }
-          this, this.httpServiceDetallePago.obtenerDetallePagoMov(newMovimiento).subscribe(res => {
+
+          this, this.httpServiceDescuento.obtenerDescuentosAplicados(newMovimiento).subscribe(res => {
             if (res.codigoError != "OK") {
   
             } else {
-              this.lstDetallePagos = res.lstDetallePagos;
+              this.lstDescuentos = res.lstDescuentos;
               this.datatableElement.dtInstance.then((dtInstance2: DataTables.Api) => {
                 // Destruye la tabla existente y elimina los datos
                 dtInstance2.destroy();
@@ -717,128 +707,121 @@ export class ApplyDiscountComponent implements OnInit {
 
     return subtotal;
   }
-  eliminarDetalle(detalle: DetallesPagoEntity): void {
+  // eliminarDetalle(detalle: DetallesPagoEntity): void {
     
-    Swal.fire({
-      icon: 'question',
-      title: `¿Esta seguro de eliminar ${detalle.valor}?`,
-      showDenyButton: true,
-      confirmButtonText: 'Si',
-      denyButtonText: 'No',
-    }).then((result) => {
-      if (result.isConfirmed) {
+  //   Swal.fire({
+  //     icon: 'question',
+  //     title: `¿Esta seguro de eliminar ${detalle.valor}?`,
+  //     showDenyButton: true,
+  //     confirmButtonText: 'Si',
+  //     denyButtonText: 'No',
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
         
-        this.httpServiceDetallePago.eliminarDetallePago(detalle).subscribe((res) => {
-          if (res.codigoError == 'OK') {
-            Swal.fire({
-              icon: 'success',
-              title: 'Eliminado Exitosamente.',
-              text: `Se ha eliminado la forma de pago en ${detalle.nombre}`,
-              showConfirmButton: true,
-              confirmButtonText: 'Ok',
-            }).then(() => {
-              const newMovimiento: MovimientosEntity = {
-                id: localStorage.getItem('movimiento_id')!,
-                tipo_id: '',
-                tipo_emision_cod: '',
-                estado_fact_id: '',
-                tipo_comprb_id: '',
-                almacen_id: '',
-                cod_doc: '',
-                secuencial: ''
-              }
-              this, this.httpServiceDetallePago.obtenerDetallePagoMov(newMovimiento).subscribe(res => {
-                if (res.codigoError != "OK") {
-                  window.location.reload();
-                  Swal.fire({
-                    icon: 'info',
-                    title: 'Información',
-                    text: 'Necesitas abonar dinero',
-                    showConfirmButton: true,
-                    // timer: 3000
-                  });
-                } else {
-                  this.lstDetallePagos = res.lstDetallePagos;
-                  this.datatableElement.dtInstance.then((dtInstance2: DataTables.Api) => {
-                    // Destruye la tabla existente y elimina los datos
-                    dtInstance2.destroy();
+  //       this.httpServiceDetallePago.eliminarDetallePago(detalle).subscribe((res) => {
+  //         if (res.codigoError == 'OK') {
+  //           Swal.fire({
+  //             icon: 'success',
+  //             title: 'Eliminado Exitosamente.',
+  //             text: `Se ha eliminado la forma de pago en ${detalle.nombre}`,
+  //             showConfirmButton: true,
+  //             confirmButtonText: 'Ok',
+  //           }).then(() => {
+  //             const newMovimiento: MovimientosEntity = {
+  //               id: localStorage.getItem('movimiento_id')!,
+  //               tipo_id: '',
+  //               tipo_emision_cod: '',
+  //               estado_fact_id: '',
+  //               tipo_comprb_id: '',
+  //               almacen_id: '',
+  //               cod_doc: '',
+  //               secuencial: ''
+  //             }
+  //             this, this.httpServiceDetallePago.obtenerDetallePagoMov(newMovimiento).subscribe(res => {
+  //               if (res.codigoError != "OK") {
+  //                 window.location.reload();
+  //                 Swal.fire({
+  //                   icon: 'info',
+  //                   title: 'Información',
+  //                   text: 'Necesitas abonar dinero',
+  //                   showConfirmButton: true,
+  //                   // timer: 3000
+  //                 });
+  //               } else {
+  //                 this.lstDetallePagos = res.lstDetallePagos;
+  //                 this.datatableElement.dtInstance.then((dtInstance2: DataTables.Api) => {
+  //                   // Destruye la tabla existente y elimina los datos
+  //                   dtInstance2.destroy();
 
-                    // Renderiza la tabla con los nuevos datos
-                    this.dtTrigger2.next('');
+  //                   // Renderiza la tabla con los nuevos datos
+  //                   this.dtTrigger2.next('');
 
-                    // Opcional: Reinicia la página a la primera página
-                    dtInstance2.page('first').draw('page');
-                    //this.calcularSumaTotal();
-                  });
-                }
-              });
-            });
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Ha ocurrido un error.',
-              text: res.descripcionError,
-              showConfirmButton: false,
-            });
-          }
-        });
-      }
-    });
+  //                   // Opcional: Reinicia la página a la primera página
+  //                   dtInstance2.page('first').draw('page');
+  //                   //this.calcularSumaTotal();
+  //                 });
+  //               }
+  //             });
+  //           });
+  //         } else {
+  //           Swal.fire({
+  //             icon: 'error',
+  //             title: 'Ha ocurrido un error.',
+  //             text: res.descripcionError,
+  //             showConfirmButton: false,
+  //           });
+  //         }
+  //       });
+  //     }
+  //   });
     
-  }
+  // }
 
-  aplicarCambiosDetalle(index: number): void {
-    if (parseFloat(this.lstDetallePagos[this.detalleEditIndex].valor) <= this.sumaTotal.replace(',', '.') && parseFloat(this.lstDetallePagos[this.detalleEditIndex].valor) <= (parseFloat(this.resto) + parseFloat(this.valorAnterior))){
-    if (this.detalleEditIndex >= 0 && this.detalleEditBackup) {
-      // Realizar lógica de guardado o actualización del detalle en tu servicio
-      // Por ejemplo:
-      this.httpServiceDetallePago
-        .modificarDetallePago(
-          this.lstDetallePagos[this.detalleEditIndex]
-        )
-        .subscribe((res) => {
-          if (res.codigoError == 'OK') {
-            Swal.fire({
-              icon: 'success',
-              title: 'Guardado Exitosamente.',
-              text: `Se han guardado los cambios del detalle`,
-              showConfirmButton: true,
-              confirmButtonText: 'Ok',
-            }).then(() => {
-              //this.cargarTablaMenuvent();
-              this.editarDetalle = false;
-              this.detalleEditIndex = -1;
-              this.detalleEditBackup = null;
-              //this.calcularSumaTotal();
-              this.actualizarColor();
-              });
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Ha ocurrido un error.',
-              text: res.descripcionError,
-              showConfirmButton: false,
-            });
-          }
-        });
-    }
-  }else {
-    Swal.fire({
-      icon: 'error',
-      title: 'Ha ocurrido un error.',
-      text: 'Estás abonando más del resto o has abonado el total',
-      showConfirmButton: false,
-    });
-  }
+  // aplicarCambiosDetalle(index: number): void {
+  //   if (parseFloat(this.lstDetallePagos[this.detalleEditIndex].valor) <= this.sumaTotal.replace(',', '.') && parseFloat(this.lstDetallePagos[this.detalleEditIndex].valor) <= (parseFloat(this.resto) + parseFloat(this.valorAnterior))){
+  //   if (this.detalleEditIndex >= 0 && this.detalleEditBackup) {
+  //     // Realizar lógica de guardado o actualización del detalle en tu servicio
+  //     // Por ejemplo:
+  //     this.httpServiceDetallePago
+  //       .modificarDetallePago(
+  //         this.lstDetallePagos[this.detalleEditIndex]
+  //       )
+  //       .subscribe((res) => {
+  //         if (res.codigoError == 'OK') {
+  //           Swal.fire({
+  //             icon: 'success',
+  //             title: 'Guardado Exitosamente.',
+  //             text: `Se han guardado los cambios del detalle`,
+  //             showConfirmButton: true,
+  //             confirmButtonText: 'Ok',
+  //           }).then(() => {
+  //             //this.cargarTablaMenuvent();
+  //             this.editarDetalle = false;
+  //             this.detalleEditIndex = -1;
+  //             this.detalleEditBackup = null;
+  //             //this.calcularSumaTotal();
+  //             this.actualizarColor();
+  //             });
+  //         } else {
+  //           Swal.fire({
+  //             icon: 'error',
+  //             title: 'Ha ocurrido un error.',
+  //             text: res.descripcionError,
+  //             showConfirmButton: false,
+  //           });
+  //         }
+  //       });
+  //   }
+  // }else {
+  //   Swal.fire({
+  //     icon: 'error',
+  //     title: 'Ha ocurrido un error.',
+  //     text: 'Estás abonando más del resto o has abonado el total',
+  //     showConfirmButton: false,
+  //   });
+  // }
     
-  }
-
-  editarDetallePago(index: number): void {
-    this.detalleEditIndex = index;
-    this.detalleEditBackup = { ...this.lstDetallePagos[index] };
-    this.editarDetalle = true;
-    this.valorAnterior = this.lstDetallePagos[this.detalleEditIndex].valor;
-  }
+  // }
 
   calcularTotalTarifa15(): number {
     const totalTarifa15 = this.lstDetalleMovimientos

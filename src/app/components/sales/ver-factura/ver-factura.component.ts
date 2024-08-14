@@ -25,6 +25,7 @@ import { environment } from 'src/environments/environment.prod';
 import { FormasPagoServiceSociedad } from 'src/app/services/formaspagosociedad.service';
 import { DescargarInventarioComponent } from '../descargar-inventario/descargar-inventario.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ApplyDiscountComponent } from '../../discounts-cl/apply-discount/apply-discount.component';
 @Component({
   selector: 'app-ver-factura',
   templateUrl: './ver-factura.component.html',
@@ -870,7 +871,7 @@ export class VerFacturaComponent implements OnInit {
           return
         }
     
-        const dialogRef = this.dialog.open(DescargarInventarioComponent, {
+        const dialogRef = this.dialog.open(ApplyDiscountComponent, {
           width: 'auto', // Ancho automático basado en el contenido
           maxWidth: '90vw', // Máximo ancho del modal al 90% del viewport width
           height: 'auto', // Altura automática basada en el contenido

@@ -22,12 +22,10 @@ export class DiscountsCreateComponent implements OnInit {
    selectSociedades: boolean = false;
    //Creación de la variable para formulario
    warehousesForm = new FormGroup({
-     tipo: new FormControl('0', Validators.required),
+     tipo: new FormControl('0'),
      codigoDescuento: new FormControl('', Validators.required),
-     Direccion: new FormControl('', [Validators.required]),
      usoMaximo: new FormControl('', [Validators.required]),
-     pto_emision: new FormControl('', [Validators.required]),
-     valorDescuento: new FormControl('', [Validators.required, Validators.minLength(9)]),
+     valorDescuento: new FormControl('', [Validators.required]),
      fecha_inicio: new FormControl('', [Validators.required]),
       fecha_fin: new FormControl('', [Validators.required]),
       tipoDescuento: new FormControl('0', Validators.required),

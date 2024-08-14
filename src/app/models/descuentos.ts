@@ -15,4 +15,5 @@ export interface DescuentosEntity {
     tipoDescuento: string;
     sociedad: string;
     estado?: string;
+    movimiento_id?: string;
 }

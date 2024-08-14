@@ -93,13 +93,7 @@ constructor(private readonly httpService: AlmacenesService,
 
     this.httpDescuentos.obtenerDescuentos(almacen).subscribe(res => {
       if (res.codigoError != "OK") {
-        Swal.fire({
-          icon: 'error',
-          title: 'Ha ocurrido un error.',
-          text: res.descripcionError,
-          showConfirmButton: false,
-        // timer: 3000
-        });
+        
       } else {
         this.lstDescuentos = res.lstDescuentos;
         console.log("Estos son los descuentos",this.lstDescuentos)
