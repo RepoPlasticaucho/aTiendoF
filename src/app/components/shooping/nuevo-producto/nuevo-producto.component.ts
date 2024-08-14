@@ -56,8 +56,8 @@ export class NuevoProductoComponent implements OnInit {
     tarifa: new FormControl('0', [Validators.required]),
     tarifaICE: new FormControl('0', [Validators.required]),
     precio: new FormControl('', [Validators.required]),
-    costo: new FormControl('', [Validators.required])
-
+    costo: new FormControl('', [Validators.required]),
+    cod_sap: new FormControl('', [Validators.required]),
   });
   //Variables para listas desplegables
   lstModeloProductos: ModeloProductosEntity[] = [];
@@ -281,7 +281,7 @@ export class NuevoProductoComponent implements OnInit {
           es_plasticaucho: '1',
           es_sincronizado: '1',
           modelo_producto_id: this.modelProductForm.value!.modeloproducto_id ?? "",
-          cod_sap: '',
+          cod_sap: this.modelProductForm.value!.cod_sap ?? "",
           impuesto_id: '',
           impuesto_nombre: '',
           tarifa_ice_iva_id: this.lstTarifas2[0].id,
@@ -319,7 +319,9 @@ export class NuevoProductoComponent implements OnInit {
               precio: this.modelProductForm.value!.precio ?? "",
               created_at: fechaFormateada,
               costo: this.modelProductForm.value!.costo ?? "",
-              updated_at: ''
+              updated_at: '',
+              cod_sap: this.modelProductForm.value!.cod_sap ?? "",
+
             }
 
             //Si el precio es menor que el costo preguntar si esta seguro de guardar
@@ -401,7 +403,8 @@ export class NuevoProductoComponent implements OnInit {
                     precio: this.modelProductForm.value!.precio ?? "",
                     created_at: fechaFormateada,
                     costo: this.modelProductForm.value!.costo ?? "",
-                    updated_at: ''
+                    updated_at: '',
+                    cod_sap: this.modelProductForm.value!.cod_sap ?? "",
                   }
                   this.httpServiceProveedoresProd.agregarProductosProv(newProdProv).subscribe(res3 => {
                     if (res3.codigoError == "OK") {
@@ -502,7 +505,7 @@ export class NuevoProductoComponent implements OnInit {
             es_plasticaucho: '1',
             es_sincronizado: '1',
             modelo_producto_id: this.modelProductForm.value!.modeloproducto_id ?? "",
-            cod_sap: '',
+            cod_sap: this.modelProductForm.value!.cod_sap ?? "",
             impuesto_id: '',
             impuesto_nombre: '',
             tarifa_ice_iva_id: this.lstTarifas2[0].id,
@@ -540,7 +543,8 @@ export class NuevoProductoComponent implements OnInit {
                 precio: this.modelProductForm.value!.precio ?? "",
                 created_at: fechaFormateada,
                 costo: this.modelProductForm.value!.costo ?? "",
-                updated_at: ''
+                updated_at: '',
+                cod_sap: this.modelProductForm.value!.cod_sap ?? "",
               }
   
               //Si el precio es menor que el costo preguntar si esta seguro de guardar
@@ -622,7 +626,8 @@ export class NuevoProductoComponent implements OnInit {
                       precio: this.modelProductForm.value!.precio ?? "",
                       created_at: fechaFormateada,
                       costo: this.modelProductForm.value!.costo ?? "",
-                      updated_at: ''
+                      updated_at: '',
+                      cod_sap: this.modelProductForm.value!.cod_sap ?? "",
                     }
                     this.httpServiceProveedoresProd.agregarProductosProv(newProdProv).subscribe(res3 => {
                       if (res3.codigoError == "OK") {
