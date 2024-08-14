@@ -156,6 +156,7 @@ import { DescargarInventarioComponent } from './components/sales/descargar-inven
 import { SugeridoAlmacenesComponent } from './components/suggested/sugerido-almacenes/sugerido-almacenes.component';
 import { DiscountsComponent } from './components/discounts-cl/discounts/discounts.component';
 import { DiscountsCreateComponent} from './components/discounts-cl/discounts-create/discounts-create.component';
+import { ApplyDiscountComponent } from './components/discounts-cl/apply-discount/apply-discount.component';
 
 
 @NgModule({
@@ -289,7 +290,8 @@ import { DiscountsCreateComponent} from './components/discounts-cl/discounts-cre
     DescargarInventarioComponent,
     SugeridoAlmacenesComponent,
     DiscountsComponent,
-    DiscountsCreateComponent
+    DiscountsCreateComponent,
+    ApplyDiscountComponent
 
   ],
   imports: [

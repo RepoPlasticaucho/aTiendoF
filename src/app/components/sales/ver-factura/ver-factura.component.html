@@ -96,7 +96,11 @@
         <div class="icon-container">
           <label for="total" class="label-input" style="font-size: 14px;">Dto NOMINAL :</label>
           <input type="text" [(ngModel)]="descuentoN" class="cool-input resultado-input custom-input"
-            [disabled]="deshabilitarIn" (input)="onInput2($event)">
+            [disabled]="deshabilitarIn" (input)="onInput2($event)"
+           
+            (click)="openModalDescuentoNominal()"
+            
+            >
         </div>
         <br><br>
         <div class="icon-container">

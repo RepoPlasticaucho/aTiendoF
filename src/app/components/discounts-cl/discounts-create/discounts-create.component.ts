@@ -75,6 +75,18 @@ export class DiscountsCreateComponent implements OnInit {
 
    onSubmit(): void {
 
+    //Controles
+    if (this.warehousesForm.invalid) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Ha ocurrido un error.',
+        text: 'Por favor, complete los campos requeridos.',
+        showConfirmButton: false,
+      });
+      return;
+    }
+
+
     //Construir el objeto
     const descuentoEntity: DescuentosEntity = {
       id: '',

@@ -63,7 +63,9 @@
                 <div class="form-group">
                     <label for="usoMaximo">Cantidad de uso maximo</label>
                     <input type="text" class="form-control" id="usoMaximo"
-                        placeholder="Ingrese el establecimiento " formControlName="usoMaximo">
+                        placeholder="Ingrese el establecimiento " formControlName="usoMaximo"
+                       (keypress)="keyPressNumbers($event)"
+                        >
                     <small
                         *ngIf="warehousesForm.controls['usoMaximo'].invalid && (warehousesForm.controls['usoMaximo'].dirty || warehousesForm.controls['usoMaximo'].touched)">
                         <small *ngIf="warehousesForm.controls['usoMaximo'].errors?.['required']"

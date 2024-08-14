@@ -23,7 +23,8 @@ import { SriwsService } from 'src/app/services/sriws.service';
 import { DataTableDirective } from 'angular-datatables';
 import { environment } from 'src/environments/environment.prod';
 import { FormasPagoServiceSociedad } from 'src/app/services/formaspagosociedad.service';
-
+import { DescargarInventarioComponent } from '../descargar-inventario/descargar-inventario.component';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-ver-factura',
   templateUrl: './ver-factura.component.html',
@@ -87,6 +88,8 @@ export class VerFacturaComponent implements OnInit {
     private readonly httpServiceTercero: TercerosService,
     private readonly httpServiceForma: FormasPagoService,
     private readonly httpServiceFormaSociedad: FormasPagoServiceSociedad,
+    private dialog: MatDialog,
+
     private router: Router) { }
 
   ngOnInit(): void {
@@ -851,5 +854,30 @@ export class VerFacturaComponent implements OnInit {
       this.esRestoCero = false;
     }
   }
+
+  openModalDescuentoNominal() {
+    //Guardar el total en el local storage
+    localStorage.setItem('totalDescargar', this.sumaTotal);
+    
+        if(this.lstDetalleMovimientos.length == 0){
+          Swal.fire({
+            icon: 'info',
+            title: 'Información',
+            text: 'No hay productos en el carrito.',
+            showConfirmButton: true,
+            // timer: 3000
+          });
+          return
+        }
+    
+        const dialogRef = this.dialog.open(DescargarInventarioComponent, {
+          width: 'auto', // Ancho automático basado en el contenido
+          maxWidth: '90vw', // Máximo ancho del modal al 90% del viewport width
+          height: 'auto', // Altura automática basada en el contenido
+          maxHeight: '80vh', // Máxima altura del modal al 80% del viewport height
+        });
+      }
+    
+    
 
 }

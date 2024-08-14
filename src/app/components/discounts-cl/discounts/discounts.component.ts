@@ -365,6 +365,16 @@ eliminarDescuento(descuento: DescuentosEntity): void {
     });
   });
 }
+
+
+//Validar que loque se ingresa al input sea numero y no letras
+validarNumero(event: any): void {
+  if (event.charCode < 48 || event.charCode > 57) {
+    event.preventDefault();
+  }
+}
+  
+
   
 }
 

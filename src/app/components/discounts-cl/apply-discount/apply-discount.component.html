@@ -1,0 +1,95 @@
+<!-- Modal -->
+<div class="modal-dialog custom-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="fas fa-shop mr-2"></i> DESCARGAR INVENTARIO</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+          (click)="closeModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="cliente" class="cool-label">Cliente:</label>
+          <input type="text" class="form-control cool-input" placeholder="Cliente" readonly [(ngModel)]="cliente">
+        </div>
+
+        <div class="form-group">
+            <label for="cliente" class="cool-label">Documento:</label>
+            <input type="text" class="form-control cool-input" placeholder="Numero de documento"  [(ngModel)]="documento"
+              maxlength="10"
+              (keypress)="onKeyPress($event)"
+              >
+            
+          </div>
+  
+        <div class="form-group mt-3">
+          <div class="d-flex align-items-center">
+            <select class="form-control small-select" (change)="changePago($event)">
+              <option value="0" selected>Seleccionar método de pago</option>
+              <option *ngFor="let formasPago of lstFormasPago" [value]="formasPago.nombre">
+                {{formasPago.nombre}}
+              </option>
+            </select>
+            <input type="text" class="form-control cool-input2 ml-2" placeholder="Monto" id="monto"
+              (keypress)="onKeyPressFloat($event)"
+            >
+            <button class="btn btn-success ml-2" [disabled]="!isBotonHabilitado"
+                (click)="abonar()"
+            >ABONAR</button>
+          </div>
+        </div>
+  
+        <div class="form-group mt-3">
+          <div class="d-flex align-items-center">
+            <label for="restante" class="cool-label mr-2">RESTANTE:</label>
+            <input type="text" class="form-control cool-input3" placeholder="Resto" readonly [(ngModel)]="resto" [ngStyle]="{'background-color': inputColor}">
+          </div>
+        </div>
+        <table datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger2" style="width: 50%; margin-left: 20px;">
+          <thead>
+            <tr>
+              <th style="width: 10%; ">FORMA DE PAGO</th>
+              <th style="width: 10%; ">FORMA DE PAGO</th>
+              <th style="width: 10%; ">VALOR</th>
+              <th style="width: 10%; "></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let detallePago of lstDetallePagos; let i = index">
+              <td>{{detallePago.id}}</td>
+              <td>{{detallePago.nombre}}</td>
+              <td>
+                <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
+                  {{detallePago.valor}}
+                </ng-container>
+                <input class="small-input" (input)="onInput($event)" *ngIf="editarDetalle && i === detalleEditIndex"
+                  type="text" [(ngModel)]="detallePago.valor">
+              </td>
+              <td style="text-align: center;">
+                <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
+                  <fa-icon [icon]="faEdit" class="btn btn-info" [size]="'lg'" style="margin-right: 5px;"
+                    data-placement="bottom" (click)="editarDetallePago(i)" title="Editar pago"></fa-icon>
+                </ng-container>
+                <ng-container *ngIf="editarDetalle && i === detalleEditIndex">
+                  <fa-icon [icon]="faCheck" class="btn btn-success" [size]="'lg'" style="margin-right: 5px;"
+                    data-placement="bottom" (click)="aplicarCambiosDetalle(i)" title="Aplicar"></fa-icon>
+                </ng-container>
+                <fa-icon [icon]="faTrashAlt" class="btn btn-danger" [size]=" 'lg' " data-placement="bottom"
+                  (click)=" eliminarDetalle(detallePago)" title="Eliminar pago"></fa-icon>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+          (click)="closeModal()"
+        >Cancelar</button>
+        <button type="button" class="btn btn-primary"
+            (click)="descargarInventario()"
+        >Confirmar</button>
+      </div>
+    </div>
+  </div>
+  
