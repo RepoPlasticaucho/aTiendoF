@@ -104,7 +104,6 @@ export class ApplyDiscountComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.actualizarColor();
     this.dtOptions = {
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
@@ -128,96 +127,7 @@ export class ApplyDiscountComponent implements OnInit {
       responsive: true
     }
 
-    //Obtener el total del localstorage
-
-    this.resto = localStorage.getItem('totalDescargar');
-    this.sumaTotal = this.resto
-    .toLocaleString(undefined, { maximumFractionDigits: 2 })
-    .replace('.', ',');
-
-    this.httpServiceForma.obtenerFormasPago().subscribe(res => {
-      if (res.codigoError == 'OK') {
-        this.lstFormasPagoAux = res.lstFormasPago;
-
-        const sociedad: SociedadesEntity = {
-          idSociedad: localStorage.getItem('sociedadid')!,
-          razon_social: '',
-          nombre_comercial: '',
-          id_fiscal: '',
-          email: '',
-          telefono: '',
-          password: '',
-          funcion: '',
-          tipo_ambienteid: '',
-          idGrupo: ''
-        }
-        this.httpServiceFormaSociedad.obtenerFormasPago(sociedad).subscribe(res => {
-          if (res.codigoError == 'OK') {
-            this.lstFormasPagoSociedad = res.lstFormasPagoSociedad;
-            //Recorrer lstFormasPagoAux y solo sacar los que tengan el mismo codigo de lstFormasPagoSociedad
-            this.lstFormasPago = this.lstFormasPagoAux.filter((item) => {
-              return this.lstFormasPagoSociedad.some((item2) => {
-                return parseInt(item.codigo) === parseInt(item2.forma_pago_id);
-              });
-            });
-
-          } else {
-            console.log('ERROR')
-          }
-        });
-
-      } else {
-        Swal.fire({
-          icon: 'info',
-          title: 'Información',
-          text: 'Ha ocurrido un error',
-          showConfirmButton: true,
-        });
-      }
-    });
-
- 
-
-
-
-    const newDetalle: DetallesMovimientoEntity = {
-      id: '',
-      producto_nombre: '',
-      inventario_id: '',
-      producto_id: '',
-      movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
-      cantidad: '',
-      costo: '',
-      precio: ''
-    }
-    const newAlmacen: AlmacenesEntity = {
-      idAlmacen: localStorage.getItem('almacenid')!,
-      sociedad_id: '',
-      nombresociedad: '',
-      direccion: '',
-      telefono: '',
-      codigo: '',
-      pto_emision: ''
-    }
-    const newTercero: TercerosEntity = {
-      almacen_id: '',
-      sociedad_id: '',
-      tipotercero_id: '',
-      tipousuario_id: '',
-      nombresociedad: '',
-      nombrealmacen: '',
-      nombretercero: '',
-      tipousuario: '',
-      nombre: '',
-      id_fiscal: localStorage.getItem('idfiscalCl')!,
-      direccion: '',
-      telefono: '',
-      correo: '',
-      fecha_nac: '',
-      ciudad: '',
-      provincia: '',
-      ciudadid: ''
-    }
+    //Crear movimiento con el id del movimiento
     const newMovimiento: MovimientosEntity = {
       id: localStorage.getItem('movimiento_id')!,
       tipo_id: '',
@@ -228,93 +138,44 @@ export class ApplyDiscountComponent implements OnInit {
       cod_doc: '',
       secuencial: ''
     }
-    Swal.fire({
-      title: 'CARGANDO...',
-      html: 'Se está cargando el detalle.',
-      timer: 30000,
-      // didOpen: () => {
-      //   Swal.showLoading();
-      //   this.httpServiceTercero.obtenerTerceroCedula(newTercero).subscribe(res1 => {
-      //     console.log("ACA RES1"+res1.lstTerceros)
-      //     if (res1.codigoError != "OK") {
-      //       this.cliente = "Consumidor Final";
-      //       this.telefono = "999999999";
-      //       this.email = "99999999";
 
-      //     } else {
-      //       this.numFactura = localStorage.getItem('movimiento_id')!;
-      //       this.cliente = res1.lstTerceros[0].nombre;
-      //       this.telefono = res1.lstTerceros[0].telefono;
-      //       this.email = res1.lstTerceros[0].correo;
-      //       this.idFiscalCliente = res1.lstTerceros[0].id_fiscal;
-      //     }
-      //   });
-      //   this.httpServiceAlmacen.obtenerAlmacenID(newAlmacen).subscribe(res1 => {
-      //     if (res1.codigoError != "OK") {
 
-      //     } else {
-      //       this.nombreSoc = res1.lstAlmacenes[0].nombresociedad!;
-      //       this.idFiscalSoc = res1.lstAlmacenes[0].idfiscal_sociedad!;
-      //       this.direccionAlm = res1.lstAlmacenes[0].direccion!;
-      //       this.telefonoAlm = res1.lstAlmacenes[0].telefono!;
-      //     }
-      //   });
-      //   this.httpServiceMovimiento.obtenerMovimientoID(newMovimiento).subscribe(res2 => {
-      //     if (res2.codigoError != "OK") {
+    this, this.httpServiceDescuento.obtenerDescuentosAplicados(newMovimiento).subscribe(res => {
+      if (res.codigoError != "OK") {
+        Swal.fire({
+          icon: 'error',
+          title: 'Ha ocurrido un error.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
 
-      //     } else {
-      //       this.fechaEmision = res2.lstMovimientos[0].fecha_emision!;
-      //     }
-      //   });
-      //   this, this.httpServiceDetallePago.obtenerDetallePagoMov(newMovimiento).subscribe(res => {
-      //     if (res.codigoError != "OK") {
-      //       this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe(res1 => {
-      //         if (res1.codigoError != "OK") {
-      //           Swal.fire({
-      //             icon: 'error',
-      //             title: 'No existe nada en el carrito.',
-      //             text: res.descripcionError,
-      //             showConfirmButton: false,
-      //             // timer: 3000
-      //           });
-      //         } else {
-      //           this.lstDetalleMovimientos = res1.lstDetalleMovimientos;
-      //           this.dtTrigger.next('');
-      //           Swal.close();
-      //         }
-      //       });
-      //     } else {
-      //       this.lstDetallePagos = res.lstDetallePagos;
-      //       this.dtTrigger2.next('');
-      //       console.log(this.lstDetalleMovimientos)
-      //       this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe(res1 => {
-      //         console.log(res1)
-              
-      //         if (res1.codigoError != "OK") {
-      //           Swal.fire({
-      //             icon: 'error',
-      //             title: 'No existe nada en el carrito.',
-      //             text: res.descripcionError,
-      //             showConfirmButton: false,
-      //             // timer: 3000
-      //           });
-      //         } else {
-      //           this.lstDetalleMovimientos = res1.lstDetalleMovimientos;
-      //           this.dtTrigger.next('');
-      //           Swal.close();
-      //         }
-      //       });
-      //     }
-      //   })
-        
-      // },
-      
-    }).then((result) => {
-      /* Read more about handling dismissals below */
-      if (result.dismiss === Swal.DismissReason.timer) {
-        console.log('I was closed by the timer');
+        console.log('ERROR AL OBTENER DESCUENTOS APLICADOS')
+      } else {
+        this.lstDescuentos = res.lstDescuentos;
+
+        //Insertar en el input todos los que tengan en tipo 1 que es monto y sumar el total
+        this.lstDescuentos.forEach((descuento) => {
+          if (descuento.tipoDescuento == '1') {
+            this.descuentoN += parseFloat(descuento.valorDescuento);
+          } else {
+            this.descuentoP += parseFloat(descuento.valorDescuento);
+          }
+        });
+
+        console.log("ACA LSITAAAA===================="+this.lstDescuentos)
+
+        this.datatableElement.dtInstance.then((dtInstance2: DataTables.Api) => {
+          // Destruye la tabla existente y elimina los datos
+          dtInstance2.destroy();
+
+          // Renderiza la tabla con los nuevos datos
+          this.dtTrigger2.next('');
+
+          // Opcional: Reinicia la página a la primera página
+          dtInstance2.page('first').draw('page');
+        });
       }
-    });
+    })
 
   }
 
@@ -420,6 +281,9 @@ export class ApplyDiscountComponent implements OnInit {
   
             } else {
               this.lstDescuentos = res.lstDescuentos;
+
+              this.httpServiceDescuento.updateDescuentos(res.lstDescuentos);
+
               this.datatableElement.dtInstance.then((dtInstance2: DataTables.Api) => {
                 // Destruye la tabla existente y elimina los datos
                 dtInstance2.destroy();

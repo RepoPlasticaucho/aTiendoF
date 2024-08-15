@@ -46,11 +46,25 @@
                     <td>{{proveedorProducto.unidad_medida}}</td>
                     <td>{{proveedorProducto.descripcion_uni}}</td>
                     <!-- <td>{{proveedorProducto.costo}}</td> -->
-                    <td>
-                        <input class="cool-input" (input)="onInput($event)" 
+                    <td
+                    *ngIf="proveedorProducto.tieneCostoCalculado"
+
+                    >
+                        <input class="cool-input" (input)="onInputComa($event)" 
+                    
+                        type="text" [(ngModel)]="proveedorProducto.costoCalculado" value="proveedorProducto.costoCalculado"/>
+                    </td>
+                    <td
+                    *ngIf="!proveedorProducto.tieneCostoCalculado"
+
+                    >
+                        <input class="cool-input" (input)="onInputComa($event)" 
                     
                         type="text" [(ngModel)]="proveedorProducto.costo" value="proveedorProducto.costo"/>
                     </td>
+
+
+
                     <td>
                         <input class="cool-input" (input)="onInput($event)" (keyup.enter)="anadirTodosProductos()" 
                             type="text" [(ngModel)]="proveedorProducto.cantidad" />

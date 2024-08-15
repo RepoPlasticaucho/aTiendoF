@@ -1078,36 +1078,61 @@ export class CompraNuevoComponent implements OnInit {
 
             } else {
 
+
+              this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res10 => {
+                
+                const newDetalle4: DetallesMovimientoEntity = {
+                  id: '',
+                  producto_nombre: '',
+                  inventario_id: res10.lstInventarios[0].id,
+                  producto_id: res.producto_id,
+                  movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
+                  cantidad: proveedorProducto.cantidad!,
+                  costo: proveedorProducto.costoCalculado! || proveedorProducto.costo!,
+                  precio: (parseFloat(proveedorProducto.costo!) * parseFloat(proveedorProducto.cantidad!)).toString(),
+                  url_image: localStorage.getItem('almacenid')!
+                }
+                
+                if (proveedorProducto.cantidad! != '0' && proveedorProducto.productoExistente) {
+
+                  console.log("Entro al erroracaaaa")
+  
+                  // //Solo modificamos el detalle que cambio la cantidad
+  
+                  newDetalle4.precio = (parseFloat(newDetalle.cantidad!) * parseFloat(proveedorProducto.costoCalculado! || newDetalle.costo)).toString();
+                  newDetalle4.cantidad = proveedorProducto.cantidad!
+  
+  
+                  console.log("newDetalle", newDetalle)
+                  console.log("Aca antes de modificar")
+  
+                  this.httpServiceDetalle.modificarDetallePedidoVentaCosto(newDetalle4).subscribe(res => {
+                    console.log(res.codigoError)
+                    if (res.codigoError == 'OK') {
+  
+                      this.cerrarDialog();
+  
+                      this.productoAgregado.emit(proveedorProducto);
+  
+                    } else {
+  
+                    }
+                  });
+                } else {
+                  this.httpServiceDetalle.eliminarDetallePedidoVenta(newDetalle4).subscribe(res => {
+                    console.log("en este metodo" + res)
+  
+                    this.cerrarDialog();
+  
+                  });
+                } 
+                
+              
+              })
+
               console.log("Entro al error")
 
-              if (proveedorProducto.cantidad! != '0' && proveedorProducto.productoExistente) {
 
-                console.log("Entro al error")
-                // //Solo modificamos el detalle que cambio la cantidad
-
-                newDetalle.precio = (parseFloat(newDetalle.cantidad!) * parseFloat(newDetalle.costo!)).toString();
-
-
-                this.httpServiceDetalle.modificarDetallePedidoVenta(newDetalle).subscribe(res => {
-                  console.log(res.codigoError)
-                  if (res.codigoError == 'OK') {
-
-                    this.cerrarDialog();
-
-                    this.productoAgregado.emit(proveedorProducto);
-
-                  } else {
-
-                  }
-                });
-              } else {
-                this.httpServiceDetalle.eliminarDetallePedidoVenta(newDetalle).subscribe(res => {
-                  console.log("en este metodo" + res)
-
-                  this.cerrarDialog();
-
-                });
-              }
             }
           }
         });
@@ -1338,6 +1363,13 @@ export class CompraNuevoComponent implements OnInit {
     const inputValue = event.target.value;
     event.target.value = inputValue.replace(/[^0-9]/g, ''); // Filtra solo números
   }
+
+  onInputComa(event: any) {
+    const inputValue = event.target.value;
+    // Filtra todo lo que no sea un número o una coma
+    event.target.value = inputValue.replace(/[^0-9.]/g, '');
+  }
+  
 
   nuevoProducto() {
     const dialogRef = this.dialog.open(NuevoProductoComponent, {

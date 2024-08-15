@@ -58,14 +58,17 @@
                             <span *ngIf="almacen.estado!.toString() == '1'">Activo</span>
                             <span *ngIf="almacen.estado!.toString() == '0'">Inactivo</span>
 
-                            <td style="display: flex; gap: 5px;">
+                            <td >
                                 <!-- Boton Eliminar -->
-                                <span>
+                                <span
+                                >
                                     <a class="btn button ver-icon" style="border-radius: 5px; 
                                            background: rgba(209, 53, 53, 0.8); 
                                            font-size: 15px; width:120px; 
                                            height:35px; text-align:center; 
-                                           margin-top: 10px;"
+                                           margin-top: 10px;
+                                           
+                                           "
                                        (click)="eliminarDescuento(almacen)">
                                         <fa-icon [icon]="faTrashAlt" style="color: white;"></fa-icon>
                                     </a>

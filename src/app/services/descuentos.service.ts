@@ -14,7 +14,20 @@ export class DescuentosService {
 
     constructor(private readonly http: HttpClient) { }
 
-
+    private descuentosSubject = new BehaviorSubject<DescuentosEntity[]>([]);
+  
+    // Observable para que otros componentes puedan suscribirse
+    descuentos$ = this.descuentosSubject.asObservable();
+  
+    // Método para actualizar los descuentos
+    updateDescuentos(descuentos: DescuentosEntity[]) {
+      this.descuentosSubject.next(descuentos);
+    }
+  
+    // Método para obtener los descuentos actuales (opcional)
+    getDescuentos(): DescuentosEntity[] {
+      return this.descuentosSubject.getValue();
+    }
     agregarDescuento(descuento: DescuentosEntity): Observable<Descuentos> {
         return this.http.post<Descuentos>(`${environment.apiUrl}descuentos/InsertarDescuento`, descuento);
     }
@@ -39,7 +52,7 @@ export class DescuentosService {
     }
 
     obtenerDescuentosAplicados(movimiento: MovimientosEntity): Observable<Descuentos> {
-        return this.http.post<Descuentos>(`${environment.apiUrl}descuentos/ObtenerDescuentosAplicados`, movimiento.id);
+        return this.http.post<Descuentos>(`${environment.apiUrl}descuentos/ObtenerDescuentosAplicados`, movimiento);
     }
     
 

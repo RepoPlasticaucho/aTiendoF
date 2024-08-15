@@ -112,6 +112,9 @@ export class DetallesmovimientoService {
   modificarDetallePedidoVenta(detalle: DetallesMovimientoEntity): Observable<DetallesMovimiento> {
     return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ModificarDetallePedidoVenta`, detalle);
   }
+  modificarDetallePedidoVentaCosto(detalle: DetallesMovimientoEntity): Observable<DetallesMovimiento> {
+    return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ModificarDetallePedidoVentaCosto`, detalle);
+  }
 
   modificarDetalleCompra(detalle: DetallesMovimientoEntity): Observable<DetallesMovimiento> {
     return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ModificarDetalleCompra`, detalle);

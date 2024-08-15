@@ -26,6 +26,8 @@ import { FormasPagoServiceSociedad } from 'src/app/services/formaspagosociedad.s
 import { DescargarInventarioComponent } from '../descargar-inventario/descargar-inventario.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ApplyDiscountComponent } from '../../discounts-cl/apply-discount/apply-discount.component';
+import { DescuentosService } from 'src/app/services/descuentos.service';
+import { DescuentosEntity } from 'src/app/models/descuentos';
 @Component({
   selector: 'app-ver-factura',
   templateUrl: './ver-factura.component.html',
@@ -89,11 +91,16 @@ export class VerFacturaComponent implements OnInit {
     private readonly httpServiceTercero: TercerosService,
     private readonly httpServiceForma: FormasPagoService,
     private readonly httpServiceFormaSociedad: FormasPagoServiceSociedad,
+    private readonly httpServiceDescuento: DescuentosService,
     private dialog: MatDialog,
 
     private router: Router) { }
 
   ngOnInit(): void {
+    
+    this.httpServiceDescuento.descuentos$.subscribe(descuentos => {
+      this.handleDescuentosAplicados(descuentos);
+    });
     this.dtOptions = {
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
@@ -877,8 +884,22 @@ export class VerFacturaComponent implements OnInit {
           height: 'auto', // Altura automática basada en el contenido
           maxHeight: '80vh', // Máxima altura del modal al 80% del viewport height
         });
+
+        dialogRef.afterClosed().subscribe(result => {
+          const descuentos = this.httpServiceDescuento.descuentos$; // Obtén los descuentos desde el servicio
+          console.log('Descuentos después de cerrar el modal:', descuentos);
+        })
       }
     
+
+      handleDescuentosAplicados(descuentos: DescuentosEntity[]) {
+        this.descuentoN = descuentos.reduce((total, descuento) => total + parseFloat(descuento.valorDescuento), 0);
+        this.descuentoP = descuentos.reduce((total, descuento) => total + parseFloat(descuento.valorDescuento), 0);
+
+        console.log('Descuentos aplicados:', descuentos);
+        // Actualiza los datos según los descuentos aplicados
+        // Por ejemplo, puedes calcular el total con los descuentos aplicados aquí
+      }
     
 
 }
