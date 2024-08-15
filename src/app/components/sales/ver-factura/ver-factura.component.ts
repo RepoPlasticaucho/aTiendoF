@@ -148,7 +148,6 @@ export class VerFacturaComponent implements OnInit {
                 return parseInt(item.codigo) === parseInt(item2.forma_pago_id);
               });
             });
-
           } else {
             console.log('ERROR')
           }
@@ -893,9 +892,15 @@ export class VerFacturaComponent implements OnInit {
     
 
       handleDescuentosAplicados(descuentos: DescuentosEntity[]) {
-        this.descuentoN = descuentos.reduce((total, descuento) => total + parseFloat(descuento.valorDescuento), 0);
-        this.descuentoP = descuentos.reduce((total, descuento) => total + parseFloat(descuento.valorDescuento), 0);
+        const descuentosTipo1 = descuentos.filter(descuento => descuento.tipoDescuento === "2");
 
+        // Suma los valores de los descuentos filtrados
+        this.descuentoN = descuentosTipo1.reduce((total, descuento) => total + parseFloat(descuento.valorDescuento), 0);
+
+        const descuentosTipo2 = descuentos.filter(descuento => descuento.tipoDescuento === "1");
+        this.descuentoP = descuentosTipo2.reduce((total, descuento) => total + parseFloat(descuento.valorDescuento), 0);
+
+        
         console.log('Descuentos aplicados:', descuentos);
         // Actualiza los datos según los descuentos aplicados
         // Por ejemplo, puedes calcular el total con los descuentos aplicados aquí
