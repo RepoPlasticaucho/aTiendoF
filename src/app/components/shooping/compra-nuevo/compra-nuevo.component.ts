@@ -1022,7 +1022,7 @@ export class CompraNuevoComponent implements OnInit {
                     producto_id: res.producto_id,
                     movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
                     cantidad: proveedorProducto.cantidad!,
-                    costo: proveedorProducto.costo!,
+                    costo: proveedorProducto.costoCalculado! || proveedorProducto.costo!,
                     precio: (parseFloat(proveedorProducto.costo!) * parseFloat(proveedorProducto.cantidad!)).toString(),
                     url_image: localStorage.getItem('almacenid')!
                   }

@@ -8,7 +8,6 @@
       </button>
     </div>
     <div class="modal-body">
-
       <div class="form-group" style="display: flex; justify-content: space-between; align-items: center;">
 
         <label for="cliente" class="cool-label">Codigo de Descuento:</label>
@@ -32,16 +31,14 @@
             <td>
               <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
                 <!-- Si tipoDescuento es 1 entonces Porcentaje o 2 Monto -->
-                 {{detallePago.tipoDescuento == "1" ? 'Porcentaje' : 'Monto'}}
+                {{detallePago.tipoDescuento == "1" ? 'Porcentaje' : 'Monto'}}
               </ng-container>
             </td>
             <td>
               <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
                 {{detallePago.valorDescuento}}
               </ng-container>
-           
             </td>
-          
           </tr>
         </tbody>
       </table>

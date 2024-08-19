@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DetallesMovimientoEntity } from 'src/app/models/detallesmovimiento';
 import { DetallesmovimientoService } from 'src/app/services/detallesmovimiento.service';
@@ -24,7 +24,7 @@ import { SriwsService } from 'src/app/services/sriws.service';
 import { DataTableDirective } from 'angular-datatables';
 import { environment } from 'src/environments/environment.prod';
 import { FormasPagoServiceSociedad } from 'src/app/services/formaspagosociedad.service';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { parse } from 'path';
 import { DetalleImpuestosService } from 'src/app/services/detalle-impuestos.service';
 import { MenuventComponent } from '../../all_components';
@@ -99,6 +99,7 @@ export class ApplyDiscountComponent implements OnInit {
     private readonly httpServiceFormaSociedad: FormasPagoServiceSociedad,
     private readonly httpServiceDet: DetalleImpuestosService,
     private readonly httpServiceDescuento: DescuentosService,
+    @Inject(MAT_DIALOG_DATA) public data: any, // Aquí se inyectan los datos
 
     private router: Router) { }
 
@@ -152,7 +153,7 @@ export class ApplyDiscountComponent implements OnInit {
         console.log('ERROR AL OBTENER DESCUENTOS APLICADOS')
       } else {
         this.lstDescuentos = res.lstDescuentos;
-
+        
         //Insertar en el input todos los que tengan en tipo 1 que es monto y sumar el total
         this.lstDescuentos.forEach((descuento) => {
           if (descuento.tipoDescuento == '1') {
@@ -235,9 +236,6 @@ export class ApplyDiscountComponent implements OnInit {
 
   
   abonar() {
-
-
-
     
     if (this.documento !== 'd') {
       //Imprimir lo que esta dentro del if}
@@ -280,8 +278,77 @@ export class ApplyDiscountComponent implements OnInit {
             if (res.codigoError != "OK") {
   
             } else {
+  
+
+              //sI es mayor que la data.total entonces no se puede abonar y se elimina
+
+              //Calcular el total de descuentos y ver si es mayot que la data.total
+
+              let totalDescuentos = 0;
+
+              res.lstDescuentos.forEach((descuento) => {
+                if (descuento.tipoDescuento == '2') {
+                  totalDescuentos += parseFloat(descuento.valorDescuento);
+                }
+              });
+
+
               this.lstDescuentos = res.lstDescuentos;
 
+              console.log('TOTAL DESCUENTOS ===???????: ' + totalDescuentos);
+
+              //Verificar si es mayor que el total
+
+              if (totalDescuentos > parseFloat(this.data.total)) {
+                Swal.fire({
+                  icon: 'warning',
+                  title: 'Ha ocurrido un error.',
+                  text: 'El descuento excede el total',
+                  showConfirmButton: false,
+                });
+
+                //Eliminar el descuento
+                this.httpServiceDescuento.eliminarDescuento(descuentoDetalle).subscribe(res => {
+                  if (res.codigoError == 'OK') {
+                    console.log('Eliminado')
+                  } else {
+                    console.log('ERROR')
+                  }
+                });
+
+
+                //ELIMINAR EL VALOR DEL INPUT
+                this.documento = '';
+
+
+                //Actualizar la tabla
+                
+
+
+                this.httpServiceDescuento.updateDescuentos(res.lstDescuentos);
+
+                this.datatableElement.dtInstance.then((dtInstance2: DataTables.Api) => {
+                  // Destruye la tabla existente y elimina los datos
+                  dtInstance2.destroy();
+      
+                  // Renderiza la tabla con los nuevos datos
+                  this.dtTrigger2.next('');
+      
+                  // Opcional: Reinicia la página a la primera página
+                  dtInstance2.page('first').draw('page');
+                });
+
+
+                //Recargar
+                window.location.reload();
+
+                return;
+              }
+
+              this.lstDescuentos = res.lstDescuentos;
+
+              //Calcular el total de descuentos
+            
               this.httpServiceDescuento.updateDescuentos(res.lstDescuentos);
 
               this.datatableElement.dtInstance.then((dtInstance2: DataTables.Api) => {
@@ -293,6 +360,9 @@ export class ApplyDiscountComponent implements OnInit {
     
                 // Opcional: Reinicia la página a la primera página
                 dtInstance2.page('first').draw('page');
+
+                window.location.reload();
+
               });
             }
           })

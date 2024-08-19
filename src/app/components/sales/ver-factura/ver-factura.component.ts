@@ -163,10 +163,6 @@ export class VerFacturaComponent implements OnInit {
       }
     });
 
- 
-
-
-
     const newDetalle: DetallesMovimientoEntity = {
       id: '',
       producto_nombre: '',
@@ -306,6 +302,20 @@ export class VerFacturaComponent implements OnInit {
         console.log('I was closed by the timer');
       }
     });
+
+    //Obtener los desuentos aplicados
+    this.httpServiceDescuento.obtenerDescuentosAplicados(newMovimiento).subscribe(res => {
+      if (res.codigoError == 'OK') {
+        //Asignar los descuentos a los inputs
+        this.httpServiceDescuento.updateDescuentos(res.lstDescuentos);
+
+        //Calcular el total de la factura
+        this.calcularSumaTotal();
+
+      }
+    });
+    
+
 
   }
 
@@ -882,6 +892,9 @@ export class VerFacturaComponent implements OnInit {
           maxWidth: '90vw', // Máximo ancho del modal al 90% del viewport width
           height: 'auto', // Altura automática basada en el contenido
           maxHeight: '80vh', // Máxima altura del modal al 80% del viewport height
+          data: { /* Aquí pasas los datos que quieres enviar */ 
+            total: this.totalF
+          }
         });
 
         dialogRef.afterClosed().subscribe(result => {
