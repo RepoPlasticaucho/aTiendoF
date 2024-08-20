@@ -288,7 +288,7 @@ eliminarDescuento(descuento: DescuentosEntity): void {
     }
   });
 
-  this.httpDescuentos.eliminarDescuento(descuento).subscribe(res => {
+  this.httpDescuentos.eliminarDescuentoID(descuento).subscribe(res => {
     if (res.codigoError == "OK") {
       Swal.fire({
         icon: 'success',

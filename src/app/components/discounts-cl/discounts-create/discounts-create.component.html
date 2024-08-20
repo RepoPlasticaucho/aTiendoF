@@ -45,20 +45,25 @@
                     </small>
                 </div>
                 
-                <div class="form-group ">
-                    <label for="valorDescuento ">Valor</label>
-                    <input type="text " class="form-control " id="valorDescuento "
-                        placeholder="Ingrese el número de teléfono "
-                        oninput="javascript: if (this.value.length> this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                        maxlength="10" formControlName="valorDescuento" (keypress)="keyPressNumbers($event)">
-                    <small
+                <div class="form-group">
+                    <label for="valorDescuento">Valor</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="valorDescuento" 
+                        placeholder="Ingrese el valor" 
+                        formControlName="valorDescuento"
+                        (input)="onInput($event)" 
+                        (keypress)="keyPressNumbers($event)">
+                    <small 
                         *ngIf="warehousesForm.controls['valorDescuento'].invalid && (warehousesForm.controls['valorDescuento'].dirty || warehousesForm.controls['valorDescuento'].touched)">
                         <small *ngIf="warehousesForm.controls['valorDescuento'].errors?.['required']" style="color: red;">
                             Debe ingresar el valor.
                         </small>
-                     
                     </small>
                 </div>
+                
+                
 
                 <div class="form-group">
                     <label for="usoMaximo">Cantidad de uso maximo</label>

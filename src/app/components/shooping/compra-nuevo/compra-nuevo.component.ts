@@ -850,33 +850,54 @@ export class CompraNuevoComponent implements OnInit {
               }
             });
           } else if (res1.codigoError == 'OK') {
+
+            
             //Promedio de los costos de la res1}
             console.log("=====]]Entro al OK")
 
             const sumatoriaCostos = res1.lstInventarios.reduce((acc, inv) => {
               return acc + parseFloat(inv.costo!);
             }, 0);
+
+            console.log("=====]]SUMATORIA COSTOS", sumatoriaCostos)
+
             const costoActual = sumatoriaCostos / res1.lstInventarios.length;
             // console.log("=====]]COSTO ACTUAL", costoActual)
+
+            console.log("=====]]COSTO ACTUAL", costoActual)
 
             //Sumatoria de todo el stock
             const existenciaActual = res1.lstInventarios.reduce((acc, inv) => {
               return acc + parseFloat(inv.stock!);
             }, 0);
+
+            console.log("=====]]STOCK ACTUAL", existenciaActual)
             // console.log("=====]]STOCK ACTUAL", existenciaActual)
 
 
             const oper1 = costoActual * existenciaActual;
 
+            console.log("=====]]ProveedorProducto.cantidad", proveedorProducto.cantidad)
+
             // console.log("=====]]ProveedorProducto.cantidad", proveedorProducto.cantidad)
             // console.log("=====]]ProveedorProducto.costo", proveedorProducto.costo)
             const oper2 = parseFloat(proveedorProducto.cantidad!) * parseFloat(proveedorProducto.costo!);
+
+            console.log("=====]]OPER1", oper1)
+
+            console.log("=====]]OPER2", oper2)
+
             // console.log("=====]]OPER1", oper1)
             // console.log("=====]]OPER2", oper2)
             // console.log("=====]]Denominador", existenciaActual + parseFloat(proveedorProducto.cantidad!) )
             // console.log("=====]]ExistenciaActual", existenciaActual)
             // console.log("=====]]ProveedorProducto.cantidad", proveedorProducto.cantidad)
             const nuevoCosto = (oper1 + oper2) / (existenciaActual + parseFloat(proveedorProducto.cantidad!));
+
+            console.log("=====]]NUEVO COSTO", nuevoCosto)
+
+
+
             // console.log("=====]]NUEVO COSTO", nuevoCosto)
 
             //Actualizar el costo de todos los inventarios
@@ -926,6 +947,8 @@ export class CompraNuevoComponent implements OnInit {
               precio: (parseFloat(proveedorProducto.costo!) * parseFloat(proveedorProducto.cantidad!)).toString(),
               url_image: localStorage.getItem('almacenid')!
             }
+
+            
 
             if (!proveedorProducto.productoExistente) {
               if (proveedorProducto.cantidad == "0") {

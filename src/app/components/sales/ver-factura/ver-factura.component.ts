@@ -913,6 +913,8 @@ export class VerFacturaComponent implements OnInit {
         const descuentosTipo2 = descuentos.filter(descuento => descuento.tipoDescuento === "1");
         this.descuentoP = descuentosTipo2.reduce((total, descuento) => total + parseFloat(descuento.valorDescuento), 0);
 
+        //Calcular el total
+        this.calcularSumaTotal();
         
         console.log('Descuentos aplicados:', descuentos);
         // Actualiza los datos según los descuentos aplicados

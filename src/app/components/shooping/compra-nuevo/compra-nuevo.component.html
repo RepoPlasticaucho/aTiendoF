@@ -8,14 +8,11 @@
     </div>
     <br>
     <div class="d-flex justify-content-end">
-        <button class="btn button boton-adicional" (click)="nuevoProducto()"
-            style="margin-right: 10px; height: 40px;"
-        >
+        <button class="btn button boton-adicional" (click)="nuevoProducto()" style="margin-right: 10px; height: 40px;">
             <fa-icon [icon]="faFolderPlus" [size]="'lg'" style="color: #ffffff; margin-right: 10px;"></fa-icon>
             NUEVO PRODUCTO
         </button>
-        <button class="btn btn-success" (click)="anadirTodosProductos()"
-        style="height: 40px;">
+        <button class="btn btn-success" (click)="anadirTodosProductos()" style="height: 40px;">
             <fa-icon [icon]="faShoppingCart" [size]="'lg'" style="color: #ffffff; margin-right: 10px;"></fa-icon>
             TERMINAR COMPRA
         </button>
@@ -34,7 +31,7 @@
                     <th style="width: 10%;">TARIFA</th>
                     <th style="width: 10%;">COSTO</th>
                     <th style="width: 10%;">CANTIDAD</th>
-                    <th style="width: 10%;">COSTO CALCULADO</th>
+                    <!-- <th style="width: 10%;">COSTO CALCULADO</th> -->
                 </tr>
             </thead>
             <tbody style="color: #767695;">
@@ -46,47 +43,31 @@
                     <td>{{proveedorProducto.unidad_medida}}</td>
                     <td>{{proveedorProducto.descripcion_uni}}</td>
                     <!-- <td>{{proveedorProducto.costo}}</td> -->
-                    <td
-                    *ngIf="proveedorProducto.tieneCostoCalculado"
-
-                    >
-                        <input class="cool-input" (input)="onInputComa($event)" 
-                    
-                        type="text" [(ngModel)]="proveedorProducto.costoCalculado" value="proveedorProducto.costoCalculado"/>
+                    <td *ngIf="proveedorProducto.tieneCostoCalculado">
+                        <input class="cool-input" (input)="onInputComa($event)" type="text"
+                            [(ngModel)]="proveedorProducto.costoCalculado" value="proveedorProducto.costoCalculado" />
                     </td>
-                    <td
-                    *ngIf="!proveedorProducto.tieneCostoCalculado"
-
-                    >
-                        <input class="cool-input" (input)="onInputComa($event)" 
-                    
-                        type="text" [(ngModel)]="proveedorProducto.costo" value="proveedorProducto.costo"/>
+                    <td *ngIf="!proveedorProducto.tieneCostoCalculado">
+                        <input class="cool-input" (input)="onInputComa($event)" type="text"
+                            [(ngModel)]="proveedorProducto.costo" value="proveedorProducto.costo" />
                     </td>
 
 
 
                     <td>
-                        <input class="cool-input" (input)="onInput($event)" (keyup.enter)="anadirTodosProductos()" 
+                        <input class="cool-input" (input)="onInput($event)" (keyup.enter)="anadirTodosProductos()"
                             type="text" [(ngModel)]="proveedorProducto.cantidad" />
                     </td>
-                    <td
-                    *ngIf="proveedorProducto.tieneCostoCalculado"
-              
-                    >
-                    <span
-                    [ngClass]="{
+                    <!-- <td *ngIf="proveedorProducto.tieneCostoCalculado">
+                        <span [ngClass]="{
                         'cool-input': !proveedorProducto.tieneCostoCalculado,
                         'cool-input-readonly': proveedorProducto.tieneCostoCalculado
-                      }"
-                    >
-                        {{proveedorProducto.costoCalculado}}
-                    </span>
-                </td>
+                      }">
+                            {{proveedorProducto.costoCalculado}}
+                        </span>
+                    </td>
 
-                    <td
-                    *ngIf="!proveedorProducto.tieneCostoCalculado"
-
-                    >{{proveedorProducto.costo}}</td>
+                    <td *ngIf="!proveedorProducto.tieneCostoCalculado">{{proveedorProducto.costo}}</td> -->
                 </tr>
             </tbody>
         </table>

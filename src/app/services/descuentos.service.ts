@@ -47,6 +47,10 @@ export class DescuentosService {
         return this.http.post<Descuentos>(`${environment.apiUrl}descuentos/EliminarDescuento`, descuento);
     }
 
+    eliminarDescuentoID(descuento: DescuentosEntity): Observable<Descuentos> {
+        return this.http.post<Descuentos>(`${environment.apiUrl}descuentos/EliminarDescuentoID`, descuento);
+    }
+
     aplicarDescuento(descuento: DescuentosEntity): Observable<Descuentos> {
         return this.http.post<Descuentos>(`${environment.apiUrl}descuentos/AplicarDescuento`, descuento);
     }

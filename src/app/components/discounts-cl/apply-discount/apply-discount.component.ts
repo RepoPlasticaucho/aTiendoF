@@ -143,13 +143,6 @@ export class ApplyDiscountComponent implements OnInit {
 
     this, this.httpServiceDescuento.obtenerDescuentosAplicados(newMovimiento).subscribe(res => {
       if (res.codigoError != "OK") {
-        Swal.fire({
-          icon: 'error',
-          title: 'Ha ocurrido un error.',
-          text: res.descripcionError,
-          showConfirmButton: false,
-        });
-
         console.log('ERROR AL OBTENER DESCUENTOS APLICADOS')
       } else {
         this.lstDescuentos = res.lstDescuentos;
@@ -311,6 +304,8 @@ export class ApplyDiscountComponent implements OnInit {
                 this.httpServiceDescuento.eliminarDescuento(descuentoDetalle).subscribe(res => {
                   if (res.codigoError == 'OK') {
                     console.log('Eliminado')
+                    window.location.reload();
+
                   } else {
                     console.log('ERROR')
                   }
@@ -368,6 +363,12 @@ export class ApplyDiscountComponent implements OnInit {
           })
           
         } else {
+          Swal.fire({
+            icon: 'warning',
+            title: 'El descuento esta inactivo o ya no se puede aplicar',
+            text: res.descripcionError,
+            showConfirmButton: false,
+          });
           console.log('ERROR')
         }
       });
