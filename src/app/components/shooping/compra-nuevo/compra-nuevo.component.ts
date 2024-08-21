@@ -738,6 +738,8 @@ export class CompraNuevoComponent implements OnInit {
         this.costo = res.costo;
         this.costo2 = res.costo;
         this.precio = parseFloat(res.costo!) * parseFloat(proveedorProducto.cantidad!);
+      
+
 
         const newInventario: InventariosEntity = {
           categoria_id: '',
@@ -881,7 +883,7 @@ export class CompraNuevoComponent implements OnInit {
 
             // console.log("=====]]ProveedorProducto.cantidad", proveedorProducto.cantidad)
             // console.log("=====]]ProveedorProducto.costo", proveedorProducto.costo)
-            const oper2 = parseFloat(proveedorProducto.cantidad!) * parseFloat(proveedorProducto.costo!);
+            const oper2 = (existenciaActual + parseFloat(proveedorProducto.cantidad!)) * parseFloat(proveedorProducto.costoCalculado!);
 
             console.log("=====]]OPER1", oper1)
 
@@ -892,7 +894,14 @@ export class CompraNuevoComponent implements OnInit {
             // console.log("=====]]Denominador", existenciaActual + parseFloat(proveedorProducto.cantidad!) )
             // console.log("=====]]ExistenciaActual", existenciaActual)
             // console.log("=====]]ProveedorProducto.cantidad", proveedorProducto.cantidad)
-            const nuevoCosto = (oper1 + oper2) / (existenciaActual + parseFloat(proveedorProducto.cantidad!));
+
+            const operDenominador = existenciaActual + (existenciaActual + parseFloat(proveedorProducto.cantidad!));
+            console.log("=====]]Denominador", operDenominador)
+            console.log("=====]]DenominadorExistencia", existenciaActual)
+            console.log("=====]]DenominadorCantidad", parseFloat(proveedorProducto.cantidad!))
+
+
+            const nuevoCosto = ((oper1 + oper2) / operDenominador);
 
             console.log("=====]]NUEVO COSTO", nuevoCosto)
 
@@ -943,8 +952,8 @@ export class CompraNuevoComponent implements OnInit {
               producto_id: res.producto_id,
               movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
               cantidad: proveedorProducto.cantidad!,
-              costo: proveedorProducto.costo!,
-              precio: (parseFloat(proveedorProducto.costo!) * parseFloat(proveedorProducto.cantidad!)).toString(),
+              costo: proveedorProducto.costoCalculado!,
+              precio: (parseFloat(proveedorProducto.costoCalculado!) * parseFloat(proveedorProducto.cantidad!)).toString(),
               url_image: localStorage.getItem('almacenid')!
             }
 
@@ -962,13 +971,39 @@ export class CompraNuevoComponent implements OnInit {
                 return
               }
 
-              this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res1 => {
-                if (res1.codigoError == 'NEXISTE') {
+              this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res5 => {
+                if (res5.codigoError == 'NEXISTE') {
 
-                  console.log("ENTRO AL PRODUCTO NEXISTE2")
-                  this.httpServiceInventario.agregarInventario(newInventario).pipe(
+                  console.log("ENTRO AL PRODUCTO NEXISTE2.1")
+                  const inventarioCostoCalculado: InventariosEntity = {
+                    categoria_id: '',
+                    categoria: '',
+                    linea: '',
+                    modelo: '',
+                    marca_id: '',
+                    marca: '',
+                    modelo_producto_id: '',
+                    idProducto: '',
+                    Producto: '',
+                    id: '',
+                    etiquetas: res.etiquetas,
+                    dInventario: '',
+                    producto_id: res.producto_id,
+                    almacen_id: localStorage.getItem('almacenid')!,
+                    almacen: '',
+                    stock_optimo: '',
+                    fav: '0',
+                    costo: nuevoCosto.toString(),
+                    color: '',
+                    stock: proveedorProducto.cantidad!,
+                    pvp2: proveedorProducto.precio,
+                    url_image: localStorage.getItem('sociedadid')!
+                  }
+
+
+                  this.httpServiceInventario.agregarInventario(inventarioCostoCalculado).pipe(
                     finalize(() => {
-                      this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res5 => {
+                      this.httpServiceInventario.obtenerInventariosExiste(inventarioCostoCalculado).subscribe(res5 => {
                         const newDetalle: DetallesMovimientoEntity = {
                           id: '',
                           producto_nombre: '',
@@ -976,10 +1011,12 @@ export class CompraNuevoComponent implements OnInit {
                           producto_id: res.producto_id,
                           movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
                           cantidad: proveedorProducto.cantidad!,
-                          costo: proveedorProducto.costo!,
-                          precio: (parseFloat(proveedorProducto.costo!) * parseFloat(proveedorProducto.cantidad!)).toString()
+                          costo: proveedorProducto.costoCalculado!,
+                          precio: (parseFloat(proveedorProducto.costoCalculado!) * parseFloat(proveedorProducto.cantidad!)).toString()
                         }
 
+
+                        console.log("ESTE ES EL NEWDETALLE", newDetalle)
 
                         this.httpServiceDetalle.agregarDetalleCompra(newDetalle).pipe(finalize(() => {
 
@@ -1046,7 +1083,7 @@ export class CompraNuevoComponent implements OnInit {
                     movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
                     cantidad: proveedorProducto.cantidad!,
                     costo: proveedorProducto.costoCalculado! || proveedorProducto.costo!,
-                    precio: (parseFloat(proveedorProducto.costo!) * parseFloat(proveedorProducto.cantidad!)).toString(),
+                    precio: (parseFloat(proveedorProducto.costoCalculado!) * parseFloat(proveedorProducto.cantidad!)).toString(),
                     url_image: localStorage.getItem('almacenid')!
                   }
                   
