@@ -149,12 +149,16 @@ export class ApplyDiscountComponent implements OnInit {
         
         //Insertar en el input todos los que tengan en tipo 1 que es monto y sumar el total
         this.lstDescuentos.forEach((descuento) => {
+          descuento.valorDescuento = descuento.valorDescuento.replace(',', '.');
+
           if (descuento.tipoDescuento == '1') {
             this.descuentoN += parseFloat(descuento.valorDescuento);
           } else {
             this.descuentoP += parseFloat(descuento.valorDescuento);
           }
         });
+
+        
 
         console.log("ACA LSITAAAA===================="+this.lstDescuentos)
 
@@ -341,6 +345,12 @@ export class ApplyDiscountComponent implements OnInit {
               }
 
               this.lstDescuentos = res.lstDescuentos;
+              //Reemplazar los descuentos en el valor las , por . en el string
+              this.lstDescuentos.forEach((descuento) => {
+                descuento.valorDescuento = descuento.valorDescuento.replace(',', '.');
+              });
+              
+
 
               //Calcular el total de descuentos
             

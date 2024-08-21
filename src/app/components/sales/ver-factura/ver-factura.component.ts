@@ -905,6 +905,12 @@ export class VerFacturaComponent implements OnInit {
     
 
       handleDescuentosAplicados(descuentos: DescuentosEntity[]) {
+        //Reemplazar en lso descuentos valor las , por .
+        descuentos.forEach(descuento => {
+          descuento.valorDescuento = descuento.valorDescuento.replace(',', '.');
+        });
+
+
         const descuentosTipo1 = descuentos.filter(descuento => descuento.tipoDescuento === "2");
 
         // Suma los valores de los descuentos filtrados
