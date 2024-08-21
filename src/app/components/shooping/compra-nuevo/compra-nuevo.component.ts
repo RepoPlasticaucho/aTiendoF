@@ -73,6 +73,10 @@ export class CompraNuevoComponent implements OnInit {
       if (parseInt(producto.cantidad!) > 0) {
         console.log("ESTE ES EL PRODUCTO", producto)
 
+        //Reemplzar , por . en el costo y costoCalculado
+        producto.costo = producto.costo!.replace(',', '.')
+        producto.costoCalculado = producto.costoCalculado!.replace(',', '.')
+
         this.crearDetalle(producto);
       }
     }
