@@ -45,7 +45,7 @@ export class TercerosusuariosComponent implements OnInit {
     const tercero : TercerosEntity = {
       id: '',
       almacen_id: JSON.parse(localStorage.getItem('almacenid') || "[]"),
-      sociedad_id: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
+      sociedad_id: '1',
       tipotercero_id: '',
       tipousuario_id: '',
       nombresociedad: '',
@@ -60,13 +60,18 @@ export class TercerosusuariosComponent implements OnInit {
       fecha_nac: '',
       ciudad: '',
       provincia: '',
-      ciudadid: ''
+      ciudadid: '',
     }
 
     //
     this.httpService.obtenerTodosTerceros(tercero).subscribe(res => {
       if (res.codigoError != "OK") {
-    
+        Swal.fire({
+          icon: 'error',
+          title: 'Ha ocurrido un error.',
+          text: res.descripcionError,
+          showConfirmButton: false,
+        });
       } else {
         this.dtTrigger.next('');
         this.lstTerceros = res.lstTerceros;

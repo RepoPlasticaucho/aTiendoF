@@ -57,6 +57,7 @@ export class TercerosService {
 
   
   obtenerTodosTerceros(tercero: TercerosEntity): Observable<Terceros> {
+    
     return this.http.post<Terceros>(`${environment.apiUrl}terceros/ObtenerTodosTerceros`, tercero );
   }
   

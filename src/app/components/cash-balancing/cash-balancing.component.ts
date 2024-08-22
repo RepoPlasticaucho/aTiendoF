@@ -386,7 +386,12 @@ console.log("AQUI TARJETA DEBITOoooOOOoo ", this.tar_deb)
       this.transferencia = '0';
     }
 
-    
+    //Reemplazar la , por el . en los valores
+    this.efectivo = this.efectivo.replace(',', '.');
+    this.tar_deb = this.tar_deb.replace(',', '.');
+    this.tar_cre = this.tar_cre.replace(',', '.');
+    this.deposito = this.deposito.replace(',', '.');
+    this.transferencia = this.transferencia.replace(',', '.');
 
     const suma = parseFloat(this.efectivo) + parseFloat(this.tar_deb) + parseFloat(this.tar_cre) + parseFloat(this.deposito) + parseFloat(this.transferencia);
     console.log(this.efectivo)
