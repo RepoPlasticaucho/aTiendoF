@@ -68,23 +68,63 @@ export class CompraNuevoComponent implements OnInit {
   ) { }
 
   anadirTodosProductos(): void {
+    // Mostrar mensaje de carga
+    Swal.fire({
+      title: 'Cargando...',
+      text: 'Por favor espere mientras se procesan los productos.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+  
+    // Procesar productos y asegurar que el mensaje de carga se oculta al final
+    this.processProductos().then(() => {
+      // Cerrar el mensaje de carga
+      Swal.fire({
+        icon: 'info',
+        title: 'Procesando productos',
+        text: 'Se estan procesando los productos.',
+        confirmButtonText: 'Aceptar'
+      });
+    }).catch((error) => {
+      // Mostrar mensaje de error si ocurre algún problema
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Ocurrió un problema al procesar los productos.',
+        confirmButtonText: 'Aceptar'
+      });
+    });
+  }
+  
+  private async processProductos(): Promise<void> {
     for (let producto of this.lstProveedoresProductos) {
-
       if (parseInt(producto.cantidad!) > 0) {
-        console.log("ESTE ES EL PRODUCTO", producto)
-
-        //Reemplzar , por . en el costo y costoCalculado
-        producto.costo = producto.costo!.replace(',', '.')
-
-        if(producto.costoCalculado != null){
-          producto.costoCalculado = producto.costoCalculado!.replace(',', '.')
+        console.log("ESTE ES EL PRODUCTO", producto);
+  
+        // Reemplazar , por . en el costo y costoCalculado
+        producto.costo = producto.costo!.replace(',', '.');
+        if (producto.costoCalculado != null) {
+          producto.costoCalculado = producto.costoCalculado!.replace(',', '.');
         }
-
-        this.crearDetalle(producto);
+  
+        // Llamar a la función crearDetalle y esperar a que termine
+        await this.crearDetalleAsync(producto);
       }
     }
   }
-
+  
+  private crearDetalleAsync(proveedorProducto: ProveedoresProductosEntity): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      try {
+        this.crearDetalle(proveedorProducto);
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
 
 
   ngOnInit(): void {
