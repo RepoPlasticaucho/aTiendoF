@@ -272,12 +272,7 @@ export class CompraNuevoComponent implements OnInit {
 
                 console.log("ALMACENES SOCIEDAAAAAAAAAAAAA0009AAAAAD", this.almacenesSociedadId)
               } else {
-                Swal.fire({
-                  icon: 'error',
-                  title: 'No se pudo obtener los productos.',
-                  text: res.descripcionError,
-                  showConfirmButton: false,
-                });
+       
               }
             });
             
