@@ -42,8 +42,8 @@ export class AlmacenesComponent implements OnInit, OnDestroy {
     this.httpService.obtenerAlmacenes().subscribe(res => {
       if (res.codigoError != "OK") {
         Swal.fire({
-          icon: 'error',
-          title: 'Ha ocurrido un error.',
+          icon: 'warning',
+          title: 'No existen almacenes.',
           text: res.descripcionError,
           showConfirmButton: false,
           // timer: 3000

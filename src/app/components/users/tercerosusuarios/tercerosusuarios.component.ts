@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { faEdit, faPlus, faTrashAlt, faUserFriends, faTable } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
+import { SociedadesEntity } from 'src/app/models/sociedades';
 import { TercerosEntity } from 'src/app/models/terceros';
 import { TercerosService } from 'src/app/services/terceros.service';
 import Swal from 'sweetalert2';
@@ -45,7 +46,7 @@ export class TercerosusuariosComponent implements OnInit {
     const tercero : TercerosEntity = {
       id: '',
       almacen_id: JSON.parse(localStorage.getItem('almacenid') || "[]"),
-      sociedad_id: '1',
+      sociedad_id: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
       tipotercero_id: '',
       tipousuario_id: '',
       nombresociedad: '',
@@ -63,8 +64,41 @@ export class TercerosusuariosComponent implements OnInit {
       ciudadid: '',
     }
 
+
+    //Crear la sociedad
+
+    const sociendadD: SociedadesEntity = {
+      idSociedad: JSON.parse(localStorage.getItem('sociedadid') || "[]"),
+      nombreGrupo: '',
+      razon_social: '',
+      nombre_comercial: '',
+      id_fiscal: '',
+      email: '',
+      telefono: '',
+      password: '',
+      funcion: '',
+      tipo_ambienteid: '',
+      url_certificado: '',
+      clave_certificado: '',
+      dir1: '',
+      direccion: '',
+      ambiente: '',
+      email_certificado: '',
+      pass_certificado: '',
+      sociedad_pertenece: '',
+      almacen_personal_id: '',
+      emite_retencion: '',
+      obligado_contabilidad: '',
+      url_logo: '',
+      idGrupo: ''
+    }
+
+
+
+    console.log("AQUI TERCERO========", tercero);
+
     //
-    this.httpService.obtenerTodosTerceros(tercero).subscribe(res => {
+    this.httpService.obtenerTodosTerceros(sociendadD).subscribe(res => {
       if (res.codigoError != "OK") {
         Swal.fire({
           icon: 'error',

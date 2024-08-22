@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { Terceros, TercerosEntity } from '../models/terceros';
+import { Sociedades, SociedadesEntity } from '../models/sociedades';
 
 
 const initGruop: TercerosEntity = {
@@ -56,8 +57,7 @@ export class TercerosService {
   
 
   
-  obtenerTodosTerceros(tercero: TercerosEntity): Observable<Terceros> {
-    
+  obtenerTodosTerceros(tercero: SociedadesEntity): Observable<Terceros> {
     return this.http.post<Terceros>(`${environment.apiUrl}terceros/ObtenerTodosTerceros`, tercero );
   }
   

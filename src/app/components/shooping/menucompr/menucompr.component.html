@@ -1,3 +1,4 @@
+
 <div style="max-width: 95%; margin: auto">
     <div class="card">
         <br />
@@ -157,7 +158,7 @@
                 <tbody style="color: #767695;">
                     <tr *ngFor="let detalleMovimientos of lstDetalleMovimientos; let i = index">
                         <td>{{detalleMovimientos.producto_id}}</td>
-                        <td>{{detalleMovimientos.producto_nombre}}</td>
+                        <td>{{detalleMovimientos.modelo_producto_nombre}} {{detalleMovimientos.tamanio}}</td>
                         <td>
                             <ng-container *ngIf="!editarDetalle || i !== detalleEditIndex">
                                 {{detalleMovimientos.cantidad}}

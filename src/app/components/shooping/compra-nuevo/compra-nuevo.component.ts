@@ -75,7 +75,10 @@ export class CompraNuevoComponent implements OnInit {
 
         //Reemplzar , por . en el costo y costoCalculado
         producto.costo = producto.costo!.replace(',', '.')
-        producto.costoCalculado = producto.costoCalculado!.replace(',', '.')
+
+        if(producto.costoCalculado != null){
+          producto.costoCalculado = producto.costoCalculado!.replace(',', '.')
+        }
 
         this.crearDetalle(producto);
       }
