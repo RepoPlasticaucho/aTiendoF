@@ -1049,6 +1049,7 @@ export class CompraNuevoComponent implements OnInit {
                               });
                             }
                           });
+                          
                         })).subscribe(res4 => {
                           if (res4.codigoError != 'OK') {
                             Swal.fire({
