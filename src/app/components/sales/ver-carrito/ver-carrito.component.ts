@@ -345,6 +345,7 @@ export class VerCarritoComponent implements OnInit {
       invent.cantidad !== undefined && invent.cantidad !== ''
     );
 
+
     //Si el producto_id ya existe en auxlst y tiene la misma cantidad, no se agrega
     this.lstDetalles.forEach(detalle => {
       const detalleExistente = this.auxlst.find(det => det.producto_id === detalle.producto_id);
@@ -432,6 +433,12 @@ export class VerCarritoComponent implements OnInit {
 
 
   crearDetalle(inventario: InventariosEntity): Promise<void> {
+
+      //Cambiar la , por el .
+    inventario.pvp1 = inventario.pvp1?.replace(',', '.');
+    inventario.pvp2 = inventario.pvp2?.replace(',', '.');
+    inventario.costo = inventario.costo?.replace(',', '.');
+
     return new Promise((resolve, reject) => {
       this.httpServiceInventarios.asignarInventario(inventario);
       console.log("Aca 1");
