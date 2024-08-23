@@ -96,7 +96,7 @@
                
                 <div class="form-group">
                     <label for="tamanio">Talla</label>
-                    <input type="text" class="form-control" id="tamanio" placeholder="Ingrese el código SAP" formControlName="tamanio">
+                    <input type="text" class="form-control" id="tamanio" placeholder="Ingrese el código" formControlName="tamanio">
                     <small *ngIf="modelProductForm.controls['tamanio'].invalid && (modelProductForm.controls['tamanio'].dirty || modelProductForm.controls['tamanio'].touched)">
                         <small *ngIf="modelProductForm.controls['tamanio'].errors?.['required']" style="color: red;">
                             Debe ingresar la descripción del Producto
@@ -155,8 +155,8 @@
                     </small>
                 </div>
                 <div class="form-group">
-                    <label for="codigoSAP">Código SAP</label>
-                    <input type="text" class="form-control" id="codigoSAP" placeholder="Ingrese el código SAP" formControlName="codigoSAP">
+                    <label for="codigoSAP">Código Producto</label>
+                    <input type="text" class="form-control" id="codigoSAP" placeholder="Ingrese el código" formControlName="codigoSAP">
                 </div>
                 <button type="submit" class="btn btn-primary">
                     <fa-icon [icon]="faSave" [size]="'sm'"></fa-icon>

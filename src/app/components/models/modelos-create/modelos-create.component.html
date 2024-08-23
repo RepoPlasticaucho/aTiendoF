@@ -61,12 +61,12 @@
                     </small>
                 </div>
                 <div class="form-group">
-                    <label for="codigoSAP">Código SAP</label>
+                    <label for="codigoSAP">Código</label>
                     <input type="text" class="form-control" id="codigoSAP" placeholder="Ingrese el código" formControlName="codigoSAP">
                     <small *ngIf="modelForm.controls['codigoSAP'].invalid && (modelForm.controls['codigoSAP'].dirty || modelForm.controls['codigoSAP'].touched)">
                         <small *ngIf="modelForm.controls['codigoSAP'].errors?.['required']"
                             style="color: red;">
-                            Debe ingresar el código SAP.
+                            Debe ingresar el código.
                         </small>
                     </small>
                 </div>

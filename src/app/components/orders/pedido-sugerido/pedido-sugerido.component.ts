@@ -243,7 +243,7 @@ export class PedidoSugeridoComponent implements OnInit, OnDestroy {
   
     const renombrar = lstInventariosR.map(movimiento => {
       return {
-        'CODIGO SAP': movimiento.idProducto,
+        'CODIGO': movimiento.idProducto,
         'PRODUCTO': movimiento.Producto,
         'CATEGORIA': movimiento.categoria,
         'LINEA': movimiento.linea,

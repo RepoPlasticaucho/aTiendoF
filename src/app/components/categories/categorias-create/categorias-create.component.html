@@ -21,8 +21,8 @@
                     </small >
                 </div>
                 <div class="form-group">
-                    <label for="grupo">Código SAP</label>
-                    <input type="text" class="form-control" id="codigoSAP" placeholder="Ingrese el código SAP" formControlName="codigoSAP">
+                    <label for="grupo">Código</label>
+                    <input type="text" class="form-control" id="codigoSAP" placeholder="Ingrese el código" formControlName="codigoSAP">
                     <small *ngIf="categoryForm.controls['codigoSAP'].invalid && (categoryForm.controls['codigoSAP'].dirty || categoryForm.controls['codigoSAP'].touched)">
                         <small  *ngIf="categoryForm.controls['codigoSAP'].errors" style="color: red;">
                             Debe ingresar el código.

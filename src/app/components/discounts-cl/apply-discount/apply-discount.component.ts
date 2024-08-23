@@ -375,7 +375,7 @@ export class ApplyDiscountComponent implements OnInit {
         } else {
           Swal.fire({
             icon: 'warning',
-            title: 'El descuento esta inactivo o ya no se puede aplicar',
+            title: 'El descuento esta inactivo o no existe',
             text: res.descripcionError,
             showConfirmButton: false,
           });

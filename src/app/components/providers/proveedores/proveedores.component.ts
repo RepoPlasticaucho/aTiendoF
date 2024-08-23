@@ -101,8 +101,8 @@ export class ProveedoresComponent implements OnInit {
         this.httpService.obtenerProveedoresS(sociedad).subscribe(res => {
           if (res.codigoError != "OK") {
             Swal.fire({
-              icon: 'error',
-              title: 'Ha ocurrido un error.',
+              icon: 'warning',
+              title: 'No existen proveedores.',
               text: res.descripcionError,
               showConfirmButton: false,
             });

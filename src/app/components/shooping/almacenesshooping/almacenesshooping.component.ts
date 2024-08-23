@@ -86,8 +86,8 @@ export class AlmacenesshoopingComponent implements OnInit {
     this.httpService.obtenerAlmacenesSociedad(almacen).subscribe(res => {
       if (res.codigoError != "OK") {
         Swal.fire({
-          icon: 'error',
-          title: 'Ha ocurrido un error.',
+          icon: 'warning',
+          title: 'No existen almacenes',
           text: res.descripcionError,
           showConfirmButton: false,
           // timer: 3000

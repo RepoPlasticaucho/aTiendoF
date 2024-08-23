@@ -101,8 +101,8 @@ export class TercerosusuariosComponent implements OnInit {
     this.httpService.obtenerTodosTerceros(sociendadD).subscribe(res => {
       if (res.codigoError != "OK") {
         Swal.fire({
-          icon: 'error',
-          title: 'Ha ocurrido un error.',
+          icon: 'warning',
+          title: 'No existen terceros.',
           text: res.descripcionError,
           showConfirmButton: false,
         });
