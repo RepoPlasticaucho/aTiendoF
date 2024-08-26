@@ -660,7 +660,7 @@ export class DescargarInventarioComponent implements OnInit {
           localStorage.removeItem('almacenid');
           localStorage.removeItem('estab');
           localStorage.removeItem('movimiento_id');
-          this.router.navigate(['/menuvent']);
+  
         });
       } else {
         Swal.fire({

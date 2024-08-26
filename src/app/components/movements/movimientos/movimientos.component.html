@@ -2,7 +2,7 @@
     <div class="card-header">
         <div class="row mx-3">
             <fa-icon [icon]="faList" [size]="'3x'" style="color: #636363;"></fa-icon>
-            <h1 class="mx-5 " style="color: #636363;">MOVIMIENTOS</h1>
+            <h1 class="mx-5 " style="color: #636363;">INGRESOS - EGRESOS</h1>
         </div>
     </div>
     <div class="d-flex">
@@ -72,7 +72,7 @@
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
             <thead style="color: #636363;">
                 <tr>
-                    <th style="width: 45%; ">PROUCTO</th>
+                    <th style="width: 45%; ">PRODUCTO</th>
                     <th style="width: 5%; ">PUNTO DE EMISIÓN</th>
                     <th style="width: 10%; ">FECHA</th>
                     <th style="width: 5%; ">TIPO</th>
@@ -85,7 +85,7 @@
             </thead>
             <tbody style="color: #767695;">
                 <tr *ngFor="let detalle of lstDetalleMovimientos">
-                    <td>{{detalle.producto_nombre}}</td>
+                    <td>{{detalle.producto_nombre}} {{detalle.tamanio}}</td>
                     <td>{{detalle.pto_emision}}</td>
                     <td>{{detalle.created_at}}</td>
                     <td

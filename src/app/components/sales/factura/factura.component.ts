@@ -168,7 +168,26 @@ export class FacturaComponent implements OnInit {
             this.claveAcceso = res1.lstMovimientos[0].clave_acceso!;
           }
         });
-        this.httpServiceSociedad.obtenerSociedadDatos(newSociedad).subscribe(res1 => {
+        // this.httpServiceSociedad.obtenerSociedadDatos(newSociedad).subscribe(res1 => {
+        //   if (res1.codigoError != "OK") {
+
+        //   } else {
+        //     this.razonSocial = res1.lstSociedades[0].razon_social!;
+        //     this.nombreComercial = res1.lstSociedades[0].nombre_comercial!;
+        //     this.idFiscalSoc = res1.lstSociedades[0].id_fiscal!;
+        //     this.direccionAlm = res1.lstSociedades[0].direccion!;
+        //     this.dir1 = res1.lstSociedades[0].dir1!;
+        //     this.ambiente = res1.lstSociedades[0].ambiente!;
+        //     this.emiteRetencion = res1.lstSociedades[0].emite_retencion! == '2' ? 'SI' : 'NO';
+        //     this.obligadoContabilidad = res1.lstSociedades[0].obligado_contabilidad! == '2' ? 'SI' : 'NO';
+        //     this.url_logo = res1.lstSociedades[0].url_logo!;
+
+        //   }
+        // });
+
+        const almacenNombre = localStorage.getItem('almacenNombreUsuario')!;
+
+        this.httpServiceSociedad.obtenerSociedadDatosAlmacen(newSociedad,almacenNombre ).subscribe(res1 => {
           if (res1.codigoError != "OK") {
 
           } else {

@@ -90,6 +90,9 @@ export class SociedadesService {
   obtenerSociedadDatos(sociedad: SociedadesEntity): Observable<Sociedades> {
     return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/ObtenerSociedadDatos`, sociedad);
   }
+  obtenerSociedadDatosAlmacen(sociedad: SociedadesEntity, almacen: string): Observable<Sociedades> {
+    return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/ObtenerSociedadDatosAlmacen`, sociedad + '/' + almacen);
+  }
   obtenerSociedadesN(nombre: SociedadesEntity):Observable<Sociedades>{
     return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/ObtenerSociedadesN`, nombre);
   }

@@ -186,10 +186,10 @@
             <br><br><br>
             <div class="button-container">
                 <button class="btn btn-secondary"  [disabled]="identificacion == '' || nombre == '' || correo == '' || ciudad == '' || direccion == '' || telefono == ''" (click)="facturarFisica()">
-                    <span style="color: white ; font-size: 20px;">Descargar Inventario</span>
+                    <span style="color: white ; font-size: 20px;">Factura Fisica</span>
                 </button>
                 <button class="btn btn-primary" style="margin-left: 50px" [disabled]="identificacion == '' || nombre == '' || correo == '' || ciudad == '' || direccion == '' || telefono == '' || lstDetalleMovimientos.length == 0" (click)="finalizarPedido()">
-                    <span style="color: white ; font-size: 20px;">Continuar</span>
+                    <span style="color: white ; font-size: 20px;">Factura Electrónica</span>
                 </button>
             </div>
 
