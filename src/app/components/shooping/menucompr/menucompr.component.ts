@@ -1483,6 +1483,20 @@ export class MenucomprComponent implements OnInit {
         const costo = this.getTextContentFromElement(detalles[i], 'precioTotalSinImpuesto')
         const descuento = this.getTextContentFromElement(detalles[i], 'descuento')
         const precioUnitario = this.getTextContentFromElement(detalles[i], 'precioUnitario')
+        this.autorizacion = this.getTextContentFromElement(cdataDoc, 'claveAcceso') ?? '';
+        this.comprobante = this.getTextContentFromElement(cdataDoc, 'estab') + '-' + this.getTextContentFromElement(cdataDoc, 'ptoEmi') + '-' + this.getTextContentFromElement(cdataDoc, 'secuencial');
+
+        //Actualziar el local storage
+        localStorage.setItem('compventa', this.comprobante);
+        localStorage.setItem('autorizacion', this.autorizacion);
+
+
+        //Actualizar los valores de los inputs
+        this.autorizacionLlena = this.autorizacion.trim() !== "" && this.autorizacion.length == 10 || this.autorizacion.length == 49;
+        this.comprobanteLleno = this.comprobante.trim() !== "";
+        this.buttonsDisabled = !this.checkAllConditions();
+
+
 
         //Crear XmlCargaEntity
         const xmlCarga: XmlCargaEntity = {
