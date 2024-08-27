@@ -127,13 +127,16 @@ export class MenuventComponent implements OnInit {
     this.dtOptions = {
       language: {
         url: '//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json',
+      
       },
       paging: false,
       search: false,
       searching: true,
       ordering: true,
+      //Cambaiar el info por items
       info: false,
       scrollY: '50vh',
+      
 
       // responsive: {
       //   details: {

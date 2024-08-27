@@ -39,12 +39,8 @@
                         <label for="razonSocial">Clave Actual</label>
                         <div class="input-group">
                             <input type="{{ showPassword['razonSocial'] ? 'text' : 'password' }}" class="form-control" id="razonSocial" placeholder="Ingrese la contraseña Actual" formControlName="razonSocial">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button" (click)="togglePassword('razonSocial')">
-                                    <i class="fa" [ngClass]="{'fa-eye': showPassword['razonSocial'], 'fa-eye-slash': !showPassword['razonSocial']}"></i>
-                                </button>
-                            </div>
                         </div>
+
                         <small *ngIf="corporationForm.controls['razonSocial'].invalid && (corporationForm.controls['razonSocial'].dirty || corporationForm.controls['razonSocial'].touched)">
                             <small *ngIf="corporationForm.controls['razonSocial'].errors?.['required']" style="color: red;">
                                 Debe ingresar la contraseña actual

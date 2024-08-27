@@ -37,6 +37,7 @@ export class InventariosPedidoComponent implements OnInit {
   sumaTotal: any;
   totalRegistros: number = 0;
   mostrarDiv: boolean = false;
+  totalProductos: number = 0;
 
   
   constructor(private readonly httpService: InventariosService,
@@ -128,10 +129,19 @@ export class InventariosPedidoComponent implements OnInit {
 
   calculateTotalSum(): void {
     this.sumaTotal = this.lstInventarios.reduce((total, inventario) => {
-      return total + parseFloat(inventario.pvp2!);
+      //Reemplazar la coma por un punto
+      inventario.costo = inventario.costo!.replace(',', '.');
+
+      return (total + (parseFloat(inventario.costo!) * parseFloat(inventario.stock!)));
     }, 0).toFixed(2);
 
     this.totalRegistros = this.lstInventarios.length;
+
+    this.totalProductos = this.lstInventarios.reduce((total, inventario) => {
+      return (total + parseFloat(inventario.stock!));
+    }, 0);
+
+
   }
 
 

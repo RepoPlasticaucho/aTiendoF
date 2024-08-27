@@ -249,7 +249,6 @@ export class PedidoSugeridoComponent implements OnInit, OnDestroy {
         'LINEA': movimiento.linea,
         'MARCA': movimiento.marca,
         'STOCK': movimiento.stock,
-        'PRECIO': movimiento.pvp2,
         'CANTIDAD A PEDIR': parseInt(movimiento.stock_optimo) - parseInt(movimiento.stock!),
       };
 

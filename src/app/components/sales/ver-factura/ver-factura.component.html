@@ -121,8 +121,9 @@
         <br><br>
         <div class="icon-container">
           <label for="total" class="label-input">TOTAL:</label>
-          <input type="text" [(ngModel)]="sumaTotal" class="cool-input resultado-input" readonly>
+          <input type="text" [value]="(sumaTotal || 0).toString().replace(',', '.')" class="cool-input resultado-input" readonly>
         </div>
+        
         <br>
       </div>
     </div>
