@@ -44,7 +44,7 @@ export class DashboardPerComponent {
           { title: 'Productos', cols: 1, rows: 1, name: "los productos", figure: "apps" , dir: "navegation-facturador/(contentPersonal:inventarios)"},
           { title: 'Inventarios', cols: 1, rows: 1, name: "los inventarios", figure: "apps" , dir: "navegation-facturador/(contentPersonal:inventarios-pedido)"},
           { title: 'Pedido Sugerido', cols: 1, rows: 1, name: "los pedidos sugeridos a Platicaucho", figure: "widgets", dir: "navegation-facturador/(contentPersonal:pedido-sugeridos)"},
-          { title: 'Movimientos', cols: 1, rows: 1, name: "los movimientos", figure: "monitor" ,  dir: "navegation-facturador/(contentPersonal:movimientos)"},
+          { title: 'Ingresos - Egresos', cols: 1, rows: 1, name: "los ingreso y egresos", figure: "monitor" ,  dir: "navegation-facturador/(contentPersonal:movimientos)"},
 
         ];
       }
@@ -55,7 +55,7 @@ export class DashboardPerComponent {
         { title: 'Productos', cols: 1, rows: 1, name: "los productos", figure: "apps" , dir: "navegation-facturador/(contentPersonal:inventarios)"},
         { title: 'Inventarios', cols: 1, rows: 1, name: "los inventarios", figure: "apps" , dir: "navegation-facturador/(contentPersonal:inventarios-pedido)"},
         { title: 'Pedido Sugerido', cols: 1, rows: 1, name: "los pedidos sugeridos a Platicaucho", figure: "widgets", dir: "navegation-facturador/(contentPersonal:pedido-sugeridos)"},
-        { title: 'Movimientos', cols: 1, rows: 1, name: "los movimientos", figure: "monitor" ,  dir: "navegation-facturador/(contentPersonal:movimientos)"},
+        { title: 'Ingresos - Egresos', cols: 1, rows: 1, name: "los ingresos y egresos", figure: "monitor" ,  dir: "navegation-facturador/(contentPersonal:movimientos)"},
 
       ];
     })

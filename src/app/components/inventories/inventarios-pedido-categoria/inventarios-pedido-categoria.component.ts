@@ -31,6 +31,8 @@ export class InventariosPedidoCategoriaComponent implements OnInit {
   lstLineas: LineasEntity[] = [];
   sumaTotal: any;
   totalRegistros: number = 0;
+  totalProductos: number = 0;
+
 
   private codigocategoria: string = "";
   private codigoalmacen: string = "";
@@ -146,10 +148,22 @@ export class InventariosPedidoCategoriaComponent implements OnInit {
 
   calculateTotalSum(): void {
     this.sumaTotal = this.lstInventarios.reduce((total, inventario) => {
-      return total + parseFloat(inventario.pvp2!);
+      //Reemplazar la coma por un punto
+      console.log("COSTO", inventario.costo);
+      console.log("STOCK", inventario.stock);
+      return (total + (parseFloat(inventario.costo!) * parseFloat(inventario.stock!)));
     }, 0).toFixed(2);
 
+    console.log("ACA TODOSSS LOS INVENTARIOOOSSSS", this.lstInventarios);
+
+
     this.totalRegistros = this.lstInventarios.length;
+
+    this.totalProductos = this.lstInventarios.reduce((total, inventario) => {
+      return total + parseFloat(inventario.stock!);
+    }, 0);
+
+
   }
 
   buscarPortafolioLinea(card: LineasEntity) {

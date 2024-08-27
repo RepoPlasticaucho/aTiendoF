@@ -28,7 +28,7 @@ export class InventariosPedidoLineasComponent implements OnInit {
   faPlus = faPlus;
   faMoneyBillAlt = faMoneyBillAlt;
   faBoxes = faBoxes;
-
+  totalProductos: number = 0;
   //Declaración de variables
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
@@ -216,11 +216,21 @@ export class InventariosPedidoLineasComponent implements OnInit {
   }
 
   calculateTotalSum(): void {
-    this.sumaTotal = this.lstInventarios.reduce((total, inventario) => {
-      return total + parseFloat(inventario.pvp2!);
-    }, 0).toFixed(2);
+     this.sumaTotal = this.lstInventarios.reduce((total, inventario) => {
+       //Reemplazar la coma por un punto
+       return (total + (parseFloat(inventario.costo!) * parseFloat(inventario.stock!)));
+     }, 0).toFixed(2);
 
+
+    // this.sumaTotal = this.lstInventarios.reduce((total, inventario) => {
+    //   return total + parseFloat(inventario.pvp2!);
+    // }, 0).toFixed(2);
     this.totalRegistros = this.lstInventarios.length;
+
+    this.totalProductos = this.lstInventarios.reduce((total, inventario) => {
+      return total + parseFloat(inventario.stock!);
+    }, 0);
+
   }
 
   returnLinea() {

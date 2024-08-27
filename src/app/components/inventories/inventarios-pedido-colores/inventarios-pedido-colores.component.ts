@@ -40,6 +40,9 @@ export class InventariosPedidoColoresComponent implements OnInit {
   linea_name: string | undefined;
   modelo_name: string | undefined;
 
+
+  totalProductos: number = 0;
+
   codalmacen: string | undefined;
   constructor(private readonly httpService: InventariosService, private router: Router) { }
 
@@ -143,10 +146,15 @@ export class InventariosPedidoColoresComponent implements OnInit {
 
   calculateTotalSum(): void {
     this.sumaTotal = this.lstInventarios.reduce((total, inventario) => {
-      return total + parseFloat(inventario.pvp2!);
+      //Reemplazar la coma por un punto
+      return (total + (parseFloat(inventario.costo!) * parseFloat(inventario.stock!)));
     }, 0).toFixed(2);
 
     this.totalRegistros = this.lstInventarios.length;
+
+    this.totalProductos = this.lstInventarios.reduce((total, inventario) => {
+      return (total + parseFloat(inventario.stock!));
+    }, 0);
   }
 
   returncategoria() {

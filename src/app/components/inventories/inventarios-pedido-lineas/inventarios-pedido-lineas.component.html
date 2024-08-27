@@ -86,6 +86,8 @@
                         <th style="width: 55%; ">PRODUCTO</th>
                         <th style="width: 15%; ">CANTIDAD OPTIMO</th>
                         <th style="width: 15%; ">STOCK</th>
+                        <th style="width: 15%; ">COSTO</th>
+
                         <th style="width: 15%; ">PRECIO</th>
                     </tr>
                 </thead>
@@ -96,21 +98,31 @@
                         <td [class.text-danger]="isStockBelowOptimal(inventario.stock!, inventario.stock_optimo)">
                             {{ inventario.stock }}
                         </td>
+
+                        <td>{{inventario.costo}}</td>
                         <td>{{inventario.pvp2}}</td>
                     </tr>
                 </tbody>
             </table>
+            <br>
             <br><br>
             <div class="icon-container">
                 <fa-icon [icon]="faMoneyBillAlt" [size]="'3x'" style="color: #6aaf42" class="icono-input"></fa-icon>
-                <label for="total" class="label-input">TOTAL:</label>
+                <label for="total" class="label-input">TOTAL $:</label>
                 <input type="text" [(ngModel)]="sumaTotal" class="cool-input resultado-input" readonly>
             </div>
             <br><br><br>
             <div class="icon-container">
                 <fa-icon [icon]="faBoxes" [size]="'3x'" style="color: #7e94d1" class="icono-input2"></fa-icon>
-                <label for="total" class="label-input2">TOTAL DE PRODUCTOS:</label>
+                <label for="total" class="label-input2">TOTAL DE ITEMS:</label>
                 <input type="text" [(ngModel)]="totalRegistros" class="cool-input resultado-input" readonly>
+            </div>
+            <br><br><br>
+
+            <div class="icon-container">
+                <fa-icon [icon]="faBoxes" [size]="'3x'" style="color: #7e94d1" class="icono-input2"></fa-icon>
+                <label for="total" class="label-input2">TOTAL DE PRODUCTOS:</label>
+                <input type="text" [(ngModel)]="totalProductos" class="cool-input resultado-input" readonly>
             </div>
             <br><br>
         </div>

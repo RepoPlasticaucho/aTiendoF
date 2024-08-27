@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faEdit, faPlus, faTrashAlt, faUserFriends, faMoneyBillAlt } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrashAlt, faUserFriends, faMoneyBillAlt, faBoxes } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs/internal/Subject';
 import { InventariosEntity } from 'src/app/models/inventarios';
 import { ModeloProductosEntity } from 'src/app/models/modeloproductos';
@@ -25,6 +25,7 @@ export class InventariosPedidoModelosComponent implements OnInit {
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;
   faPlus = faPlus;
+  faBoxes = faBoxes;
   faMoneyBillAlt = faMoneyBillAlt;
   //Declaración de variables
   dtOptions: DataTables.Settings = {};
@@ -37,6 +38,8 @@ export class InventariosPedidoModelosComponent implements OnInit {
   categoria_name: string | undefined;
   linea_name: string | undefined;
   modelo_name: string | undefined;
+  totalRegistros: number = 0;
+  totalProductos: number = 0;
 
   codigocolor: string | undefined;
   codalmacen: string | undefined;
@@ -188,6 +191,15 @@ export class InventariosPedidoModelosComponent implements OnInit {
     this.sumaTotal = this.lstInventarios.reduce((total, inventario) => {
       return total + parseFloat(inventario.pvp2!);
     }, 0).toFixed(2);
+
+    
+    this.totalRegistros = this.lstInventarios.length;
+
+    this.totalProductos = this.lstInventarios.reduce((total, inventario) => {
+      return total + parseFloat(inventario.stock!);
+    }
+    , 0);
+
   }
 
   buscarPortafolioModeloColor(card: ModeloProductosEntity) {
