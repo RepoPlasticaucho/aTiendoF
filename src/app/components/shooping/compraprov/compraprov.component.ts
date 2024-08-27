@@ -142,7 +142,28 @@ export class CompraprovComponent implements OnInit {
 
   }
 
+  eliminarDatosCompra() {
+
+
+    //Eliminar los datos de la factura anterior del localstorage si es que hay
+    localStorage.removeItem('sustento');
+    localStorage.removeItem('comprobanteCompraid');
+    localStorage.removeItem('comprobanteCompracid');
+    localStorage.removeItem('comprobante');
+    localStorage.removeItem('proveedorid');
+    localStorage.removeItem('compventa');
+    localStorage.removeItem('autorizacion');
+    localStorage.removeItem('comprobanteCompra');
+    localStorage.removeItem('proveedor');
+    localStorage.removeItem('sustentoid');
+
+
+  }
+
   crearCompra() {
+
+    this.eliminarDatosCompra();
+
     const newMovimiento: MovimientosEntity = {
       almacen_id: localStorage.getItem('almacenid')!,
       id: '',

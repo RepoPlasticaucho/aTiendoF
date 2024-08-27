@@ -105,10 +105,23 @@ export class AlmacenesegresosComponent implements OnInit {
 
   }
 
+  eliminarDatosCompra() {
 
+
+    //Eliminar los datos de la factura anterior del localstorage si es que hay
+    localStorage.removeItem('nombreCl');
+    localStorage.removeItem('idfiscalCl');
+    localStorage.removeItem('apellidoCl');
+    localStorage.removeItem('ciudadCl');
+    localStorage.removeItem('direccionCl');
+    localStorage.removeItem('correoCl');
+    localStorage.removeItem('telefonoCl');
+  }
   
 
   abrirVista(almacen: AlmacenesEntity) {
+
+this.eliminarDatosCompra();
 
     localStorage.setItem('almacenid', almacen.idAlmacen)
     localStorage.setItem('almacenNombreUsuario', almacen.nombre_almacen!)
@@ -158,4 +171,6 @@ export class AlmacenesegresosComponent implements OnInit {
       })
     })
   }
+
+  
 }

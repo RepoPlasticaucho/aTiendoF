@@ -1486,16 +1486,34 @@ export class MenucomprComponent implements OnInit {
         this.autorizacion = this.getTextContentFromElement(cdataDoc, 'claveAcceso') ?? '';
         this.comprobante = this.getTextContentFromElement(cdataDoc, 'estab') + '-' + this.getTextContentFromElement(cdataDoc, 'ptoEmi') + '-' + this.getTextContentFromElement(cdataDoc, 'secuencial');
 
+        //Por defecto seleccionar el primero en comprobante y sustento
+
+        //Establcer por defecto el select del comprobante en factura y el sustento en 06
+        // this.selectedComprobante = "Factura";
+        // this.selectedSustento = "06 - Inventario - Crédito Tributario para declaración de IVA";
+    
+        //Actualizar los select
+        localStorage.setItem("comprobanteCompra", this.comprobante);
+        localStorage.setItem("comprobanteCompraid", this.selectedComprobante);
+        localStorage.setItem("sustento", this.selectedSustento);
+        localStorage.setItem("sustentoid", this.selectedSustento);
+
+        //Cmabiar los valores en los selects
+        this.proveedorSeleccionado = true;
+        this.sustentoSeleccionado = true;
+
+        
         //Actualziar el local storage
         localStorage.setItem('compventa', this.comprobante);
         localStorage.setItem('autorizacion', this.autorizacion);
 
 
-        //Actualizar los valores de los inputs
-        this.autorizacionLlena = this.autorizacion.trim() !== "" && this.autorizacion.length == 10 || this.autorizacion.length == 49;
+        this.proveedorSeleccionado = this.selectedProveedor.trim() !== "";
+        this.sustentoSeleccionado = this.selectedSustento.trim() !== "";
         this.comprobanteLleno = this.comprobante.trim() !== "";
+        this.autorizacionLlena = this.autorizacion.trim() !== "" && this.autorizacion.length == 10 || this.autorizacion.length == 49;
         this.buttonsDisabled = !this.checkAllConditions();
-
+   
 
 
         //Crear XmlCargaEntity

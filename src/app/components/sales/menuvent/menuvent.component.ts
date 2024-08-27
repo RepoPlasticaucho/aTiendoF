@@ -365,6 +365,7 @@ export class MenuventComponent implements OnInit {
             ciudad: '',
             provincia: '',
             ciudadid: '',
+            
           };
 
           //Si los datos siguen vacios obtener a partir de la cedula

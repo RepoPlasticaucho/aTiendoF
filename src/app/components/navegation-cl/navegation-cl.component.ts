@@ -46,6 +46,7 @@ export class NavegationClComponent {
         drawer.close();
       }
     }
+    
   logout() {
     this.authService.logout();
     this.location.replaceState('/');
