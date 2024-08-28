@@ -48,6 +48,19 @@
                     </small>
                 </div>
                 <div class="form-group">
+                    <label for="dir1">Direccion Matriz</label>
+                    <input type="text" class="form-control" id="dir1"
+                        placeholder="Ingrese la direccion de la matriz " formControlName="dir1">
+                    <small
+                        *ngIf="corporationForm.controls['dir1'].invalid && (corporationForm.controls['dir1'].dirty || corporationForm.controls['dir1'].touched)">
+                        <small *ngIf="corporationForm.controls['dir1'].errors?.['required']"
+                            style="color: red;">
+                            Debe ingrese la direccion de la matriz
+                        </small>
+                    </small>
+                </div>
+
+                <div class="form-group">
                     <label for="nombreComercial">Nombre Comercial</label>
                     <input type="text" class="form-control" id="nombreComercial"
                         placeholder="Ingrese el Nombre Comercial " formControlName="nombreComercial">

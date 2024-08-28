@@ -40,6 +40,7 @@ export class SociedadesCreateComponent implements OnInit {
     emiteRetencion: new FormControl('0', Validators.required),
     obligadoContabilidad: new FormControl('0', Validators.required),
     urlImagen: new FormControl(''),
+    dir1: new FormControl('0', Validators.required),
 
   });
   //Variables para listas desplegables
@@ -147,6 +148,7 @@ export class SociedadesCreateComponent implements OnInit {
           emite_retencion: this.corporationForm.value!.emiteRetencion ?? "",
           obligado_contabilidad: this.corporationForm.value!.obligadoContabilidad ?? "",
           url_logo: this.imageName,
+          dir1: this.corporationForm.value!.dir1 ?? "",
         };
         if (this.imageName != '') {
           const imageEntity: ImagenesEntity = {

@@ -33,6 +33,7 @@ export class SociedadesEditComponent implements OnInit {
     emiteRetencion: new FormControl('0', Validators.required),
     obligadoContabilidad: new FormControl('0', Validators.required),
     urlImagen: new FormControl(''),
+    dir1: new FormControl('0', Validators.required),
   });
   //Variables para listas desplegables
   lstGrupos: GruposEntity[] = [];
@@ -102,6 +103,7 @@ imageNameOriginal: string = '';
         this.corporationForm.get("telefono")?.setValue(res.telefono);
         this.corporationForm.get("emiteRetencion")?.setValue(res.emite_retencion!);
         this.corporationForm.get("obligadoContabilidad")?.setValue(res.obligado_contabilidad!);
+        this.corporationForm.get("dir1")?.setValue(res.dir1!);
         this.imageUrl = res.url_logo!;
 
         console.log("Esta es la image del logo ", this.imageUrl);
@@ -173,7 +175,8 @@ imageNameOriginal: string = '';
           razon_social: '',
           emite_retencion: this.corporationForm.value!.emiteRetencion ?? "",
           obligado_contabilidad: this.corporationForm.value!.obligadoContabilidad ?? "",
-          url_logo:this.imageName == '' ? this.imageUrl : this.imageName
+          url_logo:this.imageName == '' ? this.imageUrl : this.imageName,
+          dir1: this.corporationForm.value!.dir1 ?? "",
         };
         this.httpService.actualizarSociedad(sociedadEntity).subscribe(res => {
           if (res.codigoError == "OK") {
