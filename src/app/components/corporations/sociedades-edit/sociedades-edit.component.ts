@@ -33,7 +33,7 @@ export class SociedadesEditComponent implements OnInit {
     emiteRetencion: new FormControl('0', Validators.required),
     obligadoContabilidad: new FormControl('0', Validators.required),
     urlImagen: new FormControl(''),
-    dir1: new FormControl('0', Validators.required),
+    dir1: new FormControl('', Validators.required),
   });
   //Variables para listas desplegables
   lstGrupos: GruposEntity[] = [];

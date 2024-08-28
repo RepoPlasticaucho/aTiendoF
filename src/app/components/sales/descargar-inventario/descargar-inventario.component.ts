@@ -315,23 +315,23 @@ export class DescargarInventarioComponent implements OnInit {
 
 
   //Cuando se cierre y no se a guardado los pagos se eliminan
-  ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
-    this.dtTrigger2.unsubscribe();
+  // ngOnDestroy(): void {
+  //   this.dtTrigger.unsubscribe();
+  //   this.dtTrigger2.unsubscribe();
 
-    if (this.lstDetallePagos.length > 0) {
-      this.lstDetallePagos.forEach((detalle) => {
-        this.httpServiceDetallePago.eliminarDetallePago(detalle).subscribe((res) => {
-          if (res.codigoError == 'OK') {
-            console.log('Eliminado')
-          } else {
-            console.log('ERROR')
-          }
-        });
-      });
-    }
+  //   if (this.lstDetallePagos.length > 0) {
+  //     this.lstDetallePagos.forEach((detalle) => {
+  //       this.httpServiceDetallePago.eliminarDetallePago(detalle).subscribe((res) => {
+  //         if (res.codigoError == 'OK') {
+  //           console.log('Eliminado')
+  //         } else {
+  //           console.log('ERROR')
+  //         }
+  //       });
+  //     });
+  //   }
 
-  }
+  // }
 
   actualizarColor() {
     const restoNumerico = parseFloat(this.resto); // Convertir a número
@@ -653,13 +653,16 @@ export class DescargarInventarioComponent implements OnInit {
           showConfirmButton: true,
         }).then(() => {
           this.dialogRef.close();
-          localStorage.removeItem('totalDescargar');
-          localStorage.removeItem('movimiento_id');
-          localStorage.removeItem('sociedadid');
-          localStorage.removeItem('idfiscalCl');
-          localStorage.removeItem('almacenid');
-          localStorage.removeItem('estab');
-          localStorage.removeItem('movimiento_id');
+          this.router.navigate(['navegation-cl']);
+
+
+          // localStorage.removeItem('totalDescargar');
+          // localStorage.removeItem('movimiento_id');
+          // localStorage.removeItem('sociedadid');
+          // localStorage.removeItem('idfiscalCl');
+          // localStorage.removeItem('almacenid');
+          // localStorage.removeItem('estab');
+          // localStorage.removeItem('movimiento_id');
   
         });
       } else {

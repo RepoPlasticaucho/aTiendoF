@@ -672,7 +672,6 @@ export class VerFacturaComponent implements OnInit {
                           console.log(res4);
                           if(res4 == 'RECIBIDA'){
 
-                            Swal.close();
 
         
                             this.httpServiceSRI.autorizarXMLSri(localStorage.getItem('movimiento_id')!).subscribe(res5 => {
@@ -684,6 +683,11 @@ export class VerFacturaComponent implements OnInit {
 
                               //Cerrar pantalla de carga
                             });
+
+                            Swal.close();
+
+                            window.location.reload();
+
                           } else {
  
                             console.log('NO SE PUEDE ENVIAR LA FACTURA PARA SU AUTORIZACIÓN')
