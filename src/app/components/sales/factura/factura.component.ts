@@ -139,7 +139,8 @@ export class FacturaComponent implements OnInit {
       telefono: '',
       password: '',
       funcion: '',
-      tipo_ambienteid: ''
+      tipo_ambienteid: '',
+      almacen_personal_id: localStorage.getItem('almacenNombreUsuario')!,
     }
     Swal.fire({
       title: 'FACTURA',
@@ -187,7 +188,7 @@ export class FacturaComponent implements OnInit {
 
         const almacenNombre = localStorage.getItem('almacenNombreUsuario')!;
 
-        this.httpServiceSociedad.obtenerSociedadDatosAlmacen(newSociedad,almacenNombre ).subscribe(res1 => {
+        this.httpServiceSociedad.obtenerSociedadDatosAlmacenPrev(newSociedad ).subscribe(res1 => {
           if (res1.codigoError != "OK") {
 
           } else {
