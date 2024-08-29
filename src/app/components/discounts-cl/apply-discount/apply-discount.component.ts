@@ -292,9 +292,98 @@ export class ApplyDiscountComponent implements OnInit {
 
               this.lstDescuentos = res.lstDescuentos;
 
-              console.log('TOTAL DESCUENTOS ===???????: ' + totalDescuentos);
 
               //Verificar si es mayor que el total
+
+              console.log('TOTAL DESCUENTOS ===???????: ' + totalDescuentos);
+              console.log('TOTAL ===???????: ' + this.data);
+
+
+              //Si la ruta es menuvent
+              if(this.router.url.includes('menuvent')) {
+
+                console.log('TOTAL DESCUENTOS ===???????: ' + totalDescuentos);
+                console.log('TOTAL MENUVENT ===???????: ' + this.data.sumatotal);
+                console.log('Imprimir cada valor de la data: ' + JSON.stringify(this.data));
+
+                if (totalDescuentos > parseFloat(this.data.sumaTotal)) {
+                  Swal.fire({
+                    icon: 'warning',
+                    title: 'Ha ocurrido un error.',
+                    text: 'El descuento excede el total',
+                    showConfirmButton: false,
+                  });
+  
+                  //Eliminar el descuento
+                  this.httpServiceDescuento.eliminarDescuento(descuentoDetalle).subscribe(res => {
+                    if (res.codigoError == 'OK') {
+                      console.log('Eliminado')
+                      // window.location.reload();
+  
+                    } else {
+                      console.log('ERROR')
+                    }
+                  });
+  
+  
+                  //ELIMINAR EL VALOR DEL INPUT
+                  this.documento = '';
+  
+  
+                  //Actualizar la tabla
+                  
+  
+  
+                  this.httpServiceDescuento.updateDescuentos(res.lstDescuentos);
+  
+                  this.datatableElement.dtInstance.then((dtInstance2: DataTables.Api) => {
+                    // Destruye la tabla existente y elimina los datos
+                    dtInstance2.destroy();
+        
+                    // Renderiza la tabla con los nuevos datos
+                    this.dtTrigger2.next('');
+        
+                    // Opcional: Reinicia la página a la primera página
+                    dtInstance2.page('first').draw('page');
+                  });
+  
+  
+                  //Recargar
+                  window.location.reload();
+  
+                  return;
+                }
+
+                this.lstDescuentos = res.lstDescuentos;
+                //Reemplazar los descuentos en el valor las , por . en el string
+                this.lstDescuentos.forEach((descuento) => {
+                  descuento.valorDescuento = descuento.valorDescuento.replace(',', '.');
+                });
+                
+  
+  
+                //Calcular el total de descuentos
+              
+                this.httpServiceDescuento.updateDescuentos(res.lstDescuentos);
+  
+                this.datatableElement.dtInstance.then((dtInstance2: DataTables.Api) => {
+                  // Destruye la tabla existente y elimina los datos
+                  dtInstance2.destroy();
+      
+                  // Renderiza la tabla con los nuevos datos
+                  this.dtTrigger2.next('');
+      
+                  // Opcional: Reinicia la página a la primera página
+                  dtInstance2.page('first').draw('page');
+  
+                  window.location.reload();
+
+                }
+              )
+
+              return;
+              }
+
 
               if (totalDescuentos > parseFloat(this.data.total)) {
                 Swal.fire({
@@ -308,7 +397,7 @@ export class ApplyDiscountComponent implements OnInit {
                 this.httpServiceDescuento.eliminarDescuento(descuentoDetalle).subscribe(res => {
                   if (res.codigoError == 'OK') {
                     console.log('Eliminado')
-                    window.location.reload();
+                    // window.location.reload();
 
                   } else {
                     console.log('ERROR')

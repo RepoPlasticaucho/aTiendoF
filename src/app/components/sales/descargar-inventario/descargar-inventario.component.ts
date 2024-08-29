@@ -6,7 +6,7 @@ import { MovimientosService } from 'src/app/services/movimientos.service';
 import { MovimientosEntity } from 'src/app/models/movimientos';
 import { SociedadesService } from 'src/app/services/sociedades.service';
 import { faShoppingCart, faEdit, faTrashAlt, faMoneyBillAlt, faFileInvoice, faCheck, faSave } from '@fortawesome/free-solid-svg-icons';
-import { Subject, finalize } from 'rxjs';
+import { BehaviorSubject, Subject, finalize, takeUntil } from 'rxjs';
 import Swal from 'sweetalert2';
 import { DetalleImpuestosEntity } from 'src/app/models/detalle-impuestos';
 
@@ -25,9 +25,12 @@ import { DataTableDirective } from 'angular-datatables';
 import { environment } from 'src/environments/environment.prod';
 import { FormasPagoServiceSociedad } from 'src/app/services/formaspagosociedad.service';
 import { MenuventComponent } from '../menuvent/menuvent.component';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { parse } from 'path';
 import { DetalleImpuestosService } from 'src/app/services/detalle-impuestos.service';
+import { ApplyDiscountComponent } from '../../discounts-cl/apply-discount/apply-discount.component';
+import { DescuentosService } from 'src/app/services/descuentos.service';
+import { DescuentosEntity } from 'src/app/models/descuentos';
 
 @Component({
   selector: 'app-descargar-inventario',
@@ -36,7 +39,8 @@ import { DetalleImpuestosService } from 'src/app/services/detalle-impuestos.serv
 })
 export class DescargarInventarioComponent implements OnInit {
 
-
+  private descuentosSubject = new BehaviorSubject<DescuentosEntity[]>([]);
+  private destroy$ = new Subject<void>();
   //Declaración de variables
   dtOptions: DataTables.Settings = {};
   dtOptions2: DataTables.Settings = {};
@@ -82,6 +86,8 @@ export class DescargarInventarioComponent implements OnInit {
   lstFormasPagoAux: FormasPagoEntity[] = [];
   documento: string = '';
 
+  confirmacionCerrado = false;
+
   iva=environment.iva;
   
   constructor(private readonly httpService: DetallesmovimientoService,
@@ -95,9 +101,19 @@ export class DescargarInventarioComponent implements OnInit {
     private readonly httpServiceForma: FormasPagoService,
     private readonly httpServiceFormaSociedad: FormasPagoServiceSociedad,
     private readonly httpServiceDet: DetalleImpuestosService,
+    private dialog: MatDialog,
+    private readonly httpServiceDescuento: DescuentosService,
     private router: Router) { }
 
   ngOnInit(): void {
+
+
+
+    this.httpServiceDescuento.descuentos$
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(descuentos => {
+      this.handleDescuentosAplicados(descuentos);
+  });
 
     this.actualizarColor();
     this.dtOptions = {
@@ -334,9 +350,8 @@ export class DescargarInventarioComponent implements OnInit {
   // }
 
   actualizarColor() {
-    const restoNumerico = parseFloat(this.resto); // Convertir a número
-
-    if (restoNumerico === 0.00) {
+    const restoNumerico = parseFloat(this.sumaTotal); // Convertir a número
+    if (restoNumerico === 0.00 || restoNumerico === 0 || this.sumaTotal === '0,00' || this.sumaTotal === '0') {
       this.inputColor = '#9EF291';
       this.esRestoCero = true;
     } else {
@@ -345,6 +360,87 @@ export class DescargarInventarioComponent implements OnInit {
     }
   }
 
+
+  handleDescuentosAplicados(descuentos: DescuentosEntity[]) {
+    //Reemplazar en lso descuentos valor las , por .
+    descuentos.forEach(descuento => {
+      descuento.valorDescuento = descuento.valorDescuento.replace(',', '.');
+    });
+
+    const descuentosTipo1 = descuentos.filter(descuento => descuento.tipoDescuento === "2");
+
+    // Suma los valores de los descuentos filtrados
+    this.descuentoN = descuentosTipo1.reduce((total, descuento) => total + parseFloat(descuento.valorDescuento), 0);
+
+    const descuentosTipo2 = descuentos.filter(descuento => descuento.tipoDescuento === "1");
+    this.descuentoP = descuentosTipo2.reduce((total, descuento) => total + parseFloat(descuento.valorDescuento), 0);
+
+    //Calcular el total
+    this.calcularSumaTotal();
+    
+    console.log('Descuentos aplicados:', descuentos);
+    // Actualiza los datos según los descuentos aplicados
+    // Por ejemplo, puedes calcular el total con los descuentos aplicados aquí
+  }
+  
+  onInput2(event: any) {
+    let inputValue = event.target.value;
+    const filteredValue = inputValue.replace(/[^0-9.]/g, ''); // Filtra solo números y punto
+
+    if (/^\d*\.?\d*$/.test(inputValue) && !filteredValue.startsWith('.')) {
+      this.calcularSumaTotal();
+    } else {
+      event.target.value = inputValue.length === 0 ? '0' : '';
+    }
+  }
+
+
+  calcularSumaTotal() {
+    const totalTarifa15 = this.calcularTotalTarifa15();
+    const totalTarifa0 = this.calcularTotalTarifa0();
+    const desc = this.calcularDescuento();
+    const descP = this.validarDescuento();
+    const resto = this.calcularTotalAbonado();
+    this.totalF = totalTarifa15 + totalTarifa0 - this.descuentoN;
+
+    const suma = totalTarifa15 + totalTarifa0 - this.descuentoN - descP;
+
+    this.sumaTotal = suma
+      .toLocaleString(undefined, { maximumFractionDigits: 2 })
+      .replace('.', ',');
+
+    this.resto = (this.sumaTotal.replace(',', '.') - resto).toFixed(2);
+  }
+
+  calcularTotalAbonado(): number {
+    const totalAb = this.lstDetallePagos
+      .filter((detallePagos) => detallePagos.valor)
+      .reduce((total, detallePagos) => {
+        console.log(total)
+        return total + parseFloat(detallePagos.valor.replace(',', '.'));
+      }, 0);
+
+    return totalAb;
+  }
+
+  validarDescuento(): number {
+    if (this.sumaTotal) {
+      const descuento = (((this.descuentoP) * (this.totalF)) / 100);
+
+      return descuento;
+    }
+    return 0;
+  }
+  
+  calcularDescuento(): number {
+    const descuento = this.lstDetalleMovimientos
+      .filter((detalleMovimientos) => detalleMovimientos.desc_add)
+      .reduce((total, detalleMovimientos) => {
+        return total + parseFloat(detalleMovimientos.desc_add!.replace(',', '.'));
+      }, 0);
+
+    return descuento;
+  }
 
   changePago(event: any): void {
     const seleccionado = event.target.value;
@@ -457,7 +553,52 @@ export class DescargarInventarioComponent implements OnInit {
     }
   }
 
+  //Si cierra por otra via se elimina todos los descuentos aplicados en el movimiento
+  ngOnDestroy(): void {
+  
+    this.destroy$.next();
+    this.destroy$.complete();
+    //Si confirmacionCerrado es true se retorna
+    if (this.confirmacionCerrado) {
+      return;
+    }
+
+    const descuentoDetalle: DescuentosEntity = {
+      id: '',
+      //Agianar el valor de documento en codigo descuento
+      codigoDescuento: "",
+      usoMaximo: '',
+      valorDescuento: '',
+      fecha_inicio: '',
+      fecha_fin: '',
+      tipoDescuento: '',
+      sociedad: localStorage.getItem('sociedadid')!,
+      estado: '',
+      movimiento_id: localStorage.getItem('movimiento_id')!
+    }
+
+    this.httpServiceDescuento.eliminarDescuentoMovimiento(descuentoDetalle).subscribe(res => {
+      if (res.codigoError == 'OK') {
+        console.log('Descuentos eliminados')
+
+        
+      this.descuentoN = 0;
+      this.descuentoP = 0;
+      //Eliminar en el observable los descuentos
+      this.httpServiceDescuento.updateDescuentos([]);
+      
+      // Actualizar los inputs en 0
+      this.calcularSumaTotal();
+
+      } else {
+        console.log('ERROR')
+      }
+    });
+  }
+
+
   descargarInventario() {
+    this.confirmacionCerrado = true;
     //Si el numero de factura esta vacio
     if (this.documento == '') {
       Swal.fire({
@@ -680,15 +821,51 @@ export class DescargarInventarioComponent implements OnInit {
 
    
   }
-
-
   }
 
+
+  updateDescuentos(descuentos: DescuentosEntity[]) {
+    this.descuentosSubject.next(descuentos);
+  }
+
+  openModalDescuentoNominal() {
+    //Guardar el total en el local storage
+    localStorage.setItem('totalDescargar', this.sumaTotal);
+    
+        if(this.lstDetalleMovimientos.length == 0){
+          Swal.fire({
+            icon: 'info',
+            title: 'Información',
+            text: 'No hay productos en el carrito.',
+            showConfirmButton: true,
+            // timer: 3000
+          });
+          return
+        }
+    
+        const dialogRef = this.dialog.open(ApplyDiscountComponent, {
+          width: 'auto', // Ancho automático basado en el contenido
+          maxWidth: '90vw', // Máximo ancho del modal al 90% del viewport width
+          height: 'auto', // Altura automática basada en el contenido
+          maxHeight: '80vh', // Máxima altura del modal al 80% del viewport height
+          data: { /* Aquí pasas los datos que quieres enviar */ 
+            total: this.totalF,
+            sumaTotal: this.sumaTotal,
+          }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+          const descuentos = this.httpServiceDescuento.descuentos$; // Obtén los descuentos desde el servicio
+          console.log('Descuentos después de cerrar el modal:', descuentos);
+        })
+      }
   closeModal() {
     //Cerrar modal
     this.dialogRef.close();
    
   }
+
+
 
     
   //Controlar que lo que ingrese en el input sea solo numeros caso contrario no escribir
