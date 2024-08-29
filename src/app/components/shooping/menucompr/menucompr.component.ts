@@ -67,6 +67,7 @@ export class MenucomprComponent implements OnInit {
   selectedSustento: string = '';
   lstXmlProveedoresProductos: ProveedoresProductosEntity[] = [];
   failedCodSap: string[] = [];
+  rucXml: string = '';
 
   costo: any;
   costoStatic: any;
@@ -1063,6 +1064,17 @@ export class MenucomprComponent implements OnInit {
         const xmlString = reader.result as string;
         this.parseXML(xmlString);
 
+        //Si el ruc del xml no coincide con el ruc del proveedor retorna un error
+        if (this.rucXml != localStorage.getItem('id_fiscal')) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'El RUC del XML no coincide con el RUC del proveedor.',
+            showConfirmButton: true,
+          });
+          return;
+        }
+
         // Crear un array de promesas para todas las llamadas asíncronas
         const promises = this.lstXmlCarga.map((element) => {
           const proveedorProducto: ProveedoresProductosEntity = {
@@ -1477,6 +1489,8 @@ export class MenucomprComponent implements OnInit {
       // Extraer todos los códigos principales
       const detalles = cdataDoc.getElementsByTagName('detalle');
       this.codigosPrincipales = [];
+      this.rucXml = this.getTextContentFromElement(cdataDoc, 'identificacionComprador')!;
+
       for (let i = 0; i < detalles.length; i++) {
         const codigo = this.getTextContentFromElement(detalles[i], 'codigoPrincipal')
         const cantidad = this.getTextContentFromElement(detalles[i], 'cantidad')
@@ -1486,6 +1500,8 @@ export class MenucomprComponent implements OnInit {
         this.autorizacion = this.getTextContentFromElement(cdataDoc, 'claveAcceso') ?? '';
         this.comprobante = this.getTextContentFromElement(cdataDoc, 'estab') + '-' + this.getTextContentFromElement(cdataDoc, 'ptoEmi') + '-' + this.getTextContentFromElement(cdataDoc, 'secuencial');
 
+
+        
         //Por defecto seleccionar el primero en comprobante y sustento
 
         //Establcer por defecto el select del comprobante en factura y el sustento en 06
@@ -1522,7 +1538,7 @@ export class MenucomprComponent implements OnInit {
           cantidad: cantidad!,
           costo: costo!,
           descuento: descuento!,
-          precioUnitario: precioUnitario!
+          precioUnitario: precioUnitario!,
         }
 
 

@@ -86,6 +86,7 @@ export class LoginComponent {
 
         localStorage.setItem('sociedadid', idsociedad);
         localStorage.setItem('nombreComercial', nombreComercial);
+        localStorage.setItem('id_fiscal', res.lstSociedades[0].id_fiscal);
         if (res.codigoError == "OK") {
           var salt = CryptoJS.enc.Base64.parse("SXZhbiBNZWR2ZWRldg==");
           var iv = CryptoJS.enc.Hex.parse("69135769514102d0eded589ff874cacd");
