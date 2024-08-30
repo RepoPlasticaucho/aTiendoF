@@ -165,7 +165,7 @@ export class MovimientoInventariosComponent implements OnInit {
   changeGroup(alm: any): void {
     const newAlm: AlmacenesEntity = {
       idAlmacen: '',
-      sociedad_id: '',
+      sociedad_id: localStorage.getItem('sociedadid')!,
       nombresociedad: '',
       direccion: '',
       telefono: '',
@@ -204,6 +204,7 @@ export class MovimientoInventariosComponent implements OnInit {
             fav: '',
             color: ''
           }
+          console.log(newInv)
           this.httpServiceInventarios.obtenerInventariosAlm(newInv).subscribe(res => {
             console.log(res)
             if(res.codigoError == 'OK'){
@@ -343,6 +344,7 @@ export class MovimientoInventariosComponent implements OnInit {
                     fav: '',
                     color: ''
                   }
+                  console.log(actInvRes)
                   this.httpServiceInventarios.actualizarInventarioEx(actInvRes).subscribe(res2 => {
                     if(res2.codigoError == 'OK'){
                       console.log('CORRECTO4')

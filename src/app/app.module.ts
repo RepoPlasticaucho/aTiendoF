@@ -157,6 +157,7 @@ import { SugeridoAlmacenesComponent } from './components/suggested/sugerido-alma
 import { DiscountsComponent } from './components/discounts-cl/discounts/discounts.component';
 import { DiscountsCreateComponent} from './components/discounts-cl/discounts-create/discounts-create.component';
 import { ApplyDiscountComponent } from './components/discounts-cl/apply-discount/apply-discount.component';
+import { EstadoFacturasComponent } from './components/estado-facturas/estado-facturas.component';
 
 
 @NgModule({
@@ -291,7 +292,8 @@ import { ApplyDiscountComponent } from './components/discounts-cl/apply-discount
     SugeridoAlmacenesComponent,
     DiscountsComponent,
     DiscountsCreateComponent,
-    ApplyDiscountComponent
+    ApplyDiscountComponent,
+    EstadoFacturasComponent
 
   ],
   imports: [

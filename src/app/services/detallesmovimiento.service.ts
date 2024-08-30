@@ -76,9 +76,12 @@ export class DetallesmovimientoService {
     return this.http.post<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ObtenerDetalleMovimientoAlm`, almacen );
   }
 
-
   obtenerDetalleMovimientoAlmF(almacen: string, fechadesde: string, fechahasta: string): Observable<DetallesMovimiento> {
     return this.http.get<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ObtenerDetalleMovimientoAlmF?almacen=`+almacen+`&fechadesde=`+fechadesde+`&fechahasta=`+fechahasta);
+  }
+
+  obtenerDetalleMovimientoFechas(sociedad_id: string, fechadesde: string, fechahasta: string): Observable<DetallesMovimiento> {
+    return this.http.get<DetallesMovimiento>(`${environment.apiUrl}detallesmovimiento/ObtenerDetalleMovimientoFechas?sociedad_id=`+sociedad_id+`&fechadesde=`+fechadesde+`&fechahasta=`+fechahasta);
   }
 
   obtenerDetalleMovimientoAlmFTipo(almacen: string, fechadesde: string, fechahasta: string, tipo: string): Observable<DetallesMovimiento> {

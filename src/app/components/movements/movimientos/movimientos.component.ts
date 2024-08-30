@@ -121,8 +121,6 @@ export class MovimientosComponent implements OnInit {
         console.log("ENTRO 120")
             
               this.lstDetalleMovimientos = res.lstDetalleMovimientos;
-              
-              
               this.dtTrigger.next('');
 
             }
@@ -187,7 +185,7 @@ export class MovimientosComponent implements OnInit {
 
             if(!this.esFacturador){
               this.lstDetalleMovimientos = res.lstDetalleMovimientos;
-
+              console.log(this.lstDetalleMovimientos)
             }
 
         
@@ -343,7 +341,7 @@ export class MovimientosComponent implements OnInit {
     const fechaHastaControl = this.filtroForm.get('fechaHasta');
     const fechaDesde = fechaDesdeControl?.value;
     const fechaHasta = fechaHastaControl?.value;
-    const almacen = this.filtroForm.get('almacen')?.value!;
+    let almacen = this.filtroForm.get('almacen')?.value!;
     //if es facturador el nombre es nombreAlmacenFacturador
     if(this.esFacturador){
  
@@ -374,32 +372,63 @@ export class MovimientosComponent implements OnInit {
       });
       return;
     }
+    console.log(almacen)
+    const sociedad = localStorage.getItem('sociedadid');
+    if(almacen = '0'){
+      this.httpService.obtenerDetalleMovimientoFechas(sociedad!, fechaDesde, fechaHasta).subscribe(res => {
+        console.log(res)
+        if (res.codigoError != "OK") {
+          this.filtroForm.get('almacen')?.enable();
+          Swal.fire({
+            icon: 'error',
+            title: 'No se pudo obtener movimientos.',
+            text: res.descripcionError,
+            showConfirmButton: false,
+          });
+        } else {
+          this.filtroForm.get('almacen')?.disable();
+          this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+          this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            // Destruye la tabla existente y elimina los datos
+            dtInstance.destroy();
+  
+            // Renderiza la tabla con los nuevos datos
+            this.dtTrigger.next('');
+  
+            // Opcional: Reinicia la página a la primera página
+            dtInstance.page('first').draw('page');
+          });
+        }
+      });
+    } else {
+      this.httpService.obtenerDetalleMovimientoAlmF(almacen, fechaDesde, fechaHasta).subscribe(res => {
+        console.log(res)
+        if (res.codigoError != "OK") {
+          this.filtroForm.get('almacen')?.enable();
+          Swal.fire({
+            icon: 'error',
+            title: 'No se pudo obtener movimientos.',
+            text: res.descripcionError,
+            showConfirmButton: false,
+          });
+        } else {
+          this.filtroForm.get('almacen')?.disable();
+          this.lstDetalleMovimientos = res.lstDetalleMovimientos;
+          this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            // Destruye la tabla existente y elimina los datos
+            dtInstance.destroy();
+  
+            // Renderiza la tabla con los nuevos datos
+            this.dtTrigger.next('');
+  
+            // Opcional: Reinicia la página a la primera página
+            dtInstance.page('first').draw('page');
+          });
+        }
+      });
+    }
 
-    this.httpService.obtenerDetalleMovimientoAlmF(almacen, fechaDesde, fechaHasta).subscribe(res => {
-      console.log(res)
-      if (res.codigoError != "OK") {
-        this.filtroForm.get('almacen')?.enable();
-        Swal.fire({
-          icon: 'error',
-          title: 'No se pudo obtener movimientos.',
-          text: res.descripcionError,
-          showConfirmButton: false,
-        });
-      } else {
-        this.filtroForm.get('almacen')?.disable();
-        this.lstDetalleMovimientos = res.lstDetalleMovimientos;
-        this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
-          // Destruye la tabla existente y elimina los datos
-          dtInstance.destroy();
-
-          // Renderiza la tabla con los nuevos datos
-          this.dtTrigger.next('');
-
-          // Opcional: Reinicia la página a la primera página
-          dtInstance.page('first').draw('page');
-        });
-      }
-    });
+    
 
   }
 
