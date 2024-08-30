@@ -1,27 +1,36 @@
-<br>
 <div style="max-width: 95%;margin: auto;">
     <div class="card">
-        <br>
+        <br />
         <div class="card-header">
             <div class="row mx-3">
-                <fa-icon [icon]="faUserFriends" [size]="'3x'" style="color: #636363;"></fa-icon>
-                <h1 class="mx-5 " style="color: #636363;">Facturas</h1>
+                <fa-icon [icon]="faShoppingBag" [size]="'3x'" style="color: #636363"></fa-icon>
+                <h1 class="mx-5" style="color: #636363">COMPRAS</h1>
             </div>
+
         </div>
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" id="dtdt">
             <thead style="color: #636363;">
                 <tr>
-                    <th style="width: 10%; ">ID Producto</th>
-                    <th style="width: 10%; ">Producto</th>
-                    <th style="width: 10%; ">Cantidad</th>
-                  
+                    <th style="width: 10%; ">Numero Factura</th>
+                    <th style="width: 10%; ">Clave de Acceso</th>
+                    <th style="width: 10%; ">Estado Recepción</th>
+                    <th style="width: 10%; ">Estado Autorización</th>
+                    <th style="width: 10%; ">Ultima Actualización</th>
+                    <th style="width: 10%; ">Acciones</th>
                 </tr>
             </thead>
             <tbody style="color: #767695;">
                 <tr *ngFor="let detalleMovimientos of lstMovimientos; let i = index">
-                    <td>{{detalleMovimientos.id}}</td>
                     <td>{{detalleMovimientos.nroFactura}}</td>
                     <td>{{detalleMovimientos.clave_acceso}}</td>
+                    <td>{{detalleMovimientos.camp_ad1}}</td>
+                    <td>{{detalleMovimientos.camp_ad2}}</td>
+                    <td>{{detalleMovimientos.updated_at}}</td>
+                    <td>
+                        <button mat-icon-button>
+                            <fa-icon [icon]="faReply" [size]="'lg'" style="color: #636363"></fa-icon>
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>

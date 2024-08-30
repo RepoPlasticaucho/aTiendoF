@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faEdit, faPlus, faTrashAlt, faUserFriends } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrashAlt, faUserFriends, faShoppingBag, faReply } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
 import { MovimientosEntity } from 'src/app/models/movimientos';
 import { MovimientosService } from 'src/app/services/movimientos.service';
+import { SriwsService } from 'src/app/services/sriws.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -16,9 +17,11 @@ export class EstadoFacturasComponent implements OnInit {
 
  ///Iconos para la pagina de grupos
  faUserFriends = faUserFriends;
+ faShoppingBag = faShoppingBag;
  faEdit = faEdit;
  faTrashAlt = faTrashAlt;
  faPlus = faPlus;
+  faReply = faReply;
  //Declaración de variables
  dtOptions: DataTables.Settings = {};
  dtTrigger: Subject<any> = new Subject<any>();
@@ -26,7 +29,8 @@ export class EstadoFacturasComponent implements OnInit {
 
  constructor(private readonly httpService: MovimientosService,
    private router: Router,
-
+   private readonly httpSri: SriwsService
+  
   ) { }
 
  ngOnInit(): void {
@@ -38,7 +42,8 @@ export class EstadoFacturasComponent implements OnInit {
     search: false,
     searching: true,
     ordering: true,
-    info: false,
+    info: true,
+    
    }
 
    //Crear movimiento
@@ -73,6 +78,8 @@ export class EstadoFacturasComponent implements OnInit {
           movimiento.nroFactura = movimiento.clave_acceso?.substring(24,39);
         });
 
+        this.dtTrigger.next("")
+
 
       } else {
         Swal.fire({
@@ -85,6 +92,11 @@ export class EstadoFacturasComponent implements OnInit {
     
 
 
+  }
+
+
+  volverAAutorizar(movimiento: MovimientosEntity){
+    this.httpSri.autorizarXMLSri
   }
 
 
