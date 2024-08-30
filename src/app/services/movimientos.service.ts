@@ -70,6 +70,10 @@ export class MovimientosService {
     return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientoID`, movimiento );
   }
 
+  obtenerMovimientoClaveAlmacen(movimiento: MovimientosEntity): Observable<Movimientos> {
+    return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientoIDClave`, movimiento );
+  }
+
   obtenerMovimientosAlmacen(movimiento: MovimientosEntity): Observable<Movimientos> {
     return this.http.post<Movimientos>(`${environment.apiUrl}movimientos/ObtenerMovimientosAlmacen`, movimiento );
   }

@@ -9,7 +9,8 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-estado-facturas',
   templateUrl: './estado-facturas.component.html',
-  styleUrls: ['./estado-facturas.component.css']
+  styleUrls: ['./estado-facturas.component.css'],
+  
 })
 export class EstadoFacturasComponent implements OnInit {
 
@@ -24,87 +25,67 @@ export class EstadoFacturasComponent implements OnInit {
  lstMovimientos: MovimientosEntity[] = [];
 
  constructor(private readonly httpService: MovimientosService,
-   private router: Router) { }
+   private router: Router,
+
+  ) { }
 
  ngOnInit(): void {
    this.dtOptions = {
-     language: {
-       url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
-     },
-     paging: true,
-     search: false,
-     searching: true,
-     ordering: true,
-     info: true,
-     responsive:true
+    language: {
+      url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+    },
+    paging: true,
+    search: false,
+    searching: true,
+    ordering: true,
+    info: false,
    }
-   /*
-   this.httpService.obtenerAlmacenes().subscribe(res => {
-     if (res.codigoError != "OK") {
-       Swal.fire({
-         icon: 'warning',
-         title: 'No existen almacenes.',
-         text: res.descripcionError,
-         showConfirmButton: false,
-         // timer: 3000
-       });
-     } else {
-       this.lstAlmacenes = res.lstAlmacenes;
-       this.dtTrigger.next('');
-     }
-   })
 
- }
+   //Crear movimiento
+   const movimiento: MovimientosEntity = {
+      id:"",
+      tipo_id: '',
+      tipo_emision_cod: '',
+      estado_fact_id: '',
+      tipo_comprb_id: '',
+      almacen_id: localStorage.getItem('almacenid')!,
+      cod_doc: '',
+      secuencial: '',
+      importe_total: '',
+      valor_rete_iva: '',
+      valor_rete_renta: '',
+      updated_at: '',
+      tercero: '',
+      tipo_comprb_cod: '',
+      id_fiscal_soc: '',
+      tipo_ambiente: '',
+      pto_emision: '',
+      url_factura: '',
+      comprobante_compra_id: '',
+      nroFactura: ''
+    }
 
- eliminarAlmacenes(almacen: AlmacenesEntity): void {
-   Swal.fire({
-     icon: 'question',
-     title: `¿Esta seguro de eliminar ${almacen.nombresociedad}?`,
-     showDenyButton: true,
-     confirmButtonText: 'Si',
-     denyButtonText: 'No',
-   }).then((result) => {
-     if (result.isConfirmed) {
-       this.httpService.eliminarAlmacen(almacen).subscribe(res => {
-         if (res.codigoError == 'OK') {
-           Swal.fire({
-             icon: 'success',
-             title: 'Eliminado Exitosamente.',
-             text: `Se ha eliminado el grupo ${almacen.nombresociedad}`,
-             showConfirmButton: true,
-             confirmButtonText: "Ok"
-           }).then(() => {
-             // this.groupForm.reset();
-             window.location.reload();
-           });
-         } else {
-           Swal.fire({
-             icon: 'error',
-             title: 'Ha ocurrido un error.',
-             text: res.descripcionError,
-             showConfirmButton: false,
-           });
-         }
-       })
-     }
-   })
- }
+    this.httpService.obtenerMovimientoClaveAlmacen(movimiento).subscribe(res => {
+      if(res.codigoError === 'OK'){
+        this.lstMovimientos = res.lstMovimientos;
 
- ngOnDestroy(): void {
-   this.dtTrigger.unsubscribe();
- }
+        this.lstMovimientos.forEach(movimiento => {
+          movimiento.nroFactura = movimiento.clave_acceso?.substring(24,39);
+        });
 
- agregarAlmacenes() {
-   this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['crearAlmacenes'] } }]);
- }
 
- editarAlmacenes(almacen: AlmacenesEntity) {
-   console.log(almacen);
-   this.httpService.asignarAlmacen(almacen);
-   this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['editarAlmacenes'] } }]);
- }
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: res.descripcionError
+        });
+      }
+    });
+    
 
-*/
-}
+
+  }
+
 
 }
