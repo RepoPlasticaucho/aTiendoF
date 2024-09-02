@@ -128,5 +128,8 @@ export class EstadoFacturasAlmacenesComponent implements OnInit {
     this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['estado-facturas'] } }]);
   }
 
+
+
+
   
 }

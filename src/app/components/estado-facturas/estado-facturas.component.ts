@@ -44,7 +44,7 @@ export class EstadoFacturasComponent implements OnInit {
     searching: true,
     ordering: true,
     info: true,
-    
+    order: [[0, 'desc']] // Ordenar por la primera columna de mayor a menor
    }
 
    //Crear movimiento
@@ -128,6 +128,10 @@ export class EstadoFacturasComponent implements OnInit {
       //Cerrar pantalla de carga
     });
 
+  }
+
+  nuevaFactura() {
+    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['menu-vent'] } }]);
   }
 
 

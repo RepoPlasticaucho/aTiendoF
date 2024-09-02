@@ -472,36 +472,39 @@ export class FacturaComponent implements OnInit {
     });
   }
 
-
   enviarComprobante() {
-    const movimientoID = localStorage.getItem('movimiento_id')!;
-    this.httpServiceSRI.enviarComprobanteCorreo(movimientoID).subscribe(res => {
-      if (res == 'Correo enviado correctamente') {
-        console.log(res);
-        Swal.fire({
-          icon: 'success',
-          title: 'Finalizado Correctamente.',
-          text: `Se ha finalizado la venta y enviado el comprobante`,
-          showConfirmButton: true,
-          confirmButtonText: "Ok"
-        }).finally(() => {
-          // this.groupForm.reset();
-          let ruta = this.router.url;
-
-          if (ruta.includes('navegation-cl')) {
-            this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ventaprov'] } }]);
-          }
-
-          if (ruta.includes('navegation-facturador')) {
-            this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['ventaprov'] } }]);
-          }
-
-        });
-      } else {
-        console.log(res);
-      }
-    });
+    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['estado-facturas'] } }]);
   }
+
+  // enviarComprobante() {
+  //   const movimientoID = localStorage.getItem('movimiento_id')!;
+  //   this.httpServiceSRI.enviarComprobanteCorreo(movimientoID).subscribe(res => {
+  //     if (res == 'Correo enviado correctamente') {
+  //       console.log(res);
+  //       Swal.fire({
+  //         icon: 'success',
+  //         title: 'Finalizado Correctamente.',
+  //         text: `Se ha finalizado la venta y enviado el comprobante`,
+  //         showConfirmButton: true,
+  //         confirmButtonText: "Ok"
+  //       }).finally(() => {
+  //         // this.groupForm.reset();
+  //         let ruta = this.router.url;
+
+  //         if (ruta.includes('navegation-cl')) {
+  //           this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['ventaprov'] } }]);
+  //         }
+
+  //         if (ruta.includes('navegation-facturador')) {
+  //           this.router.navigate(['/navegation-facturador', { outlets: { 'contentPersonal': ['ventaprov'] } }]);
+  //         }
+
+  //       });
+  //     } else {
+  //       console.log(res);
+  //     }
+  //   });
+  // }
 
   calcularTotalTarifa0(): number {
     const totalTarifa0 = this.lstDetalleMovimientos

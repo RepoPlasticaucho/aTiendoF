@@ -1,13 +1,20 @@
 <div style="max-width: 95%;margin: auto;">
     <div class="card">
         <br />
-        <div class="card-header">
-            <div class="row mx-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
                 <fa-icon [icon]="faShoppingBag" [size]="'3x'" style="color: #636363"></fa-icon>
                 <h1 class="mx-5" style="color: #636363">ESTADO FACTURAS</h1>
             </div>
-
+        
+            <!-- Boton para nueva factura en el ultimo almacen -->
+            <button mat-icon-button (click)="nuevaFactura()"
+                style="background-color: #636363; color: white; margin-right: 20px;"
+            >
+                Nueva Factura
+            </button>
         </div>
+        
         <div class="card-body ">
 
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" id="dtdt">
@@ -35,7 +42,6 @@
 
                     <td>
                         <button mat-icon-button
-                            *ngIf="detalleMovimientos.camp_ad1 != 'RECIBIDA' && detalleMovimientos.camp_ad2 != 'AUTORIZADO'"
                             (click)="volverAAutorizar(detalleMovimientos)"
                         >
                             <fa-icon [icon]="faReply" [size]="'lg'" style="color: #636363"></fa-icon>

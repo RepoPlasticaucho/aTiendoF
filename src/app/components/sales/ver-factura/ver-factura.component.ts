@@ -658,14 +658,14 @@ export class VerFacturaComponent implements OnInit {
                     this.httpServiceMovimiento.actualizarCLAVEACCESO(newMovCA).pipe(finalize(() => {
                       this.httpServiceMovimiento.crearXML(localStorage.getItem('movimiento_id')!).pipe(finalize(() => {
                                        //Mostrar pantalla de carga mientras se autoriza el XML
-                    Swal.fire({
-                      title: 'Autorizando XML',
-                      html: 'Espere un momento por favor',
-                      timer: 30000,
-                      didOpen: () => {
-                        Swal.showLoading();
-                      }
-                    });
+                    // Swal.fire({
+                    //   title: 'Autorizando XML',
+                    //   html: 'Espere un momento por favor',
+                    //   timer: 30000,
+                    //   didOpen: () => {
+                    //     Swal.showLoading();
+                    //   }
+                    // });
                         this.httpServiceSRI.recibirXMLSri(localStorage.getItem('movimiento_id')!).subscribe(res4 => {
 
 
@@ -684,7 +684,7 @@ export class VerFacturaComponent implements OnInit {
                               //Cerrar pantalla de carga
                             });
 
-                            Swal.close();
+                            // Swal.close();
 
                             window.location.reload();
 

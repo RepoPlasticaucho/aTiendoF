@@ -131,12 +131,13 @@
   </div>
   <br><br>
   <div class="botones">
+    <button class="btn btn-primary" (click)="enviarComprobante()">
+      <span style="color: white; font-size: 20px;">Nueva Factura</span>
+    </button>
     <button class="btn btn-primary" style="margin-right: 70px;" (click)="guardarPDF()">
       <span style="color: white; font-size: 20px;">Generar PDF</span>
     </button>
-    <button class="btn btn-primary" (click)="enviarComprobante()" [disabled]="!pdfGenerado">
-      <span style="color: white; font-size: 20px;">Enviar Comprobante por Correo</span>
-    </button>
+ 
   </div>
   <br><br>
 </div>
