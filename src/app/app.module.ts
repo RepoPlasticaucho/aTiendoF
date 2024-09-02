@@ -158,6 +158,7 @@ import { DiscountsComponent } from './components/discounts-cl/discounts/discount
 import { DiscountsCreateComponent} from './components/discounts-cl/discounts-create/discounts-create.component';
 import { ApplyDiscountComponent } from './components/discounts-cl/apply-discount/apply-discount.component';
 import { EstadoFacturasComponent } from './components/estado-facturas/estado-facturas.component';
+import { EstadoFacturasAlmacenesComponent } from './components/estado-facturas-almacenes/estado-facturas-almacenes.component';
 
 
 @NgModule({
@@ -293,7 +294,8 @@ import { EstadoFacturasComponent } from './components/estado-facturas/estado-fac
     DiscountsComponent,
     DiscountsCreateComponent,
     ApplyDiscountComponent,
-    EstadoFacturasComponent
+    EstadoFacturasComponent,
+    EstadoFacturasAlmacenesComponent
 
   ],
   imports: [

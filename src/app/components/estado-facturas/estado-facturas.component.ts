@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faEdit, faPlus, faTrashAlt, faUserFriends, faShoppingBag, faReply } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrashAlt, faUserFriends, faShoppingBag, faReply, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
 import { MovimientosEntity } from 'src/app/models/movimientos';
 import { MovimientosService } from 'src/app/services/movimientos.service';
@@ -17,6 +17,7 @@ export class EstadoFacturasComponent implements OnInit {
 
  ///Iconos para la pagina de grupos
  faUserFriends = faUserFriends;
+ faEnvelope = faEnvelope;
  faShoppingBag = faShoppingBag;
  faEdit = faEdit;
  faTrashAlt = faTrashAlt;
@@ -94,6 +95,27 @@ export class EstadoFacturasComponent implements OnInit {
 
   }
 
+
+  enviarComprobante(movimiento: MovimientosEntity) {
+
+
+    this.httpSri.enviarComprobanteCorreo(movimiento.id).subscribe(res => {
+      if (res == 'Correo enviado correctamente') {
+        console.log(res);
+        Swal.fire({
+          icon: 'success',
+          title: 'Finalizado Correctamente.',
+          text: `Se ha finalizado la venta y enviado el comprobante`,
+          showConfirmButton: true,
+          confirmButtonText: "Ok"
+        }).finally(() => {
+          Swal.close();
+        });
+      } else {
+        console.log(res);
+      }
+    });
+  }
 
   volverAAutorizar(movimiento: MovimientosEntity){
     this.httpSri.autorizarXMLSri(movimiento.id).subscribe(res5 => {

@@ -4,7 +4,7 @@
         <div class="card-header">
             <div class="row mx-3">
                 <fa-icon [icon]="faShoppingBag" [size]="'3x'" style="color: #636363"></fa-icon>
-                <h1 class="mx-5" style="color: #636363">COMPRAS</h1>
+                <h1 class="mx-5" style="color: #636363">ESTADO FACTURAS</h1>
             </div>
 
         </div>
@@ -37,6 +37,14 @@
                         >
                             <fa-icon [icon]="faReply" [size]="'lg'" style="color: #636363"></fa-icon>
                         </button>
+
+                        <button mat-icon-button
+                    *ngIf="detalleMovimientos.camp_ad1 == 'RECIBIDA' && detalleMovimientos.camp_ad2 == 'AUTORIZADO'"
+
+                        (click)="enviarComprobante(detalleMovimientos)"
+                    >
+                        <fa-icon [icon]="faEnvelope" [size]="'lg'" style="color: #636363"></fa-icon>
+                    </button>
                     </td>
                 </tr>
             </tbody>
