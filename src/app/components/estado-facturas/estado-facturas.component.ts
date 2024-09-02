@@ -96,7 +96,16 @@ export class EstadoFacturasComponent implements OnInit {
 
 
   volverAAutorizar(movimiento: MovimientosEntity){
-    this.httpSri.autorizarXMLSri
+    this.httpSri.autorizarXMLSri(movimiento.id).subscribe(res5 => {
+                              
+      console.log(res5);
+      const palabras: string[] = res5.split(' ');
+      console.log(palabras)
+      localStorage.setItem('fechaAutoriz', palabras.slice(1).join(' '));
+
+      //Cerrar pantalla de carga
+    });
+
   }
 
 

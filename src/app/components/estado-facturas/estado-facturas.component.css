@@ -160,3 +160,7 @@
     height: 35px;
     text-align: center;
   }
+
+  .card-body {
+    overflow-x: auto
+}

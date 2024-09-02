@@ -8,6 +8,8 @@
             </div>
 
         </div>
+        <div class="card-body ">
+
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" id="dtdt">
             <thead style="color: #636363;">
                 <tr>
@@ -16,6 +18,7 @@
                     <th style="width: 10%; ">Estado Recepción</th>
                     <th style="width: 10%; ">Estado Autorización</th>
                     <th style="width: 10%; ">Ultima Actualización</th>
+                    <th style="width: 10%; ">Mensaje</th>
                     <th style="width: 10%; ">Acciones</th>
                 </tr>
             </thead>
@@ -26,8 +29,12 @@
                     <td>{{detalleMovimientos.camp_ad1}}</td>
                     <td>{{detalleMovimientos.camp_ad2}}</td>
                     <td>{{detalleMovimientos.updated_at}}</td>
+                    <td>{{detalleMovimientos.estado_mensaje}}</td>
+
                     <td>
-                        <button mat-icon-button>
+                        <button mat-icon-button
+                            (click)="volverAAutorizar(detalleMovimientos)"
+                        >
                             <fa-icon [icon]="faReply" [size]="'lg'" style="color: #636363"></fa-icon>
                         </button>
                     </td>
@@ -35,4 +42,5 @@
             </tbody>
         </table>
     </div>
+</div>
 </div>
