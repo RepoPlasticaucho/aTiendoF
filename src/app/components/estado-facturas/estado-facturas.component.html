@@ -15,6 +15,7 @@
                 <tr>
                     <th style="width: 10%; ">Numero Factura</th>
                     <th style="width: 10%; ">Clave de Acceso</th>
+                    <th style="width: 10%; ">Cliente</th>
                     <th style="width: 10%; ">Estado Recepción</th>
                     <th style="width: 10%; ">Estado Autorización</th>
                     <th style="width: 10%; ">Ultima Actualización</th>
@@ -26,6 +27,7 @@
                 <tr *ngFor="let detalleMovimientos of lstMovimientos; let i = index">
                     <td>{{detalleMovimientos.nroFactura}}</td>
                     <td>{{detalleMovimientos.clave_acceso}}</td>
+                    <td>{{detalleMovimientos.tercero}}</td>
                     <td>{{detalleMovimientos.camp_ad1}}</td>
                     <td>{{detalleMovimientos.camp_ad2}}</td>
                     <td>{{detalleMovimientos.updated_at}}</td>
