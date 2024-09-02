@@ -11,6 +11,7 @@ import { AllInventario } from './components/inventories/all-inventario-cliente/a
 import { SugeridoAlmacenesComponent } from './components/suggested/sugerido-almacenes/sugerido-almacenes.component';
 import { DiscountsComponent } from './components/discounts-cl/discounts/discounts.component';
 import { DiscountsCreateComponent } from './components/discounts-cl/discounts-create/discounts-create.component';
+import { EstadoFacturasAlmacenesComponent } from './components/estado-facturas-almacenes/estado-facturas-almacenes.component';
 const routes: Routes = [
   {
     path: 'navegation-cl', component: NavegationClComponent,
@@ -78,6 +79,7 @@ const routes: Routes = [
       { path: "sugerdio-almacen", component: SugeridoAlmacenesComponent, outlet: "contentClient" },
       { path: "descuentos", component: DiscountsComponent, outlet: "contentClient" },
       { path: "descuentos-create", component: DiscountsCreateComponent, outlet: "contentClient" },
+      { path: "almacenes-estado-facturas", component: EstadoFacturasAlmacenesComponent, outlet: "contentClient" },
       { path: "estado-facturas", component: EstadoFacturasComponent, outlet: "contentClient" },
     ]
   },
