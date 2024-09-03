@@ -120,18 +120,24 @@ export class EstadoFacturasComponent implements OnInit {
   volverAAutorizar(movimiento: MovimientosEntity){
     this.httpSri.autorizarXMLSri(movimiento.id).subscribe(res5 => {
                               
-      console.log(res5);
       const palabras: string[] = res5.split(' ');
       console.log(palabras)
       localStorage.setItem('fechaAutoriz', palabras.slice(1).join(' '));
-
       //Cerrar pantalla de carga
+      if(palabras[0] = 'AUTORIZADO'){
+        movimiento.camp_ad2 = "AUTORIZADO";
+        movimiento.estado_mensaje = "Sin Novedad"
+      } else {
+        movimiento.camp_ad2 = "NO AUTORIZADO";
+        movimiento.estado_mensaje = "Recarga la pantalla para visualizar el mensaje";
+      }
+      
     });
 
   }
 
   nuevaFactura() {
-    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['menu-vent'] } }]);
+    this.router.navigate(['/navegation-cl', { outlets: { 'contentClient': ['almacenegresos'] } }]);
   }
 
 

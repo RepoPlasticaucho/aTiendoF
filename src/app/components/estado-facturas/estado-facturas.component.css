@@ -7,9 +7,6 @@
     text-align: center;
   }
   
-  .card-body {
-    overflow-x: auto
-  }
   
   .cool-input {
     border: 1px solid #35b0e9;
@@ -71,7 +68,6 @@
     /* Ajusta este valor según tus necesidades */
     max-width: 750px;
     overflow-y: auto;
-    overflow-x: auto;
   }
   
   /* Estilos personalizados para el scrollbar */
@@ -162,5 +158,7 @@
   }
 
   .card-body {
-    overflow-x: auto
+    overflow-x: auto;
+    max-height: calc(100vh - 150px);
+    padding-bottom: 15px; /* Espacio extra para el scroll */
 }
