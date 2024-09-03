@@ -97,24 +97,48 @@ export class EstadoFacturasComponent implements OnInit {
 
 
   enviarComprobante(movimiento: MovimientosEntity) {
-
-
-    this.httpSri.enviarComprobanteCorreo(movimiento.id).subscribe(res => {
-      if (res == 'Correo enviado correctamente') {
-        console.log(res);
-        Swal.fire({
-          icon: 'success',
-          title: 'Finalizado Correctamente.',
-          text: `Se ha finalizado la venta y enviado el comprobante`,
-          showConfirmButton: true,
-          confirmButtonText: "Ok"
-        }).finally(() => {
-          Swal.close();
-        });
-      } else {
-        console.log(res);
+    // Mostrar la pantalla de carga (spinner)
+    Swal.fire({
+      title: 'Enviando...',
+      text: 'Por favor, espere mientras se envía el comprobante.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
       }
     });
+  
+    this.httpSri.enviarComprobanteCorreo(movimiento.id).subscribe(
+      res => {
+        if (res === 'Correo enviado correctamente') {
+          console.log(res);
+          // Actualizar la alerta con el resultado y cerrar el spinner
+          Swal.fire({
+            icon: 'success',
+            title: 'Finalizado Correctamente.',
+            text: 'Se ha finalizado la venta y enviado el comprobante',
+            confirmButtonText: 'Ok'
+          });
+        } else {
+          console.log(res);
+          // En caso de error, mostrar un mensaje de error
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se pudo enviar el comprobante.',
+            confirmButtonText: 'Ok'
+          });
+        }
+      },
+      error => {
+        // En caso de error en la petición, mostrar un mensaje de error
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Hubo un problema al intentar enviar el comprobante.',
+          confirmButtonText: 'Ok'
+        });
+      }
+    );
   }
 
   volverAAutorizar(movimiento: MovimientosEntity){

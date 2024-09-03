@@ -42,6 +42,7 @@
 
                     <td>
                         <button mat-icon-button
+                        *ngIf="detalleMovimientos.camp_ad1 == 'RECIBIDA' && detalleMovimientos.camp_ad2 != 'AUTORIZADO'"
                             (click)="volverAAutorizar(detalleMovimientos)"
                         >
                             <fa-icon [icon]="faReply" [size]="'lg'" style="color: #636363"></fa-icon>
