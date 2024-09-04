@@ -129,7 +129,5 @@ export class EstadoFacturasAlmacenesComponent implements OnInit {
   }
 
 
-
-
   
 }

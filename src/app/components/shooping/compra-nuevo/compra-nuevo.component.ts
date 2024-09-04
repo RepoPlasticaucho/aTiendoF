@@ -1212,13 +1212,10 @@ export class CompraNuevoComponent implements OnInit {
                   this.httpServiceDetalle.modificarDetallePedidoVentaCosto(newDetalle4).subscribe(res => {
                     console.log(res.codigoError)
                     if (res.codigoError == 'OK') {
-  
                       this.cerrarDialog();
-  
                       this.productoAgregado.emit(proveedorProducto);
-  
                     } else {
-  
+                      
                     }
                   });
                 } else {

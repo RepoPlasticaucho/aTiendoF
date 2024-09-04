@@ -1103,7 +1103,6 @@ export class MenucomprComponent implements OnInit {
                   producto.pvp2 = producto.precio;
                   producto.precio = element.precioUnitario!;
                   
-
                   console.log('Producto aquiiiii', producto);
 
                   this.lstXmlProveedoresProductos.push(producto);
