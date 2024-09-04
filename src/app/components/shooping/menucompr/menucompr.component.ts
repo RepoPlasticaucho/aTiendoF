@@ -1065,15 +1065,15 @@ export class MenucomprComponent implements OnInit {
         this.parseXML(xmlString);
 
         //Si el ruc del xml no coincide con el ruc del proveedor retorna un error
-        if (this.rucXml != localStorage.getItem('id_fiscal')) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'El RUC del XML no coincide con el RUC del proveedor.',
-            showConfirmButton: true,
-          });
-          return;
-        }
+        // if (this.rucXml != localStorage.getItem('id_fiscal')) {
+        //   Swal.fire({
+        //     icon: 'error',
+        //     title: 'Error',
+        //     text: 'El RUC del XML no coincide con el RUC del proveedor.',
+        //     showConfirmButton: true,
+        //   });
+        //   return;
+        // }
 
         // Crear un array de promesas para todas las llamadas asíncronas
         const promises = this.lstXmlCarga.map((element) => {
@@ -1188,6 +1188,15 @@ export class MenucomprComponent implements OnInit {
 
     try {
       for (const detalle of detalles) {
+               // Reemplazar , por . en el costo y costoCalculado
+               detalle.costo = detalle.precio!;
+               if (detalle.costoCalculado != null) {
+                 detalle.costoCalculado = detalle.precio!.replace(',', '.');
+                  console.log('Este es el detalle', detalle);
+                }
+
+
+         
         await this.crearDetalle(detalle);
       }
       Swal.fire({
@@ -1210,6 +1219,489 @@ export class MenucomprComponent implements OnInit {
 
 
   crearDetalle(proveedorProducto: ProveedoresProductosEntity): Promise<void> {
+    return new Promise((resolve, reject) => {
+    this.httpServiceProvProd.asignarProveedorProducto(proveedorProducto);
+    this.httpServiceProvProd.obtenerProveedorProducto$.pipe(take(1)).subscribe((res) => {
+      if (res.producto_id == '') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Ha ocurrido un error.',
+          text: 'No se ha obtenido información.',
+          showConfirmButton: false,
+        }).finally(() => {
+          this.router.navigate([
+            '/navegation-cl',
+            { outlets: { contentClient: ['menucompr'] } },
+          ]);
+        });
+      } else {
+        //Asignamos los valores a los campos
+        this.costo = res.costo;
+        this.costo2 = res.costo;
+        this.precio = parseFloat(res.costo!) * parseFloat(proveedorProducto.cantidad!);
+
+        const newInventario: InventariosEntity = {
+          categoria_id: '',
+          categoria: '',
+          linea: '',
+          modelo: '',
+          marca_id: '',
+          marca: '',
+          modelo_producto_id: '',
+          idProducto: '',
+          Producto: '',
+          id: '',
+          etiquetas: res.etiquetas,
+          dInventario: '',
+          producto_id: res.producto_id,
+          almacen_id: localStorage.getItem('almacenid')!,
+          almacen: '',
+          stock_optimo: '',
+          fav: '0',
+          costo: this.costo2,
+          color: '',
+          stock: proveedorProducto.cantidad!,
+          pvp2: proveedorProducto.precio,
+          url_image: localStorage.getItem('sociedadid')!
+        }
+
+
+
+        // cambios
+        //console.log(proveedorProducto.productoExistente)
+
+        //Cambio stock y costNuevo general
+        this.httpServiceInventario.obtenerStockTotalSociedad(newInventario).subscribe(res1 => {
+          if (res1.codigoError == 'NEXISTE') {
+            console.log("ENTRO AL PRODUCTO NEXISTE1")
+            this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res1 => {
+              if (res1.codigoError == 'NEXISTE') {
+
+                console.log("ENTRO AL PRODUCTO NEXISTE2")
+                this.httpServiceInventario.agregarInventario(newInventario).pipe(
+                  finalize(() => {
+                    this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res5 => {
+                      const newDetalle: DetallesMovimientoEntity = {
+                        id: '',
+                        producto_nombre: '',
+                        inventario_id: res5.lstInventarios[0].id,
+                        producto_id: res.producto_id,
+                        movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
+                        cantidad: proveedorProducto.cantidad!,
+                        costo: proveedorProducto.costo!,
+                        precio: (parseFloat(proveedorProducto.costo!) * parseFloat(proveedorProducto.cantidad!)).toString()
+                      }
+
+
+                      this.httpServiceDetalle.agregarDetalleCompra(newDetalle).pipe(finalize(() => {
+
+                        this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
+                          if (res1.codigoError == 'OK') {
+                            const newDetalleImp: DetalleImpuestosEntity = {
+                              id: '',
+                              detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
+                              cod_impuesto: res1.lstDetalleMovimientos[0].codigo_impuesto!,
+                              codigo_tarifa: res1.lstDetalleMovimientos[0].cod_tarifa!,
+                              porcentaje: res1.lstDetalleMovimientos[0].tarifa!,
+                              base_imponible: '',
+                              valor: res1.lstDetalleMovimientos[0].costo!,
+                              created_at: '',
+                              updated_at: ''
+                            }
+                            this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
+                              if (res2.codigoError != 'OK') {
+                                Swal.fire({
+                                  icon: 'error',
+                                  title: 'Ha ocurrido un error.',
+                                  text: res2.descripcionError,
+                                  showConfirmButton: false
+                                });
+                              }
+                            });
+                          }
+                        });
+                      })).subscribe(res4 => {
+                        if (res4.codigoError != 'OK') {
+                          Swal.fire({
+                            icon: 'error',
+                            title: 'Ha ocurrido un error.',
+                            text: 'La cantidad no puede ser vacía',
+                            showConfirmButton: false
+                          });
+                        } else {
+
+                          resolve();
+                        }
+                      });
+                    });
+                  })
+                ).subscribe(res2 => {
+                  if (res2.codigoError != 'OK') {
+                    Swal.fire({
+                      icon: 'error',
+                      title: 'Ha ocurrido un error.',
+                      text: res2.descripcionError,
+                      showConfirmButton: false
+                    });
+                  } else {
+                  }
+                });
+              }
+            });
+          } else if (res1.codigoError == 'OK') {
+
+            //Controlar si el costo calculado es null entonces se le asigna el costo
+            proveedorProducto.costo = proveedorProducto.costo!.replace(',', '.');
+            if (proveedorProducto.costoCalculado == null) {
+              proveedorProducto.costoCalculado = proveedorProducto.costo;
+            }
+            
+            //Promedio de los costos de la res1}
+            console.log("=====]]Entro al OK")
+
+            console.log("=====]]Res1", res1.lstInventarios)
+
+            const sumatoriaCostos = res1.lstInventarios.reduce((acc, inv) => {
+              return acc + parseFloat(inv.costo!);
+            }, 0);
+
+            console.log("=====]]SUMATORIA COSTOS", sumatoriaCostos)
+
+            const costoActual = sumatoriaCostos / res1.lstInventarios.length;
+            // console.log("=====]]COSTO ACTUAL", costoActual)
+
+            console.log("=====]]COSTO ACTUAL", costoActual)
+
+            //Sumatoria de todo el stock
+            const existenciaActual = res1.lstInventarios.reduce((acc, inv) => {
+              return acc + parseFloat(inv.stock!);
+            }, 0);
+
+            console.log("=====]]STOCK ACTUAL", existenciaActual)
+            // console.log("=====]]STOCK ACTUAL", existenciaActual)
+
+
+            const oper1 = costoActual * existenciaActual;
+
+            console.log("=====]]ProveedorProducto.cantidad", proveedorProducto.cantidad)
+            
+            console.log("=====]]ProveedorProducto.costoCalculado", proveedorProducto.costoCalculado)
+            // console.log("=====]]ProveedorProducto.cantidad", proveedorProducto.cantidad)
+            // console.log("=====]]ProveedorProducto.costo", proveedorProducto.costo)
+            const oper2 = (existenciaActual + parseFloat(proveedorProducto.cantidad!)) * parseFloat(proveedorProducto.costoCalculado!);
+
+            console.log("=====]]OPER1", oper1)
+
+            console.log("=====]]OPER2", oper2)
+
+            // console.log("=====]]OPER1", oper1)
+            // console.log("=====]]OPER2", oper2)
+            // console.log("=====]]Denominador", existenciaActual + parseFloat(proveedorProducto.cantidad!) )
+            // console.log("=====]]ExistenciaActual", existenciaActual)
+            // console.log("=====]]ProveedorProducto.cantidad", proveedorProducto.cantidad)
+
+            const operDenominador = existenciaActual + (existenciaActual + parseFloat(proveedorProducto.cantidad!));
+            console.log("=====]]Denominador", operDenominador)
+            console.log("=====]]DenominadorExistencia", existenciaActual)
+            console.log("=====]]DenominadorCantidad", parseFloat(proveedorProducto.cantidad!))
+
+
+            const nuevoCosto = ((oper1 + oper2) / operDenominador);
+
+            console.log("=====]]NUEVO COSTO", nuevoCosto)
+
+
+
+            // console.log("=====]]NUEVO COSTO", nuevoCosto)
+
+            //Actualizar el costo de todos los inventarios
+            res1.lstInventarios.forEach(inventario => {
+              const inventarioCosto: InventariosEntity = {
+                categoria_id: '',
+                categoria: '',
+                linea: '',
+                modelo: '',
+                marca_id: '',
+                marca: '',
+                modelo_producto_id: '',
+                idProducto: '',
+                Producto: '',
+                costo: nuevoCosto.toString(),
+                id: inventario.id,
+                dInventario: '',
+                producto_id: '',
+                almacen_id: '',
+                almacen: '',
+                stock_optimo: '',
+                fav: '',
+                color: ''
+              }
+              this.httpServiceInventario.actualizarCosto(inventarioCosto).subscribe(resC => {
+                if (resC.codigoError != 'OK') {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Ha ocurrido un error.',
+                    text: resC.descripcionError,
+                    showConfirmButton: false
+                  });
+                } else {
+                  console.log("Se actualizo el costo")
+                }
+              });
+            });
+
+            const newDetalle: DetallesMovimientoEntity = {
+              id: '',
+              producto_nombre: '',
+              inventario_id: res1.lstInventarios[0].id,
+              producto_id: res.producto_id,
+              movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
+              cantidad: proveedorProducto.cantidad!,
+              costo: proveedorProducto.costoCalculado!,
+              precio: (parseFloat(proveedorProducto.costoCalculado!) * parseFloat(proveedorProducto.cantidad!)).toString(),
+              url_image: localStorage.getItem('almacenid')!
+            }
+
+            
+
+            if (!proveedorProducto.productoExistente) {
+              if (proveedorProducto.cantidad == "0") {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'No se puede agregar 0',
+                  text: "La cantidad no puede ser 0",
+                  showConfirmButton: false
+                });
+              
+                resolve();
+              }
+
+              this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res5 => {
+                if (res5.codigoError == 'NEXISTE') {
+
+                  console.log("ENTRO AL PRODUCTO NEXISTE2.1")
+                  const inventarioCostoCalculado: InventariosEntity = {
+                    categoria_id: '',
+                    categoria: '',
+                    linea: '',
+                    modelo: '',
+                    marca_id: '',
+                    marca: '',
+                    modelo_producto_id: '',
+                    idProducto: '',
+                    Producto: '',
+                    id: '',
+                    etiquetas: res.etiquetas,
+                    dInventario: '',
+                    producto_id: res.producto_id,
+                    almacen_id: localStorage.getItem('almacenid')!,
+                    almacen: '',
+                    stock_optimo: '',
+                    fav: '0',
+                    costo: nuevoCosto.toString(),
+                    color: '',
+                    stock: proveedorProducto.cantidad!,
+                    pvp2: proveedorProducto.precio,
+                    url_image: localStorage.getItem('sociedadid')!
+                  }
+
+
+                  this.httpServiceInventario.agregarInventario(inventarioCostoCalculado).pipe(
+                    finalize(() => {
+                      this.httpServiceInventario.obtenerInventariosExiste(inventarioCostoCalculado).subscribe(res5 => {
+                        const newDetalle: DetallesMovimientoEntity = {
+                          id: '',
+                          producto_nombre: '',
+                          inventario_id: res5.lstInventarios[0].id,
+                          producto_id: res.producto_id,
+                          movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
+                          cantidad: proveedorProducto.cantidad!,
+                          costo: proveedorProducto.costoCalculado!,
+                          precio: (parseFloat(proveedorProducto.costoCalculado!) * parseFloat(proveedorProducto.cantidad!)).toString()
+                        }
+
+
+                        console.log("ESTE ES EL NEWDETALLE", newDetalle)
+
+                        this.httpServiceDetalle.agregarDetalleCompra(newDetalle).pipe(finalize(() => {
+
+                          this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
+                            if (res1.codigoError == 'OK') {
+                              const newDetalleImp: DetalleImpuestosEntity = {
+                                id: '',
+                                detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
+                                cod_impuesto: res1.lstDetalleMovimientos[0].codigo_impuesto!,
+                                codigo_tarifa: res1.lstDetalleMovimientos[0].cod_tarifa!,
+                                porcentaje: res1.lstDetalleMovimientos[0].tarifa!,
+                                base_imponible: '',
+                                valor: res1.lstDetalleMovimientos[0].costo!,
+                                created_at: '',
+                                updated_at: ''
+                              }
+                              this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
+                                if (res2.codigoError != 'OK') {
+                                  Swal.fire({
+                                    icon: 'error',
+                                    title: 'Ha ocurrido un error.',
+                                    text: res2.descripcionError,
+                                    showConfirmButton: false
+                                  });
+                                }
+                              });
+                            }
+                          });
+                          
+                        })).subscribe(res4 => {
+                          if (res4.codigoError != 'OK') {
+                            Swal.fire({
+                              icon: 'error',
+                              title: 'Ha ocurrido un error.',
+                              text: 'La cantidad no puede ser vacía',
+                              showConfirmButton: false
+                            });
+                          } else {
+
+                            resolve();
+
+                          }
+                        });
+                      });
+                    })
+                  ).subscribe(res2 => {
+                    if (res2.codigoError != 'OK') {
+                      Swal.fire({
+                        icon: 'error',
+                        title: 'Ha ocurrido un error.',
+                        text: res2.descripcionError,
+                        showConfirmButton: false
+                      });
+                    } else {
+                    }
+                  });
+                } else {
+
+                  const newDetalle2: DetallesMovimientoEntity = {
+                    id: '',
+                    producto_nombre: '',
+                    inventario_id: res1.lstInventarios[0].id,
+                    producto_id: res.producto_id,
+                    movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
+                    cantidad: proveedorProducto.cantidad!,
+                    costo: proveedorProducto.costoCalculado! || proveedorProducto.costo!,
+                    precio: (parseFloat(proveedorProducto.costoCalculado!) * parseFloat(proveedorProducto.cantidad!)).toString(),
+                    url_image: localStorage.getItem('almacenid')!
+                  }
+                  
+                  console.log("ENTRO AL PRODUCTO EXISTEEEEEEEEEEEEEEEEEE")
+                  this.httpServiceDetalle.agregarDetalleCompras(newDetalle2).pipe(finalize(() => {
+
+                    this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle2).subscribe(res1 => {
+                      if (res1.codigoError == 'OK') {
+                        const newDetalleImp: DetalleImpuestosEntity = {
+                          id: '',
+                          detalle_movimiento_id: res1.lstDetalleMovimientos[0].id,
+                          cod_impuesto: res1.lstDetalleMovimientos[0].codigo_impuesto!,
+                          codigo_tarifa: res1.lstDetalleMovimientos[0].cod_tarifa!,
+                          porcentaje: res1.lstDetalleMovimientos[0].tarifa!,
+                          base_imponible: '',
+                          valor: res1.lstDetalleMovimientos[0].costo!,
+                          created_at: '',
+                          updated_at: ''
+                        }
+                        this.httpServiceDetalleImp.agregarDetalleImpuestos(newDetalleImp).subscribe(res2 => {
+                          if (res2.codigoError != 'OK') {
+                            Swal.fire({
+                              icon: 'error',
+                              title: 'Ha ocurrido un error.',
+                              text: res2.descripcionError,
+                              showConfirmButton: false
+                            });
+                          }
+                        });
+                      }
+                    });
+                  })).subscribe(res3 => {
+                    if (res3.codigoError != 'OK') {
+                      Swal.fire({
+                        icon: 'error',
+                        title: 'Ha ocurrido un error.',
+                        text: 'La cantidad no puede ser vacía',
+                        showConfirmButton: false
+                      });
+                    } else {
+
+                      reject();
+                    
+                    }
+                  });
+                }
+              }
+              );
+
+            } else {
+
+
+              this.httpServiceInventario.obtenerInventariosExiste(newInventario).subscribe(res10 => {
+                
+                const newDetalle4: DetallesMovimientoEntity = {
+                  id: '',
+                  producto_nombre: '',
+                  inventario_id: res10.lstInventarios[0].id,
+                  producto_id: res.producto_id,
+                  movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
+                  cantidad: proveedorProducto.cantidad!,
+                  costo: proveedorProducto.costoCalculado! || proveedorProducto.costo!,
+                  precio: (parseFloat(proveedorProducto.costo!) * parseFloat(proveedorProducto.cantidad!)).toString(),
+                  url_image: localStorage.getItem('almacenid')!
+                }
+                
+                if (proveedorProducto.cantidad! != '0' && proveedorProducto.productoExistente) {
+
+                  console.log("Entro al erroracaaaa")
+  
+                  // //Solo modificamos el detalle que cambio la cantidad
+  
+                  newDetalle4.precio = (parseFloat(newDetalle.cantidad!) * parseFloat(proveedorProducto.costoCalculado! || newDetalle.costo)).toString();
+                  newDetalle4.cantidad = proveedorProducto.cantidad!
+  
+  
+                  console.log("newDetalle", newDetalle)
+                  console.log("Aca antes de modificar")
+  
+                  this.httpServiceDetalle.modificarDetallePedidoVentaCosto(newDetalle4).subscribe(res => {
+                    console.log(res.codigoError)
+                    if (res.codigoError == 'OK') {
+                      resolve();
+                    } else {
+                      
+                    }
+                  });
+                } else {
+                  this.httpServiceDetalle.eliminarDetallePedidoVenta(newDetalle4).subscribe(res => {
+                    console.log("en este metodo" + res)
+  
+  
+                  });
+                } 
+                
+              
+              })
+
+              console.log("Entro al error")
+
+
+            }
+          }
+        });
+      }
+    })
+  
+  
+     });
+
+  }
+
+  crearDetalleFun(proveedorProducto: ProveedoresProductosEntity): Promise<void> {
     return new Promise((resolve, reject) => {
       this.httpServiceProvProd.asignarProveedorProducto(proveedorProducto);
       this.httpServiceProvProd.obtenerProveedorProducto$.pipe(take(1)).subscribe((res) => {
