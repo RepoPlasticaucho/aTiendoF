@@ -163,6 +163,55 @@ form h2 {
   border-bottom: 2px solid #d9d9d9;
 }
 
+.input-divretrive {
+  position: relative;
+  display: grid;
+  margin: 20px 0;
+  padding: 10px 0;
+  border-bottom: 2px solid #d9d9d9;
+}
+
+.input-divretrive::after,
+.input-divretrive::before {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  width: 0;
+  height: 2px;
+  background-color: #5061C2;
+  transition: 0.3s;
+}
+
+.input-divretrive::after {
+  right: 50%;
+}
+
+.input-divretrive::before {
+  left: 50%;
+}
+
+.input-divretrive.focus .i i {
+  color: #5061C2;
+}
+
+.input-divretrive.focus div h5 {
+  top: -5px;
+  font-size: 15px;
+}
+
+.input-divretrive.focus::after,
+.input-divretrive.focus::before {
+  width: 50%;
+}
+
+.input-divretrive .one {
+  margin-top: 0;
+}
+
+.input-divretrive .two {
+  margin-bottom: 4px;
+}
+
 .input-div::after,
 .input-div::before {
   content: "";

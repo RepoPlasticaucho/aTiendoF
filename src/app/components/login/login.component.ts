@@ -24,6 +24,100 @@ export class LoginComponent {
 
   mostrarIni: boolean = true;
   mostrarAct: boolean = false;
+  mostrarCodigo: boolean = false;
+
+  mostrarRecuperar: boolean = false;
+
+  codeForm = new FormGroup({
+    codigo: new FormControl('', Validators.required),
+  });
+
+  recoverForm = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email]),
+  });
+
+
+
+  onCodeSubmit() {
+    if (this.codeForm.valid) {
+      const codigo = this.codeForm.value.codigo;
+      // Aquí deberías verificar el código con tu backend
+      
+
+
+
+    } else {
+      this.codeForm.markAllAsTouched();
+    }
+  }
+
+  olvidoContrasena() {
+    this.mostrarIni = false;
+    this.mostrarRecuperar = true;
+  }
+
+  cancelarCodigo() {
+    this.mostrarCodigo = false;
+    this.mostrarIni = true;
+    this.codeForm.reset();
+  }
+  cancelarRecuperacion() {
+    this.mostrarRecuperar = false;
+    this.mostrarIni = true;
+
+    this.recoverForm.reset();
+  }
+
+  onRecoverSubmit() {
+    if (this.recoverForm.valid) {
+      const email = this.recoverForm.value.email;
+      // Aquí podrías llamar a un servicio que maneje el envío de un correo electrónico de recuperación
+
+      //Crear la sociedad
+
+      const userEntity: SociedadesEntity = {
+        idGrupo: '',
+        nombre_comercial: '',
+        tipo_ambienteid: '',
+        id_fiscal: '',
+        email: email!,
+        telefono: '',
+        password: '',
+        funcion: '',
+        idSociedad: '',
+        razon_social: '',
+        sociedad_pertenece: '',
+        almacen_personal_id: ''
+      }
+
+
+      this.httpService.recuperarContrasena(userEntity).subscribe(res => {
+        if (res.codigoError == "OK") {
+          Swal.fire({
+            icon: 'success',
+            title: 'Correo enviado.',
+            text: 'Se ha enviado un correo con las instrucciones para recuperar la contraseña.',
+            showConfirmButton: true,
+            confirmButtonText: "Ok"
+          }).finally(() => {
+            this.mostrarRecuperar = false;
+            this.mostrarCodigo = true;
+            this.recoverForm.reset();
+          
+
+
+          });
+        } else {
+          this.mostrarRecuperar = false;
+          this.mostrarCodigo = true;
+          this.recoverForm.reset();
+        }
+      });
+
+    } else {
+      this.recoverForm.markAllAsTouched();
+    }
+  }
   //Creación de la variable para formulario
   categoryForm = new FormGroup({
     categoria: new FormControl('', Validators.required),

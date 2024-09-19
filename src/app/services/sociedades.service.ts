@@ -64,6 +64,13 @@ export class SociedadesService {
     return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/ModificarSociedadImagen`, sociedad);
   }
 
+  recuperarContrasena(sociedad: SociedadesEntity): Observable<Sociedades> {
+    return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/RecuperarContrasena`, sociedad);
+  }
+
+  verificarCorreo(sociedad: SociedadesEntity): Observable<Sociedades> {
+    return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/VerificarCorreo`, sociedad);
+  }
 
 
   actualSociedad(sociedad: SociedadesEntity): Observable<Sociedades> {

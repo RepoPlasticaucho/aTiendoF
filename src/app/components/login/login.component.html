@@ -52,8 +52,11 @@
                 <small *ngIf="categoryForm.controls['codigoSAP'].invalid && (categoryForm.controls['codigoSAP'].dirty || categoryForm.controls['codigoSAP'].touched)" class="error-message" style="color: red;">
                     Debe ingresar la contraseña.
                 </small>
-                <button type="submit" class="btn"> Entrar </button>
-                <a class="forgot" href="forgotPassword.html">Olvido su contraseña ?</a>
+                <button class="btn"> Entrar </button>
+                <a class="forgot"
+                (click)="olvidoContrasena()"
+                style="cursor: pointer; color: #000; text-decoration: none;"
+                >Olvido su contraseña ?</a>
                 <div class="others">
                     <hr>
                     <p>O</p>
@@ -65,6 +68,43 @@
                     <a href="register.html">¡Registrate Ahora!</a>
                 </div>
             </form>
+
+
+            <form [formGroup]="recoverForm" (ngSubmit)="onRecoverSubmit()" *ngIf="mostrarRecuperar">
+                <h2>Recuperar Contraseña</h2>
+                <p>Ingresa tu correo electrónico para recuperar tu contraseña.</p>
+                <div class="input-divretrive one">
+                    <div
+                      
+                    >
+                        <input class="input" type="text" placeholder="Correo Electrónico" formControlName="email">
+                    </div>
+                </div>
+                <small *ngIf="recoverForm.controls['email'].invalid && (recoverForm.controls['email'].dirty || recoverForm.controls['email'].touched)" class="error-message" style="color: red;">
+                    Debe ingresar un correo electrónico válido.
+                </small>
+                <button type="submit" class="btn"> Recuperar Contraseña </button>
+                <a (click)="cancelarRecuperacion()"
+                    style="cursor: pointer; color: #000; text-decoration: none;">Cancelar</a>
+            
+            </form>
+
+
+            <!-- Formulario para ingresar el código de verificación -->
+<form [formGroup]="codeForm" (ngSubmit)="onCodeSubmit()" *ngIf="mostrarCodigo">
+    <h2>Ingresa el Código de Verificación</h2>
+    <p>Te hemos enviado un código a tu correo.</p>
+    <div class="input-div">
+        <input class="input" type="text" placeholder="Código de Verificación" formControlName="codigo">
+    </div>
+    <small *ngIf="codeForm.controls['codigo'].invalid && (codeForm.controls['codigo'].dirty || codeForm.controls['codigo'].touched)" class="error-message" style="color: red;">
+        Debe ingresar el código de verificación.
+    </small>
+    <button type="submit" class="btn"> Verificar Código </button>
+    <a (click)="cancelarCodigo()" style="cursor: pointer; color: #000; text-decoration: none;">Cancelar</a>
+</form>
+
+
         </div>
     </div>
 

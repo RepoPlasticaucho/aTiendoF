@@ -1064,17 +1064,6 @@ export class MenucomprComponent implements OnInit {
         const xmlString = reader.result as string;
         this.parseXML(xmlString);
 
-        //Si el ruc del xml no coincide con el ruc del proveedor retorna un error
-        // if (this.rucXml != localStorage.getItem('id_fiscal')) {
-        //   Swal.fire({
-        //     icon: 'error',
-        //     title: 'Error',
-        //     text: 'El RUC del XML no coincide con el RUC del proveedor.',
-        //     showConfirmButton: true,
-        //   });
-        //   return;
-        // }
-
         // Crear un array de promesas para todas las llamadas asíncronas
         const promises = this.lstXmlCarga.map((element) => {
           const proveedorProducto: ProveedoresProductosEntity = {
@@ -1183,9 +1172,6 @@ export class MenucomprComponent implements OnInit {
 
 
   async realizarAccionConDetalles(detalles: ProveedoresProductosEntity[]): Promise<void> {
-
-
-
     try {
       for (const detalle of detalles) {
                // Reemplazar , por . en el costo y costoCalculado
@@ -1193,11 +1179,8 @@ export class MenucomprComponent implements OnInit {
                if (detalle.costoCalculado != null) {
                  detalle.costoCalculado = detalle.precio!.replace(',', '.');
                   console.log('Este es el detalle', detalle);
-                }
-
-
-         
-        await this.crearDetalle(detalle);
+              }
+          await this.crearDetalle(detalle);
       }
       Swal.fire({
         icon: 'success',
@@ -1691,6 +1674,9 @@ export class MenucomprComponent implements OnInit {
 
 
             }
+
+            resolve();
+
           }
         });
       }

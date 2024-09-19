@@ -34,7 +34,7 @@ export class DashboardClComponent {
         return [
           { title: 'Compras', cols: 1, rows: 1, name: "las compras", figure: "book" , dir: "navegation-cl/(contentClient:almacenesshooping)"},
           { title: 'Ventas', cols: 1, rows: 1, name: "las ventas", figure: "payment" ,  dir: "navegation-cl/(contentClient:almacenegresos)"},
-          { title: 'Estado de Facturas', cols: 1, rows: 1, name: "el estado de las facturas", figure: "payment" ,  dir: "navegation-cl/(contentClient:almacenes-estado-facturas)"},
+          { title: 'Estado de Facturas', cols: 1, rows: 1, name: "el estado de las facturas", figure: "description" ,  dir: "navegation-cl/(contentClient:almacenes-estado-facturas)"},
           { title: 'Cuadre de Caja', cols: 1, rows: 1, name: "las cuentas", figure: "monetization_on" , dir: "navegation-cl/(contentClient:cuadre-caja)"},
           { title: 'Productos', cols: 1, rows: 1, name: "los productos", figure: "apps" , dir: "navegation-cl/(contentClient:inventarios-productos)"},
           { title: 'Inventarios', cols: 1, rows: 1, name: "los inventarios", figure: "apps" , dir: "navegation-cl/(contentClient:inventarios-almacen)"},
@@ -46,7 +46,6 @@ export class DashboardClComponent {
           { title: 'Proveedores', cols: 1, rows: 1, name: "los proveedores", figure: "supervisor_account", dir: "navegation-cl/(contentClient:proveedores)" },
           { title: 'Personal', cols: 1, rows: 1, name: "el personal", figure: "supervisor_account", dir: "navegation-cl/(contentClient:personal)" },
           { title: 'Descuentos', cols: 1, rows: 1, name: "descuentos", figure: "discounts", dir: "navegation-cl/(contentClient:descuentos)" },
-          { title: 'Facturas', cols: 1, rows: 1, name: "facturas", figure: "description", dir: "navegation-cl/(contentClient:estado-facturas)" },
           { title: 'Ayuda', cols: 1, rows: 1, name: "ayuda", figure: "help", dir: "https://docs-atiendo.vercel.app/" },
 
         ];
@@ -55,7 +54,7 @@ export class DashboardClComponent {
       return [
         { title: 'Compras', cols: 1, rows: 1, name: "las compras", figure: "book" , dir: "navegation-cl/(contentClient:almacenesshooping)"},
         { title: 'Ventas', cols: 1, rows: 1, name: "las ventas", figure: "payment" ,  dir: "navegation-cl/(contentClient:almacenegresos)"},
-        { title: 'Estado de Facturas', cols: 1, rows: 1, name: "el estado de las facturas", figure: "payment" ,  dir: "navegation-cl/(contentClient:almacenes-estado-facturas)"},
+        { title: 'Estado de Facturas', cols: 1, rows: 1, name: "el estado de las facturas", figure: "description" ,  dir: "navegation-cl/(contentClient:almacenes-estado-facturas)"},
         { title: 'Cuadre de Caja', cols: 1, rows: 1, name: "las cuentas", figure: "monetization_on" , dir: "navegation-cl/(contentClient:cuadre-caja)"},
         { title: 'Productos', cols: 1, rows: 1, name: "los productos", figure: "apps" , dir: "navegation-cl/(contentClient:inventarios-productos)"},
         { title: 'Inventarios', cols: 1, rows: 1, name: "los inventarios", figure: "apps" , dir: "navegation-cl/(contentClient:inventarios-almacen)"},
@@ -66,7 +65,6 @@ export class DashboardClComponent {
         { title: 'Proveedores', cols: 1, rows: 1, name: "los proveedores", figure: "supervisor_account", dir: "navegation-cl/(contentClient:proveedores)" },
         { title: 'Personal', cols: 1, rows: 1, name: "el personal", figure: "supervisor_account", dir: "navegation-cl/(contentClient:personal)" },
         { title: 'Descuentos', cols: 1, rows: 1, name: "descuentos", figure: "discounts", dir: "navegation-cl/(contentClient:descuentos)" },
-        { title: 'Facturas', cols: 1, rows: 1, name: "facturas", figure: "description", dir: "navegation-cl/(contentClient:estado-facturas)" },
         { title: 'Ayuda', cols: 1, rows: 1, name: "ayuda", figure: "help", dir: "https://docs-atiendo.vercel.app/" },
  
 

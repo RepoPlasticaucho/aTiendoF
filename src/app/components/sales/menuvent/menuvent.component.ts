@@ -505,13 +505,13 @@ export class MenuventComponent implements OnInit {
         console.log(res)
 
         if (res.codigoError != 'OK') {
-          Swal.fire({
-            icon: 'info',
-            title: 'Información',
-            text: 'Empieza tu pedido en "AÑADIR".',
-            showConfirmButton: true,
-            // timer: 3000
-          });
+          // Swal.fire({
+          //   icon: 'info',
+          //   title: 'Información',
+          //   text: 'Empieza tu pedido en "AÑADIR".',
+          //   showConfirmButton: true,
+          //   // timer: 3000
+          // });
         } else {
           //Imprimir 
 
@@ -552,13 +552,13 @@ export class MenuventComponent implements OnInit {
 
     this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe((res) => {
       if (res.codigoError != 'OK') {
-        Swal.fire({
-          icon: 'info',
-          title: 'Información',
-          text: 'Empieza tu pedido en "AÑADIR".',
-          showConfirmButton: true,
-          // timer: 3000
-        });
+        // Swal.fire({
+        //   icon: 'info',
+        //   title: 'Información',
+        //   text: 'Empieza tu pedido en "AÑADIR".',
+        //   showConfirmButton: true,
+        //   // timer: 3000
+        // });
       } else {
 
         console.log("AQUI EN DATALLE MOVIMIENTO")
@@ -683,13 +683,13 @@ export class MenuventComponent implements OnInit {
       this.httpService.obtenerDetalleMovimiento(newDetalle).subscribe(res => {
         if (res.codigoError != "OK") {
           //window.location.reload();
-          Swal.fire({
-            icon: 'info',
-            title: 'Información',
-            text: 'Empieza tu pedido en "AÑADIR1".',
-            showConfirmButton: true,
-            // timer: 3000
-          });
+          // Swal.fire({
+          //   icon: 'info',
+          //   title: 'Información',
+          //   text: 'Empieza tu pedido en "AÑADIR1".',
+          //   showConfirmButton: true,
+          //   // timer: 3000
+          // });
           this.lstDetalleMovimientos = res.lstDetalleMovimientos;
           
         } else {

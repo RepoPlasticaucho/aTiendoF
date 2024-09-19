@@ -50,6 +50,14 @@ export class VerCarritoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    Swal.fire({
+      title: 'CARGANDO...',
+      html: 'Se están cargando los productos.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
 
     //Suscribirse a los cambios de la lista de inventarios de menuvent
     this.menuvent.emiteDesdeProductoAgregado.subscribe((evento: { objeto: any, mensaje: string, valor?: any }) => {
@@ -195,17 +203,20 @@ export class VerCarritoComponent implements OnInit {
     };
 
     this.dtOptions = {
+
+
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
       },
-      paging: false,
+      paging: true,
       search: false,
       searching: true,
       ordering: true,
       info: false,
-      pageLength: 3,
+      pageLength: 15,
       scrollY: '50vh',
-
+      //Mostrar cargando mientras se renderiza la tabla
+      deferRender: true,
 
       responsive: {
         details: {
@@ -224,6 +235,8 @@ export class VerCarritoComponent implements OnInit {
         }
       },
       initComplete: () => {
+        Swal.close();
+        
         $('#dataTable tbody').on('input', 'input', function () {
           cantidadAux = $(this).val() + "";
         });
