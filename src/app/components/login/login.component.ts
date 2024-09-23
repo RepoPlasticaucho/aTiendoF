@@ -21,10 +21,12 @@ export class LoginComponent {
   faTimes = faTimes;
   faCopy = faCopy;
   faSave = faSave;
+  token: string | undefined;
 
   mostrarIni: boolean = true;
   mostrarAct: boolean = false;
   mostrarCodigo: boolean = false;
+  mostrarNuevaContrasena: boolean = false;
 
   mostrarRecuperar: boolean = false;
 
@@ -36,6 +38,95 @@ export class LoginComponent {
     email: new FormControl('', [Validators.required, Validators.email]),
   });
 
+  newPasswordForm = new FormGroup({
+    newPassword: new FormControl('', Validators.required),
+    confirmPassword: new FormControl('', Validators.required),
+  });
+
+  cancelarNuevaContrasena() {
+    this.mostrarNuevaContrasena = false;
+    this.mostrarIni = true;
+    this.newPasswordForm.reset();
+  }
+
+  onChagePassSubmit() {
+    if (this.newPasswordForm.valid) {
+      const passwnew = this.newPasswordForm.value.newPassword;
+      const passconfirm = this.newPasswordForm.value.confirmPassword;
+
+      if (passwnew == passconfirm) {
+        // Aquí deberías cambiar la contraseña en tu backend
+        var salt = CryptoJS.enc.Base64.parse("SXZhbiBNZWR2ZWRldg==");
+        var iv = CryptoJS.enc.Hex.parse("69135769514102d0eded589ff874cacd");
+        var key564Bits10000Iterations = CryptoJS.PBKDF2("Venus21!", salt, { keySize: 256 / 32 + 128 / 32, iterations: 10000, hasher: CryptoJS.algo.SHA512 });
+        const pass = passwnew ?? ""
+        var encrypted = CryptoJS.AES.encrypt(pass, key564Bits10000Iterations, {
+          iv: iv,
+          mode: CryptoJS.mode.CBC,
+          padding: CryptoJS.pad.Pkcs7
+        });
+
+        this.passwre = pass;
+        this.encPass = encrypted.toString();
+
+        const userEntity: SociedadesEntity = {
+          idGrupo: '',
+          nombre_comercial: '',
+          tipo_ambienteid: '',
+          id_fiscal: '',
+          email: '',
+          telefono: '',
+          password: this.token!,
+          funcion: '',
+          idSociedad: '',
+          razon_social: '',
+          sociedad_pertenece: '',
+          almacen_personal_id: '',
+          pass_certificado: this.encPass
+        }
+
+        this.httpService.actualizarPassw(userEntity).subscribe(res => {
+          if (res){
+            Swal.fire({
+              icon: 'success',
+              title: 'Contraseña actualizada correctamente.',
+              showConfirmButton: true,
+              confirmButtonText: "Ok"
+            }).finally(() => {
+              this.mostrarNuevaContrasena = false;
+              this.mostrarIni = true;
+              this.newPasswordForm.reset();
+            });
+          }
+
+        });
+
+      } else {
+
+      }
+    } else {
+      this.newPasswordForm.markAllAsTouched();
+    }
+  }
+
+  onNewPasswordSubmit() {
+    if (this.newPasswordForm.valid) {
+      const passwnew = this.newPasswordForm.value.newPassword;
+      const passconfirm = this.newPasswordForm.value.confirmPassword;
+
+      if (passwnew == passconfirm) {
+        // Aquí deberías cambiar la contraseña en tu backend
+        
+
+
+      } else {
+
+      }
+    } else {
+      this.newPasswordForm.markAllAsTouched();
+    }
+  }
+
 
 
   onCodeSubmit() {
@@ -44,9 +135,49 @@ export class LoginComponent {
       // Aquí deberías verificar el código con tu backend
       
 
+      //1. Construir sociedad
+      const userEntity: SociedadesEntity = {
+        idGrupo: '',
+        nombre_comercial: '',
+        tipo_ambienteid: '',
+        id_fiscal: '',
+        email: '',
+        telefono: '',
+        password: codigo!,
+        funcion: '',
+        idSociedad: '',
+        razon_social: '',
+        sociedad_pertenece: '',
+        almacen_personal_id: ''
+      }
+
+      this.httpService.verificarCodigo(userEntity).subscribe(res => {
+        console.log("FORM0001" + res);
+        
+        if(res!=null){
+          //Mostar formulario de nueva contraseña
+          this.mostrarCodigo = false;
+          this.mostrarNuevaContrasena = true;
+          this.token = codigo!;
+          this.codeForm.reset();
+
+        }else{
+          Swal.fire({
+            icon: 'error',
+            title: 'Código Incorrecto.',
+            text: 'El código ingresado no es válido.',
+            showConfirmButton: true,
+            confirmButtonText: "Ok"
+          });
+        }
+        console.log("FORM2" + res);
+
+      });
+
 
 
     } else {
+      console.log("FORM")
       this.codeForm.markAllAsTouched();
     }
   }
@@ -90,8 +221,19 @@ export class LoginComponent {
         almacen_personal_id: ''
       }
 
-
+    
+      Swal.fire({
+        title: 'Enviando correo...',
+        html: 'Por favor espere un momento',
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading()
+        },
+      });
+      
       this.httpService.recuperarContrasena(userEntity).subscribe(res => {
+    //Mostrar pantalla de carga
+
         if (res.codigoError == "OK") {
           Swal.fire({
             icon: 'success',
@@ -103,14 +245,14 @@ export class LoginComponent {
             this.mostrarRecuperar = false;
             this.mostrarCodigo = true;
             this.recoverForm.reset();
-          
-
-
+            Swal.close();
           });
         } else {
           this.mostrarRecuperar = false;
           this.mostrarCodigo = true;
           this.recoverForm.reset();
+          Swal.close();
+        
         }
       });
 

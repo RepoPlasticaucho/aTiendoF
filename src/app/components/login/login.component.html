@@ -57,7 +57,7 @@
                 (click)="olvidoContrasena()"
                 style="cursor: pointer; color: #000; text-decoration: none;"
                 >Olvido su contraseña ?</a>
-                <div class="others">
+                <!-- <div class="others">
                     <hr>
                     <p>O</p>
                     <hr>
@@ -66,7 +66,7 @@
                 <div class="account">
                     <p>No tienes una cuenta?</p>
                     <a href="register.html">¡Registrate Ahora!</a>
-                </div>
+                </div> -->
             </form>
 
 
@@ -74,9 +74,7 @@
                 <h2>Recuperar Contraseña</h2>
                 <p>Ingresa tu correo electrónico para recuperar tu contraseña.</p>
                 <div class="input-divretrive one">
-                    <div
-                      
-                    >
+                    <div>
                         <input class="input" type="text" placeholder="Correo Electrónico" formControlName="email">
                     </div>
                 </div>
@@ -94,7 +92,7 @@
 <form [formGroup]="codeForm" (ngSubmit)="onCodeSubmit()" *ngIf="mostrarCodigo">
     <h2>Ingresa el Código de Verificación</h2>
     <p>Te hemos enviado un código a tu correo.</p>
-    <div class="input-div">
+    <div class="input-divretrive one">
         <input class="input" type="text" placeholder="Código de Verificación" formControlName="codigo">
     </div>
     <small *ngIf="codeForm.controls['codigo'].invalid && (codeForm.controls['codigo'].dirty || codeForm.controls['codigo'].touched)" class="error-message" style="color: red;">
@@ -103,6 +101,36 @@
     <button type="submit" class="btn"> Verificar Código </button>
     <a (click)="cancelarCodigo()" style="cursor: pointer; color: #000; text-decoration: none;">Cancelar</a>
 </form>
+
+    <!-- Formulario para ingresar la nueva contraseña -->
+
+<form [formGroup]="newPasswordForm" (ngSubmit)="onChagePassSubmit()" *ngIf="mostrarNuevaContrasena">
+    <h2>Ingresa tu Nueva Contraseña</h2>
+    <p>Ingresa tu nueva contraseña.</p>
+    <div class="input-divretrive one">
+        <input class="input" type="password" placeholder="Nueva Contraseña" formControlName="newPassword">
+    </div>
+    <small *ngIf="newPasswordForm.controls['newPassword'].invalid && (newPasswordForm.controls['newPassword'].dirty || newPasswordForm.controls['newPassword'].touched)" class="error-message" style="color: red;">
+        Debe ingresar la nueva contraseña.
+    </small>
+
+    <div class="input-divretrive one">
+        <input class="input" type="password" placeholder="Confirmar Contraseña" formControlName="confirmPassword">
+        </div>
+        <small *ngIf="newPasswordForm.controls['confirmPassword'].invalid && (newPasswordForm.controls['confirmPassword'].dirty || newPasswordForm.controls['confirmPassword'].touched)" class="error-message" style="color: red;">
+            Debe confirmar la nueva contraseña.
+        </small>
+
+        <button type="submit" class="btn"> Cambiar Contraseña </button>
+
+        <a (click)="cancelarNuevaContrasena()" style="cursor: pointer; color: #000; text-decoration: none;">Cancelar</a>
+    </form>
+
+    
+
+    
+
+
 
 
         </div>

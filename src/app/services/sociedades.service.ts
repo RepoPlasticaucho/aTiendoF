@@ -79,6 +79,9 @@ export class SociedadesService {
   actualizarPass(sociedad: SociedadesEntity): Observable<Sociedades> {
     return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/ActualizarPass`, sociedad);
   }
+  actualizarPassw(sociedad: SociedadesEntity): Observable<Sociedades> {
+    return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/Actualizarpassw`, sociedad);
+  }
   actualizarCertificado(sociedad: SociedadesEntity): Observable<Sociedades> {
     return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/ActualizarCerificado`, sociedad);
   }
@@ -110,6 +113,15 @@ export class SociedadesService {
 
   obtenerEmailPorIdSociedad(sociedad: SociedadesEntity): Observable<string> {
     return this.http.post<string>(`${environment.apiUrl}sociedades/ObtenerSociedadEmail`, sociedad);
+  }
+
+  verificarCodigo(sociedad: SociedadesEntity): Observable<Sociedades> { 
+    return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/Verficartoken`, sociedad);
+  }
+
+
+  actualizarContrasena(sociedad: SociedadesEntity): Observable<Sociedades> {
+    return this.http.post<Sociedades>(`${environment.apiUrl}sociedades/ActualizarContrasena`, sociedad);
   }
 
 }
