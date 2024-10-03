@@ -222,7 +222,6 @@ export class VerCompraComponent implements OnInit {
       }, 0);
     const porcen = totalTarifa15 * (this.iva/100);
     return porcen;
-    
   }
 
 
