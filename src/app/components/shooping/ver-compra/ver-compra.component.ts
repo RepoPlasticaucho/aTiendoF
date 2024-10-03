@@ -268,6 +268,7 @@ export class VerCompraComponent implements OnInit {
         showDenyButton: true,
         confirmButtonText: 'SÍ',
         denyButtonText: `NO`,
+        
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
