@@ -221,7 +221,6 @@ export class VerCompraComponent implements OnInit {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
     const porcen = totalTarifa15 * (this.iva/100);
-
     return porcen;
   }
 
@@ -268,7 +267,7 @@ export class VerCompraComponent implements OnInit {
         showDenyButton: true,
         confirmButtonText: 'SÍ',
         denyButtonText: `NO`,
-        
+
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
