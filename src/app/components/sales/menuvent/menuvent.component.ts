@@ -35,7 +35,7 @@ export class MenuventComponent implements OnInit {
   selectTipo: boolean = false;
   nombreAlmacenUsuario: string = localStorage.getItem('almacenNombreUsuario')!;
   @Output() emiteDesdeProductoAgregado = new EventEmitter<{ objeto: any, mensaje: string, valor?: any }>();
- 
+
   ciudadSeleccionada: string = '';
 
   clienteForm = new FormGroup({
@@ -89,19 +89,19 @@ export class MenuventComponent implements OnInit {
     private router: Router,
 
   ) {
-  
-    
+
+
 
   }
 
   agregarProducto(event: any) {
-  
-  
+
+
 
 
     this.cargarTablaMenuvent();
     console.log("lstDetalleMovimientos desde menuvent ", this.lstDetalleMovimientos)
-    
+
 
 
   }
@@ -127,7 +127,7 @@ export class MenuventComponent implements OnInit {
     this.dtOptions = {
       language: {
         url: '//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json',
-      
+
       },
       paging: false,
       search: false,
@@ -136,7 +136,7 @@ export class MenuventComponent implements OnInit {
       //Cambaiar el info por items
       info: false,
       scrollY: '50vh',
-      
+
 
       // responsive: {
       //   details: {
@@ -365,7 +365,7 @@ export class MenuventComponent implements OnInit {
             ciudad: '',
             provincia: '',
             ciudadid: '',
-            
+
           };
 
           //Si los datos siguen vacios obtener a partir de la cedula
@@ -476,7 +476,7 @@ export class MenuventComponent implements OnInit {
 
 
 
-  
+
   verCarrito() {
     const dialogRef = this.dialog.open(VerCarritoComponent, {
       width: '1200px',
@@ -580,7 +580,7 @@ export class MenuventComponent implements OnInit {
         console.log("ESTA ES LA LISTA DE DETALLE MOVIMIENTO ORDENADA)", this.lstDetalleMovimientos)
 
 
-        this.emiteDesdeProductoAgregado.emit({objeto: this.lstDetalleMovimientos, mensaje: "agregar"});
+        this.emiteDesdeProductoAgregado.emit({ objeto: this.lstDetalleMovimientos, mensaje: "agregar" });
 
         this.dtTrigger.next('');
         this.calcularSumaTotal();
@@ -596,9 +596,16 @@ export class MenuventComponent implements OnInit {
 
     const suma = totalTarifa15 + totalTarifa0;
 
-    this.sumaTotal = suma
+    let sumaAjustada = suma;
+    // Comprobar si el valor termina en .99
+    if (parseFloat((suma % 1).toFixed(2)) === 0.99) {
+      sumaAjustada = parseFloat((suma + 0.01).toFixed(2)); // Sumar 0.01 y asegurar máximo 2 decimales
+    }
+
+    this.sumaTotal = sumaAjustada
       .toLocaleString(undefined, { maximumFractionDigits: 2 })
       .replace('.', ',');
+
   }
 
   calcularSubtotal(): number {
@@ -617,7 +624,6 @@ export class MenuventComponent implements OnInit {
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
-
     return totalTarifa15;
   }
 
@@ -627,7 +633,7 @@ export class MenuventComponent implements OnInit {
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
-    const porcen = totalTarifa15 * (this.iva / 100)
+    const porcen = (totalTarifa15 * (this.iva / 100)) - 0.01
 
     return totalTarifa15 + porcen;
   }
@@ -666,7 +672,7 @@ export class MenuventComponent implements OnInit {
   eliminarDetalle(detalle: DetallesMovimientoEntity): void {
 
     //Empezar a eliminar
-    this.emiteDesdeProductoAgregado.emit({objeto: detalle, mensaje: "eliminar"});
+    this.emiteDesdeProductoAgregado.emit({ objeto: detalle, mensaje: "eliminar" });
 
     this.httpService.eliminarDetallePedido(detalle).subscribe((res) => {
 
@@ -691,7 +697,7 @@ export class MenuventComponent implements OnInit {
           //   // timer: 3000
           // });
           this.lstDetalleMovimientos = res.lstDetalleMovimientos;
-          
+
         } else {
           this.lstDetalleMovimientos = res.lstDetalleMovimientos;
           this.calcularSumaTotal();
@@ -708,14 +714,14 @@ export class MenuventComponent implements OnInit {
           });
 
 
-          
+
 
           // this.disableProveedor = this.lstDetalleMovimientos.length > 0;
           // this.groupForm.reset();
-         
+
 
           //window.location.reload();
-          
+
         }
       })
     }
@@ -750,7 +756,7 @@ export class MenuventComponent implements OnInit {
             }).then(() => {
               //window.location.reload();
               this.cargarTablaMenuvent();
-              
+
               this.editarDetalle = false;
               this.detalleEditIndex = -1;
               this.detalleEditBackup = null;
@@ -758,7 +764,7 @@ export class MenuventComponent implements OnInit {
               //Emite el evento para actualizar el carrito
               //Imprime el nuevo valor
 
-              this.emiteDesdeProductoAgregado.emit({objeto: this.lstDetalleMovimientos[index], mensaje: "editar", valor: this.lstDetalleMovimientos[index].cantidad});
+              this.emiteDesdeProductoAgregado.emit({ objeto: this.lstDetalleMovimientos[index], mensaje: "editar", valor: this.lstDetalleMovimientos[index].cantidad });
 
 
             });
@@ -866,7 +872,7 @@ export class MenuventComponent implements OnInit {
             }
           });
 
-          
+
 
           return
         }
@@ -1032,7 +1038,7 @@ export class MenuventComponent implements OnInit {
     }
 
     if (localStorage.getItem('nombreCl') != null) {
-      this.nombre = localStorage.getItem('nombreCl')! +" "+ localStorage.getItem('apellidoCl')!
+      this.nombre = localStorage.getItem('nombreCl')! + " " + localStorage.getItem('apellidoCl')!
     }
 
     if (localStorage.getItem('correoCl') != null) {
@@ -1054,7 +1060,7 @@ export class MenuventComponent implements OnInit {
 
     if (localStorage.getItem('idClVenta') != null) {
       this.clienteDatosCompletos = true;
-    }  
+    }
   }
 
 
@@ -1063,10 +1069,10 @@ export class MenuventComponent implements OnInit {
   //2. Continuar y hacer todo el proceso pero no facturar
 
   facturarFisica() {
-//Guardar el total en el local storage
-localStorage.setItem('totalDescargar', this.sumaTotal);
+    //Guardar el total en el local storage
+    localStorage.setItem('totalDescargar', this.sumaTotal);
 
-    if(this.lstDetalleMovimientos.length == 0){
+    if (this.lstDetalleMovimientos.length == 0) {
       Swal.fire({
         icon: 'info',
         title: 'Información',

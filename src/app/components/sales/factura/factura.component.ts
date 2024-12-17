@@ -41,7 +41,7 @@ export class FacturaComponent implements OnInit {
   idFiscalSoc: string = '';
   ambiente: string = '';
   numFactura: string = '';
-  fechaEmision: Date | undefined;
+  fechaEmision: string = '';
   direccionAlm: string = '';
   dir1: string = '';
   fechaAut = localStorage.getItem('fechaAutoriz')!;
@@ -165,7 +165,7 @@ export class FacturaComponent implements OnInit {
           if (res1.codigoError != "OK") {
 
           } else {
-            this.facturaNro = res1.lstMovimientos[0].pto_emision + '-' + res1.lstMovimientos[0].estab! + '-' + res1.lstMovimientos[0].secuencial;
+            this.facturaNro =  res1.lstMovimientos[0].estab! + '-' + res1.lstMovimientos[0].pto_emision  + '-' + res1.lstMovimientos[0].secuencial;
             this.claveAcceso = res1.lstMovimientos[0].clave_acceso!;
           }
         });
@@ -230,15 +230,25 @@ export class FacturaComponent implements OnInit {
               if (res2.codigoError != "OK") {
 
               } else {
-                const fecha: string[] = res2.lstMovimientos[0].fecha_emision!.split(' ');
+                const fecha = res2.lstMovimientos[0].fecha_emision!;
+                /*
+                console.log(fecha)
                 const fechaEmisionStr: string = fecha[0];
+                console.log(fechaEmisionStr)
                 const partesFecha: string[] = fechaEmisionStr.split("/");
-                const dia: number = parseInt(partesFecha[0], 10);
-                const mes: number = parseInt(partesFecha[1], 10) - 1;
+                console.log(partesFecha)
+                const dia: number = parseInt(partesFecha[1], 10);
+                const mes: number = parseInt(partesFecha[0], 10) - 1;
                 const anio: number = parseInt(partesFecha[2], 10);
+                console.log(dia)
+                console.log(mes)
+                console.log(anio)
 
                 const fechaEmision: Date = new Date(anio, mes, dia);
+                console.log(fechaEmision)
                 this.fechaEmision = fechaEmision;
+                */
+                this.fechaEmision = fecha;
                 const sub: number = this.calcularTotalTarifa0();
                 const numeroFormateado: string = sub.toFixed(2);
                 this.subtotal0 = numeroFormateado;
@@ -375,7 +385,8 @@ export class FacturaComponent implements OnInit {
     const doc = new jsPDF('p', 'pt', 'a4');
     const options = {
       background: 'white',
-      scale: 3
+      scale: 3,
+      useCORS: true // Para permitir la carga de estilos externos
     };
 
 
@@ -395,7 +406,7 @@ export class FacturaComponent implements OnInit {
 
     html2canvas(fixedContainer, options).then((canvas) => {
   
-      const img = canvas.toDataURL('image/PNG');
+      const img = canvas.toDataURL('image/png', 1.0); // Asegúrate de que sea un PNG válido
   
   
       const bufferX = 0;
@@ -404,7 +415,88 @@ export class FacturaComponent implements OnInit {
       const pdfWidth = doc.internal.pageSize.getWidth();
       const pdfHeight = doc.internal.pageSize.getHeight();
 
-      doc.addImage(img, 'PNG', bufferX, bufferY, pdfWidth, pdfHeight, undefined, 'FAST');
+      doc.addImage(img, 'PNG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
+
+      //Descargarse y agregar la imagen del logo
+      const logoUrl = this.url_logo;
+      console.log("ESTO ES LO QUE TENGO EN EL LOGO URL " + logoUrl)
+      this.getBase64Image(logoUrl).then((logoBase64) => {
+        if (logoBase64) {
+
+          console.log("eSTO ES LO QUE TENGO EN EL LOGO " + logoBase64)
+          doc.addImage(logoBase64, 'PNG', 10, 10, 70, 70);
+        }
+      })
+
+      return doc;
+    }).then((docResult) => {
+      document.body.removeChild(fixedContainer);
+
+      // Datos para guardar el pdf en remoto
+  
+      const pdfContent = doc.output('datauristring');
+      const pdfBase64 = pdfContent.split(',')[1];
+      const pdfBase64URL = `data:application/pdf;base64,${pdfBase64}`;
+      const pdfBase641 = pdfBase64URL.split(',')[1];
+      this.facturaBase64 = pdfBase641;
+  
+      const newMov: MovimientosEntity = {
+        id: localStorage.getItem('movimiento_id')!,
+        tipo_id: '',
+        tipo_emision_cod: '',
+        estado_fact_id: '',
+        tipo_comprb_id: '',
+        almacen_id: '',
+        cod_doc: '',
+        secuencial: ''
+      }
+      this.httpServiceMovimiento.obtenerMovimientoCLAVEACCESO(newMov).subscribe(res => {
+        this.facturaName = `factura_${res.lstMovimientos[0].clave_acceso}.pdf`;
+        // Guardar pdf en local
+        docResult.save(this.facturaName);
+      
+      });
+    })
+  }
+
+  imprimirComprobante() {
+    console.log("Generando PDF");
+  
+    const DATA = document.getElementById('htmlComprobante')!;
+    const doc = new jsPDF('p', 'pt', 'a4');
+    const options = {
+      background: 'white',
+      scale: 3,
+      useCORS: true // Para permitir la carga de estilos externos
+    };
+
+
+    // Crear un contenedor para renderizar el contenido en tamaño fijo
+    const fixedContainer = document.createElement('div');
+    fixedContainer.style.width = '794px'; // Ancho en puntos para A4
+    fixedContainer.style.position = 'absolute';
+    fixedContainer.style.top = '0';
+    fixedContainer.style.left = '0';
+    fixedContainer.style.background = 'white';
+
+    // Clonar el contenido original y agregarlo al contenedor fijo
+    const contentClone = DATA.cloneNode(true) as HTMLElement;
+    fixedContainer.appendChild(contentClone);
+    document.body.appendChild(fixedContainer);
+
+
+    html2canvas(fixedContainer, options).then((canvas) => {
+  
+      const img = canvas.toDataURL('image/png', 1.0); // Asegúrate de que sea un PNG válido
+  
+  
+      const bufferX = 0;
+      const bufferY = 0;
+
+      const pdfWidth = doc.internal.pageSize.getWidth();
+      const pdfHeight = doc.internal.pageSize.getHeight();
+
+      doc.addImage(img, 'PNG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
 
       //Descargarse y agregar la imagen del logo
       const logoUrl = this.url_logo;

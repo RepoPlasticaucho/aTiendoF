@@ -8,8 +8,8 @@
             <th style="width: 10%;">PRODUCTO</th>
             <th style="width: 5%;">CANTIDAD</th>
             <th style="width: 8%;">MEDIDA</th>
-            
-            <th style="width: 10%;">PVP</th>
+            <th style="width: 10%;">PVP Sin Iva</th>
+            <th style="width: 10%;">PV Final</th>
             <th style="width: 8%;">STOCK</th>
 
             <th style="width: 8%;">TIPO</th>
@@ -44,6 +44,9 @@
             <td>{{ inventario.unidad_medidad }}</td>
             
             <td>{{ inventario.pvp2 }}</td>
+            <td>
+              <input class="cool-input" (input)="onInput2($event)" type="text" id="pvp_iva" [(ngModel)]="inventario.pvp_iva" 
+    style="max-width: 100%; width: 100%;"(keyup.enter)="onEnter($event)"  autocomplete="off">
             <td>{{ parseInt(inventario.stock_auxiliar!) | number: '.0-0' }}</td>
 
             <td>{{ inventario.linea }}</td>

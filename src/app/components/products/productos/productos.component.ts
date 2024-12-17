@@ -186,6 +186,7 @@ export class ProductosComponent implements OnInit {
   onMigrarP() {
     this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['portafoliosmigracion'] } }]);
   }
+  
   onMigrarPP() {
     this.router.navigate(['/navegation-adm', { outlets: { 'contentAdmin': ['producto-proveedores-migracion'] } }]);
   }

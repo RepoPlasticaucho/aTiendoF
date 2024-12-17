@@ -17,6 +17,7 @@
           <div>Dirección Sucursal: {{direccionAlm}}</div>
           <div>Obligado a llevar Contabilidad: {{obligadoContabilidad}}</div>
           <div>Emite Retención: {{emiteRetencion}}</div>
+          <div>CONTRIBUYENTE RÉGIMEN RIMPE</div>
         </div>
       </div>
       <div class="info-comercial">
@@ -137,7 +138,119 @@
     <button class="btn btn-primary" style="margin-right: 70px;" (click)="guardarPDF()">
       <span style="color: white; font-size: 20px;">Generar PDF</span>
     </button>
+    <button class="btn btn-primary" style="margin-right: 70px;" (click)="imprimirComprobante()">
+      <span style="color: white; font-size: 20px;">Imprimir Comprobante</span>
+    </button>
  
   </div>
   <br><br>
+  <div id="htmlComprobante" style="display: none;">
+    <div class="factura">
+      <div class="info-comercial">
+        <div class="comercial">
+          <br><br>
+       
+          <div class="encabezado" *ngIf="url_logo == ''">
+              NO TIENE LOGO
+          </div>
+          
+          <br><br>
+          <div>Razón Social:{{razonSocial}}</div>
+          <div>Nombre Comercial: {{nombreComercial}}</div>
+          <div>Dirección Matriz: {{dir1}}</div>
+          <div>Dirección Sucursal: {{direccionAlm}}</div>
+          <div>Obligado a llevar Contabilidad: {{obligadoContabilidad}}</div>
+          <div>Emite Retención: {{emiteRetencion}}</div>
+          <div>CONTRIBUYENTE RÉGIMEN RIMPE</div>
+          <div class="encabezado2">RUC: {{idFiscalSoc}}</div>
+          <div>FACTURA</div>
+          <div>Nro. {{facturaNro}}</div>
+          <div>Emisión: Normal</div>
+          <div>Clave de Acceso: {{claveAcceso}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="info-cliente">
+      <div class="cliente">
+        <div>Razón Social / Nombre y Apellido: {{cliente}}</div>
+        <div>Identificación: {{idFiscalCliente}}</div>
+        <div>Fecha: {{fechaEmision | date: 'dd/MM/yyyy'}}</div>
+        <div>Dirección: {{direccionCl}}</div>
+      </div>
+    </div>
+    <div class="invoice-details">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th style="width: 10%; ">Código</th>
+            <th style="width: 10%; ">Producto</th>
+            <th style="width: 10%; ">Cantidad</th>
+            <th style="width: 10%; ">Precio Uni.</th>
+            <th style="width: 10%; ">Descuento</th>
+            <th style="width: 10%; ">Precio Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let detalleMovimientos of lstDetalleMovimientos">
+            <td>{{detalleMovimientos.producto_id}}</td>
+            <td>{{detalleMovimientos.modelo_producto_nombre}} {{detalleMovimientos.tamanio}}</td>
+            <td>{{detalleMovimientos.cantidad}}</td>
+            <td>{{detalleMovimientos.costo}}</td>
+            <td>{{detalleMovimientos.desc_add}}</td>
+            <td>{{detalleMovimientos.precio}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="labelAdic">
+      <label for="" >INFORMACIÓN ADICIONAL:</label>
+      <br>
+      <label for="" class="separ">Teléfono: {{telefono}}</label>
+      <label for="" class="">Correo: {{email}}</label>
+    </div>
+    <div class="invoice-details2">
+      <div class="table-container">
+        <table class="custom-table2">
+          <tbody>
+            <tr>
+              <td class="aaa">SUBTOTAL 0%:</td>
+              <td>{{subtotal0}}</td>
+            </tr>
+            <tr>
+              <td class="aaa">SUBTOTAL {{iva}}%:</td>
+              <td>{{subtotal12}}</td>
+            </tr>
+            <tr>
+              <td class="aaa">SUBTOTAL NO SUJETO DE IVA:</td>
+              <td>{{subtotal0}}</td>
+            </tr>
+            <tr>
+              <td class="aaa">SUBTOTAL SIN IMPUESTOS:</td>
+              <td>{{subtotal12}}</td>
+            </tr>
+            <tr>
+              <td class="aaa">DESCUENTO:</td>
+              <td>{{descuento}}</td>
+            </tr>
+            <tr>
+              <td class="aaa">ICE:</td>
+              <td>{{ice}}</td>
+            </tr>
+            <tr>
+              <td class="aaa">IVA {{iva}}%:</td>
+              <td>{{ivaCalculado}}</td>
+            </tr>
+            <tr>
+              <td class="aaa">PROPINA:</td>
+              <td>{{propina}}</td>
+            </tr>
+            <tr>
+              <td class="aaa">VALOR TOTAL:</td>
+              <td>{{valorTotal}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>

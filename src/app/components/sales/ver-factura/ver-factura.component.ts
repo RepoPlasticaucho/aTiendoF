@@ -382,7 +382,14 @@ export class VerFacturaComponent implements OnInit {
 
     const suma = totalTarifa15 + totalTarifa0 - this.descuentoN - descP;
 
-    this.sumaTotal = suma
+    let sumaAjustada = suma;
+
+    // Comprobar si el valor termina en .99
+    if (parseFloat((suma % 1).toFixed(2)) === 0.99) {
+      sumaAjustada = parseFloat((suma + 0.01).toFixed(2)); // Sumar 0.01 y asegurar máximo 2 decimales
+    }
+    
+    this.sumaTotal = sumaAjustada
       .toLocaleString(undefined, { maximumFractionDigits: 2 })
       .replace('.', ',');
 
@@ -508,7 +515,7 @@ export class VerFacturaComponent implements OnInit {
       .reduce((total, detalleMovimientos) => {
         return total + parseFloat(detalleMovimientos.precio.replace(',', '.'));
       }, 0);
-    const porcen = totalTarifa15 * (this.iva/100);
+    const porcen = (totalTarifa15 * (this.iva / 100)) - 0.01
 
     return totalTarifa15 + porcen;
   }
@@ -561,11 +568,14 @@ export class VerFacturaComponent implements OnInit {
     const total_desc = Number(this.calcularDescuento()) + Number(this.descuentoN) + Number(descuento);
     const total_imp = this.calcularTotalTarifa15() + this.calcularTotalTarifa0();
     this.httpServiceMovimiento.obtenerUltimoSecuencial(localStorage.getItem('almacenid')!).subscribe(res1 => {
+      console.log(res1)
       if (res1.codigoError == 'OK') {
         this.ultSecuencial = res1.lstMovimientos[0].secuencial;
         const numero = parseInt(this.ultSecuencial, 10)
+        console.log(numero)
         const num2 = numero + 1;
         this.secuencial = num2.toString().padStart(9, '0');
+        console.log(this.secuencial.toString())
       }
       const newPedido: MovimientosEntity = {
         id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
@@ -582,6 +592,7 @@ export class VerFacturaComponent implements OnInit {
         estab: localStorage.getItem('estab')!,
         importe_total: this.sumaTotal.replace(',', '.')
       }
+      console.log(newPedido)
       Swal.fire({
         title: '¿Estás seguro de finalizar la VENTA?',
         showDenyButton: true,

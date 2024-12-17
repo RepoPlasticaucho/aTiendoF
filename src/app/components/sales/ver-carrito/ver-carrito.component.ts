@@ -37,9 +37,11 @@ export class VerCarritoComponent implements OnInit {
 
   costo: any;
   precio: any;
+  pvp_iva: any;
   codigo: string = '';
   auxlst: InventariosEntity[] = [];
   productoAgregado: EventEmitter<any> = new EventEmitter<any>();
+  inventario: any;
 
   constructor(
     private readonly httpServiceInventarios: InventariosService,
@@ -86,6 +88,7 @@ export class VerCarritoComponent implements OnInit {
           inventario.stock_auxiliar = (parseInt(inventario.stock_auxiliar!) + parseInt(detalleMovimiento.cantidad!)).toString();
           //Vaciar el campo de cantidad
           inventario.cantidad = '';
+          inventario.pvp_iva = '';
           inventario.productoExistente = false;
         }
       })
@@ -189,6 +192,7 @@ export class VerCarritoComponent implements OnInit {
       costo: '',
       cantidad: '',
       pvp1: '',
+      pvp_iva: '',
       pvp2: '',
       pvp_sugerido: '',
       cod_principal: '',
@@ -391,7 +395,8 @@ export class VerCarritoComponent implements OnInit {
 
       if (detalleExistente) {
         // Si el detalle ya existe, actualiza la cantidad
-        detalleExistente.cantidad! == nuevo.cantidad;  // Asumiendo que cantidad es un número
+        detalleExistente.cantidad! == nuevo.cantidad;
+        //detalleExistente.costo! == this.inventario.pvp_iva; 
        
 
         detalleExistente.productoExistente = true;
@@ -450,6 +455,7 @@ export class VerCarritoComponent implements OnInit {
       //Cambiar la , por el .
     inventario.pvp1 = inventario.pvp1?.replace(',', '.');
     inventario.pvp2 = inventario.pvp2?.replace(',', '.');
+    inventario.pvp_iva = inventario.pvp_iva?.replace(',', '.');
     inventario.costo = inventario.costo?.replace(',', '.');
 
     return new Promise((resolve, reject) => {
@@ -468,8 +474,8 @@ export class VerCarritoComponent implements OnInit {
             resolve(); // Resuelve la promesa incluso si hay error
           });
         } else {
-          this.costo = res.pvp2;
-          this.precio = parseFloat(res.pvp2!) * parseFloat(inventario.cantidad!);
+          this.costo = Math.ceil((parseFloat(inventario.pvp_iva!) / 1.15) * 100) / 100;
+          this.precio = parseFloat((Math.ceil((parseFloat(inventario.pvp_iva!) / 1.15) * 100) / 100).toFixed(2)) * parseFloat(inventario.cantidad!);
           this.codigo = res.id!;
 
           if (inventario.productoExistente) {
@@ -480,11 +486,16 @@ export class VerCarritoComponent implements OnInit {
               producto_id: res.producto_id,
               movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
               cantidad: inventario.cantidad!,
-              costo: '',
+              costo: (Math.ceil((parseFloat(inventario.pvp_iva!) / 1.15) * 100) / 100).toFixed(2),
               precio: ''
             };
+            
+            newDetalle.precio = (
+              Math.ceil((parseFloat(inventario.pvp_iva!) / 1.15) * 100) / 100 *
+              parseFloat(inventario.cantidad!)
+            ).toFixed(2);
+            
 
-            newDetalle.precio = (parseFloat(inventario.cantidad!) * parseFloat(res.pvp2!)).toString();
 
             if (inventario.cantidad! !== '0') {
               this.httpServiceDetalle.modificarDetallePedidoVenta(newDetalle).subscribe(res => {
@@ -522,9 +533,10 @@ export class VerCarritoComponent implements OnInit {
               producto_id: res.producto_id,
               movimiento_id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
               cantidad: inventario.cantidad!,
-              costo: this.costo,
-              precio: this.precio,
+              costo: (Math.ceil((parseFloat(inventario.pvp_iva!) / 1.15) * 100) / 100).toFixed(2),
+              precio: this.precio
             };
+            console.log("Valor de inventario.pvp_iva:", inventario.pvp_iva);
             
             if (newDetalle.cantidad === '0') {
               resolve();
@@ -532,6 +544,8 @@ export class VerCarritoComponent implements OnInit {
             }
 
             console.log("Aca el detalle" + JSON.stringify(newDetalle));
+            
+            console.log(newDetalle)
 
             this.httpServiceDetalle.agregarDetallePedido(newDetalle).pipe(finalize(() => {
               this.httpServiceDetalle.obtenerUltDetalleMovimiento(newDetalle).subscribe(res1 => {
@@ -606,6 +620,14 @@ export class VerCarritoComponent implements OnInit {
     if (event.keyCode === 13) {
       this.facturar();
     }
+    
+  }
+
+  onInput2(event: Event): void {
+    const inputValue = (event.target as HTMLInputElement).value;
+    console.log('Valor ingresado:', inputValue);
+    // Si necesitas actualizar manualmente inventario.pvp_iva:
+    this.inventario.pvp_iva = inputValue;
   }
 
 }

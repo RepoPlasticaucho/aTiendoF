@@ -41,6 +41,7 @@ const initGruop: InventariosEntity = {
   costo: '',
   pvp1 : '',
   pvp2 : '',
+  pvp_iva: '',
   pvp_sugerido : '',
   url_image: '',
   cod_principal : '',

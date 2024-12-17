@@ -40,6 +40,7 @@ export interface InventariosEntity {
     cantidad?: string;
     pvp1? : string;
     pvp2? : string;
+    pvp_iva? : string;
     pvp_sugerido? : string;
     cod_principal? : string;
     cod_secundario? : string;  

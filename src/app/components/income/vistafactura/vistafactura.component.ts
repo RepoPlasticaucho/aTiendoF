@@ -152,6 +152,7 @@ export class VistafacturaComponent implements OnInit {
         const numero = parseInt(this.ultSecuencial,10)
         const num2 = numero + 1;
         this.secuencial = num2.toString().padStart(9, '0')
+        console.log(this.secuencial)
       }
       const newPedido: MovimientosEntity = {
         id: JSON.parse(localStorage.getItem('movimiento_id') || "[]"),
